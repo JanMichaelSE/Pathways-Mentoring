@@ -9,3 +9,48 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @db.VarChar(100)
+  email        String   @unique @db.VarChar(150)
+  password     String   @unique @db.VarChar(65)
+  passwordSalt String   @unique @db.VarChar(65)
+  role         String   @db.VarChar(10)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model Mentor {
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String   @db.VarChar(100)
+  email          String   @unique @db.VarChar(150)
+  phone          String?  @db.VarChar(15)
+  gender         String?  @db.VarChar(10)
+  department     String?  @db.VarChar(100)
+  academicDegree String?  @db.VarChar(50)
+  office         String?  @db.VarChar(100)
+  officeHours    String?  @db.VarChar(100)
+  facultyStatus  String?  @db.VarChar(100)
+  interests      String?  @db.VarChar(255)
+  description    String?
+  profilePicture String   @db.VarChar(255)
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model Student {
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String   @db.VarChar(100)
+  email          String   @unique @db.VarChar(150)
+  phone          String?  @db.VarChar(15)
+  gender         String?  @db.VarChar(10)
+  graduationDate DateTime @db.Timestamptz(6)
+  gpa            Int
+  institution    String?  @db.VarChar(255)
+  fieldOfStudy   String?  @db.VarChar(255)
+  hasResearch    Boolean  @default(false)
+  profilePicture String   @db.VarChar(255)
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime @default(now()) @db.Timestamptz(6)
+}
