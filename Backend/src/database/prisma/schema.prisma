@@ -38,7 +38,7 @@ model Mentor {
   facultyStatus  String?  @db.VarChar(100)
   interests      String?  @db.VarChar(255)
   description    String?
-  profilePicture String   @db.VarChar(255)
+  profilePicture String?
   createdDate    DateTime @default(now()) @db.Timestamptz(6)
   lastModified   DateTime @default(now()) @db.Timestamptz(6)
   userId         String   @unique @db.Uuid
@@ -47,21 +47,21 @@ model Mentor {
 }
 
 model Student {
-  id             String   @id @default(uuid()) @db.Uuid
-  name           String   @db.VarChar(100)
-  email          String   @unique @db.VarChar(150)
-  phone          String?  @db.VarChar(15)
-  gender         String?  @db.VarChar(10)
-  graduationDate DateTime @db.Timestamptz(6)
-  gpa            Int
-  institution    String?  @db.VarChar(255)
-  fieldOfStudy   String?  @db.VarChar(255)
-  hasResearch    Boolean  @default(false)
-  profilePicture String   @db.VarChar(255)
-  createdDate    DateTime @default(now()) @db.Timestamptz(6)
-  lastModified   DateTime @default(now()) @db.Timestamptz(6)
-  userId         String   @unique @db.Uuid
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String    @id @default(uuid()) @db.Uuid
+  name           String    @db.VarChar(100)
+  email          String    @unique @db.VarChar(150)
+  phone          String?   @db.VarChar(15)
+  gender         String    @db.VarChar(10)
+  graduationDate DateTime? @db.Date
+  gpa            Float?
+  institution    String
+  fieldOfStudy   String    @db.VarChar(255)
+  hasResearch    Boolean   @default(false)
+  profilePicture String?
+  createdDate    DateTime  @default(now()) @db.Timestamptz(6)
+  lastModified   DateTime  @default(now()) @db.Timestamptz(6)
+  userId         String    @unique @db.Uuid
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   records        Record[]
   answers        Answer[]
 }
