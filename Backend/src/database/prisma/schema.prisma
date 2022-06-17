@@ -29,14 +29,14 @@ model Mentor {
   id             String   @id @default(uuid()) @db.Uuid
   name           String   @db.VarChar(100)
   email          String   @unique @db.VarChar(150)
-  phone          String?  @db.VarChar(15)
-  gender         String?  @db.VarChar(10)
-  department     String?  @db.VarChar(100)
-  academicDegree String?  @db.VarChar(50)
+  phone          String   @db.VarChar(15)
+  gender         String   @db.VarChar(10)
+  department     String   @db.VarChar(100)
+  academicDegree String   @db.VarChar(50)
   office         String?  @db.VarChar(100)
-  officeHours    String?  @db.VarChar(100)
-  facultyStatus  String?  @db.VarChar(100)
-  interests      String?  @db.VarChar(255)
+  officeHours    String?  
+  facultyStatus  String   @db.VarChar(100)
+  interests      String?
   description    String?
   profilePicture String?
   createdDate    DateTime @default(now()) @db.Timestamptz(6)
@@ -130,3 +130,4 @@ model Answer {
   student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
+

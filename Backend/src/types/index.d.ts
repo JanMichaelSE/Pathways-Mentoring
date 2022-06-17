@@ -17,3 +17,21 @@ export interface IStudent {
   hasResearch: boolean
   profilePicture: string
 }
+
+export interface IMentor {
+  name:            string   
+  password:        string
+  email:           string   
+  phone:           string
+  role:            string  
+  gender:          string  
+  department:      string  
+  academicDegree:  string  
+  office?:         string  
+  officeHours?:    string 
+  facultyStatus:   string  
+  interests?:      string
+  description?:    string
+  profilePicture?: string
+}
+
