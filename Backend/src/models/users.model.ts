@@ -58,6 +58,43 @@ async function findUserByEmail(email: string): Promise<User | null> {
   }
 }
 
+async function isUserAuthorized(email: string, password: string) : Promise<User | IErrorResponse> {
+  try {
+    
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email
+      }
+    });
+
+    if (!user) {
+      const error: IErrorResponse = {
+        errorCode: 401,
+        errorMessage:
+          "A user with this email doesn't exist.",
+      };
+      return error;
+    }
+
+    let hashedPasswordFromRequest = sha512(password, user.passwordSalt);
+    if (hashedPasswordFromRequest !== user.password) {
+      const error: IErrorResponse = {
+        errorCode: 401,
+        errorMessage:
+          "Provided password is incorrect is for this user.",
+      };
+      return error;
+    }
+
+    const userWithoutPassord = exclude(user, 'password', 'passwordSalt');
+    return userWithoutPassord;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+
 function generateSalt(length: number): string {
   return crypto
     .randomBytes(Math.ceil(length / 2))
@@ -82,4 +119,4 @@ function exclude<User, Key extends keyof User>(
   return user;
 }
 
-export { createUser };
+export { createUser, isUserAuthorized };
