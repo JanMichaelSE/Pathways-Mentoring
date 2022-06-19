@@ -4,6 +4,7 @@ import { IStudent } from './../types/index.d';
 
 async function createStudent(student: IStudent, userId: string) : Promise<Student>{
   try {
+
     const createdStudent = await prisma.student.create({
       data: {
         name: student.name,
@@ -20,13 +21,43 @@ async function createStudent(student: IStudent, userId: string) : Promise<Studen
       }
     });
     
-    const studentWithoutId = exclude(createdStudent, 'id');
+    const studentWithoutId = exclude(createdStudent, 'id', 'userId');
     return studentWithoutId;
 
   } catch (error) {
     throw error
   }
 }
+
+async function getAllStudents() : Promise<Student[]> {
+  try {
+
+    const students = await prisma.student.findMany();
+    const studentsWithoutId = students.map(student => exclude(student, 'id', 'userId'));
+    return studentsWithoutId;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getStudentsByMentor(mentorId: string) : Promise<Student[]> {
+  try {
+
+    const students = await prisma.student.findMany({
+      where: {
+        mentorId: mentorId
+      }
+    });
+    
+    const studentsWithoutId = students.map(student => exclude(student, 'id', 'mentorId', 'userId'));
+    return studentsWithoutId;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 
 function exclude<Student, Key extends keyof Student>(
@@ -40,5 +71,7 @@ function exclude<Student, Key extends keyof Student>(
 }
 
 export {
-  createStudent
+  createStudent,
+  getAllStudents,
+  getStudentsByMentor
 }

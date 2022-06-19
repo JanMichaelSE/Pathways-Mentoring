@@ -23,11 +23,34 @@ async function createMentor(mentor: IMentor, userId: string) : Promise<Mentor | 
       }
     });
     
-    const mentorWithoutId = exclude(createdMentor, 'id');
+    const mentorWithoutId = exclude(createdMentor, 'id', 'userId');
     return mentorWithoutId;
 
   } catch (error) {
     throw error
+  }
+}
+
+async function getAllMentors() : Promise<Mentor[]> {
+  try {
+    const mentors = await prisma.mentor.findMany();
+    const mentorsWithoutId = mentors.map(mentor => exclude(mentor, 'id', 'userId'));
+    return mentorsWithoutId;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function findMentorByEmail(email: string) : Promise<Mentor | null> {
+  try {
+    const mentor = await prisma.mentor.findUnique({
+      where: {
+        email: email
+      }
+    });
+    return mentor;
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -43,5 +66,7 @@ function exclude<Mentor, Key extends keyof Mentor>(
 
 
 export {
-  createMentor
+  createMentor,
+  getAllMentors,
+  findMentorByEmail
 }

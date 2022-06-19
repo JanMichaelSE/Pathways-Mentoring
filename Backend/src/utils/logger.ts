@@ -10,4 +10,14 @@ const logger = createLogger({
   ]
 });
 
-export default logger;
+function errorLogger(error: any) {
+  if (error instanceof Error) {
+    const errorMessage = `${error.message} ----- Cause: ${error.cause} ----- Stack ${error.stack}`;
+    logger.log('error', errorMessage);
+  }
+}
+
+export {
+  logger,
+  errorLogger
+};
