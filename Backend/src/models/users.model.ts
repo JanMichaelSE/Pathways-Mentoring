@@ -86,7 +86,7 @@ async function isUserAuthorized(email: string, password: string) : Promise<User 
       return error;
     }
 
-    const userWithoutPassord = exclude(user, 'password', 'passwordSalt');
+    const userWithoutPassord = exclude(user, 'id', 'password', 'passwordSalt');
     return userWithoutPassord;
 
   } catch (error) {

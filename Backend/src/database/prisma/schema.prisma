@@ -26,24 +26,25 @@ model User {
 }
 
 model Mentor {
-  id             String   @id @default(uuid()) @db.Uuid
-  name           String   @db.VarChar(100)
-  email          String   @unique @db.VarChar(150)
-  phone          String   @db.VarChar(15)
-  gender         String   @db.VarChar(10)
-  department     String   @db.VarChar(100)
-  academicDegree String   @db.VarChar(50)
-  office         String?  @db.VarChar(100)
-  officeHours    String?  
-  facultyStatus  String   @db.VarChar(100)
+  id             String    @id @default(uuid()) @db.Uuid
+  name           String    @db.VarChar(100)
+  email          String    @unique @db.VarChar(150)
+  phone          String    @db.VarChar(15)
+  gender         String    @db.VarChar(10)
+  department     String    @db.VarChar(100)
+  academicDegree String    @db.VarChar(50)
+  office         String?   @db.VarChar(100)
+  officeHours    String?
+  facultyStatus  String    @db.VarChar(100)
   interests      String?
   description    String?
   profilePicture String?
-  createdDate    DateTime @default(now()) @db.Timestamptz(6)
-  lastModified   DateTime @default(now()) @db.Timestamptz(6)
-  userId         String   @unique @db.Uuid
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdDate    DateTime  @default(now()) @db.Timestamptz(6)
+  lastModified   DateTime  @default(now()) @db.Timestamptz(6)
+  userId         String    @unique @db.Uuid
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   records        Record[]
+  students       Student[]
 }
 
 model Student {
@@ -62,6 +63,8 @@ model Student {
   lastModified   DateTime  @default(now()) @db.Timestamptz(6)
   userId         String    @unique @db.Uuid
   user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mentorId       String?   @db.Uuid
+  mentor         Mentor?   @relation(fields: [mentorId], references: [id], onDelete: NoAction)
   records        Record[]
   answers        Answer[]
 }
@@ -75,8 +78,8 @@ model Record {
   createdDate  DateTime @default(now()) @db.Timestamptz(6)
   lastModified DateTime @default(now()) @db.Timestamptz(6)
   mentorId     String   @db.Uuid
-  studentId    String   @db.Uuid
   mentor       Mentor   @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  studentId    String   @db.Uuid
   student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   notes        Note[]
 }
@@ -95,8 +98,8 @@ model Message {
   createdDate  DateTime @default(now()) @db.Timestamptz(6)
   lastModified DateTime @default(now()) @db.Timestamptz(6)
   senderId     String   @db.Uuid
-  receiverId   String   @db.Uuid
   sender       User     @relation(name: "sender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId   String   @db.Uuid
   receiver     User     @relation(name: "receiver", fields: [receiverId], references: [id], onDelete: Cascade)
 }
 
@@ -126,8 +129,7 @@ model Answer {
   createdDate  DateTime @default(now()) @db.Timestamptz(6)
   lastModified DateTime @default(now()) @db.Timestamptz(6)
   studentId    String   @db.Uuid
-  questionId   Int
   student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  questionId   Int
   question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
-
