@@ -5,6 +5,7 @@ import { createUser, isUserAuthorized } from "../../models/users.model";
 import { IErrorResponse, IStudent } from "../../types";
 import { createMentor } from '../../models/mentors.model';
 import { formatPhoneNumber, titleCase } from '../../utils/helpers';
+import logger from '../../utils/logger';
 
 async function httpLogin(req: Request, res: Response) {
   try {
@@ -34,6 +35,11 @@ async function httpLogin(req: Request, res: Response) {
     return res.status(200).json(userResponse);
 
   } catch (error) {
+    if (error instanceof Error) {
+      const errorMessage = `${error.message} ----- Cause: ${error.cause} ----- Stack ${error.stack}`;
+      logger.log('error', errorMessage);
+    }
+
     const errorResponse: IErrorResponse = {
       errorCode: 500,
       errorMessage: "The resquest to login failed. Please report this to Tech Support for further investigation."
@@ -102,6 +108,11 @@ async function httpSignupStudent(req: Request, res: Response) {
     return res.status(200).json(studentResponse);
 
   } catch (error) {    
+    if (error instanceof Error) {
+      const errorMessage = `${error.message} ----- Cause: ${error.cause} ----- Stack ${error.stack}`;
+      logger.log('error', errorMessage);
+    }
+
     const errorResponse: IErrorResponse = {
       errorCode: 500,
       errorMessage: "The resquest to signup student failed. Please report this to Tech Support for further investigation."
@@ -175,6 +186,11 @@ async function httpSignupMentor(req: Request, res: Response) {
     return res.status(200).json(mentorResponse);
 
   } catch (error) {
+    if (error instanceof Error) {
+      const errorMessage = `${error.message} ----- Cause: ${error.cause} ----- Stack ${error.stack}`;
+      logger.log('error', errorMessage);
+    }
+
     const errorResponse: IErrorResponse = {
       errorCode: 500,
       errorMessage: "The resquest to signup mentor failed. Please report this to Tech Support for further investigation."
