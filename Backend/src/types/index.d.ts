@@ -35,3 +35,16 @@ export interface IMentor {
   profilePicture?: string
 }
 
+export interface IAssessment {
+  name:         string
+  description?: string
+  questions:    IQuestion[]
+}
+
+export interface IQuestion {
+  question:      string
+  type:          string
+  options?:      string
+  assessmentId?: number
+}
+
