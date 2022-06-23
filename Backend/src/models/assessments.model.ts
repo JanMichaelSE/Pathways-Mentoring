@@ -1,7 +1,7 @@
 import { prisma } from "../database";
 import { Assessment } from "@prisma/client";
-import { IErrorResponse, IQuestion } from "./../types/index.d";
-import { titleCase } from "../utils/helpers";
+import { IAssessment, IErrorResponse, IQuestion } from "./../types/index.d";
+import { deleteQuestions, upsertQuestions, validateQuestionsFormat } from "./questions.model";
 
 async function createAssessment(
   name: string,
@@ -10,33 +10,9 @@ async function createAssessment(
 ): Promise<Assessment | IErrorResponse> {
   try {
 
-    // Transform Questions to have proper title casing type
-    questions.forEach((q) => {
-      q.type = titleCase(q.type);
-    });
-
-    // Validate Questions have correct information
-    for (const question of questions) {
-      if (
-        question.type != "Text" &&
-        question.type != "Select" &&
-        question.type != "Multi-select"
-      ) {
-        const error: IErrorResponse = {
-          errorCode: 400,
-          errorMessage: `The question: "${question.question}" does not have a valid type assigned. Valid types are: "Text", "Select" and "Multi-select`,
-        };
-        return error;
-      } else if (
-        (question.type === "Multi-select" || question.type === "Select") &&
-        !question.options
-      ) {
-        const error: IErrorResponse = {
-          errorCode: 400,
-          errorMessage: `The question: "${question.question}" does not have a options assigned. If questions is of type "Select" or "Multi-select", options are required.`,
-        };
-        return error;
-      }
+    const questionsTransformed = validateQuestionsFormat(questions);
+    if ("errorCode" in questionsTransformed) {
+      return questionsTransformed;
     }
 
     const createdAssessment = await prisma.assessment.create({
@@ -45,14 +21,87 @@ async function createAssessment(
         description: description,
         questions: {
           createMany: {
-            data: [...questions],
+            data: [...questionsTransformed],
           },
         },
       },
     });
 
     return createdAssessment;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getAllAssessments(): Promise<Assessment[]> {
+  try {
+
+    const assessments = await prisma.assessment.findMany();
+    return assessments;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getAssessmentWithQuestionsById(
+  id: number
+): Promise<Assessment | null> {
+  try {
+
+    const assessment = await prisma.assessment.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        questions: true,
+      },
+    });
+
+    return assessment;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function updateAssessment(
+  assessment: IAssessment,
+  assessmentId: number
+): Promise<Assessment | IErrorResponse> {
+  try {
+
+    const existingAssessment = await getAssessmentWithQuestionsById(assessmentId);
+    if (!existingAssessment) {
+      const error: IErrorResponse = {
+        errorCode: 400,
+        errorMessage: "An Assessment with this Id does not exist.",
+      };
+      return error;
+    }
+
+    const questionsTransformed = validateQuestionsFormat(assessment.questions);
+    if ("errorCode" in questionsTransformed) {
+      return questionsTransformed;
+    }
+
+    await prisma.assessment.update({
+      where: {
+        id: assessmentId,
+      },
+      data: {
+        name: assessment.name,
+        description: assessment.description,
+      },
+    });
+    await deleteQuestions(questionsTransformed, assessmentId);
+    await upsertQuestions(questionsTransformed, assessmentId);
     
+    const updatedAssessment = await getAssessmentWithQuestionsById(assessmentId);
+    // @ts-ignore - Ignore Null since we already checked if Id is Valid
+    return updatedAssessment;
+
   } catch (error) {
     throw error;
   }
@@ -62,7 +111,7 @@ async function deleteAssessment(
   assessmentId: number
 ): Promise<Assessment | IErrorResponse> {
   try {
-
+    
     const existingAssessment = await prisma.assessment.findUnique({
       where: {
         id: assessmentId,
@@ -88,6 +137,7 @@ async function deleteAssessment(
   }
 }
 
+// --- Assessment Model Helpers ----
 function exclude<Assessment, Key extends keyof Assessment>(
   assessment: Assessment,
   ...keys: Key[]
@@ -98,7 +148,10 @@ function exclude<Assessment, Key extends keyof Assessment>(
   return assessment;
 }
 
-export { 
-  createAssessment, 
-  deleteAssessment 
+export {
+  createAssessment,
+  getAllAssessments,
+  getAssessmentWithQuestionsById,
+  updateAssessment,
+  deleteAssessment,
 };

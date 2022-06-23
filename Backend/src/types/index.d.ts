@@ -36,12 +36,14 @@ export interface IMentor {
 }
 
 export interface IAssessment {
+  id?:          number
   name:         string
   description?: string
   questions:    IQuestion[]
 }
 
 export interface IQuestion {
+  id?:           number
   question:      string
   type:          string
   options?:      string
