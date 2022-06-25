@@ -1,4 +1,4 @@
-import { IMentor } from './../../types/index.d';
+import { IMentor, IUser } from './../../types/index.d';
 import { Request, Response } from "express";
 import { createStudent } from "../../models/students.model";
 import { createUser, isUserAuthorized } from "../../models/users.model";
@@ -8,7 +8,8 @@ import { formatPhoneNumber, handleErrorResponse, titleCase } from '../../utils/h
 
 async function httpLogin(req: Request, res: Response) {
   try {
-    const userInfo = {
+
+    const userInfo: IUser = {
       email: req.body.email,
       password: req.body.password
     };
@@ -41,11 +42,13 @@ async function httpLogin(req: Request, res: Response) {
 async function httpSignupStudent(req: Request, res: Response) {
   try {
 
+    const userInfo: IUser = {
+      email: req.body.email,
+      password: req.body.password,
+      role: titleCase(req.body.role)
+    }
     const studentInfo: IStudent = {
       name: titleCase(req.body.name),
-      password: req.body.password,
-      email: req.body.email,
-      role: titleCase(req.body.role),
       phone: formatPhoneNumber(req.body.phone),
       gender: titleCase(req.body.gender),
       graduationDate: req.body.graduationDate,
@@ -57,10 +60,10 @@ async function httpSignupStudent(req: Request, res: Response) {
     };
   
     if (
+      !userInfo.email ||
+      !userInfo.password ||
+      !userInfo.role ||
       !studentInfo.name ||
-      !studentInfo.password ||
-      !studentInfo.email ||
-      !studentInfo.role ||
       !studentInfo.gender ||
       !studentInfo.fieldOfStudy ||
       !studentInfo.institution
@@ -72,19 +75,18 @@ async function httpSignupStudent(req: Request, res: Response) {
       return res.status(error.errorCode).json({ error });
     }
 
-    if (studentInfo.role !== "Student") {
+    if (userInfo.role !== "Student") {
       const error: IErrorResponse = {
         errorCode: 400,
-        errorMessage: "Expected a role of 'student' but received " + studentInfo.role + " instead. Please provide the 'student' role when creating a student."
+        errorMessage: "Expected a role of 'student' but received " + userInfo.role + " instead. Please provide the 'student' role when creating a student."
       };
       return res.status(error.errorCode).json({ error });
     }
   
     const userResponse = await createUser(
-      studentInfo.name,
-      studentInfo.email,
-      studentInfo.password,
-      studentInfo.role
+      userInfo.email,
+      userInfo.password,
+      userInfo.role
     );
     if ('errorCode' in userResponse) {
       return res.status(userResponse.errorCode).json({
@@ -92,7 +94,7 @@ async function httpSignupStudent(req: Request, res: Response) {
       });
     }
   
-    const studentResponse = await createStudent(studentInfo, userResponse.id);
+    const studentResponse = await createStudent(userResponse.id, userInfo.email, studentInfo);
     return res.status(200).json(studentResponse);
 
   } catch (error) {    
@@ -103,11 +105,13 @@ async function httpSignupStudent(req: Request, res: Response) {
 async function httpSignupMentor(req: Request, res: Response) {
   try {
 
+    const userInfo: IUser = {
+      email: req.body.email,
+      password: req.body.password,
+      role: titleCase(req.body.role)
+    }
     const mentorInfo: IMentor = {
       name: titleCase(req.body.name),
-      password: req.body.password,
-      email: req.body.email,
-      role: titleCase(req.body.role),
       phone: formatPhoneNumber(req.body.phone),
       gender: titleCase(req.body.gender),
       department: titleCase(req.body.department),
@@ -121,10 +125,10 @@ async function httpSignupMentor(req: Request, res: Response) {
     };
   
     if (
-      !mentorInfo.name ||
-      !mentorInfo.password ||
-      !mentorInfo.email ||
-      !mentorInfo.role ||
+      !userInfo.email ||
+      !userInfo.password ||
+      !userInfo.role ||
+      !mentorInfo.name ||      
       !mentorInfo.gender ||
       !mentorInfo.phone ||
       !mentorInfo.department ||
@@ -138,20 +142,19 @@ async function httpSignupMentor(req: Request, res: Response) {
       return res.status(error.errorCode).json({ error });
     }
 
-    if (mentorInfo.role !== "Mentor") {
+    if (userInfo.role !== "Mentor") {
       const error: IErrorResponse = {
         errorCode: 400,
-        errorMessage: "Expected a role of 'mentor' but received '" + mentorInfo.role + "' instead. Please provide the 'mentor' role when creating a mentor."
+        errorMessage: "Expected a role of 'mentor' but received '" + userInfo.role + "' instead. Please provide the 'mentor' role when creating a mentor."
       };
       return res.status(error.errorCode).json({ error });
     }
 
   
     const userResponse = await createUser(
-      mentorInfo.name,
-      mentorInfo.email,
-      mentorInfo.password,
-      mentorInfo.role
+      userInfo.email,
+      userInfo.password,
+      userInfo.role
     );
     if ('errorCode' in userResponse) {
       return res.status(userResponse.errorCode).json({
@@ -159,7 +162,7 @@ async function httpSignupMentor(req: Request, res: Response) {
       });
     }
   
-    const mentorResponse = await createMentor(mentorInfo, userResponse.id);
+    const mentorResponse = await createMentor(userResponse.id, userInfo.email, mentorInfo);
     return res.status(200).json(mentorResponse);
 
   } catch (error) {

@@ -3,38 +3,43 @@ import { prisma } from "../database";
 import { IMentor, IErrorResponse } from './../types/index.d';
 
 
-async function createMentor(mentor: IMentor, userId: string) : Promise<Mentor | IErrorResponse> {
+async function createMentor(
+  userId: string,
+  email: string,
+  mentorInfo: IMentor
+): Promise<Mentor | IErrorResponse> {
   try {
+
     const createdMentor = await prisma.mentor.create({
       data: {
-        name: mentor.name,
-        email: mentor.email,
-        phone: mentor.phone,
-        gender: mentor.gender,
-        department: mentor.department,
-        academicDegree: mentor.academicDegree,
-        officeHours: mentor.officeHours,
-        office: mentor.office,
-        interests: mentor.interests,
-        description: mentor.description,
-        facultyStatus: mentor.facultyStatus,
-        profilePicture: mentor.profilePicture,
-        userId: userId
-      }
+        name: mentorInfo.name,
+        email: email,
+        phone: mentorInfo.phone,
+        gender: mentorInfo.gender,
+        department: mentorInfo.department,
+        academicDegree: mentorInfo.academicDegree,
+        officeHours: mentorInfo.officeHours,
+        office: mentorInfo.office,
+        interests: mentorInfo.interests,
+        description: mentorInfo.description,
+        facultyStatus: mentorInfo.facultyStatus,
+        profilePicture: mentorInfo.profilePicture,
+        userId: userId,
+      },
     });
-    
-    const mentorWithoutId = exclude(createdMentor, 'id', 'userId');
-    return mentorWithoutId;
 
+    const mentorWithoutId = exclude(createdMentor, "id");
+    return mentorWithoutId;
+    
   } catch (error) {
-    throw error
+    throw error;
   }
 }
 
 async function getAllMentors() : Promise<Mentor[]> {
   try {
     const mentors = await prisma.mentor.findMany();
-    const mentorsWithoutId = mentors.map(mentor => exclude(mentor, 'id', 'userId'));
+    const mentorsWithoutId = mentors.map(mentor => exclude(mentor, 'id'));
     return mentorsWithoutId;
   } catch (error) {
     throw error;

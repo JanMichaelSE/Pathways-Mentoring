@@ -1,5 +1,5 @@
 import './styles/App.css'
-import AuthRouter from '@/pages/Auth/index.router.jsx';
+import AuthRouter from '@/routes/root.router.jsx';
 
 function App() {
 

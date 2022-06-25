@@ -13,6 +13,14 @@ async function httpGetAllMentors(req: Request, res: Response) {
   }
 }
 
+async function httpUpdateMentorProfile(req: Request, res: Response) {
+  try {
+    
+  } catch (error) {
+    return handleErrorResponse('update mentor profile', error, res);
+  }
+}
+
 
 export {
   httpGetAllMentors

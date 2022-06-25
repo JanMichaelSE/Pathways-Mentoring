@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom"
 import ContactUs from "@/pages/Common/Contact-Us/contact-us"
-import MentorProfile from "./Profile/mentor-profile"
-import Programs from "./Programs/programs"
-import MentorRecords from "./Records/mentor-records"
-import Students from "./Students/students"
+import MentorProfile from "@/pages/Mentors/Profile/mentor-profile"
+import Programs from "@/pages/Mentors/Programs/programs"
+import MentorRecords from "@/pages/Mentors/Records/mentor-records"
+import Students from "@/pages/Mentors/Students/students"
 
 function MentorRouter() {
   return (
