@@ -1,10 +1,9 @@
 import { Routes, Route } from "react-router-dom"
-
-import Login from './Login/login'
-import Signup from './Signup/signup'
-import AdminRouter from '../Admin/index.router'
-import MentorRouter from '../Mentors/index.router'
-import StudentRouter from '../Students/index.router'
+import Login from '@/pages/Auth/Login/login'
+import Signup from '@/pages/Auth/Signup/signup'
+import AdminRouter from './admin.router'
+import MentorRouter from './mentor.router'
+import StudentRouter from './student.router'
 
 function AuthRouter() {
   return (

@@ -1,7 +1,6 @@
 -- CreateTable
 CREATE TABLE "User" (
     "id" UUID NOT NULL,
-    "name" VARCHAR(100) NOT NULL,
     "email" VARCHAR(150) NOT NULL,
     "password" VARCHAR(65) NOT NULL,
     "passwordSalt" VARCHAR(65) NOT NULL,
@@ -17,16 +16,16 @@ CREATE TABLE "Mentor" (
     "id" UUID NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "email" VARCHAR(150) NOT NULL,
-    "phone" VARCHAR(15),
-    "gender" VARCHAR(10),
-    "department" VARCHAR(100),
-    "academicDegree" VARCHAR(50),
+    "phone" VARCHAR(15) NOT NULL,
+    "gender" VARCHAR(10) NOT NULL,
+    "department" VARCHAR(100) NOT NULL,
+    "academicDegree" VARCHAR(50) NOT NULL,
     "office" VARCHAR(100),
-    "officeHours" VARCHAR(100),
-    "facultyStatus" VARCHAR(100),
-    "interests" VARCHAR(255),
+    "officeHours" TEXT,
+    "facultyStatus" VARCHAR(100) NOT NULL,
+    "interests" TEXT,
     "description" TEXT,
-    "profilePicture" VARCHAR(255) NOT NULL,
+    "profilePicture" TEXT,
     "createdDate" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "lastModified" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" UUID NOT NULL,
@@ -40,23 +39,24 @@ CREATE TABLE "Student" (
     "name" VARCHAR(100) NOT NULL,
     "email" VARCHAR(150) NOT NULL,
     "phone" VARCHAR(15),
-    "gender" VARCHAR(10),
-    "graduationDate" TIMESTAMPTZ(6) NOT NULL,
-    "gpa" INTEGER NOT NULL,
-    "institution" VARCHAR(255),
-    "fieldOfStudy" VARCHAR(255),
+    "gender" VARCHAR(10) NOT NULL,
+    "graduationDate" DATE,
+    "gpa" DOUBLE PRECISION,
+    "institution" TEXT NOT NULL,
+    "fieldOfStudy" VARCHAR(255) NOT NULL,
     "hasResearch" BOOLEAN NOT NULL DEFAULT false,
-    "profilePicture" VARCHAR(255) NOT NULL,
+    "profilePicture" TEXT,
     "createdDate" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "lastModified" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" UUID NOT NULL,
+    "mentorId" UUID,
 
     CONSTRAINT "Student_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Record" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "stage" VARCHAR(255) NOT NULL,
     "finished" BOOLEAN DEFAULT false,
     "approved" BOOLEAN DEFAULT false,
@@ -74,7 +74,7 @@ CREATE TABLE "Note" (
     "id" SERIAL NOT NULL,
     "createdDate" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "lastModified" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "recordId" INTEGER NOT NULL,
+    "recordId" UUID NOT NULL,
 
     CONSTRAINT "Note_pkey" PRIMARY KEY ("id")
 );
@@ -107,6 +107,7 @@ CREATE TABLE "Question" (
     "id" SERIAL NOT NULL,
     "question" TEXT NOT NULL,
     "type" VARCHAR(255) NOT NULL,
+    "options" TEXT,
     "createdDate" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "lastModified" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "assessmentId" INTEGER NOT NULL,
@@ -152,6 +153,9 @@ ALTER TABLE "Mentor" ADD CONSTRAINT "Mentor_userId_fkey" FOREIGN KEY ("userId") 
 
 -- AddForeignKey
 ALTER TABLE "Student" ADD CONSTRAINT "Student_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Student" ADD CONSTRAINT "Student_mentorId_fkey" FOREIGN KEY ("mentorId") REFERENCES "Mentor"("id") ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Record" ADD CONSTRAINT "Record_mentorId_fkey" FOREIGN KEY ("mentorId") REFERENCES "Mentor"("id") ON DELETE CASCADE ON UPDATE CASCADE;

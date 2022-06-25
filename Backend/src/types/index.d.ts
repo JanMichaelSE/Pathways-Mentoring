@@ -3,27 +3,29 @@ export interface IErrorResponse {
   errorMessage:  string
 }
 
+export interface IUser {
+  id?: string
+  email: string
+  password: string
+  newPassword?: string
+  role?: string
+}
+
 export interface IStudent {
   name: string
-  password: string
-  email: string
-  role: string
   phone: string
   gender: string
   graduationDate: Date
   gpa: number
   institution: string
   fieldOfStudy: string
-  hasResearch: boolean
+  hasResearch?: boolean
   profilePicture: string
 }
 
 export interface IMentor {
   name:            string   
-  password:        string
-  email:           string   
   phone:           string
-  role:            string  
   gender:          string  
   department:      string  
   academicDegree:  string  

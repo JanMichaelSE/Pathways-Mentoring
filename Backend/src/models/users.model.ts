@@ -5,7 +5,6 @@ import { User } from "@prisma/client";
 import { IErrorResponse } from "./../types/index.d";
 
 async function createUser(
-  name: string,
   email: string,
   password: string,
   role: string
@@ -27,7 +26,6 @@ async function createUser(
 
     const createdUser = await prisma.user.create({
       data: {
-        name: name,
         email: email,
         password: hashedPassword,
         passwordSalt: salt,
@@ -61,12 +59,7 @@ async function findUserByEmail(email: string): Promise<User | null> {
 async function isUserAuthorized(email: string, password: string) : Promise<User | IErrorResponse> {
   try {
     
-    const user = await prisma.user.findUnique({
-      where: {
-        email: email
-      }
-    });
-
+    const user = await findUserByEmail(email);
     if (!user) {
       const error: IErrorResponse = {
         errorCode: 401,
@@ -81,12 +74,12 @@ async function isUserAuthorized(email: string, password: string) : Promise<User 
       const error: IErrorResponse = {
         errorCode: 401,
         errorMessage:
-          "Provided password is incorrect is for this user.",
+          "Provided password is incorrect for this user.",
       };
       return error;
     }
 
-    const userWithoutPassord = exclude(user, 'id', 'password', 'passwordSalt');
+    const userWithoutPassord = exclude(user, 'password', 'passwordSalt');
     return userWithoutPassord;
 
   } catch (error) {
@@ -94,7 +87,91 @@ async function isUserAuthorized(email: string, password: string) : Promise<User 
   }
 }
 
+async function updateUserPassword(userId: string, currentPassword: string, newPassword: string) : Promise<User | IErrorResponse> {
+  try {
 
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId
+      }
+    });
+    if (!user) {
+      const error: IErrorResponse = {
+        errorCode: 401,
+        errorMessage:
+          "This user does not exist in the system.",
+      };
+      return error;
+    }
+
+    let hashedPasswordFromRequest = sha512(currentPassword, user.passwordSalt);
+    if (hashedPasswordFromRequest !== user.password) {
+      const error: IErrorResponse = {
+        errorCode: 401,
+        errorMessage:
+          "Current password is incorrect for this user.",
+      };
+      return error;
+    }
+
+    let salt: string = generateSalt(32);
+    let hashedPassword: string = sha512(newPassword, salt);
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: {
+        password: hashedPassword,
+        passwordSalt: salt
+      }
+    });
+
+    return updatedUser;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function updateUserEmail(userId: string, email: string) : Promise<User | IErrorResponse> {
+  try {
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId
+      }
+    });
+    if (!user) {
+      const error: IErrorResponse = {
+        errorCode: 401,
+        errorMessage:
+          "This user does not exist in the system.",
+      };
+      return error;
+    }
+
+    if (user.email === email) {
+      return user;
+    }
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: {
+        email: email
+      }
+    });
+
+    return updatedUser;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+// --- User Helper Functions ---
 function generateSalt(length: number): string {
   return crypto
     .randomBytes(Math.ceil(length / 2))
@@ -119,4 +196,9 @@ function exclude<User, Key extends keyof User>(
   return user;
 }
 
-export { createUser, isUserAuthorized };
+export { 
+  createUser,
+  isUserAuthorized, 
+  updateUserPassword,
+  updateUserEmail 
+};

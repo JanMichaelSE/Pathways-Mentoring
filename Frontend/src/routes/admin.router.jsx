@@ -1,9 +1,9 @@
 import { Route, Routes } from 'react-router-dom'
 
-import ManageAssessments from './Manage-Assessments/manage-assessments'
-import ManageRecords from './Manage-Records/manage-records'
-import ManageUsers from './Manage-Users.jsx/manage-users'
-import AdminProfile from './Profile/admin-profile'
+import ManageAssessments from '@/pages/Admin/Manage-Assessments/manage-assessments'
+import ManageRecords from '@/pages/Admin/Manage-Records/manage-records'
+import ManageUsers from '@/pages/Admin/Manage-Users.jsx/manage-users'
+import AdminProfile from '@/pages/Admin/Profile/admin-profile'
 
 function AdminRouter() {
   return (
