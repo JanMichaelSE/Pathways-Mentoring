@@ -25,6 +25,11 @@ function formatPhoneNumber(phoneNumberString: string) : string {
   return "";
 }
 
+function isValidUUID(str: string) : boolean {
+  const regexExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
+  return regexExp.test(str);
+}
+
 function handleErrorResponse(failedAt:string, error: any, res: Response) : Response {
   errorLogger(error);
   const errorResponse: IErrorResponse = {
@@ -39,5 +44,6 @@ function handleErrorResponse(failedAt:string, error: any, res: Response) : Respo
 export {
   titleCase,
   formatPhoneNumber,
+  isValidUUID,
   handleErrorResponse
 }

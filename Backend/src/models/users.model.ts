@@ -56,37 +56,6 @@ async function findUserByEmail(email: string): Promise<User | null> {
   }
 }
 
-async function isUserAuthorized(email: string, password: string) : Promise<User | IErrorResponse> {
-  try {
-    
-    const user = await findUserByEmail(email);
-    if (!user) {
-      const error: IErrorResponse = {
-        errorCode: 401,
-        errorMessage:
-          "A user with this email doesn't exist.",
-      };
-      return error;
-    }
-
-    let hashedPasswordFromRequest = sha512(password, user.passwordSalt);
-    if (hashedPasswordFromRequest !== user.password) {
-      const error: IErrorResponse = {
-        errorCode: 401,
-        errorMessage:
-          "Provided password is incorrect for this user.",
-      };
-      return error;
-    }
-
-    const userWithoutPassord = exclude(user, 'password', 'passwordSalt');
-    return userWithoutPassord;
-
-  } catch (error) {
-    throw error;
-  }
-}
-
 async function updateUserPassword(userId: string, currentPassword: string, newPassword: string) : Promise<User | IErrorResponse> {
   try {
 
@@ -170,6 +139,37 @@ async function updateUserEmail(userId: string, email: string) : Promise<User | I
   }
 }
 
+async function isUserAuthorized(email: string, password: string) : Promise<User | IErrorResponse> {
+  try {
+    
+    const user = await findUserByEmail(email);
+    if (!user) {
+      const error: IErrorResponse = {
+        errorCode: 401,
+        errorMessage:
+          "A user with this email doesn't exist.",
+      };
+      return error;
+    }
+
+    let hashedPasswordFromRequest = sha512(password, user.passwordSalt);
+    if (hashedPasswordFromRequest !== user.password) {
+      const error: IErrorResponse = {
+        errorCode: 401,
+        errorMessage:
+          "Provided password is incorrect for this user.",
+      };
+      return error;
+    }
+
+    const userWithoutPassord = exclude(user, 'password', 'passwordSalt');
+    return userWithoutPassord;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 // --- User Helper Functions ---
 function generateSalt(length: number): string {
@@ -197,8 +197,9 @@ function exclude<User, Key extends keyof User>(
 }
 
 export { 
-  createUser,
-  isUserAuthorized, 
+  createUser, 
+  findUserByEmail,
   updateUserPassword,
-  updateUserEmail 
+  updateUserEmail,
+  isUserAuthorized, 
 };
