@@ -7,7 +7,7 @@ async function createMentor(
   userId: string,
   email: string,
   mentorInfo: IMentor
-): Promise<Mentor | IErrorResponse> {
+) : Promise<Mentor | IErrorResponse> {
   try {
 
     const createdMentor = await prisma.mentor.create({
@@ -36,11 +36,31 @@ async function createMentor(
   }
 }
 
-async function getAllMentors() : Promise<Mentor[]> {
+async function findAllMentors() : Promise<Mentor[]> {
   try {
     const mentors = await prisma.mentor.findMany();
     const mentorsWithoutId = mentors.map(mentor => exclude(mentor, 'id'));
     return mentorsWithoutId;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function findMentorByUserId(userId: string) : Promise<Mentor | null> {
+  try {
+    const mentor = await prisma.mentor.findUnique({
+      where: {
+        userId: userId
+      }
+    });
+
+    if (!mentor) {
+      return null;
+    }
+    
+    const mentorWithoutId = exclude(mentor, 'id');
+    return mentorWithoutId;
+
   } catch (error) {
     throw error;
   }
@@ -59,6 +79,51 @@ async function findMentorByEmail(email: string) : Promise<Mentor | null> {
   }
 }
 
+async function updateMentor(userId: string, mentorInfo: IMentor) : Promise<Mentor | IErrorResponse> {
+  try {
+    
+    const mentor = await prisma.mentor.findUnique({
+      where: {
+        userId: userId
+      }
+    });
+    if (!mentor) {
+      const error: IErrorResponse = {
+        errorCode: 401,
+        errorMessage:
+          "This mentor does not exist in the system.",
+      };
+      return error;
+    }
+
+    const updatedMentor = await prisma.mentor.update({
+      where: {
+        id: mentor.id
+      },
+      data: {
+        name: !!mentorInfo.name ? mentorInfo.name : undefined,
+        phone: !!mentorInfo.phone ? mentorInfo.phone : undefined,
+        gender: !!mentorInfo.gender ? mentorInfo.gender : undefined,
+        description: mentorInfo.description,
+        interests: mentorInfo.interests,
+        department: !!mentorInfo.department ? mentorInfo.department : undefined,
+        academicDegree: !!mentorInfo.academicDegree ? mentorInfo.academicDegree : undefined,
+        office: mentorInfo.office,
+        officeHours: mentorInfo.officeHours,
+        profilePicture: mentorInfo.profilePicture
+      }
+    });
+
+    const mentorWithoutId = exclude(updatedMentor, 'id');
+    return mentorWithoutId;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+// --- Mentor Helper Functions ---
 function exclude<Mentor, Key extends keyof Mentor>(
   mentor: Mentor,
   ...keys: Key[]
@@ -72,6 +137,8 @@ function exclude<Mentor, Key extends keyof Mentor>(
 
 export {
   createMentor,
-  getAllMentors,
-  findMentorByEmail
+  findAllMentors,
+  findMentorByUserId,
+  findMentorByEmail,
+  updateMentor
 }

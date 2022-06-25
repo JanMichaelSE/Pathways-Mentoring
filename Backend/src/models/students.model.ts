@@ -33,7 +33,7 @@ async function createStudent(
   }
 }
 
-async function getAllStudents() : Promise<Student[]> {
+async function findAllStudents() : Promise<Student[]> {
   try {
 
     const students = await prisma.student.findMany();
@@ -45,7 +45,7 @@ async function getAllStudents() : Promise<Student[]> {
   }
 }
 
-async function getStudentsByMentor(mentorId: string) : Promise<Student[]> {
+async function findStudentsByMentor(mentorId: string) : Promise<Student[]> {
   try {
 
     const students = await prisma.student.findMany({
@@ -56,6 +56,27 @@ async function getStudentsByMentor(mentorId: string) : Promise<Student[]> {
     
     const studentsWithoutId = students.map(student => exclude(student, 'id', 'mentorId', 'userId'));
     return studentsWithoutId;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function findStudentByUserId(userId: string) : Promise<Student | null>{
+
+  try {
+    const student = await prisma.student.findUnique({
+      where: {
+        userId: userId
+      }
+    });
+
+    if (!student) {
+      return null;
+    }
+    
+    const studentWithoutId = exclude(student, 'id');
+    return studentWithoutId;
 
   } catch (error) {
     throw error;
@@ -121,7 +142,8 @@ function exclude<Student, Key extends keyof Student>(
 
 export {
   createStudent,
-  getAllStudents,
-  getStudentsByMentor,
+  findAllStudents,
+  findStudentsByMentor,
+  findStudentByUserId,
   updateStudent
 }

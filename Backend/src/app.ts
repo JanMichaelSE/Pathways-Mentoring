@@ -1,7 +1,7 @@
 import express from "express";
 
 import authRouter from "./routes/auth/auth.router";
-import mentorsRouter from "./routes/mentors/mentros.router";
+import mentorsRouter from "./routes/mentors/mentors.router";
 import studentsRouter from "./routes/students/students.router";
 import assessmentRouter from "./routes/assessments/asessments.router";
 

@@ -2,15 +2,15 @@ import { IUser, IStudent } from './../../types/index.d';
 import { Request, Response } from "express";
 import { IErrorResponse } from "../../types";
 import { findMentorByEmail } from "../../models/mentors.model";
-import { getAllStudents, getStudentsByMentor, updateStudent } from "../../models/students.model";
-import { formatPhoneNumber, handleErrorResponse, titleCase } from "../../utils/helpers";
+import { findAllStudents, findStudentByUserId, findStudentsByMentor, updateStudent } from "../../models/students.model";
+import { formatPhoneNumber, handleErrorResponse, isValidUUID, titleCase } from "../../utils/helpers";
 import { updateUserEmail, updateUserPassword } from '../../models/users.model';
 
 
 async function httpGetAllStudents(req: Request, res: Response) {  
   try {
 
-    const students = await getAllStudents();
+    const students = await findAllStudents();
     return res.status(200).json(students);
     
   } catch (error) {
@@ -32,7 +32,7 @@ async function httpGetAllStudentsByMentor(req: Request, res: Response) {
       return res.status(error.errorCode).json({ error });
     }
 
-    const students = await getStudentsByMentor(mentor.id);
+    const students = await findStudentsByMentor(mentor.id);
     return res.status(200).json(students);
     
   } catch (error) {
@@ -40,8 +40,45 @@ async function httpGetAllStudentsByMentor(req: Request, res: Response) {
   }
 }
 
+async function httpGetStudentByUserId(req: Request, res: Response) {
+  try {
+
+    const userId = req.params.id;
+    const isValidId = isValidUUID(userId);
+
+    if(!isValidId) {
+      const error: IErrorResponse = {
+        errorCode: 400,
+        errorMessage:
+          "This Id passed in the URL parameter is not does not have a valid format.",
+      };
+      return res.status(error.errorCode).json({
+        error: error,
+      });
+    }
+
+    const studentResponse = await findStudentByUserId(userId);
+    if (!studentResponse) {
+      const error: IErrorResponse = {
+        errorCode: 400,
+        errorMessage:
+          "This student does not exist in the system.",
+      };
+      return res.status(error.errorCode).json({
+        error: error,
+      });
+    }   
+
+    return res.status(200).json(studentResponse);
+
+  } catch (error) {
+    return handleErrorResponse('get student by user id', error, res);
+  }
+}
+
 async function httpUpdateStudentProfile(req: Request, res: Response) {
   try {
+
     const userInfo: IUser = {
       id: req.body.userId,
       email: req.body.email,
@@ -114,5 +151,6 @@ async function httpUpdateStudentProfile(req: Request, res: Response) {
 export {
   httpGetAllStudents,
   httpGetAllStudentsByMentor,
+  httpGetStudentByUserId,
   httpUpdateStudentProfile
 }
