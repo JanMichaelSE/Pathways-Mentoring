@@ -7,10 +7,6 @@
   padding: 3rem 4rem;
 }
 
-.header-container {
-
-}
-
 .heading {
   color: var(--color-blue-dark);
   font-size: var(--font-size-heading);
@@ -28,14 +24,103 @@
 
 /* Creating Student Form Component */
 .form-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  column-gap: 1rem;
-  row-gap: 2rem;
+  max-width: 1500px;
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
   padding-top: 2rem;
 }
 
-.form-container div {
-  
+.form div {
+  margin-right: 2rem;
+  margin-bottom: 1.5rem;
 }
 
+
+/* Input Text Component Styles */
+.label {
+  display: block;
+  font-size: var(--font-size-regular);
+  font-weight: bold;
+  color: #5C5D60;
+  padding-bottom: 0.25rem;
+  margin-left: 20px;
+}
+
+.input-text {
+  font-size: var(--font-size-regular);
+  background-color: var(--color-white);
+  border: 1px solid rgba(139, 141, 144, 0.5);
+  box-shadow:  0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  padding: 0 20px;
+  height: 60px;
+  width: 19rem;
+}
+
+.input-text:focus {
+  outline: none;
+}
+
+.input-numeric {
+  width: 9rem !important;
+}
+
+/* Select Input Styles Component*/
+.input-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-size: var(--font-size-regular);
+  background-color: var(--color-white);
+  background-image: url('../../../assets/chevron-down-icon.svg');
+  background-repeat: no-repeat;
+  background-position: top 5px right 20px;
+  border: 1px solid rgba(139, 141, 144, 0.5);
+  box-shadow:  0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  padding: 0 20px;
+  height: 60px;
+  width: 19rem;
+}
+
+.input-select > option {
+  text-align: center;
+}
+
+/* Search Input Styles Component*/
+.input-search {
+  font-size: var(--font-size-regular);
+  background-color: var(--color-white);
+  background-image: url('../../../assets/search-icon.svg');
+  background-repeat: no-repeat;
+  background-position: top 5px left 20px;
+  border: 1px solid rgba(139, 141, 144, 0.5);
+  box-shadow:  0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  padding: 0 20px 0 70px;
+  height: 60px;
+  width: 25rem;
+}
+
+.input-search:focus {
+  outline: none;
+}
+
+
+
+/* Button Styles Component */
+.button {
+  cursor: pointer;
+  font-size: var(--font-size-heading);
+  font-weight: bold;
+  color: var(--color-white);
+  width: 230px;
+  height: 81px;
+  background: linear-gradient(180.71deg, #FAC20B 0.61%, #EE7222 99.39%);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  border: none;
+  float: right;
+}
