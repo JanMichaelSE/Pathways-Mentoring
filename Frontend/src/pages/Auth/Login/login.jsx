@@ -2,7 +2,7 @@ import { useRef,useState,useEffect } from "react";
 import styles from  "./login.module.css";
 import Pathway_Logo from "@/assets/Pathway_Logo.png"
 import { Link } from "react-router-dom";
-import loginbackground from "@/assets/login-background.svg"
+
 
 function Login() {
   const userRef = useRef();
@@ -22,7 +22,7 @@ function Login() {
   }, [user,pwd])
 
   const [flag, setFlag] = useState(false);
-  
+
   const toggleState = () => {
     setFlag((prev) => !prev);
     console.log('Flag:',  flag);
