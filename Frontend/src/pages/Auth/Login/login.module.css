@@ -1,29 +1,132 @@
 *{
   box-sizing: border-box;
 }
+
+/* Background */
 .loginBackground{
-  
-  background-image: url("../../../../assets/login-background.svg");
-  max-width: 100%;
+
+  background-image: url("../../../assets/login-background.svg");
+  padding: 3rem 4rem;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  background-size: cover;
 }
 
-.loginContainer {
-  margin: 3rem auto;
-  background-color: red;
-  padding: 5rem;
+/* Pathway logo */
+.logoContainer{
+  display: flex;
+  justify-content: center;
+  /*margin-top: 100px;*/
+
 }
 
 .pathwayLogo {
-  max-width: 100%;
-  width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  top: 100px;
-  /*text-align: center;*/
-  align-items: center;
+  width: 50%;
+
 }
 
-.logoContainer{
+/* Form for login credential */
+.formContainer{
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+form {
+  width: 100%;
+  max-width: 500px;
+  min-width: 20%;
+}
 
-  
+.inputUser {
+  font-size: var(--font-size-regular);
+  background-color: var(--color-white);
+  background-image: url('../../../assets/mail-icon.svg');
+  background-repeat: no-repeat;
+  background-position: top 5px left 20px;
+  border: 1px solid rgba(139, 141, 144, 0.5);
+  box-shadow:  0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  padding: 0 20px;
+  height: 60px;
+  width: 100%;
+  margin-bottom: 50px;
+}
+.inputUser::placeholder{
+  font-size: 32px;
+  font-family: 'Inter';
+  font-style: normal;
+  color: rgba(139, 141, 144, 0.5);
+  height: 50%;
+  text-align: center;
+
+}
+input[type=text]{
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 80px;
+}
+
+.inputPwd {
+  font-size: var(--font-size-regular);
+  background-color: var(--color-white);
+  background-image: url('../../../assets/secure-icon.svg');
+  background-repeat: no-repeat;
+  background-position: top 5px left 20px;
+  border: 1px solid rgba(139, 141, 144, 0.5);
+  box-shadow:  0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  padding: 0 20px;
+  height: 60px;
+  width: 100%;
+  margin-bottom: 50px;
+}
+.inputPwd::placeholder{
+  font-size: 32px;
+  font-family: 'Inter';
+  font-style: normal;
+  color: rgba(139, 141, 144, 0.5);
+  height: 50%;
+  text-align: center
+}
+input[type=password]{
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 80px;
+
+}
+
+.button {
+  cursor: pointer;
+  font-size: var(--font-size-heading);
+  font-weight: bold;
+  color: var(--color-white);
+  width: 230px;
+  height: 81px;
+  background: linear-gradient(180.71deg, #FAC20B 0.61%, #EE7222 99.39%);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  border: none;
+  float: right;
+  margin-right: 25%;
+  margin-left: 25%;
+
+}
+
+/* Below Links */
+.linkContainer{
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+
+}
+
+.sub-heading {
+  font-size: var(--font-size-subheading);
+  margin-top: 3rem;
+}
+
+.navigation-link {
+  color: var(--color-blue-dark);
+  text-decoration: none;
+
 }
