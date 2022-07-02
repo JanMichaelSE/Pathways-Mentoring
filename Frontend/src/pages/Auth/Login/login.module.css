@@ -37,6 +37,13 @@ form {
   min-width: 20%;
 }
 
+p{
+  font-size: var(--font-size-regular);
+  color: red;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
 .inputUser {
   font-size: var(--font-size-regular);
   background-color: var(--color-white);
@@ -49,7 +56,7 @@ form {
   padding: 0 20px;
   height: 60px;
   width: 100%;
-  margin-bottom: 50px;
+  margin-bottom: 1px;
 }
 .inputUser::placeholder{
   font-size: 32px;
@@ -60,7 +67,7 @@ form {
   text-align: center;
 
 }
-input[type=text]{
+input[type=email]{
   padding-top: 0;
   padding-bottom: 0;
   padding-left: 80px;
@@ -78,7 +85,7 @@ input[type=text]{
   padding: 0 20px;
   height: 60px;
   width: 100%;
-  margin-bottom: 50px;
+  margin-bottom: 1px;
 }
 .inputPwd::placeholder{
   font-size: 32px;
