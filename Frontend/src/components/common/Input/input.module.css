@@ -15,9 +15,15 @@
   border-radius: 30px;
   padding: 0 20px;
   height: 60px;
-  width: 15rem;
+  width: 19rem;
 }
 
 .input:focus {
   outline: none;
+}
+
+@media only screen and (max-width: 1135px) {
+  .input {
+    width: 16rem;
+  }
 }

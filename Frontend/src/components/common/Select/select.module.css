@@ -1,0 +1,30 @@
+.label {
+  display: block;
+  font-size: var(--font-size-regular);
+  font-weight: bold;
+  color: #5c5d60;
+  padding-bottom: 0.25rem;
+  margin-left: 20px;
+}
+
+.select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-size: var(--font-size-regular);
+  background-color: var(--color-white);
+  background-image: url("../../../assets/chevron-down-icon.svg");
+  background-repeat: no-repeat;
+  background-position: top 5px right 20px;
+  border: 1px solid rgba(139, 141, 144, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  padding: 0 20px;
+  height: 60px;
+  width: 19rem;
+}
+
+@media only screen and (max-width: 1135px) {
+  .select {
+    width: 16rem;
+  }
+}
