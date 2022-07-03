@@ -9,6 +9,9 @@
   --font-size-subheading: 16pt;
   --font-size-regular: 14pt;
   --font-size-small: 12pt;
+
+  /* React Toastify Overriden Styles */
+  --toastify-color-warning: linear-gradient(180.71deg, #FAC20B 0.61%, #EE7222 99.39%);
 }
 
 *,
@@ -35,4 +38,13 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* Error Styles */
+.label-error {
+  color: red;
+}
+
+.input-error {
+  border-color: red;
 }
