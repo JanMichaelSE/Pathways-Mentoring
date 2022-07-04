@@ -1,0 +1,26 @@
+.form-input {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 2rem;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.error{
+  color: red;
+  margin-left: 1.5rem;
+}
+.emailMessage{
+  color: red;
+  margin-left: 1.5rem;
+}
+
+.pwdMessage{
+  color: red;
+  margin-bottom: 0;
+  margin-left: 1rem;
+
+}
+.button-container {
+    margin-right: 25%;
+  }
