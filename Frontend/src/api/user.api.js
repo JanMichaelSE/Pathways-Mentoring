@@ -1,5 +1,44 @@
 import axios from "axios";
 
+async function httpLogin(userParam){
+  let userToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+
+  try {
+
+    const userInfo = {
+      email: userParam.email,
+      password: userParam.password,
+
+    };
+
+    const response = await axios.post(
+      "http://localhost:5000/auth/login",
+      userInfo
+    );
+
+    console.log("Response: ", response);
+    console.log("Response Data: ", response.data);
+
+    userToReturn.data = response.data;
+    console.log(userToReturn);
+  } catch (error) {
+    const errorResponse = error.response.data;
+    if (errorResponse.error.errorCode == 401) {
+      userToReturn.hasError = true;
+      userToReturn.errorMessage = errorResponse.error.errorMessage;
+    } else if (errorResponse.error.errorCode == 500) {
+      userToReturn.hasError = true;
+      userToReturn.errorMessage = errorResponse.error.errorMessage;
+    }
+  }
+
+  return userToReturn;
+}
+
 async function httpSignupStudent(studentParam) {
   let userToReturn = {
     hasError: false,
@@ -45,4 +84,4 @@ async function httpSignupStudent(studentParam) {
   return userToReturn;
 }
 
-export { httpSignupStudent };
+export { httpSignupStudent, httpLogin };
