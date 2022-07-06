@@ -6,9 +6,11 @@
     border-radius: 30px;
     padding: 0 20px;
     height: 60px;
-    width: 100%;
+    max-width: 500px;
+    width: 32rem;
     margin-bottom: 2rem;
-  }
+
+}
 
 .input:focus {
 outline: none;
@@ -31,6 +33,6 @@ input[type=password]{
 }
 @media only screen and (max-width: 1135px) {
 .input {
-    width: 16rem;
+    width: 22rem;
 }
 }
