@@ -1,6 +1,6 @@
 import axios from "axios";
 
-async function httpLogin(userParam){
+async function httpLogin(userParam) {
   let userToReturn = {
     hasError: false,
     data: null,
@@ -8,20 +8,15 @@ async function httpLogin(userParam){
   };
 
   try {
-
     const userInfo = {
       email: userParam.email,
       password: userParam.password,
-
     };
 
     const response = await axios.post(
       "http://localhost:5000/auth/login",
       userInfo
     );
-
-    console.log("Response: ", response);
-    console.log("Response Data: ", response.data);
 
     userToReturn.data = response.data;
     console.log(userToReturn);
@@ -47,7 +42,7 @@ async function httpSignupStudent(studentParam) {
   };
 
   try {
-    const name = `${studentParam.firstName}  ${studentParam.lastName} ${studentParam.secondLastName}`;
+    const name = `${studentParam.firstName} ${studentParam.lastName}`;
 
     const studentInfo = {
       name: name,
@@ -65,9 +60,6 @@ async function httpSignupStudent(studentParam) {
       "http://localhost:5000/auth/signup/student",
       studentInfo
     );
-
-    console.log("Response: ", response);
-    console.log("Response Data: ", response.data);
 
     userToReturn.data = response.data;
   } catch (error) {

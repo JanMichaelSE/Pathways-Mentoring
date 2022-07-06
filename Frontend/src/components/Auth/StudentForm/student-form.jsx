@@ -1,23 +1,27 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
+
+import { httpSignupStudent } from "@/api/user.api";
+import { useUserStore } from "@/store/user.store";
+
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
 import styles from "./student-form.module.css";
-import { useNavigate } from "react-router-dom";
-import { httpSignupStudent } from "@/api/user.api";
-import { toast } from "react-toastify";
 
 function StudentForm() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const userId = useUserStore((state) => state.userId);
+  const setUser = useUserStore((state) => state.setUser);
 
   useEffect(() => {
-    if (user) {
+    if (userId) {
       navigate("../student", { replace: true });
     }
-  }, [user]);
+  }, [userId]);
 
   async function handleSubmit(studentInfo) {
     const userResponse = await httpSignupStudent(studentInfo);
@@ -26,7 +30,11 @@ function StudentForm() {
       return toast.error(userResponse.errorMessage);
     }
 
-    setUser(userResponse.data);
+    setUser(
+      userResponse.data.userId,
+      userResponse.data.email,
+      userResponse.data.role
+    );
   }
 
   return (
@@ -35,7 +43,6 @@ function StudentForm() {
         initialValues={{
           firstName: "",
           lastName: "",
-          secondLastName: "",
           phone: "",
           email: "",
           password: "",
@@ -48,7 +55,6 @@ function StudentForm() {
         validationSchema={Yup.object({
           firstName: Yup.string().required(),
           lastName: Yup.string().required(),
-          secondLastName: Yup.string().required(),
           phone: Yup.string().matches(
             /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
             "Phone number is not valid"
@@ -77,11 +83,6 @@ function StudentForm() {
           <div className={styles.formInput}>
             <Input label="First Name *" name="firstName" type="text" />
             <Input label="Last Name *" name="lastName" type="text" />
-            <Input
-              label="Second Last Name *"
-              name="secondLastName"
-              type="text"
-            />
             <Input label="Phone" name="phone" type="text" />
             <Input label="Email *" name="email" type="text" />
             <Input label="Password *" name="password" type="text" />

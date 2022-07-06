@@ -1,94 +1,87 @@
-import { useState, useEffect } from "react";
-import { Formik, Form,ErrorMessage } from "formik";
-import * as Yup from "yup";
-import Button from "@/components/common/Button/button";
-import Input from "@/components/Auth/LoginForm/common/input-login";
-import styles from "./login-form.module.css";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Formik, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
+
+import Button from "@/components/common/Button/button";
+import Input from "@/components/Auth/InputLogin/input-login";
+import styles from "./login-form.module.css";
+
 import { httpLogin } from "@/api/user.api";
-import { ToastContainer,toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useUserStore } from "@/store/user.store";
 
-function LoginForm(){
-    const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-
+function LoginForm() {
+  const navigate = useNavigate();
+  const role = useUserStore((state) => state.role);
+  const setUser = useUserStore((state) => state.setUser);
 
   useEffect(() => {
-    if (user) {
-      if(user.role == "Student"){
-        navigate("../student", { replace: true });
-      }else if(user.role == "Mentor"){
-        navigate("../mentor", { replace: true });
-      }else if(user.role == "Admin"){
-        navigate("../admin", { replace: true });
-      }
-
+    if (role == "Student") {
+      navigate("../student", { replace: true });
+    } else if (role == "Mentor") {
+      navigate("../mentor", { replace: true });
+    } else if (role == "Admin") {
+      navigate("../admin", { replace: true });
     }
-  }, [user]);
+  }, [role]);
 
   async function handleSubmit(studentInfo) {
     const userResponse = await httpLogin(studentInfo);
 
     if (userResponse.hasError) {
-      return toast.error(userResponse.errorMessage,{
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        });
+      return toast.error(userResponse.errorMessage);
     }
 
-    setUser(userResponse.data);
+    setUser(
+      userResponse.data.userId,
+      userResponse.data.email,
+      userResponse.data.role
+    );
   }
 
-    return (
+  return (
     <Formik
-        initialValues={{
-            email: "",
-            password: "",
-        }}
-        validationSchema={Yup.object({
-            email: Yup.string().email("Invalid email address").required(),
-            password: Yup.string().min(12,"Must Contain 12 Characters").required(),
-        })}
-        onSubmit={async (values) => {
-            await handleSubmit(values);
-        }}
+      initialValues={{
+        email: "",
+        password: "",
+      }}
+      validationSchema={Yup.object({
+        email: Yup.string()
+          .email("Invalid email address")
+          .required("Email is required"),
+        password: Yup.string()
+          .min(12, "Must Contain 12 Characters")
+          .required("Password is required"),
+      })}
+      onSubmit={async (values) => {
+        await handleSubmit(values);
+      }}
     >
-        <Form >
-            <div className={styles.formInput}>
-              <div className={styles.error} >
-                <ErrorMessage className="emailMessage" name='email' />
-              </div>
-                <Input name="email" type="text" placeholder="Email" id="input"/>
-              <div className={styles.error} >
-                <ErrorMessage className={styles.pwdMessage} name='password' />
-              </div>
-                <Input name="password" type="password" placeholder="Password" id="input" />
-            </div>
-            <div className={styles.buttonContainer}>
-                <Button type="submit">Log In</Button>
-                <ToastContainer
-                  position="top-right"
-                  autoClose={5000}
-                  hideProgressBar={false}
-                  newestOnTop={false}
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  />
-                {/* Same as */}
-                <ToastContainer />
-            </div>
-        </Form>
+      <Form>
+        <div className={styles.formInput}>
+          <Input name="email" type="text" placeholder="Email" id="input" />
+          <div className={styles.error}>
+            <ErrorMessage name="email" />
+          </div>
+
+          <Input
+            name="password"
+            type="password"
+            placeholder="Password"
+            id="input"
+          />
+          <div className={styles.error}>
+            <ErrorMessage name="password" />
+          </div>
+
+          <div className={styles.buttonContainer}>
+            <Button type="submit">Log In</Button>
+          </div>
+        </div>
+      </Form>
     </Formik>
-    );
+  );
 }
 
 export default LoginForm;
