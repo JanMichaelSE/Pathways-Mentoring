@@ -1,5 +1,50 @@
-.loginContainer {
-  margin: 3rem auto;
-  background-color: red;
-  padding: 5rem;
+/* Background */
+.loginBackground {
+  background-image: url("../../../assets/login-background.svg");
+  padding: 3rem 4rem;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Pathway logo */
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  /*margin-top: 100px;*/
+}
+
+.pathwayLogo {
+  width: 40%;
+}
+
+/* Form for login credential */
+.formContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+form {
+  width: 100%;
+  max-width: 500px;
+  min-width: 20%;
+}
+
+/* Below Links */
+.linkContainer {
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+}
+
+.sub-heading {
+  font-size: var(--font-size-subheading);
+  margin-top: 1rem;
+}
+
+.navigation-link {
+  color: var(--color-blue-dark);
+  text-decoration: none;
 }
