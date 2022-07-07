@@ -1,0 +1,135 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String    @id @default(uuid()) @db.Uuid
+  email            String    @unique @db.VarChar(150)
+  password         String    @unique @db.VarChar(65)
+  passwordSalt     String    @unique @db.VarChar(65)
+  role             String    @db.VarChar(10)
+  createdDate      DateTime  @default(now()) @db.Timestamptz(6)
+  lastModified     DateTime  @default(now()) @db.Timestamptz(6)
+  mentor           Mentor?
+  student          Student?
+  senderMessages   Message[] @relation(name: "sender")
+  receiverMessages Message[] @relation(name: "receiver")
+}
+
+model Mentor {
+  id             String    @id @default(uuid()) @db.Uuid
+  name           String    @db.VarChar(100)
+  email          String    @unique @db.VarChar(150)
+  phone          String    @db.VarChar(15)
+  gender         String    @db.VarChar(10)
+  department     String    @db.VarChar(100)
+  academicDegree String    @db.VarChar(50)
+  office         String?   @db.VarChar(100)
+  officeHours    String?
+  facultyStatus  String    @db.VarChar(100)
+  interests      String?
+  description    String?
+  profilePicture String?
+  createdDate    DateTime  @default(now()) @db.Timestamptz(6)
+  lastModified   DateTime  @default(now()) @db.Timestamptz(6)
+  userId         String    @unique @db.Uuid
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  records        Record[]
+  students       Student[]
+}
+
+model Student {
+  id             String    @id @default(uuid()) @db.Uuid
+  name           String    @db.VarChar(100)
+  email          String    @unique @db.VarChar(150)
+  phone          String?   @db.VarChar(15)
+  gender         String    @db.VarChar(10)
+  graduationDate DateTime? @db.Date
+  gpa            Float?
+  institution    String
+  fieldOfStudy   String    @db.VarChar(255)
+  hasResearch    Boolean   @default(false)
+  profilePicture String?
+  createdDate    DateTime  @default(now()) @db.Timestamptz(6)
+  lastModified   DateTime  @default(now()) @db.Timestamptz(6)
+  userId         String    @unique @db.Uuid
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mentorId       String?   @db.Uuid
+  mentor         Mentor?   @relation(fields: [mentorId], references: [id], onDelete: NoAction)
+  records        Record[]
+  answers        Answer[]
+}
+
+model Record {
+  id           String   @id @default(uuid()) @db.Uuid
+  stage        String   @db.VarChar(255)
+  finished     Boolean? @default(false)
+  approved     Boolean? @default(false)
+  rating       Decimal?
+  createdDate  DateTime @default(now()) @db.Timestamptz(6)
+  lastModified DateTime @default(now()) @db.Timestamptz(6)
+  mentorId     String   @db.Uuid
+  mentor       Mentor   @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  studentId    String   @db.Uuid
+  student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  notes        Note[]
+}
+
+model Note {
+  id           Int      @id @default(autoincrement())
+  createdDate  DateTime @default(now()) @db.Timestamptz(6)
+  lastModified DateTime @default(now()) @db.Timestamptz(6)
+  recordId     String   @db.Uuid
+  record       Record   @relation(fields: [recordId], references: [id], onDelete: Cascade)
+}
+
+model Message {
+  id           Int      @id @default(autoincrement())
+  message      String
+  createdDate  DateTime @default(now()) @db.Timestamptz(6)
+  lastModified DateTime @default(now()) @db.Timestamptz(6)
+  senderId     String   @db.Uuid
+  sender       User     @relation(name: "sender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId   String   @db.Uuid
+  receiver     User     @relation(name: "receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+}
+
+model Assessment {
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(255)
+  description  String?
+  createdDate  DateTime   @default(now()) @db.Timestamptz(6)
+  lastModified DateTime   @default(now()) @db.Timestamptz(6)
+  questions    Question[]
+}
+
+model Question {
+  id           Int        @id @default(autoincrement())
+  question     String
+  type         String     @db.VarChar(255)
+  options      String?
+  createdDate  DateTime   @default(now()) @db.Timestamptz(6)
+  lastModified DateTime   @default(now()) @db.Timestamptz(6)
+  assessmentId Int
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  answers      Answer[]
+}
+
+model Answer {
+  id           Int      @id @default(autoincrement())
+  answer       String
+  createdDate  DateTime @default(now()) @db.Timestamptz(6)
+  lastModified DateTime @default(now()) @db.Timestamptz(6)
+  studentId    String   @db.Uuid
+  student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  questionId   Int
+  question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}

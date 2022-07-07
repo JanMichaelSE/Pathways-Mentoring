@@ -1,0 +1,23 @@
+.container {
+  min-height: 100vh;
+  background-image: url('../../../assets/signup-background.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  padding: 3rem 4rem;
+}
+
+.heading {
+  color: var(--color-blue-dark);
+  font-size: var(--font-size-heading);
+  padding-bottom: 0.5rem;
+}
+
+.sub-heading {
+  font-size: var(--font-size-subheading);
+}
+
+.navigation-link {
+  color: var(--color-blue-dark);
+  text-decoration: none;
+}
