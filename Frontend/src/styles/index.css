@@ -1,9 +1,9 @@
 :root {
-  --color-blue-dark: #0066CC;
-  --color-blue-light: #267CD3;
-  --color-yellow: #FAC20B;
-  --color-white: #F1F8FC;
-  --color-grey: #8B8D90;
+  --color-blue-dark: #0066cc;
+  --color-blue-light: #267cd3;
+  --color-yellow: #fac20b;
+  --color-white: #f1f8fc;
+  --color-grey: #8b8d90;
 
   --font-size-heading: 24pt;
   --font-size-subheading: 16pt;
@@ -11,7 +11,11 @@
   --font-size-small: 12pt;
 
   /* React Toastify Overriden Styles */
-  --toastify-color-warning: linear-gradient(180.71deg, #FAC20B 0.61%, #EE7222 99.39%);
+  --toastify-color-warning: linear-gradient(
+    180.71deg,
+    #fac20b 0.61%,
+    #ee7222 99.39%
+  );
 }
 
 *,
@@ -19,7 +23,7 @@
 *::before {
   margin: 0;
   padding: 0;
-  box-sizing: inherit; 
+  box-sizing: inherit;
 }
 
 html {
@@ -28,15 +32,15 @@ html {
 
 body {
   min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
@@ -47,4 +51,9 @@ code {
 
 .input-error {
   border-color: red;
+}
+
+.error {
+  font-size: var(--font-size-small);
+  color: red;
 }

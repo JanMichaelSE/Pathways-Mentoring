@@ -53,27 +53,29 @@ function StudentForm() {
           gpa: "",
         }}
         validationSchema={Yup.object({
-          firstName: Yup.string().required(),
-          lastName: Yup.string().required(),
-          phone: Yup.string().matches(
-            /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
-            "Phone number is not valid"
-          ),
-          email: Yup.string().email("Invalid email address").required(),
-          password: Yup.string()
-            .min(12)
+          firstName: Yup.string().required("First Name is required"),
+          lastName: Yup.string().required("Last Name is required"),
+          phone: Yup.string()
             .matches(
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
-              "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+              /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/,
+              "Phone number is not valid"
             )
-            .required(),
+            .min(10, "Phone number must be 10 digits"),
+          email: Yup.string()
+            .email("Invalid email address")
+            .required("Email is required"),
+          password: Yup.string()
+            .min(12, "Password must be at least 12 characters")
+            .required("Password is required"),
           confirmPassword: Yup.string()
             .oneOf([Yup.ref("password"), null], "Passwords must match")
-            .required(),
-          gender: Yup.string().oneOf(["Male", "Female", "Other"]).required(),
-          fieldOfStudy: Yup.string().required(),
-          institution: Yup.string().required(),
-          gpa: Yup.number().required(),
+            .required("Password Confirmation is required"),
+          gender: Yup.string()
+            .oneOf(["Male", "Female", "Other"])
+            .required("Gender is required"),
+          fieldOfStudy: Yup.string().required("Field of Study is required"),
+          institution: Yup.string().required("Insitution is required"),
+          gpa: Yup.number(),
         })}
         onSubmit={async (values) => {
           await handleSubmit(values);
@@ -83,13 +85,13 @@ function StudentForm() {
           <div className={styles.formInput}>
             <Input label="First Name *" name="firstName" type="text" />
             <Input label="Last Name *" name="lastName" type="text" />
-            <Input label="Phone" name="phone" type="text" />
+            <Input label="Phone" name="phone" type="tel" />
             <Input label="Email *" name="email" type="text" />
-            <Input label="Password *" name="password" type="text" />
+            <Input label="Password *" name="password" type="password" />
             <Input
               label="Confirm Password *"
               name="confirmPassword"
-              type="text"
+              type="password"
             />
             <Input label="Field Of Study *" name="fieldOfStudy" type="text" />
             <Input
@@ -103,7 +105,7 @@ function StudentForm() {
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </Select>
-            <Input label="GPA *" name="gpa" type="numeric" width={120} />
+            <Input label="GPA" name="gpa" type="numeric" width={120} />
           </div>
 
           <div className={styles.buttonContainer}>

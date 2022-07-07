@@ -9,6 +9,8 @@
   max-width: 500px;
   width: 30rem;
   margin-top: 2rem;
+
+  transition: width 0.4s ease-in-out;
 }
 
 .input:focus {

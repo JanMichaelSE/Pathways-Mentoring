@@ -23,6 +23,12 @@
   width: 19rem;
 }
 
+.error-container {
+  display: block;
+  margin-left: 20px;
+  margin-top: 5px;
+}
+
 @media only screen and (max-width: 1135px) {
   .select {
     width: 16rem;

@@ -1,4 +1,4 @@
-import { useField } from "formik";
+import { useField, ErrorMessage } from "formik";
 import styles from "./select.module.css";
 
 function Select({ label, ...props }) {
@@ -22,6 +22,9 @@ function Select({ label, ...props }) {
         {label}
       </label>
       <select className={selectStyles()} {...field} {...props} />
+      <span className={`error ${styles.errorContainer}`}>
+        <ErrorMessage name={props.name} />
+      </span>
     </div>
   );
 }
