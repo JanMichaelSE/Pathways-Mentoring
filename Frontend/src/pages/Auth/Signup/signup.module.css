@@ -1,14 +1,10 @@
-
 .container {
   min-height: 100vh;
   background-image: url('../../../assets/signup-background.svg');
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
   padding: 3rem 4rem;
-}
-
-.header-container {
-
 }
 
 .heading {
@@ -25,17 +21,3 @@
   color: var(--color-blue-dark);
   text-decoration: none;
 }
-
-/* Creating Student Form Component */
-.form-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  column-gap: 1rem;
-  row-gap: 2rem;
-  padding-top: 2rem;
-}
-
-.form-container div {
-  
-}
-
