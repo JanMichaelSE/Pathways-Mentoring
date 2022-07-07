@@ -1,10 +1,9 @@
-import './styles/App.css'
-import AuthRouter from '@/routes/root.router.jsx';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import "./styles/App.css";
+import AuthRouter from "@/routes/root.router.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-
   return (
     <div className="App">
       <ToastContainer
@@ -25,4 +24,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
