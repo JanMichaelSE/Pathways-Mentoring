@@ -2,14 +2,21 @@ import { useField, ErrorMessage } from "formik";
 import styles from "./input.module.css";
 import { phoneFormat } from "@/utils/helpers";
 
-function Input({ label, ...props }) {
+function Input({ label, imgUrl, ...props }) {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
   function inputStyles() {
-    return meta.touched && meta.error
-      ? `${styles.input} input-error`
-      : styles.input;
+    let classNames = styles.input;
+
+    if (meta.touched && meta.error) {
+      classNames += " input-error";
+    }
+    if (imgUrl) {
+      classNames += " " + styles.inputImg;
+    }
+
+    return classNames;
   }
 
   function labelStyles() {
@@ -30,12 +37,14 @@ function Input({ label, ...props }) {
 
   return (
     <div>
-      <label className={labelStyles()} htmlFor={props.id || props.name}>
-        {label}
-      </label>
+      {label && (
+        <label className={labelStyles()} htmlFor={props.id || props.name}>
+          {label}
+        </label>
+      )}
       <input
         className={inputStyles()}
-        style={{ width: props.width }}
+        style={{ width: props.width, backgroundImage: `url(${imgUrl})` }}
         {...field}
         {...props}
         onChange={formatInput}
