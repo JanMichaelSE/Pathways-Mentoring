@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import { useToast } from "@chakra-ui/react";
 
 import { httpSignupStudent } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
@@ -14,6 +14,7 @@ import styles from "./student-form.module.css";
 
 function StudentForm() {
   const navigate = useNavigate();
+  const toast = useToast();
   const userId = useUserStore((state) => state.userId);
   const setUser = useUserStore((state) => state.setUser);
 
@@ -27,7 +28,12 @@ function StudentForm() {
     const userResponse = await httpSignupStudent(studentInfo);
 
     if (userResponse.hasError) {
-      return toast.error(userResponse.errorMessage);
+      return toast({
+        description: userResponse.errorMessage,
+        status: "error",
+        position: "top",
+        duration: 5000,
+      });
     }
 
     setUser(

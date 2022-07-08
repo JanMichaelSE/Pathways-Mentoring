@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import { useToast } from "@chakra-ui/react";
 
 import { httpSignupMentor } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
@@ -14,6 +14,7 @@ import styles from "./mentor-form.module.css";
 
 function MentorForm() {
   const navigate = useNavigate();
+  const toast = useToast();
   const userId = useUserStore((state) => state.userId);
   const setUser = useUserStore((state) => state.setUser);
 
@@ -29,7 +30,12 @@ function MentorForm() {
     const userResponse = await httpSignupMentor(mentorInfo);
 
     if (userResponse.hasError) {
-      return toast.error(userResponse.errorMessage);
+      return toast({
+        description: userResponse.errorMessage,
+        status: "error",
+        position: "top",
+        duration: 5000,
+      });
     }
 
     setUser(

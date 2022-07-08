@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "@/utils/axios";
 
 async function httpLogin(user) {
   let userToReturn = {
@@ -13,10 +13,7 @@ async function httpLogin(user) {
       password: user.password,
     };
 
-    const response = await axios.post(
-      "http://localhost:5000/auth/login",
-      userInfo
-    );
+    const response = await axios.post("/auth/login", userInfo);
 
     userToReturn.data = response.data;
   } catch (error) {
@@ -55,10 +52,7 @@ async function httpSignupStudent(student) {
       fieldOfStudy: student.fieldOfStudy,
     };
 
-    const response = await axios.post(
-      "http://localhost:5000/auth/signup/student",
-      studentInfo
-    );
+    const response = await axios.post("/auth/signup/student", studentInfo);
 
     userToReturn.data = response.data;
   } catch (error) {
@@ -98,10 +92,7 @@ async function httpSignupMentor(mentor) {
       facultyStatus: mentor.facultyStatus,
     };
 
-    const response = await axios.post(
-      "http://localhost:5000/auth/signup/mentor",
-      mentorInfo
-    );
+    const response = await axios.post("/auth/signup/mentor", mentorInfo);
 
     userToReturn.data = response.data;
   } catch (error) {
