@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./signup.module.css";
-import StudentForm from "../../../components/Auth/StudentForm/student-form";
+import StudentForm from "@/components/Auth/StudentForm/student-form";
+import MentorForm from "@/components/Auth/MentorForm/mentor-form";
 
 function Signup() {
   return (
@@ -16,8 +17,8 @@ function Signup() {
           </h4>
         </div>
 
-        <StudentForm />
-
+        {/* <StudentForm /> */}
+        <MentorForm />
       </div>
     </>
   );
