@@ -16,6 +16,14 @@
   padding: 0 20px;
   height: 60px;
   width: 19rem;
+
+  transition: width 0.4s;
+}
+
+.input-img {
+  background-position: top 0px left 20px;
+  background-repeat: no-repeat;
+  padding-left: 83px;
 }
 
 .input:focus {

@@ -12,7 +12,7 @@
   -moz-appearance: none;
   font-size: var(--font-size-regular);
   background-color: var(--color-white);
-  background-image: url("../../../assets/chevron-down-icon.svg");
+  background-image: url("/assets/chevron-down-icon.svg");
   background-repeat: no-repeat;
   background-position: top 5px right 20px;
   border: 1px solid rgba(139, 141, 144, 0.5);

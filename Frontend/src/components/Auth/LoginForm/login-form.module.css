@@ -7,11 +7,8 @@
   align-items: center;
 }
 
-.error {
-  font-size: var(--font-size-regular);
-  color: red;
-  margin-top: 5px;
-  margin-left: 1.5rem;
+.input-container {
+  margin-bottom: 2rem;
 }
 
 .button-container {
