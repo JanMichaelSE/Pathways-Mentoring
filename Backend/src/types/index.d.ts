@@ -58,3 +58,21 @@ export interface IAnswer {
   questionId: number;
   answer: string;
 }
+
+export interface IAnsweredAssessment {
+  assessmentId: number;
+  assessmentAnswers: IAssessmentAnswers[];
+}
+
+export interface IAssessmentAnswers {
+  questionId: number;
+  question: string;
+  answers: IAnswerResposne[];
+}
+
+export interface IAnswerResposne {
+  id?: number;
+  answer: string;
+  createdDate: Date;
+  lastModified: Date;
+}

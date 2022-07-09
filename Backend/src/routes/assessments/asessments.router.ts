@@ -4,6 +4,7 @@ import {
   httpAnswerAssessment,
   httpDeleteAssessment,
   httpGetAllAssessments,
+  httpGetAnswersByAssessement,
   httpGetAssessment,
   httpUpdateAssessment,
 } from "./assessments.controller";
@@ -12,14 +13,16 @@ const router = express.Router();
 
 router.get("/", httpGetAllAssessments);
 
-router.get("/:id", httpGetAssessment);
+router.get("/:assessmentId", httpGetAssessment);
+
+router.get("/answer/:assessmentId", httpGetAnswersByAssessement);
 
 router.post("/", httpAddAssessment);
 
 router.post("/answer/:assessmentId", httpAnswerAssessment);
 
-router.post("/:id", httpUpdateAssessment);
+router.post("/:assessmentId", httpUpdateAssessment);
 
-router.delete("/:id", httpDeleteAssessment);
+router.delete("/:assessmentId", httpDeleteAssessment);
 
 export default router;

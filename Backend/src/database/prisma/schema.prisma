@@ -45,7 +45,6 @@ model Mentor {
   user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   records        Record[]
   students       Student[]
-  answers        Answer[]
 }
 
 model Student {
@@ -133,6 +132,4 @@ model Answer {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   questionId   Int
   question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  Mentor       Mentor?  @relation(fields: [mentorId], references: [id])
-  mentorId     String?  @db.Uuid
 }

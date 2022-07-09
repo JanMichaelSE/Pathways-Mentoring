@@ -1,6 +1,9 @@
-import { IAnswer } from "./../../types/index.d";
 import { Request, Response } from "express";
-import { createAnswers } from "../../models/answers.model";
+
+import {
+  createAnswers,
+  findAnswersByAssessment,
+} from "../../models/answers.model";
 import {
   createAssessment,
   deleteAssessment,
@@ -8,8 +11,10 @@ import {
   getAssessmentWithQuestionsById,
   updateAssessment,
 } from "../../models/assessments.model";
-import { IErrorResponse, IAssessment } from "../../types";
+
+import { IErrorResponse, IAssessment, IAnswer } from "../../types";
 import { handleErrorResponse, titleCase } from "../../utils/helpers";
+import { validateRequiredFields } from "./assessments.helpers";
 
 async function httpGetAllAssessments(req: Request, res: Response) {
   try {
@@ -22,7 +27,7 @@ async function httpGetAllAssessments(req: Request, res: Response) {
 
 async function httpGetAssessment(req: Request, res: Response) {
   try {
-    const assessmentId = Number(req.params.id);
+    const assessmentId = Number(req.params.assessmentId);
     if (isNaN(assessmentId)) {
       const error: IErrorResponse = {
         errorCode: 400,
@@ -83,17 +88,19 @@ async function httpAddAssessment(req: Request, res: Response) {
 
 async function httpUpdateAssessment(req: Request, res: Response) {
   try {
-    const validAssessmentId = validateAssessmentId(req.params.id);
+    const assessmentId = Number(req.params.assessmentId);
     const assessmentInfo: IAssessment = {
       name: titleCase(req.body.name),
       description: req.body.description,
       questions: req.body.questions,
     };
 
-    if (typeof validAssessmentId !== "number") {
-      return res
-        .status(validAssessmentId.errorCode)
-        .json({ error: validAssessmentId.errorMessage });
+    if (isNaN(assessmentId)) {
+      const error: IErrorResponse = {
+        errorCode: 400,
+        errorMessage: "Assessment Id parameter must be of type number.",
+      };
+      return res.status(error.errorCode).json({ error });
     }
 
     const validAssessmentInfo = validateRequiredFields(assessmentInfo);
@@ -105,7 +112,7 @@ async function httpUpdateAssessment(req: Request, res: Response) {
 
     const assessmentResponse = await updateAssessment(
       validAssessmentInfo,
-      validAssessmentId
+      assessmentId
     );
     return res.status(200).json(assessmentResponse);
   } catch (error) {
@@ -115,7 +122,7 @@ async function httpUpdateAssessment(req: Request, res: Response) {
 
 async function httpDeleteAssessment(req: Request, res: Response) {
   try {
-    const assessmentId = Number(req.params.id);
+    const assessmentId = Number(req.params.assessmentId);
     if (isNaN(assessmentId)) {
       const error: IErrorResponse = {
         errorCode: 400,
@@ -139,7 +146,7 @@ async function httpDeleteAssessment(req: Request, res: Response) {
 
 async function httpAnswerAssessment(req: Request, res: Response) {
   try {
-    const assessmentId = Number(req.body.assessmentId);
+    const assessmentId = Number(req.params.assessmentId);
     const answersInfo = {
       userId: req.body.userId,
       answers: req.body.answers,
@@ -157,7 +164,7 @@ async function httpAnswerAssessment(req: Request, res: Response) {
     if (isNaN(assessmentId)) {
       const error: IErrorResponse = {
         errorCode: 400,
-        errorMessage: "Assessment Id must be of type number.",
+        errorMessage: "Assessment Id parameter must be of type number.",
       };
       return res.status(error.errorCode).json({ error });
     }
@@ -190,52 +197,33 @@ async function httpAnswerAssessment(req: Request, res: Response) {
       });
     }
 
-    return res.status(200).json(answersResponse);
+    return res.status(200).json({ createdCount: answersResponse.count });
   } catch (error) {
     return handleErrorResponse("answering assessment", error, res);
   }
 }
 
-// --- Assessment Helper Functions ---
-function validateRequiredFields(
-  assessmentInfo: IAssessment
-): IAssessment | IErrorResponse {
-  // Validate Assessments Required Fields
-  if (!assessmentInfo.name || !assessmentInfo.questions?.length) {
-    const error: IErrorResponse = {
-      errorCode: 400,
-      errorMessage:
-        "Assessment name and questions are required to update assessment.",
-    };
-    return error;
-  }
-
-  // Validate Each Question for Required Fields
-  for (const question of assessmentInfo.questions) {
-    if (!question.question || !question.type) {
+async function httpGetAnswersByAssessement(req: Request, res: Response) {
+  try {
+    const assessmentId = Number(req.params.assessmentId);
+    if (isNaN(assessmentId)) {
       const error: IErrorResponse = {
         errorCode: 400,
-        errorMessage: `The question "${question.question}" is missing required fields question and type to update question.`,
+        errorMessage: "Assessment Id parameter must be of type number.",
       };
-      return error;
+      return res.status(error.errorCode).json({ error });
     }
-  }
 
-  return assessmentInfo;
-}
+    const answersResponse = await findAnswersByAssessment(assessmentId);
 
-function validateAssessmentId(id: string): number | IErrorResponse {
-  const assessmentId = Number(id);
+    if ("errorCode" in answersResponse) {
+      return res.status(answersResponse.errorCode).json({
+        error: answersResponse,
+      });
+    }
 
-  if (isNaN(assessmentId)) {
-    const error: IErrorResponse = {
-      errorCode: 400,
-      errorMessage: "Assessment Id parameter must be of type number.",
-    };
-    return error;
-  }
-
-  return assessmentId;
+    return res.status(200).json(answersResponse);
+  } catch (error) {}
 }
 
 export {
@@ -245,4 +233,5 @@ export {
   httpUpdateAssessment,
   httpDeleteAssessment,
   httpAnswerAssessment,
+  httpGetAnswersByAssessement,
 };
