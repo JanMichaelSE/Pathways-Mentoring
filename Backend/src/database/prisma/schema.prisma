@@ -22,6 +22,7 @@ model User {
   student          Student?
   senderMessages   Message[] @relation(name: "sender")
   receiverMessages Message[] @relation(name: "receiver")
+  Answer           Answer[]
 }
 
 model Mentor {
@@ -44,6 +45,7 @@ model Mentor {
   user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   records        Record[]
   students       Student[]
+  answers        Answer[]
 }
 
 model Student {
@@ -65,7 +67,6 @@ model Student {
   mentorId       String?   @db.Uuid
   mentor         Mentor?   @relation(fields: [mentorId], references: [id], onDelete: NoAction)
   records        Record[]
-  answers        Answer[]
 }
 
 model Record {
@@ -128,8 +129,10 @@ model Answer {
   answer       String
   createdDate  DateTime @default(now()) @db.Timestamptz(6)
   lastModified DateTime @default(now()) @db.Timestamptz(6)
-  studentId    String   @db.Uuid
-  student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  userId       String   @db.Uuid
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   questionId   Int
   question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  Mentor       Mentor?  @relation(fields: [mentorId], references: [id])
+  mentorId     String?  @db.Uuid
 }
