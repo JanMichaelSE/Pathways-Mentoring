@@ -8,9 +8,11 @@ export default function Navbar() {
   return (
     <Fragment>
       <nav className={styles.nav}>
-        <div className={styles.logoContainer}>
-          <img src="/assets/Pathway_logo_small.png" alt="Pathways" />
-        </div>
+        <img
+          src="/assets/Pathway_logo_small.png"
+          alt="Pathways"
+          className={styles.pathwaysLogo}
+        />
         <div className={styles.navLinksContainer}>
           <Link
             className={
@@ -58,10 +60,14 @@ export default function Navbar() {
           <img
             src="/assets/Doorbell.svg"
             alt="NotificationBell"
-            className={styles.LogoLink}
+            className={styles.logoLink}
           />
-          <Link className={styles.LogoLink} to="/student/profile">
-            <img src="/assets/Avatars.png" alt="profile" />
+          <Link to="/student/profile">
+            <img
+              src="/assets/Avatars.png"
+              alt="profile"
+              className={styles.logoLink}
+            />
           </Link>
         </div>
       </nav>

@@ -1,13 +1,16 @@
 @import "@/styles/index.css";
 
 .container {
+  height: 100%;
+  width: 100%;
   background-color: var(--color-white);
+  background-size: cover;
 }
 
 .buttons-container {
   display: flex;
   justify-content: flex-end;
-  padding: 2rem 4rem;
+  padding: 3rem 4rem;
 }
 
 .button {
@@ -18,15 +21,18 @@
 }
 
 .assessments-container {
-  padding: 10vh 5vw;
   display: grid;
   align-items: center;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  justify-content: center;
+  grid-template-columns: repeat(4, minmax(250px, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(200px, 250px));
   gap: 2rem;
+  padding: 3rem;
+  padding-top: 0;
 }
 
-.assessment {
-  height: 30vh;
-  width: 15vw;
+@media screen and (max-width: 1200px) {
+  .assessments-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
 }

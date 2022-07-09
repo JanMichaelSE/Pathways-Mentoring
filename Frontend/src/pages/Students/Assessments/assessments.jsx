@@ -1,61 +1,52 @@
 import { useState } from "react";
 
 import Button from "@/components/common/Button/button.jsx";
+import AssessmentPreview from "@/components/Students/AssessmentPreview/AssessmentPreview";
+
 import styles from "./assessments.module.css";
 
-function Assessments() {
+function Assessments({ assessments }) {
   const [sortAscending, setSortAscending] = useState(true);
+  //Initial State for the filter so that it just shows all assessments
+  const [filterOption, setFilterOption] = useState("none");
 
   return (
     <div className={styles.container}>
       <div className={styles.buttonsContainer}>
         <Button
           style={{
-            width: "10vw",
-            height: "8vh",
-            fontSize: "20px",
-            marginRight: "3vw",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "7rem",
+            height: "3rem",
+            fontSize: "var(--font-size--regular)",
+            padding: "3px",
+            marginRight: "20px",
           }}
         >
           Filter
+          <img src="/assets/Filter.png" />
         </Button>
-        <Button style={{ width: "15vw", height: "8vh", fontSize: "20px" }}>
+        <Button
+          style={{
+            width: "8rem",
+            height: "3rem",
+            fontSize: "var(--font-size--regular)",
+          }}
+        >
           Sort Desc
         </Button>
       </div>
       <div className={styles.assessmentsContainer}>
-        <div className={styles.assessment}>
-          {/*Assessment Title 1*/}
-          {/*Assessment Description*/}
-        </div>
-        <div className={styles.assessment}>
-          {/*Assessment Title 2*/}
-          {/*Assessment Description*/}
-        </div>
-        <div className={styles.assessment}>
-          {/*Assessment Title 3*/}
-          {/*Assessment Description*/}
-        </div>
-        <div className={styles.assessment}>
-          {/*Assessment Title 4*/}
-          {/*Assessment Description*/}
-        </div>
-        <div className={styles.assessment}>
-          {/*Assessment Title 5*/}
-          {/*Assessment Description*/}
-        </div>
-        <div className={styles.assessment}>
-          {/*Assessment Title 6*/}
-          {/*Assessment Description*/}
-        </div>
-        <div className={styles.assessment}>
-          {/*Assessment Title 7*/}
-          {/*Assessment Description*/}
-        </div>
-        <div className={styles.assessment}>
-          {/*Assessment Title 8*/}
-          {/*Assessment Description*/}
-        </div>
+        <AssessmentPreview />
+        <AssessmentPreview />
+        <AssessmentPreview />
+        <AssessmentPreview />
+        <AssessmentPreview />
+        <AssessmentPreview />
+        <AssessmentPreview />
+        <AssessmentPreview />
       </div>
     </div>
   );
