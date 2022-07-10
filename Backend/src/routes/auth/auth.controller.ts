@@ -1,11 +1,13 @@
-import { IMentor, IUser } from "./../../types/index.d";
 import { Request, Response } from "express";
+
 import { createStudent } from "../../models/students.model";
 import { createUser, isUserAuthorized } from "../../models/users.model";
-import { IErrorResponse, IStudent } from "../../types";
 import { createMentor } from "../../models/mentors.model";
+
+import { IMentor, IUser, IStudent } from "./../../types/index.d";
 import {
   formatPhoneNumber,
+  handleBadRequestResponse,
   handleErrorResponse,
   titleCase,
 } from "../../utils/helpers";
@@ -18,12 +20,10 @@ async function httpLogin(req: Request, res: Response) {
     };
 
     if (!userInfo.email || !userInfo.password) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage:
-          "User requires email and password to login into the system.",
-      };
-      return res.status(error.errorCode).json({ error });
+      return handleBadRequestResponse(
+        "User requires email and password to login into the system.",
+        res
+      );
     }
 
     const userResponse = await isUserAuthorized(
@@ -70,22 +70,19 @@ async function httpSignupStudent(req: Request, res: Response) {
       !studentInfo.fieldOfStudy ||
       !studentInfo.institution
     ) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage: "Student is missing required fields for creation.",
-      };
-      return res.status(error.errorCode).json({ error });
+      return handleBadRequestResponse(
+        "Student is missing required fields for creation.",
+        res
+      );
     }
 
     if (userInfo.role !== "Student") {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage:
-          "Expected a role of 'student' but received " +
+      return handleBadRequestResponse(
+        "Expected a role of 'student' but received " +
           userInfo.role +
           " instead. Please provide the 'student' role when creating a student.",
-      };
-      return res.status(error.errorCode).json({ error });
+        res
+      );
     }
 
     const userResponse = await createUser(
@@ -142,22 +139,19 @@ async function httpSignupMentor(req: Request, res: Response) {
       !mentorInfo.facultyStatus ||
       !mentorInfo.academicDegree
     ) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage: "Mentor is missing required fields for creation.",
-      };
-      return res.status(error.errorCode).json({ error });
+      return handleBadRequestResponse(
+        "Mentor is missing required fields for creation.",
+        res
+      );
     }
 
     if (userInfo.role !== "Mentor") {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage:
-          "Expected a role of 'mentor' but received '" +
+      return handleBadRequestResponse(
+        "Expected a role of 'mentor' but received '" +
           userInfo.role +
           "' instead. Please provide the 'mentor' role when creating a mentor.",
-      };
-      return res.status(error.errorCode).json({ error });
+        res
+      );
     }
 
     const userResponse = await createUser(

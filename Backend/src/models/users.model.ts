@@ -2,7 +2,9 @@ import { prisma } from "../database";
 import crypto from "crypto";
 
 import { User } from "@prisma/client";
+
 import { IErrorResponse } from "./../types/index.d";
+import { buildErrorObject, excludeFields } from "../utils/helpers";
 
 async function createUser(
   email: string,
@@ -10,15 +12,12 @@ async function createUser(
   role: string
 ): Promise<User | IErrorResponse> {
   try {
-    
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage:
-          "Email is already taken, please provide a another email address.",
-      };
-      return error;
+      return buildErrorObject(
+        400,
+        "Email is already taken, please provide a another email address."
+      );
     }
 
     let salt: string = generateSalt(32);
@@ -34,7 +33,6 @@ async function createUser(
     });
 
     return createdUser;
-
   } catch (error) {
     throw error;
   }
@@ -42,7 +40,6 @@ async function createUser(
 
 async function findUserByEmail(email: string): Promise<User | null> {
   try {
-
     const user = await prisma.user.findUnique({
       where: {
         email: email,
@@ -50,37 +47,32 @@ async function findUserByEmail(email: string): Promise<User | null> {
     });
 
     return user;
-
   } catch (error) {
     throw error;
   }
 }
 
-async function updateUserPassword(userId: string, currentPassword: string, newPassword: string) : Promise<User | IErrorResponse> {
+async function updateUserPassword(
+  userId: string,
+  currentPassword: string,
+  newPassword: string
+): Promise<User | IErrorResponse> {
   try {
-
     const user = await prisma.user.findUnique({
       where: {
-        id: userId
-      }
+        id: userId,
+      },
     });
     if (!user) {
-      const error: IErrorResponse = {
-        errorCode: 401,
-        errorMessage:
-          "This user does not exist in the system.",
-      };
-      return error;
+      return buildErrorObject(401, "This user does not exist in the system.");
     }
 
     let hashedPasswordFromRequest = sha512(currentPassword, user.passwordSalt);
     if (hashedPasswordFromRequest !== user.password) {
-      const error: IErrorResponse = {
-        errorCode: 401,
-        errorMessage:
-          "Current password is incorrect for this user.",
-      };
-      return error;
+      return buildErrorObject(
+        401,
+        "Current password is incorrect for this user."
+      );
     }
 
     let salt: string = generateSalt(32);
@@ -88,36 +80,32 @@ async function updateUserPassword(userId: string, currentPassword: string, newPa
 
     const updatedUser = await prisma.user.update({
       where: {
-        id: user.id
+        id: user.id,
       },
       data: {
         password: hashedPassword,
-        passwordSalt: salt
-      }
+        passwordSalt: salt,
+      },
     });
 
     return updatedUser;
-
   } catch (error) {
     throw error;
   }
 }
 
-async function updateUserEmail(userId: string, email: string) : Promise<User | IErrorResponse> {
+async function updateUserEmail(
+  userId: string,
+  email: string
+): Promise<User | IErrorResponse> {
   try {
-
     const user = await prisma.user.findUnique({
       where: {
-        id: userId
-      }
+        id: userId,
+      },
     });
     if (!user) {
-      const error: IErrorResponse = {
-        errorCode: 401,
-        errorMessage:
-          "This user does not exist in the system.",
-      };
-      return error;
+      return buildErrorObject(401, "This user does not exist in the system.");
     }
 
     if (user.email === email) {
@@ -125,53 +113,44 @@ async function updateUserEmail(userId: string, email: string) : Promise<User | I
     }
     const updatedUser = await prisma.user.update({
       where: {
-        id: user.id
+        id: user.id,
       },
       data: {
-        email: email
-      }
+        email: email,
+      },
     });
 
     return updatedUser;
-
   } catch (error) {
     throw error;
   }
 }
 
-async function isUserAuthorized(email: string, password: string) : Promise<User | IErrorResponse> {
+async function isUserAuthorized(
+  email: string,
+  password: string
+): Promise<User | IErrorResponse> {
   try {
-    
     const user = await findUserByEmail(email);
     if (!user) {
-      const error: IErrorResponse = {
-        errorCode: 401,
-        errorMessage:
-          "A user with this email doesn't exist.",
-      };
-      return error;
+      return buildErrorObject(401, "A user with this email doesn't exist.");
     }
 
     let hashedPasswordFromRequest = sha512(password, user.passwordSalt);
     if (hashedPasswordFromRequest !== user.password) {
-      const error: IErrorResponse = {
-        errorCode: 401,
-        errorMessage:
-          "Provided password is incorrect for this user.",
-      };
-      return error;
+      return buildErrorObject(
+        401,
+        "Provided password is incorrect for this user."
+      );
     }
 
-    const userWithoutPassord = exclude(user, 'password', 'passwordSalt');
+    const userWithoutPassord = excludeFields(user, "password", "passwordSalt");
     return userWithoutPassord;
-
   } catch (error) {
     throw error;
   }
 }
 
-
-// --- User Helper Functions ---
 function generateSalt(length: number): string {
   return crypto
     .randomBytes(Math.ceil(length / 2))
@@ -186,20 +165,10 @@ function sha512(password: string, salt: string) {
   return hashedPassword;
 }
 
-function exclude<User, Key extends keyof User>(
-  user: User,
-  ...keys: Key[]
-): User {
-  for (let key of keys) {
-    delete user[key];
-  }
-  return user;
-}
-
-export { 
-  createUser, 
+export {
+  createUser,
   findUserByEmail,
   updateUserPassword,
   updateUserEmail,
-  isUserAuthorized, 
+  isUserAuthorized,
 };

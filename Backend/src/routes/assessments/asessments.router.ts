@@ -1,17 +1,28 @@
-import express from 'express';
-import { httpAddAssessment, httpDeleteAssessment, httpGetAllAssessments, httpGetAssessment, httpUpdateAssessment } from './assessments.controller';
+import express from "express";
+import {
+  httpAddAssessment,
+  httpAnswerAssessment,
+  httpDeleteAssessment,
+  httpGetAllAssessments,
+  httpGetAnswersByAssessement,
+  httpGetAssessment,
+  httpUpdateAssessment,
+} from "./assessments.controller";
 
 const router = express.Router();
 
 router.get("/", httpGetAllAssessments);
 
-router.get("/:id", httpGetAssessment);
+router.get("/:assessmentId", httpGetAssessment);
+
+router.get("/answer/:assessmentId", httpGetAnswersByAssessement);
 
 router.post("/", httpAddAssessment);
 
-router.post("/:id", httpUpdateAssessment);
+router.post("/answer/:assessmentId", httpAnswerAssessment);
 
-router.delete("/:id", httpDeleteAssessment);
+router.post("/:assessmentId", httpUpdateAssessment);
 
+router.delete("/:assessmentId", httpDeleteAssessment);
 
 export default router;
