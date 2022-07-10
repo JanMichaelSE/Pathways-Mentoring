@@ -1,6 +1,6 @@
 import { IAssessment, IErrorResponse } from "../../types";
 
-function validateRequiredFields(
+function validateAssessmentRequiredFields(
   assessmentInfo: IAssessment
 ): IAssessment | IErrorResponse {
   // Validate Assessments Required Fields
@@ -27,4 +27,4 @@ function validateRequiredFields(
   return assessmentInfo;
 }
 
-export { validateRequiredFields };
+export { validateAssessmentRequiredFields };
