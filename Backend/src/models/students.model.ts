@@ -1,6 +1,9 @@
 import { prisma } from "../database";
+
 import { Student } from "@prisma/client";
-import { IStudent, IErrorResponse } from './../types/index.d';
+
+import { IStudent, IErrorResponse } from "./../types/index.d";
+import { buildErrorObject, excludeFields } from "../utils/helpers";
 
 async function createStudent(
   userId: string,
@@ -8,14 +11,15 @@ async function createStudent(
   studentInfo: IStudent
 ): Promise<Student> {
   try {
-
     const createdStudent = await prisma.student.create({
       data: {
         name: studentInfo.name,
         email: email,
         phone: studentInfo.phone,
         gender: studentInfo.gender,
-        graduationDate: studentInfo.graduationDate ? new Date(studentInfo.graduationDate) : undefined,
+        graduationDate: studentInfo.graduationDate
+          ? new Date(studentInfo.graduationDate)
+          : undefined,
         gpa: studentInfo.gpa,
         institution: studentInfo.institution,
         fieldOfStudy: studentInfo.fieldOfStudy,
@@ -25,59 +29,56 @@ async function createStudent(
       },
     });
 
-    const studentWithoutId = exclude(createdStudent, "id");
+    const studentWithoutId = excludeFields(createdStudent, "id");
     return studentWithoutId;
-
   } catch (error) {
     throw error;
   }
 }
 
-async function findAllStudents() : Promise<Student[]> {
+async function findAllStudents(): Promise<Student[]> {
   try {
-
     const students = await prisma.student.findMany();
-    const studentsWithoutId = students.map(student => exclude(student, 'id', 'userId'));
+    const studentsWithoutId = students.map((student) =>
+      excludeFields(student, "id", "userId")
+    );
     return studentsWithoutId;
-
   } catch (error) {
     throw error;
   }
 }
 
-async function findStudentsByMentor(mentorId: string) : Promise<Student[]> {
+async function findStudentsByMentor(mentorId: string): Promise<Student[]> {
   try {
-
     const students = await prisma.student.findMany({
       where: {
-        mentorId: mentorId
-      }
+        mentorId: mentorId,
+      },
     });
-    
-    const studentsWithoutId = students.map(student => exclude(student, 'id', 'mentorId', 'userId'));
-    return studentsWithoutId;
 
+    const studentsWithoutId = students.map((student) =>
+      excludeFields(student, "id", "mentorId", "userId")
+    );
+    return studentsWithoutId;
   } catch (error) {
     throw error;
   }
 }
 
-async function findStudentByUserId(userId: string) : Promise<Student | null>{
-
+async function findStudentByUserId(userId: string): Promise<Student | null> {
   try {
     const student = await prisma.student.findUnique({
       where: {
-        userId: userId
-      }
+        userId: userId,
+      },
     });
 
     if (!student) {
       return null;
     }
-    
-    const studentWithoutId = exclude(student, 'id');
-    return studentWithoutId;
 
+    const studentWithoutId = excludeFields(student, "id");
+    return studentWithoutId;
   } catch (error) {
     throw error;
   }
@@ -88,56 +89,45 @@ async function updateStudent(
   studentInfo: IStudent
 ): Promise<Student | IErrorResponse> {
   try {
-
     const student = await prisma.student.findUnique({
       where: {
-        userId: userId
-      }
+        userId: userId,
+      },
     });
     if (!student) {
-      const error: IErrorResponse = {
-        errorCode: 401,
-        errorMessage:
-          "This student does not exist in the system.",
-      };
-      return error;
+      return buildErrorObject(
+        401,
+        "This student does not exist in the system."
+      );
     }
-    
 
     const updatedStudent = await prisma.student.update({
       where: {
-        id: student.id
+        id: student.id,
       },
       data: {
         name: !!studentInfo.name ? studentInfo.name : undefined,
         phone: !!studentInfo.phone ? studentInfo.phone : undefined,
         gender: !!studentInfo.gender ? studentInfo.gender : undefined,
-        fieldOfStudy: studentInfo.fieldOfStudy ? studentInfo.fieldOfStudy : undefined,
-        institution: studentInfo.institution ? studentInfo.institution : undefined,
+        fieldOfStudy: studentInfo.fieldOfStudy
+          ? studentInfo.fieldOfStudy
+          : undefined,
+        institution: studentInfo.institution
+          ? studentInfo.institution
+          : undefined,
         gpa: studentInfo.gpa,
-        graduationDate: studentInfo.graduationDate ? new Date(studentInfo.graduationDate) : undefined,
-        profilePicture: studentInfo.profilePicture
-      }
-    })
+        graduationDate: studentInfo.graduationDate
+          ? new Date(studentInfo.graduationDate)
+          : undefined,
+        profilePicture: studentInfo.profilePicture,
+      },
+    });
 
-    const studentWithoutId = exclude(updatedStudent, 'id');
+    const studentWithoutId = excludeFields(updatedStudent, "id");
     return studentWithoutId;
-
   } catch (error) {
     throw error;
   }
-}
-
-
-// --- Students Helper Functions ---
-function exclude<Student, Key extends keyof Student>(
-  student: Student,
-  ...keys: Key[]
-): Student {
-  for (let key of keys) {
-    delete student[key];
-  }
-  return student;
 }
 
 export {
@@ -145,5 +135,5 @@ export {
   findAllStudents,
   findStudentsByMentor,
   findStudentByUserId,
-  updateStudent
-}
+  updateStudent,
+};

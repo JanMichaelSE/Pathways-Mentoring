@@ -1,5 +1,8 @@
-import { Prisma } from "@prisma/client";
 import { prisma } from "../database";
+
+import { Prisma } from "@prisma/client";
+
+import { buildErrorObject, excludeFields } from "../utils/helpers";
 import {
   IErrorResponse,
   IAnswer,
@@ -22,12 +25,10 @@ async function createAnswers(
     });
 
     if (questions.length !== answers.length) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage:
-          "Could not create answers because not all question Ids where found in the system. Please make sure you provide valid question ids.",
-      };
-      return error;
+      return buildErrorObject(
+        400,
+        "Could not create answers because not all question Ids where found in the system. Please make sure you provide valid question ids."
+      );
     }
 
     for (const question of questions) {
@@ -38,12 +39,10 @@ async function createAnswers(
         (question.type === "Select" || question.type === "Multi-select") &&
         !isValidAnswer
       ) {
-        const error: IErrorResponse = {
-          errorCode: 400,
-          errorMessage:
-            "Could not create answer because it has provided an answer that is not within the available options of the question. If the question is of type 'Select' or 'Multi-Select', please provide a valid answer that are within the available options of that question.",
-        };
-        return error;
+        return buildErrorObject(
+          400,
+          "Could not create answer because it has provided an answer that is not within the available options of the question. If the question is of type 'Select' or 'Multi-Select', please provide a valid answer that are within the available options of that question."
+        );
       }
     }
 
@@ -68,12 +67,10 @@ async function findAnswersByAssessment(
     });
 
     if (!assessment) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage:
-          "An assessment with this Id does not exist in the system.",
-      };
-      return error;
+      return buildErrorObject(
+        400,
+        "An assessment with this Id does not exist in the system."
+      );
     }
 
     const questions = await prisma.question.findMany({
@@ -98,7 +95,7 @@ async function findAnswersByAssessment(
     const sortedAnswersLength = sortedAnswers.length;
     for (let index = 0; index < sortedAnswersLength; index++) {
       const question = questionsMap.get(sortedAnswers[index].questionId);
-      const answer = exclude(
+      const answer = excludeFields(
         sortedAnswers[index],
         "userId",
         "id",
@@ -129,17 +126,6 @@ async function findAnswersByAssessment(
   } catch (error) {
     throw error;
   }
-}
-
-// --- Answers Model Helpers ---
-function exclude<Answer, Key extends keyof Answer>(
-  answer: Answer,
-  ...keys: Key[]
-): Answer {
-  for (let key of keys) {
-    delete answer[key];
-  }
-  return answer;
 }
 
 export { createAnswers, findAnswersByAssessment };

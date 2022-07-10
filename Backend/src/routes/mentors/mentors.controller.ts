@@ -1,59 +1,58 @@
-import { IUser, IMentor } from './../../types/index.d';
 import { Request, Response } from "express";
-import { findMentorByUserId, findAllMentors, updateMentor } from "../../models/mentors.model";
-import { IErrorResponse } from "../../types";
-import { formatPhoneNumber, handleErrorResponse, isValidUUID, titleCase } from "../../utils/helpers";
-import { updateUserEmail, updateUserPassword } from '../../models/users.model';
 
+import {
+  findMentorByUserId,
+  findAllMentors,
+  updateMentor,
+} from "../../models/mentors.model";
+import { updateUserEmail, updateUserPassword } from "../../models/users.model";
+
+import { IUser, IMentor } from "./../../types/index.d";
+import {
+  formatPhoneNumber,
+  handleBadRequestResponse,
+  handleErrorResponse,
+  isValidUUID,
+  titleCase,
+} from "../../utils/helpers";
 
 async function httpGetAllMentors(req: Request, res: Response) {
   try {
     const mentors = await findAllMentors();
     return res.status(200).json(mentors);
   } catch (error) {
-    return handleErrorResponse('get all mentors', error, res);
+    return handleErrorResponse("get all mentors", error, res);
   }
 }
 
 async function httpGetMentorByUserId(req: Request, res: Response) {
   try {
-
     const userId = req.params.id;
     const isValidId = isValidUUID(userId);
 
-    if(!isValidId) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage:
-          "This Id passed in the URL parameter is not does not have a valid format.",
-      };
-      return res.status(error.errorCode).json({
-        error: error,
-      });
+    if (!isValidId) {
+      return handleBadRequestResponse(
+        "This Id passed in the URL parameter is not does not have a valid format.",
+        res
+      );
     }
 
     const mentorResponse = await findMentorByUserId(userId);
     if (!mentorResponse) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage:
-          "This mentor does not exist in the system.",
-      };
-      return res.status(error.errorCode).json({
-        error: error,
-      });
-    }   
+      return handleBadRequestResponse(
+        "This mentor does not exist in the system.",
+        res
+      );
+    }
 
     return res.status(200).json(mentorResponse);
-
   } catch (error) {
-    return handleErrorResponse('get mentor by user id', error, res);
+    return handleErrorResponse("get mentor by user id", error, res);
   }
 }
 
 async function httpUpdateMentorProfile(req: Request, res: Response) {
   try {
-
     const userInfo: IUser = {
       id: req.body.userId,
       email: req.body.email,
@@ -74,14 +73,11 @@ async function httpUpdateMentorProfile(req: Request, res: Response) {
       profilePicture: req.body.profilePicture,
     };
 
-
     if (!userInfo.id) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage:
-          "To update the mentor profile, the id of the user is required in the request.",
-      };
-      return res.status(error.errorCode).json({ error });
+      return handleBadRequestResponse(
+        "To update the mentor profile, the id of the user is required in the request.",
+        res
+      );
     }
 
     const updateEmailResponse = await updateUserEmail(
@@ -92,13 +88,13 @@ async function httpUpdateMentorProfile(req: Request, res: Response) {
       return res.status(updateEmailResponse.errorCode).json({
         error: updateEmailResponse,
       });
-    }    
+    }
 
     if (
       userInfo.password &&
       userInfo.newPassword &&
       userInfo.password !== userInfo.newPassword
-    ) {      
+    ) {
       const updatePasswordResponse = await updateUserPassword(
         userInfo.id,
         userInfo.password,
@@ -120,15 +116,9 @@ async function httpUpdateMentorProfile(req: Request, res: Response) {
     }
 
     return res.status(200).json(updateMentorResponse);
-
   } catch (error) {
-    return handleErrorResponse('update mentor profile', error, res);
+    return handleErrorResponse("update mentor profile", error, res);
   }
 }
 
-
-export {
-  httpGetAllMentors,
-  httpUpdateMentorProfile,
-  httpGetMentorByUserId
-}
+export { httpGetAllMentors, httpUpdateMentorProfile, httpGetMentorByUserId };
