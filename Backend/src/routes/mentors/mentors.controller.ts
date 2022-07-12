@@ -4,8 +4,13 @@ import {
   findMentorByUserId,
   findAllMentors,
   updateMentor,
+  validateMentorExists,
 } from "../../models/mentors.model";
-import { updateUserEmail, updateUserPassword } from "../../models/users.model";
+import {
+  updateUserEmail,
+  updateUserPassword,
+  validateProfileUpdate,
+} from "../../models/users.model";
 
 import { IUser, IMentor } from "./../../types/index.d";
 import {
@@ -15,6 +20,7 @@ import {
   isValidUUID,
   titleCase,
 } from "../../utils/helpers";
+import { validateStudentExists } from "../../models/students.model";
 
 async function httpGetAllMentors(req: Request, res: Response) {
   try {
@@ -80,40 +86,32 @@ async function httpUpdateMentorProfile(req: Request, res: Response) {
       );
     }
 
-    const updateEmailResponse = await updateUserEmail(
-      userInfo.id,
-      userInfo.email
+    const validatedUserResponse = await validateProfileUpdate(userInfo);
+    if ("errorCode" in validatedUserResponse) {
+      return res.status(validatedUserResponse.errorCode).json({
+        error: validatedUserResponse,
+      });
+    }
+
+    const validatedMentorResponse = await validateMentorExists(
+      validatedUserResponse.id
     );
-    if ("errorCode" in updateEmailResponse) {
-      return res.status(updateEmailResponse.errorCode).json({
-        error: updateEmailResponse,
+    if ("errorCode" in validatedMentorResponse) {
+      return res.status(validatedMentorResponse.errorCode).json({
+        error: validatedMentorResponse,
       });
     }
 
-    if (
-      userInfo.password &&
-      userInfo.newPassword &&
-      userInfo.password !== userInfo.newPassword
-    ) {
-      const updatePasswordResponse = await updateUserPassword(
-        userInfo.id,
-        userInfo.password,
-        userInfo.newPassword
-      );
+    await updateUserEmail(validatedUserResponse, userInfo.email);
 
-      if ("errorCode" in updatePasswordResponse) {
-        return res.status(updatePasswordResponse.errorCode).json({
-          error: updatePasswordResponse,
-        });
-      }
+    if (userInfo.newPassword) {
+      await updateUserPassword(validatedUserResponse, userInfo.newPassword);
     }
 
-    const updateMentorResponse = await updateMentor(userInfo.id, mentorInfo);
-    if ("errorCode" in updateMentorResponse) {
-      return res.status(updateMentorResponse.errorCode).json({
-        error: updateMentorResponse,
-      });
-    }
+    const updateMentorResponse = await updateMentor(
+      validatedMentorResponse.id,
+      mentorInfo
+    );
 
     return res.status(200).json(updateMentorResponse);
   } catch (error) {

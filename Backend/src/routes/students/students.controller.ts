@@ -6,8 +6,13 @@ import {
   findStudentByUserId,
   findStudentsByMentor,
   updateStudent,
+  validateStudentExists,
 } from "../../models/students.model";
-import { updateUserEmail, updateUserPassword } from "../../models/users.model";
+import {
+  updateUserEmail,
+  updateUserPassword,
+  validateProfileUpdate,
+} from "../../models/users.model";
 
 import { IUser, IStudent } from "./../../types/index.d";
 import {
@@ -99,40 +104,32 @@ async function httpUpdateStudentProfile(req: Request, res: Response) {
       );
     }
 
-    const updateEmailResponse = await updateUserEmail(
-      userInfo.id,
-      userInfo.email
+    const validatedUserResponse = await validateProfileUpdate(userInfo);
+    if ("errorCode" in validatedUserResponse) {
+      return res.status(validatedUserResponse.errorCode).json({
+        error: validatedUserResponse,
+      });
+    }
+
+    const validatedStudentResponse = await validateStudentExists(
+      validatedUserResponse.id
     );
-    if ("errorCode" in updateEmailResponse) {
-      return res.status(updateEmailResponse.errorCode).json({
-        error: updateEmailResponse,
+    if ("errorCode" in validatedStudentResponse) {
+      return res.status(validatedStudentResponse.errorCode).json({
+        error: validatedStudentResponse,
       });
     }
 
-    if (
-      userInfo.password &&
-      userInfo.newPassword &&
-      userInfo.password !== userInfo.newPassword
-    ) {
-      const updatePasswordResponse = await updateUserPassword(
-        userInfo.id,
-        userInfo.password,
-        userInfo.newPassword
-      );
+    await updateUserEmail(validatedUserResponse, userInfo.email);
 
-      if ("errorCode" in updatePasswordResponse) {
-        return res.status(updatePasswordResponse.errorCode).json({
-          error: updatePasswordResponse,
-        });
-      }
+    if (userInfo.newPassword) {
+      await updateUserPassword(validatedUserResponse, userInfo.newPassword);
     }
 
-    const updateStudentResponse = await updateStudent(userInfo.id, studentInfo);
-    if ("errorCode" in updateStudentResponse) {
-      return res.status(updateStudentResponse.errorCode).json({
-        error: updateStudentResponse,
-      });
-    }
+    const updateStudentResponse = await updateStudent(
+      validatedStudentResponse.id,
+      studentInfo
+    );
 
     return res.status(200).json(updateStudentResponse);
   } catch (error) {
