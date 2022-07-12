@@ -25,7 +25,7 @@ function LoginForm() {
 
   useEffect(() => {
     if (role == "Student") {
-      navigate("../student", { replace: true });
+      navigate("../student/profile", { replace: true });
     } else if (role == "Mentor") {
       navigate("../mentor", { replace: true });
     } else if (role == "Admin") {
@@ -44,9 +44,9 @@ function LoginForm() {
         duration: 5000,
       });
     }
-
+debugger;
     setUser(
-      userResponse.data.userId,
+      userResponse.data.id,
       userResponse.data.email,
       userResponse.data.role
     );
