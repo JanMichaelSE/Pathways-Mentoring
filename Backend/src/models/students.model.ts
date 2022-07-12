@@ -85,25 +85,13 @@ async function findStudentByUserId(userId: string): Promise<Student | null> {
 }
 
 async function updateStudent(
-  userId: string,
+  id: string,
   studentInfo: IStudent
 ): Promise<Student | IErrorResponse> {
   try {
-    const student = await prisma.student.findUnique({
-      where: {
-        userId: userId,
-      },
-    });
-    if (!student) {
-      return buildErrorObject(
-        401,
-        "This student does not exist in the system."
-      );
-    }
-
     const updatedStudent = await prisma.student.update({
       where: {
-        id: student.id,
+        id: id,
       },
       data: {
         name: !!studentInfo.name ? studentInfo.name : undefined,
@@ -130,10 +118,33 @@ async function updateStudent(
   }
 }
 
+async function validateStudentExists(
+  userId: string
+): Promise<Student | IErrorResponse> {
+  try {
+    const student = await prisma.student.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+    if (!student) {
+      return buildErrorObject(
+        401,
+        "This student does not exist in the system."
+      );
+    }
+
+    return student;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   createStudent,
   findAllStudents,
   findStudentsByMentor,
   findStudentByUserId,
   updateStudent,
+  validateStudentExists,
 };

@@ -81,22 +81,13 @@ async function findMentorByEmail(email: string): Promise<Mentor | null> {
 }
 
 async function updateMentor(
-  userId: string,
+  id: string,
   mentorInfo: IMentor
 ): Promise<Mentor | IErrorResponse> {
   try {
-    const mentor = await prisma.mentor.findUnique({
-      where: {
-        userId: userId,
-      },
-    });
-    if (!mentor) {
-      return buildErrorObject(401, "This mentor does not exist in the system.");
-    }
-
     const updatedMentor = await prisma.mentor.update({
       where: {
-        id: mentor.id,
+        id: id,
       },
       data: {
         name: !!mentorInfo.name ? mentorInfo.name : undefined,
@@ -121,10 +112,30 @@ async function updateMentor(
   }
 }
 
+async function validateMentorExists(
+  userId: string
+): Promise<Mentor | IErrorResponse> {
+  try {
+    const mentor = await prisma.mentor.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+    if (!mentor) {
+      return buildErrorObject(401, "This mentor does not exist in the system.");
+    }
+
+    return mentor;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   createMentor,
   findAllMentors,
   findMentorByUserId,
   findMentorByEmail,
   updateMentor,
+  validateMentorExists,
 };
