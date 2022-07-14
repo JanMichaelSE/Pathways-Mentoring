@@ -25,7 +25,7 @@ function LoginForm() {
 
   useEffect(() => {
     if (role == "Student") {
-      navigate("../student/profile", { replace: true });
+      navigate("../student", { replace: true });
     } else if (role == "Mentor") {
       navigate("../mentor", { replace: true });
     } else if (role == "Admin") {
@@ -44,7 +44,7 @@ function LoginForm() {
         duration: 5000,
       });
     }
-debugger;
+
     setUser(
       userResponse.data.id,
       userResponse.data.email,
@@ -71,6 +71,7 @@ debugger;
           .required("Password is required"),
       })}
       onSubmit={async (values) => {
+        console.log("values: ", values);
         await handleSubmit(values);
       }}
     >

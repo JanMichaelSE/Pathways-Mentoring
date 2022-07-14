@@ -5,10 +5,10 @@ function StudentProfile() {
   return (
     <div className={styles.container}>
       <div className={styles.containerForm}>
-        <StudentProfileForm/>
+        <StudentProfileForm />
       </div>
     </div>
-  )
+  );
 }
 
-export default StudentProfile
+export default StudentProfile;

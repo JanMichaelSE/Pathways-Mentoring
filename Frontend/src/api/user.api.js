@@ -116,8 +116,7 @@ async function httpGetStudentbyID(userID) {
     errorMessage: "",
   };
   try {
-
-    const response = await axios.get("/students", userID);
+    const response = await axios.get("/students/" + userID);
 
     userToReturn.data = response.data;
   } catch (error) {
@@ -174,4 +173,10 @@ async function httpUpdateStudent(student) {
   return userToReturn;
 }
 
-export { httpLogin, httpSignupStudent, httpSignupMentor, httpGetStudentbyID ,httpUpdateStudent };
+export {
+  httpLogin,
+  httpSignupStudent,
+  httpSignupMentor,
+  httpGetStudentbyID,
+  httpUpdateStudent,
+};

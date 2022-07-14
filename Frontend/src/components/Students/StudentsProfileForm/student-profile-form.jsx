@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useToast } from "@chakra-ui/react";
 
-import { httpUpdateStudent } from "@/api/user.api";
+import { httpUpdateStudent, httpGetStudentbyID } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
 
 import Button from "@/components/common/Button/button";
@@ -14,18 +14,35 @@ import styles from "./student-profile-form.module.css";
 import { Image } from "@chakra-ui/react";
 
 function StudentProfileForm() {
-  const navigate = useNavigate();
   const toast = useToast();
   const userId = useUserStore((state) => state.userId);
   const setUser = useUserStore((state) => state.setUser);
+  const [userData, setUserData] = useState({});
 
   console.log("User Id from Component: ", userId);
 
   useEffect(() => {
-    if (userId) {
-      navigate("../student", { replace: true });
+    async function loadStudentProfileInfo() {
+      const studentInfo = await httpGetStudentbyID(userId);
+      setUserData(studentInfo.data);
+      console.log(studentInfo);
     }
-  }, [userId]);
+    console.log(loadStudentProfileInfo());
+  }, []);
+  console.log(typeof userData.email);
+  /*useEffect(() => {
+    if (!!userId) {
+      const userInfo = async () => {
+        const data = await httpGetStudentbyID(userId);
+        console.log("User response: ", data);
+      };
+    }
+    userInfo;
+  }, [userId]);*/
+
+  function onEdit(event) {
+    console.log("Edit click:", event);
+  }
 
   async function handleSubmit(studentInfo) {
     const userResponse = await httpUpdateStudent(studentInfo);
@@ -49,18 +66,19 @@ function StudentProfileForm() {
   return (
     <div className={styles.formContainer}>
       <Formik
+        enableReinitialize={true}
         initialValues={{
           firstName: "",
           lastName: "",
-          phone: "",
-          email: "",
+          phone: userData.phone,
+          email: userData.email,
           currentPassword: "",
           password: "",
           confirmPassword: "",
-          gender: "",
-          fieldOfStudy: "",
-          institution: "",
-          gpa: "",
+          gender: userData.gender,
+          fieldOfStudy: userData.fieldOfStudy,
+          institution: userData.institution,
+          gpa: userData.gpa,
         }}
         validationSchema={Yup.object({
           firstName: Yup.string().required("First Name is required"),
@@ -98,7 +116,12 @@ function StudentProfileForm() {
         <Form className={styles.formContainer}>
           <div className={styles.photoContainer}>
             <h1 className={styles.profileHeader}>My Profile</h1>
-            <Button type="submit" id="editbutton" style={{ width: 130 }}>
+            <Button
+              type="button"
+              id="editbutton"
+              style={{ width: 130 }}
+              onClick={onEdit}
+            >
               Edit
             </Button>
           </div>
@@ -163,10 +186,15 @@ function StudentProfileForm() {
           </h1>
 
           <div className={styles.formInput}>
-            <Input label="First Name" name="firstName" type="text" width={414}/>
-            <Input label="Last Name" name="lastName" type="text" width={414}/>
-            <Input label="Email" name="email" type="text" width={414}/>
-            <Input label="Phone" name="phone" type="tel" width={414}/>
+            <Input
+              label="First Name"
+              name="firstName"
+              type="text"
+              width={414}
+            />
+            <Input label="Last Name" name="lastName" type="text" width={414} />
+            <Input label="Email" name="email" type="text" width={414} />
+            <Input label="Phone" name="phone" type="tel" width={414} />
             <Select label="Gender" name="gender" style={{ width: 250 }}>
               <option value="">Select Option</option>
               <option value="Male">Male</option>
@@ -189,7 +217,12 @@ function StudentProfileForm() {
               type="password"
               width={350}
             />
-            <Input label="Password" name="password" type="password" width={350}/>
+            <Input
+              label="Password"
+              name="password"
+              type="password"
+              width={350}
+            />
             <Input
               label="Confirm Password"
               name="confirmPassword"
@@ -206,8 +239,18 @@ function StudentProfileForm() {
             Academic Information
           </h1>
           <div className={styles.formInput}>
-            <Input label="Field Of Study" name="fieldOfStudy" type="text" width={350}/>
-            <Input label="Institution" name="institution" type="institution" width={350}/>
+            <Input
+              label="Field Of Study"
+              name="fieldOfStudy"
+              type="text"
+              width={350}
+            />
+            <Input
+              label="Institution"
+              name="institution"
+              type="institution"
+              width={350}
+            />
             <Input label="GPA" name="gpa" type="numeric" width={350} />
           </div>
 

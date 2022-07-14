@@ -18,7 +18,7 @@ function Signup() {
         </div>
 
         {/* <StudentForm /> */}
-        <MentorForm />
+        <StudentForm />
       </div>
     </>
   );
