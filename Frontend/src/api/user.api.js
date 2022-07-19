@@ -172,6 +172,29 @@ async function httpUpdateStudent(student) {
 
   return userToReturn;
 }
+async function httpGetMentorbyID(userID) {
+  let userToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+  try {
+    const response = await axios.get("/mentors/" + userID);
+
+    userToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    if (errorResponse.error.errorCode == 400) {
+      userToReturn.hasError = true;
+      userToReturn.errorMessage = errorResponse.error.errorMessage;
+    } else if (errorResponse.error.errorCode == 500) {
+      userToReturn.hasError = true;
+      userToReturn.errorMessage = errorResponse.error.errorMessage;
+    }
+  }
+
+  return userToReturn;
+}
 
 export {
   httpLogin,
@@ -179,4 +202,5 @@ export {
   httpSignupMentor,
   httpGetStudentbyID,
   httpUpdateStudent,
+  httpGetMentorbyID,
 };

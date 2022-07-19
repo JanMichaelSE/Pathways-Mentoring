@@ -3,13 +3,13 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useToast } from "@chakra-ui/react";
 
-import { httpUpdateStudent, httpGetStudentbyID } from "@/api/user.api";
+import { httpUpdateStudent, httpGetMentorbyID } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
 
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
-import styles from "./student-profile-form.module.css";
+import styles from "./mentor-profile-form.module.css";
 import { Image } from "@chakra-ui/react";
 
 import {
@@ -23,7 +23,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 
-function StudentProfileForm() {
+function MentorProfileForm() {
   const toast = useToast();
   const userId = useUserStore((state) => state.userId);
   const setUser = useUserStore((state) => state.setUser);
@@ -33,12 +33,12 @@ function StudentProfileForm() {
 
   useEffect(() => {
     async function loadStudentProfileInfo() {
-      const studentInfo = await httpGetStudentbyID(userId);
-      setUserData(studentInfo.data);
+      const mentorInfo = await httpGetMentorbyID(userId);
+      setUserData(mentorInfo.data);
 
-      if (studentInfo.hasError) {
+      if (mentorInfo.hasError) {
         return toast({
-          description: studentInfo.errorMessage,
+          description: mentorInfo.errorMessage,
           status: "error",
           position: "top",
           duration: 5000,
@@ -134,15 +134,19 @@ function StudentProfileForm() {
         initialValues={{
           firstName: "",
           lastName: "",
-          phone: userData.phone || "",
           email: userData.email || "",
+          phone: userData.phone || "",
+          gender: userData.gender || "Select Option",
           currentPassword: "",
           password: "",
           confirmPassword: "",
-          gender: userData.gender || "Select Option",
-          fieldOfStudy: userData.fieldOfStudy || "",
-          institution: userData.institution || "",
-          gpa: userData.gpa || "",
+          academicDegree: userData.academicDegree || "",
+          description: userData.description || "",
+          interests: userData.interests || "",
+          department: userData.department || "",
+          facultyStatus: userData.facultyStatus || "",
+          office: userData.office || "",
+          officeHours: "",
         }}
         validationSchema={Yup.object({
           firstName: Yup.string().required("First Name is required"),
@@ -168,9 +172,12 @@ function StudentProfileForm() {
           gender: Yup.string()
             .oneOf(["Male", "Female", "Other"])
             .required("Gender is required"),
-          fieldOfStudy: Yup.string().required("Field of Study is required"),
-          institution: Yup.string().required("Insitution is required"),
-          gpa: Yup.number(),
+          academicDegree: Yup.string().required(),
+          description: Yup.string().required("Description is required"),
+          department: Yup.string().required("Department is required"),
+          facultyStatus: Yup.string().required("Faculty Status is required"),
+          office: Yup.string().required("Office is required"),
+          officeHourst: Yup.string().required("Office Hours is required"),
         })}
         onSubmit={async (values) => {
           await handleSubmit(values);
@@ -196,28 +203,6 @@ function StudentProfileForm() {
               alt="Avatar"
             />
             <ScrollingExample />
-            {/*<Button
-              type="button"
-              id="avatarbutton"
-              style={{
-                width: 58,
-                height: 58,
-                float: "none",
-                background: "none",
-                position: "relative",
-                top: -75,
-                right: -90,
-              }}
-              disabled={edit}
-            >
-              <Image
-                borderRadius="full"
-                boxSize="62px"
-                src="/assets/Profile-Avatar-Icon.svg"
-                alt="Avatar"
-                m="auto"
-              />
-            </Button>*/}
             <Button
               type="button"
               id="camerabutton"
@@ -326,33 +311,71 @@ function StudentProfileForm() {
           <h1 className={styles.line}>
             <img
               className={styles.lineImg}
-              src="/assets/academic-icon.svg"
+              src="/assets/bibliography-icon.svg"
               style={{ marginRight: "20px" }}
             ></img>
-            Academic Information
+            Bibliography
           </h1>
           <div className={styles.formInput}>
-            <Input
-              label="Field Of Study"
-              name="fieldOfStudy"
-              type="text"
-              width={350}
-              disabled={edit}
-            />
-            <Input
-              label="Institution"
-              name="institution"
-              type="institution"
-              width={350}
-              disabled={edit}
-            />
-            <Input
-              label="GPA"
-              name="gpa"
-              type="numeric"
-              width={350}
-              disabled={edit}
-            />
+            <Input name="description" type="text" width={350} disabled={edit} />
+            <div />
+            <h1 className={styles.line}>
+              <img
+                className={styles.lineImg}
+                src="/assets/faculty-icon.svg"
+                style={{ marginRight: "20px" }}
+              ></img>
+              Faculty Information
+            </h1>
+            <div className={styles.formInput}>
+              <Select
+                label="Academic Degree"
+                name="academicDegree"
+                width={350}
+                disabled={edit}
+              >
+                <option value="">Select Option</option>
+              </Select>
+              <Select
+                label="Department"
+                name="department"
+                width={350}
+                disabled={edit}
+              >
+                <option value="">Select Option</option>
+              </Select>
+              <Select
+                label="Faculty Status"
+                name="facultyStatus"
+                width={350}
+                disabled={edit}
+              >
+                <option value="">Select Option</option>
+              </Select>
+              <Input
+                label="Office Number"
+                name="office"
+                type="numeric"
+                width={350}
+                disabled={edit}
+              />
+              <Input
+                label="Area of Interest"
+                name="interes"
+                type="text"
+                width={350}
+                disabled={edit}
+              />
+            </div>
+            <h1 className={styles.line}>
+              <img
+                className={styles.lineImg}
+                src="/assets/hour-icon.svg"
+                style={{ marginRight: "20px" }}
+              ></img>
+              Office Hours
+            </h1>
+            <div className={styles.formInput}></div>
           </div>
 
           <div className={styles.buttonContainer}>
@@ -364,4 +387,4 @@ function StudentProfileForm() {
   );
 }
 
-export default StudentProfileForm;
+export default MentorProfileForm;

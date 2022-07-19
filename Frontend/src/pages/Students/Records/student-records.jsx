@@ -1,8 +1,5 @@
-
 function StudentRecords() {
-  return (
-    <div>Student Records</div>
-  )
+  return <div>Students Records</div>;
 }
 
-export default StudentRecords
+export default StudentRecords;
