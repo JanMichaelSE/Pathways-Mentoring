@@ -1,10 +1,26 @@
 import create from "zustand";
+import { persist } from "zustand/middleware";
 
-export const useUserStore = create((set) => ({
-  userId: "",
-  email: "",
-  role: "",
-  setUser: (userId, email, role) =>
-    set({ userId: userId, email: email, role: role }),
-  resetUser: () => set({ userId: "", email: "", role: "" }),
-}));
+export const useUserStore = create(
+  persist(
+    (set) => ({
+      accessToken: "",
+      refreshToken: "",
+      email: "",
+      role: "",
+      setUser: (email, role) =>
+        set({
+          email: email,
+          role: role,
+        }),
+      setTokens: (accessToken, refreshToken) => {
+        set({
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        });
+      },
+      resetUser: () => set({ userId: "", email: "", role: "" }),
+    }),
+    { name: "user-storage", getStorage: () => localStorage }
+  )
+);
