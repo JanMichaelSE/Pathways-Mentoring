@@ -16,6 +16,7 @@ model User {
   password         String    @unique @db.VarChar(65)
   passwordSalt     String    @unique @db.VarChar(65)
   role             String    @db.VarChar(10)
+  refreshToken     String?
   createdDate      DateTime  @default(now()) @db.Timestamptz(6)
   lastModified     DateTime  @default(now()) @db.Timestamptz(6)
   mentor           Mentor?

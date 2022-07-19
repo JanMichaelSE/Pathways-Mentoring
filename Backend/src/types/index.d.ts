@@ -76,3 +76,12 @@ export interface IAnswerResposne {
   createdDate: Date;
   lastModified: Date;
 }
+
+// --- THIS NEEDS REFACTORING ---
+declare global {
+  namespace Express {
+    interface Request {
+      userId: string;
+    }
+  }
+}
