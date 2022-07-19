@@ -18,10 +18,7 @@ async function httpLogin(user) {
     userToReturn.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
-    if (errorResponse.error.errorCode == 401) {
-      userToReturn.hasError = true;
-      userToReturn.errorMessage = errorResponse.error.errorMessage;
-    } else if (errorResponse.error.errorCode == 500) {
+    if (typeof errorResponse.error.errorCode == "number") {
       userToReturn.hasError = true;
       userToReturn.errorMessage = errorResponse.error.errorMessage;
     }
@@ -57,10 +54,7 @@ async function httpSignupStudent(student) {
     userToReturn.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
-    if (errorResponse.error.errorCode == 400) {
-      userToReturn.hasError = true;
-      userToReturn.errorMessage = errorResponse.error.errorMessage;
-    } else if (errorResponse.error.errorCode == 500) {
+    if (typeof errorResponse.error.errorCode == "number") {
       userToReturn.hasError = true;
       userToReturn.errorMessage = errorResponse.error.errorMessage;
     }
@@ -97,10 +91,7 @@ async function httpSignupMentor(mentor) {
     userToReturn.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
-    if (errorResponse.error.errorCode == 400) {
-      userToReturn.hasError = true;
-      userToReturn.errorMessage = errorResponse.error.errorMessage;
-    } else if (errorResponse.error.errorCode == 500) {
+    if (typeof errorResponse.error.errorCode == "number") {
       userToReturn.hasError = true;
       userToReturn.errorMessage = errorResponse.error.errorMessage;
     }
@@ -109,4 +100,41 @@ async function httpSignupMentor(mentor) {
   return userToReturn;
 }
 
-export { httpLogin, httpSignupStudent, httpSignupMentor };
+async function httpRefreshTokens(refreshToken) {
+  let responseToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+
+  try {
+    const response = await axios.post("/auth/token", { token: refreshToken });
+    responseToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    if (typeof errorResponse.error.errorCode == "number") {
+      responseToReturn.hasError = true;
+      responseToReturn.errorMessage = errorResponse.error.errorMessage;
+    }
+  }
+
+  return responseToReturn;
+}
+
+async function httpSetRefreshTokenTimeout(accessToken, refreshToken) {
+  const responseToReturn = {
+    
+  }
+  try {
+    const accessTokenExperationTime = getJWTExpireDate(accessToken);
+    setTimeout(()=> {
+      const response = await httpRefreshTokens(refreshToken);
+      const data = response.data;
+
+    }, accessTokenExperationTime);
+  } catch (error) {
+    throw error;    
+  }
+}
+
+export { httpLogin, httpSignupStudent, httpSignupMentor, httpRefreshTokens };
