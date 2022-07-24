@@ -122,7 +122,7 @@ async function isUserAuthorized(
   }
 }
 
-async function getUserRefreshToken(token: string): Promise<User | null> {
+async function getUserTokens(token: string): Promise<User | null> {
   try {
     const userId = getUserIdFromToken(token);
 
@@ -140,8 +140,9 @@ async function getUserRefreshToken(token: string): Promise<User | null> {
   }
 }
 
-async function updateUserRefreshToken(
+async function updateUserTokens(
   userId: string,
+  accessToken: string,
   refreshToken: string
 ): Promise<void> {
   try {
@@ -150,6 +151,7 @@ async function updateUserRefreshToken(
         id: userId,
       },
       data: {
+        accessToken: accessToken,
         refreshToken: refreshToken,
       },
     });
@@ -227,6 +229,6 @@ export {
   updateUserEmail,
   isUserAuthorized,
   validateProfileUpdate,
-  getUserRefreshToken,
-  updateUserRefreshToken,
+  getUserTokens,
+  updateUserTokens,
 };

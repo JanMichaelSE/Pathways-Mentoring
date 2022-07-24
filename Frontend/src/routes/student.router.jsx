@@ -7,10 +7,12 @@ import Assessments from "@/pages/Students/Assessments/assessments";
 import Mentors from "@/pages/Students/Mentors/mentors";
 import StudentProfile from "@/pages/Students/Profile/student-profile";
 import ContactUs from "@/pages/Common/Contact-Us/contact-us";
+import IdleTimerContainer from "@/components/common/IdleTimerContainer/idle-timer-container";
 
 function StudentRouter() {
   return (
-    <div>
+    <>
+      <IdleTimerContainer />
       <Navbar />
       <Routes>
         <Route path="/" element={<StudentRecords />} />
@@ -20,7 +22,7 @@ function StudentRouter() {
         <Route path="/profile" element={<StudentProfile />} />
         <Route path="/contact-us" element={<ContactUs />} />
       </Routes>
-    </div>
+    </>
   );
 }
 

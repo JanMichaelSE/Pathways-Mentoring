@@ -14,7 +14,6 @@ async function httpLogin(user) {
     };
 
     const response = await axios.post("/auth/login", userInfo);
-
     userToReturn.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
@@ -50,7 +49,6 @@ async function httpSignupStudent(student) {
     };
 
     const response = await axios.post("/auth/signup/student", studentInfo);
-
     userToReturn.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
@@ -87,7 +85,6 @@ async function httpSignupMentor(mentor) {
     };
 
     const response = await axios.post("/auth/signup/mentor", mentorInfo);
-
     userToReturn.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
@@ -100,41 +97,25 @@ async function httpSignupMentor(mentor) {
   return userToReturn;
 }
 
-async function httpRefreshTokens(refreshToken) {
-  let responseToReturn = {
+async function httpLogout() {
+  let userToReturn = {
     hasError: false,
     data: null,
     errorMessage: "",
   };
 
   try {
-    const response = await axios.post("/auth/token", { token: refreshToken });
-    responseToReturn.data = response.data;
+    const response = await axios.post("/auth/logout");
+    userToReturn.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
     if (typeof errorResponse.error.errorCode == "number") {
-      responseToReturn.hasError = true;
-      responseToReturn.errorMessage = errorResponse.error.errorMessage;
+      userToReturn.hasError = true;
+      userToReturn.errorMessage = errorResponse.error.errorMessage;
     }
   }
 
-  return responseToReturn;
+  return userToReturn;
 }
 
-async function httpSetRefreshTokenTimeout(accessToken, refreshToken) {
-  const responseToReturn = {
-    
-  }
-  try {
-    const accessTokenExperationTime = getJWTExpireDate(accessToken);
-    setTimeout(()=> {
-      const response = await httpRefreshTokens(refreshToken);
-      const data = response.data;
-
-    }, accessTokenExperationTime);
-  } catch (error) {
-    throw error;    
-  }
-}
-
-export { httpLogin, httpSignupStudent, httpSignupMentor, httpRefreshTokens };
+export { httpLogin, httpSignupStudent, httpSignupMentor, httpLogout };

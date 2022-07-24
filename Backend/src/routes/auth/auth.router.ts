@@ -1,6 +1,8 @@
 import express from "express";
+import { authenticateJsonWebToken } from "../../services/auth.service";
 import {
   httpLogin,
+  httpLogout,
   httpRefreshToken,
   httpSignupMentor,
   httpSignupStudent,
@@ -8,9 +10,11 @@ import {
 
 const router = express.Router();
 
-router.post("/token", httpRefreshToken);
+router.post("/refreshToken", httpRefreshToken);
 
 router.post("/login", httpLogin);
+
+router.post("/logout", authenticateJsonWebToken, httpLogout);
 
 router.post("/signup/student", httpSignupStudent);
 

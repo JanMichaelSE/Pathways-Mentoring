@@ -8,6 +8,8 @@ export const useUserStore = create(
       refreshToken: "",
       email: "",
       role: "",
+      logoutTimeoutId: "",
+      refreshTokenError: {},
       setUser: (email, role) =>
         set({
           email: email,
@@ -19,8 +21,17 @@ export const useUserStore = create(
           refreshToken: refreshToken,
         });
       },
-      resetUser: () => set({ userId: "", email: "", role: "" }),
+      resetUser: () => {
+        set({
+          accessToken: "",
+          refreshToken: "",
+          email: "",
+          role: "",
+          logoutTimeoutId: "",
+          refreshTokenError: "",
+        });
+      },
     }),
-    { name: "user-storage", getStorage: () => localStorage }
+    { name: "user-storage", getStorage: () => sessionStorage }
   )
 );

@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 import { buildErrorObject } from "../utils/helpers";
+import { getUserTokens } from "../models/users.model";
 
 async function authenticateJsonWebToken(
   req: Request,
@@ -14,6 +15,15 @@ async function authenticateJsonWebToken(
 
   if (!token) {
     const error = buildErrorObject(401, "Your are not authenticated.");
+    return res.status(error.errorCode).json({ error: error });
+  }
+
+  const userTokens = await getUserTokens(token);
+  if (token !== userTokens?.accessToken) {
+    const error = buildErrorObject(
+      403,
+      "Your are not authorized to access these resources."
+    );
     return res.status(error.errorCode).json({ error: error });
   }
 
@@ -35,7 +45,7 @@ async function authenticateJsonWebToken(
 function generateAccessToken(userId: string): string {
   const user = { id: userId };
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET || "", {
-    expiresIn: "1800s",
+    expiresIn: "1200s",
   });
 }
 

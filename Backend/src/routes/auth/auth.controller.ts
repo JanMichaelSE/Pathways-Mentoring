@@ -3,9 +3,9 @@ import { Request, Response } from "express";
 import { createStudent } from "../../models/students.model";
 import {
   createUser,
-  getUserRefreshToken,
+  getUserTokens,
   isUserAuthorized,
-  updateUserRefreshToken,
+  updateUserTokens,
 } from "../../models/users.model";
 import { createMentor } from "../../models/mentors.model";
 
@@ -15,6 +15,7 @@ import {
   formatPhoneNumber,
   handleBadRequestResponse,
   handleErrorResponse,
+  isValidUUID,
   titleCase,
 } from "../../utils/helpers";
 import {
@@ -22,38 +23,6 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "../../services/auth.service";
-
-async function httpRefreshToken(req: Request, res: Response) {
-  try {
-    const refreshToken = req.body.token;
-    if (!refreshToken) {
-      const error = buildErrorObject(401, "Token was not provided.");
-      return res.status(error.errorCode).json({ error: error });
-    }
-
-    const userRefreshToken = await getUserRefreshToken(refreshToken);
-    if (!userRefreshToken || refreshToken !== userRefreshToken.refreshToken) {
-      const error = buildErrorObject(403, "Token is not valid for this users.");
-      return res.status(error.errorCode).json({ error: error });
-    }
-
-    const verifyTokenResponse = verifyRefreshToken(refreshToken);
-    if ("errorCode" in verifyTokenResponse) {
-      return res.status(verifyTokenResponse.errorCode).json({
-        error: verifyTokenResponse,
-      });
-    }
-
-    const [accessToken, refreshedToken] = verifyTokenResponse;
-    await updateUserRefreshToken(userRefreshToken.id, refreshedToken);
-
-    return res
-      .status(200)
-      .json({ accessToken: accessToken, refreshedToken: refreshedToken });
-  } catch (error) {
-    return handleErrorResponse("refresh token", error, res);
-  }
-}
 
 async function httpLogin(req: Request, res: Response) {
   try {
@@ -82,7 +51,7 @@ async function httpLogin(req: Request, res: Response) {
     const accessToken = generateAccessToken(userResponse.id);
     const refreshToken = generateRefreshToken(userResponse.id);
 
-    await updateUserRefreshToken(userResponse.id, refreshToken);
+    await updateUserTokens(userResponse.id, accessToken, refreshToken);
 
     return res.status(200).json({
       accessToken,
@@ -151,7 +120,7 @@ async function httpSignupStudent(req: Request, res: Response) {
 
     const accessToken = generateAccessToken(userResponse.id);
     const refreshToken = generateRefreshToken(userResponse.id);
-    await updateUserRefreshToken(userResponse.id, refreshToken);
+    await updateUserTokens(userResponse.id, accessToken, refreshToken);
 
     const studentResponse = await createStudent(
       userResponse.id,
@@ -229,7 +198,7 @@ async function httpSignupMentor(req: Request, res: Response) {
 
     const accessToken = generateAccessToken(userResponse.id);
     const refreshToken = generateRefreshToken(userResponse.id);
-    await updateUserRefreshToken(userResponse.id, refreshToken);
+    await updateUserTokens(userResponse.id, accessToken, refreshToken);
 
     const mentorResponse = await createMentor(
       userResponse.id,
@@ -247,4 +216,61 @@ async function httpSignupMentor(req: Request, res: Response) {
   }
 }
 
-export { httpRefreshToken, httpLogin, httpSignupStudent, httpSignupMentor };
+async function httpLogout(req: Request, res: Response) {
+  try {
+    const userId = req.userId;
+    const isValidId = isValidUUID(userId);
+
+    if (!isValidId) {
+      return handleBadRequestResponse(
+        "This Id passed in the URL parameter is not does not have a valid format.",
+        res
+      );
+    }
+
+    await updateUserTokens(userId, "", "");
+    return res.status(200).json("User has been logged out");
+  } catch (error) {
+    return handleErrorResponse("logout", error, res);
+  }
+}
+
+async function httpRefreshToken(req: Request, res: Response) {
+  try {
+    const refreshToken = req.body.token;
+    if (!refreshToken) {
+      const error = buildErrorObject(401, "Token was not provided.");
+      return res.status(error.errorCode).json({ error: error });
+    }
+
+    const userRefreshToken = await getUserTokens(refreshToken);
+    if (!userRefreshToken || refreshToken !== userRefreshToken.refreshToken) {
+      const error = buildErrorObject(401, "Token is not valid for this users.");
+      return res.status(error.errorCode).json({ error: error });
+    }
+
+    const verifyTokenResponse = verifyRefreshToken(refreshToken);
+    if ("errorCode" in verifyTokenResponse) {
+      return res.status(verifyTokenResponse.errorCode).json({
+        error: verifyTokenResponse,
+      });
+    }
+
+    const [accessToken, refreshedToken] = verifyTokenResponse;
+    await updateUserTokens(userRefreshToken.id, accessToken, refreshedToken);
+
+    return res
+      .status(200)
+      .json({ accessToken: accessToken, refreshedToken: refreshedToken });
+  } catch (error) {
+    return handleErrorResponse("refresh token", error, res);
+  }
+}
+
+export {
+  httpLogin,
+  httpSignupStudent,
+  httpSignupMentor,
+  httpLogout,
+  httpRefreshToken,
+};
