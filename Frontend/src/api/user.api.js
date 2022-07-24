@@ -14,14 +14,10 @@ async function httpLogin(user) {
     };
 
     const response = await axios.post("/auth/login", userInfo);
-
     userToReturn.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
-    if (errorResponse.error.errorCode == 401) {
-      userToReturn.hasError = true;
-      userToReturn.errorMessage = errorResponse.error.errorMessage;
-    } else if (errorResponse.error.errorCode == 500) {
+    if (typeof errorResponse.error.errorCode == "number") {
       userToReturn.hasError = true;
       userToReturn.errorMessage = errorResponse.error.errorMessage;
     }
@@ -53,14 +49,10 @@ async function httpSignupStudent(student) {
     };
 
     const response = await axios.post("/auth/signup/student", studentInfo);
-
     userToReturn.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
-    if (errorResponse.error.errorCode == 400) {
-      userToReturn.hasError = true;
-      userToReturn.errorMessage = errorResponse.error.errorMessage;
-    } else if (errorResponse.error.errorCode == 500) {
+    if (typeof errorResponse.error.errorCode == "number") {
       userToReturn.hasError = true;
       userToReturn.errorMessage = errorResponse.error.errorMessage;
     }
@@ -93,14 +85,10 @@ async function httpSignupMentor(mentor) {
     };
 
     const response = await axios.post("/auth/signup/mentor", mentorInfo);
-
     userToReturn.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
-    if (errorResponse.error.errorCode == 400) {
-      userToReturn.hasError = true;
-      userToReturn.errorMessage = errorResponse.error.errorMessage;
-    } else if (errorResponse.error.errorCode == 500) {
+    if (typeof errorResponse.error.errorCode == "number") {
       userToReturn.hasError = true;
       userToReturn.errorMessage = errorResponse.error.errorMessage;
     }
@@ -109,4 +97,25 @@ async function httpSignupMentor(mentor) {
   return userToReturn;
 }
 
-export { httpLogin, httpSignupStudent, httpSignupMentor };
+async function httpLogout() {
+  let userToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+
+  try {
+    const response = await axios.post("/auth/logout");
+    userToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    if (typeof errorResponse.error.errorCode == "number") {
+      userToReturn.hasError = true;
+      userToReturn.errorMessage = errorResponse.error.errorMessage;
+    }
+  }
+
+  return userToReturn;
+}
+
+export { httpLogin, httpSignupStudent, httpSignupMentor, httpLogout };

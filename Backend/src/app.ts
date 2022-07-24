@@ -1,15 +1,17 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 
 import authRouter from "./routes/auth/auth.router";
 import mentorsRouter from "./routes/mentors/mentors.router";
 import studentsRouter from "./routes/students/students.router";
 import assessmentRouter from "./routes/assessments/asessments.router";
 
+dotenv.config();
 const app = express();
-const allowedOrigins = ['http://localhost:3000'];
+const allowedOrigins = ["http://localhost:3000"];
 const options: cors.CorsOptions = {
-  origin: allowedOrigins
+  origin: allowedOrigins,
 };
 
 app.use(cors(options));
