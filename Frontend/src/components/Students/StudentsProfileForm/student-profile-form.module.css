@@ -11,7 +11,6 @@
 }
 
 .form-input div {
-  
   margin-bottom: 2.5rem;
 }
 
@@ -71,7 +70,7 @@ h1 #editbutton {
   -ms-border-radius: 30px;
   -o-border-radius: 30px;
 }
-.line{
+.line {
   display: flex;
   flex-direction: row;
   color: var(--color-blue-dark);
@@ -81,21 +80,35 @@ h1 #editbutton {
   align-items: center;
 }
 
-.line:before{
+.line:before {
   content: "";
   display: inline-block;
   width: 31rem;
   height: 3px;
-  background: -webkit-linear-gradient(135deg, #FAC20B 20%, #0066CC );
+  background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
   margin-right: 80px;
 }
-.line:after{
+.line:after {
   content: "";
   display: inline-block;
   width: 31rem;
   height: 3px;
-  background: -webkit-linear-gradient(135deg, #0066CC , #FAC20B 80% );
+  background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
   margin-left: 80px;
+}
+
+.avatarContainerModal {
+  display: flex;
+  flex-direction: column;
+}
+.icon {
+  width: 100px;
+  height: 100px;
+  margin: 0.5em;
+  display: flex;
+}
+.icon:hover {
+  cursor: pointer;
 }
 
 /*img {
