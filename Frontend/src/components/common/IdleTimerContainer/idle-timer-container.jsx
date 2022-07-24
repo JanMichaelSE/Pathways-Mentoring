@@ -49,7 +49,7 @@ function IdleTimerContainer() {
     clearTimeout(timeoutId);
   }
 
-  const idleTimeout = 5 * 1000; // 10 minutes to timeout
+  const idleTimeout = 10 * 10000; // 10 minutes to timeout
   useIdleTimer({
     timeout: idleTimeout,
     onIdle,
