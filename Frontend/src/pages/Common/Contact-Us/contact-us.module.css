@@ -1,0 +1,48 @@
+/* Background */
+.contactUsBackground {
+    min-height: 100vh;
+    background-color: aqua;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.segmentContainer {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.contactUsForm {
+    flex-grow: 3;
+    display: flex;
+    flex-direction: column;
+}
+
+.pathwaysStaff {
+    flex-grow: 1;
+}
+
+.LogoLink {
+    cursor: pointer;
+}
+
+.formSegment{
+    display: flex;
+    flex-direction: row;
+}
+
+.SubHeading {
+    font-size: var(--font-size-subheading);
+    color: var(--color-blue-dark);
+    margin-top: 1rem;
+}
+
+.StaffContactBox {
+    display: flex;
+    justify-content: center;
+}
+
+.linkBoxes {
+    display: flex;
+    flex-direction: row;
+}
