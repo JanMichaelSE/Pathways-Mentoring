@@ -20,7 +20,6 @@ import {
   isValidUUID,
   titleCase,
 } from "../../utils/helpers";
-import { validateStudentExists } from "../../models/students.model";
 
 async function httpGetAllMentors(req: Request, res: Response) {
   try {
@@ -31,9 +30,9 @@ async function httpGetAllMentors(req: Request, res: Response) {
   }
 }
 
-async function httpGetMentorByUserId(req: Request, res: Response) {
+async function httpGetMentorProfileByUserId(req: Request, res: Response) {
   try {
-    const userId = req.params.id;
+    const userId = req.userId;
     const isValidId = isValidUUID(userId);
 
     if (!isValidId) {
@@ -59,8 +58,18 @@ async function httpGetMentorByUserId(req: Request, res: Response) {
 
 async function httpUpdateMentorProfile(req: Request, res: Response) {
   try {
+    const userId = req.userId;
+    const isValidId = isValidUUID(userId);
+
+    if (!isValidId) {
+      return handleBadRequestResponse(
+        "This Id passed in the URL parameter is not does not have a valid format.",
+        res
+      );
+    }
+
     const userInfo: IUser = {
-      id: req.body.userId,
+      id: userId,
       email: req.body.email,
       password: req.body.currentPassword,
       newPassword: req.body.newPassword,
@@ -119,4 +128,8 @@ async function httpUpdateMentorProfile(req: Request, res: Response) {
   }
 }
 
-export { httpGetAllMentors, httpUpdateMentorProfile, httpGetMentorByUserId };
+export {
+  httpGetAllMentors,
+  httpUpdateMentorProfile,
+  httpGetMentorProfileByUserId,
+};

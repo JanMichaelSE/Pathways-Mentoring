@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -15,14 +14,8 @@ import styles from "./student-form.module.css";
 function StudentForm() {
   const navigate = useNavigate();
   const toast = useToast();
-  const userId = useUserStore((state) => state.userId);
   const setUser = useUserStore((state) => state.setUser);
-
-  useEffect(() => {
-    if (userId) {
-      navigate("../student", { replace: true });
-    }
-  }, [userId]);
+  const setTokens = useUserStore((state) => state.setTokens);
 
   async function handleSubmit(studentInfo) {
     const userResponse = await httpSignupStudent(studentInfo);
@@ -36,11 +29,10 @@ function StudentForm() {
       });
     }
 
-    setUser(
-      userResponse.data.userId,
-      userResponse.data.email,
-      userResponse.data.role
-    );
+    setUser(userResponse.data.email, userResponse.data.role);
+    setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
+
+    navigate("../student", { replace: true });
   }
 
   return (

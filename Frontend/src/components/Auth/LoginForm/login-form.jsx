@@ -19,6 +19,7 @@ function LoginForm() {
   const navigate = useNavigate();
   const role = useUserStore((state) => state.role);
   const setUser = useUserStore((state) => state.setUser);
+  const setTokens = useUserStore((state) => state.setTokens);
 
   const toast = useToast();
   const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
@@ -45,11 +46,8 @@ function LoginForm() {
       });
     }
 
-    setUser(
-      userResponse.data.id,
-      userResponse.data.email,
-      userResponse.data.role
-    );
+    setUser(userResponse.data.email, userResponse.data.role);
+    setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
   }
 
   function inputWidth() {

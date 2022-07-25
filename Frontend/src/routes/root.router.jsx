@@ -4,15 +4,37 @@ import Signup from "@/pages/Auth/Signup/signup";
 import AdminRouter from "./admin.router";
 import MentorRouter from "./mentor.router";
 import StudentRouter from "./student.router";
+import ProtectedRoute from "../components/common/ProtectedRoute/protected-route";
 
 function AuthRouter() {
   return (
     <Routes>
       <Route path="/" exact element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/admin/*" element={<AdminRouter />} />
-      <Route path="/student/*" element={<StudentRouter />} />
-      <Route path="/mentor/*" element={<MentorRouter />} />
+      <Route
+        path="/admin/*"
+        element={
+          <ProtectedRoute>
+            <AdminRouter />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/student/*"
+        element={
+          <ProtectedRoute>
+            <StudentRouter />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mentor/*"
+        element={
+          <ProtectedRoute>
+            <MentorRouter />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }

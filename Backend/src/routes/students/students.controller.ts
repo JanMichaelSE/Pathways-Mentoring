@@ -52,9 +52,9 @@ async function httpGetAllStudentsByMentor(req: Request, res: Response) {
   }
 }
 
-async function httpGetStudentByUserId(req: Request, res: Response) {
+async function httpGetStudentProfileByUserId(req: Request, res: Response) {
   try {
-    const userId = req.params.id;
+    const userId = req.userId;
     const isValidId = isValidUUID(userId);
 
     if (!isValidId) {
@@ -81,7 +81,7 @@ async function httpGetStudentByUserId(req: Request, res: Response) {
 async function httpUpdateStudentProfile(req: Request, res: Response) {
   try {
     const userInfo: IUser = {
-      id: req.body.userId,
+      id: req.userId,
       email: req.body.email,
       password: req.body.currentPassword,
       newPassword: req.body.newPassword,
@@ -140,6 +140,6 @@ async function httpUpdateStudentProfile(req: Request, res: Response) {
 export {
   httpGetAllStudents,
   httpGetAllStudentsByMentor,
-  httpGetStudentByUserId,
+  httpGetStudentProfileByUserId,
   httpUpdateStudentProfile,
 };

@@ -1,15 +1,24 @@
-import express from 'express';
-import { httpGetAllStudents, httpGetAllStudentsByMentor, httpGetStudentByUserId, httpUpdateStudentProfile } from './students.controller';
+import express from "express";
+import { authenticateJsonWebToken } from "../../services/auth.service";
+import {
+  httpGetAllStudents,
+  httpGetAllStudentsByMentor,
+  httpGetStudentProfileByUserId,
+  httpUpdateStudentProfile,
+} from "./students.controller";
 
 const router = express.Router();
 
-router.get('/mentor/:email', httpGetAllStudentsByMentor);
+router.get(
+  "/mentor/:email",
+  authenticateJsonWebToken,
+  httpGetAllStudentsByMentor
+);
 
-router.get('/', httpGetAllStudents);
+router.get("/", authenticateJsonWebToken, httpGetAllStudents);
 
-router.get('/:id', httpGetStudentByUserId);
+router.get("/profile", authenticateJsonWebToken, httpGetStudentProfileByUserId);
 
-router.post('/', httpUpdateStudentProfile);
-
+router.post("/", authenticateJsonWebToken, httpUpdateStudentProfile);
 
 export default router;

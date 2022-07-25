@@ -5,6 +5,7 @@ import { User } from "@prisma/client";
 
 import { IErrorResponse, IUser } from "./../types/index.d";
 import { buildErrorObject, excludeFields } from "../utils/helpers";
+import { getUserIdFromToken } from "../services/auth.service";
 
 async function createUser(
   email: string,
@@ -121,6 +122,46 @@ async function isUserAuthorized(
   }
 }
 
+async function getUserTokens(token: string): Promise<User | null> {
+  try {
+    const userId = getUserIdFromToken(token);
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) return null;
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function updateUserTokens(
+  userId: string,
+  accessToken: string,
+  refreshToken: string
+): Promise<void> {
+  try {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
+// --- Utility Functions ---
+
 async function validateProfileUpdate(
   userInfo: IUser
 ): Promise<User | IErrorResponse> {
@@ -188,4 +229,6 @@ export {
   updateUserEmail,
   isUserAuthorized,
   validateProfileUpdate,
+  getUserTokens,
+  updateUserTokens,
 };
