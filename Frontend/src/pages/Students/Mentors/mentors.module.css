@@ -1,0 +1,36 @@
+/* Background */
+.mentorsBackground {
+    min-height: 100vh;
+    background-color: var(--color-blue-light);
+    margin: 0;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.mentorsCardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.LogoLink {
+    cursor: pointer;
+}
+
+.SubHeading {
+    font-size: var(--font-size-subheading);
+    color: var(--color-blue-dark);
+    margin-top: 1rem;
+}
+
+.MentorCardBox {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-shrink: 1;
+}
+
+.linkBoxes {
+    display: flex;
+    flex-direction: row;
+}
