@@ -14,13 +14,14 @@ import { Image } from "@chakra-ui/react";
 
 import {
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
+  SimpleGrid,
+  Box,
 } from "@chakra-ui/react";
 
 function MentorProfileForm() {
@@ -30,6 +31,9 @@ function MentorProfileForm() {
   const [userData, setUserData] = useState({});
   const [edit, setEdit] = useState(true);
   const [close, setClose] = useState("Edit");
+  const [pictureData, setpictureData] = useState("");
+
+  const arrayImgs = [...Array(53).keys()].splice(1, 52);
 
   useEffect(() => {
     async function loadStudentProfileInfo() {
@@ -56,9 +60,20 @@ function MentorProfileForm() {
       setClose("X");
     }
   }
+  function clickImage(event) {
+    console.log(event.target.id);
+    setpictureData(event.target.id);
+  }
 
-  async function handleSubmit(studentInfo) {
-    const userResponse = await httpUpdateStudent(studentInfo);
+  async function handleSubmit(mentorInfo) {
+    console.log(typeof mentorInfo);
+    const mentorInfoWithID = {
+      userId: userId,
+      ...mentorInfo,
+      profilePicture: pictureData,
+    };
+    console.log(mentorInfoWithID);
+    const userResponse = await httpUpdateMentor(mentorInfo);
 
     if (userResponse.hasError) {
       return toast({
@@ -76,53 +91,133 @@ function MentorProfileForm() {
     );
   }
 
-  function ScrollingExample() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [scrollBehavior, setScrollBehavior] = useState("inside");
+  function ProfilePicture() {
+    if (!userData.profilePicture || !pictureData) {
+      return (
+        <Image
+          borderRadius="full"
+          boxSize="200px"
+          src="/assets/Profile-avatar.svg"
+        ></Image>
+      );
+    } else {
+      return (
+        <svg>
+          <use
+            href={
+              "/assets/spriteAvatar.svg#" +
+              (userData.profilePicture || pictureData)
+            }
+          ></use>
+        </svg>
+      );
+    }
+  }
+  const ImageList = (props) => {
+    const images = props.images.map((image) => {
+      return (
+        <Box
+          key={image}
+          id={"avatar" + image}
+          style={{
+            backgroundColor: "white",
+            borderRadius: "20px",
+          }}
+        >
+          <svg
+            key={image}
+            id={"avatar" + image}
+            className={styles.icon}
+            onClick={clickImage}
+          >
+            <use
+              key={image}
+              id={"avatar" + image}
+              href={"/assets/spriteAvatar.svg#avatar" + image}
+            ></use>
+          </svg>
+        </Box>
+      );
+    });
 
-    const btnRef = useRef(null);
+    return (
+      <div className={styles.avatarContainerModal}>
+        <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
+          {images}
+        </SimpleGrid>
+      </div>
+    );
+  };
+
+  function PopOver() {
+    const { onOpen, onClose, isOpen } = useDisclosure();
+
     return (
       <>
-        <Button
-          type="button"
-          id="avatarbutton"
-          style={{
-            width: 58,
-            height: 58,
-            float: "none",
-            background: "none",
-            position: "relative",
-            top: -75,
-            right: -90,
-          }}
-          onClick={onOpen}
-          disabled={edit}
-        >
-          <Image
-            borderRadius="full"
-            boxSize="62px"
-            src="/assets/Profile-Avatar-Icon.svg"
-            alt="Avatar"
-            m="auto"
-          />
-        </Button>
-
-        <Modal
-          onClose={onClose}
-          finalFocusRef={btnRef}
+        <Popover
           isOpen={isOpen}
-          scrollBehavior={"inside"}
+          onOpen={onOpen}
+          onClose={onClose}
+          closeOnBlur={true}
+          placement="right"
         >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Modal Title</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>Hola soy Daniel</ModalBody>
-            <ModalFooter>
-              <Button onClick={onClose}>Close</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
+          <div style={{ position: "relative" }}>
+            <PopoverTrigger>
+              <button
+                type="button"
+                id="avatarbutton"
+                style={{
+                  width: 58,
+                  height: 58,
+                  float: "none",
+                  background: "none",
+                  position: "relative",
+                  top: -75,
+                  right: -90,
+                }}
+                onClick={onOpen}
+                disabled={edit}
+              >
+                <Image
+                  borderRadius="full"
+                  boxSize="62px"
+                  src="/assets/Profile-Avatar-Icon.svg"
+                  alt="Avatar"
+                  m="auto"
+                />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              p={5}
+              overscroll
+              backgroundColor={"var(--color-white)"}
+              w={400}
+              h={180}
+              alignItems="center"
+            >
+              <PopoverArrow />
+              <PopoverCloseButton />
+              <PopoverBody
+                maxHeight={300}
+                overflowY={"scroll"}
+                sx={{
+                  "&::-webkit-scrollbar": {
+                    width: "16px",
+                    borderRadius: "20px",
+                    backgroundColor: `rgba(0, 0, 0, 0.05)`,
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    backgroundColor: `#0066CC`,
+                    borderRadius: "20px",
+                    height: "50px",
+                  },
+                }}
+              >
+                <ImageList images={arrayImgs} />
+              </PopoverBody>
+            </PopoverContent>
+          </div>
+        </Popover>
       </>
     );
   }
@@ -196,13 +291,8 @@ function MentorProfileForm() {
             </Button>
           </div>
           <div className={styles.avatarContainer}>
-            <Image
-              borderRadius="full"
-              boxSize="200px"
-              src="/assets/avatarAssets/avatar01.svg"
-              alt="Avatar"
-            />
-            <ScrollingExample />
+            <ProfilePicture enableReinitialize={true}></ProfilePicture>
+            <PopOver name="profilePicture" />
             <Button
               type="button"
               id="camerabutton"

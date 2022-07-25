@@ -154,6 +154,7 @@ async function httpUpdateStudent(student) {
       fieldOfStudy: student.fieldOfStudy,
       institution: student.institution,
       gpa: Number(student.gpa),
+      profilePicture: student.profilePicture,
     };
 
     const response = await axios.post("/students", studentInfo);
@@ -196,6 +197,47 @@ async function httpGetMentorbyID(userID) {
   return userToReturn;
 }
 
+async function httpUpdateMentor(student) {
+  let userToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+
+  try {
+    const name = `${student.firstName} ${student.lastName}`;
+
+    const studentInfo = {
+      userId: student.userId,
+      name: name,
+      email: student.email,
+      phone: student.phone,
+      gender: student.gender,
+      currentPassword: student.currentPassword,
+      newPassword: student.newPassword,
+      fieldOfStudy: student.fieldOfStudy,
+      institution: student.institution,
+      gpa: Number(student.gpa),
+      profilePicture: student.profilePicture,
+    };
+
+    const response = await axios.post("/students", studentInfo);
+
+    userToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    if (errorResponse.error.errorCode == 401) {
+      userToReturn.hasError = true;
+      userToReturn.errorMessage = errorResponse.error.errorMessage;
+    } else if (errorResponse.error.errorCode == 500) {
+      userToReturn.hasError = true;
+      userToReturn.errorMessage = errorResponse.error.errorMessage;
+    }
+  }
+
+  return userToReturn;
+}
+
 export {
   httpLogin,
   httpSignupStudent,
@@ -203,4 +245,5 @@ export {
   httpGetStudentbyID,
   httpUpdateStudent,
   httpGetMentorbyID,
+  httpUpdateMentor,
 };

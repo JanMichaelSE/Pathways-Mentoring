@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useToast } from "@chakra-ui/react";
@@ -17,12 +17,9 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-  PopoverHeader,
   PopoverBody,
-  PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
-  PopoverAnchor,
   SimpleGrid,
   Box,
 } from "@chakra-ui/react";
@@ -96,7 +93,7 @@ function StudentProfileForm() {
   }
 
   function ProfilePicture() {
-    if (!userData.profilePicture) {
+    if (!userData.profilePicture || !pictureData) {
       return (
         <Image
           borderRadius="full"
@@ -108,7 +105,10 @@ function StudentProfileForm() {
       return (
         <svg>
           <use
-            href={"/assets/spriteAvatar.svg#" + userData.profilePicture}
+            href={
+              "/assets/spriteAvatar.svg#" +
+              (userData.profilePicture || pictureData)
+            }
           ></use>
         </svg>
       );
@@ -290,7 +290,7 @@ function StudentProfileForm() {
             </Button>
           </div>
           <div className={styles.avatarContainer}>
-            <ProfilePicture></ProfilePicture>
+            <ProfilePicture enableReinitialize={true}></ProfilePicture>
             <PopOver name="profilePicture" />
             <button
               type="button"
