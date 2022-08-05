@@ -1,10 +1,14 @@
+import { Link } from "react-router-dom";
 import styles from "./AssessmentPreview.module.css";
 
-function AssessmentPreview({ assessment }) {
-  //const { title, description, date } = assessment;
+function AssessmentPreview({ assessmentId, assessmentInfo }) {
+  //const { title, description } = assessmentInfo;
 
   return (
-    <div className={styles.assessment}>
+    <Link
+      className={styles.assessment}
+      to={`/student/assessments/${assessmentId}`}
+    >
       <h1 className={styles.assessmentTitle}>
         Measurement Skills
         {/*Assessment Title*/}
@@ -16,7 +20,7 @@ function AssessmentPreview({ assessment }) {
           inside of this.
         </p>
       </div>
-    </div>
+    </Link>
   );
 }
 

@@ -35,7 +35,7 @@ function Assessments({ assessments }) {
             fontSize: "var(--font-size--regular)",
           }}
         >
-          Sort Desc
+          {sortAscending ? "Sort Desc" : "Sort Asc"}
         </Button>
       </div>
       <div className={styles.assessmentsContainer}>
