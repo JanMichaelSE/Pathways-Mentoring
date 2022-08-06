@@ -23,6 +23,7 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "../../services/auth.service";
+import { sendResetPasswordEmail } from "../../services/mail.service";
 
 async function httpLogin(req: Request, res: Response) {
   try {
@@ -267,10 +268,30 @@ async function httpRefreshToken(req: Request, res: Response) {
   }
 }
 
+async function httpResetPassword(req: Request, res: Response) {
+  try {
+    const email = req.body.email;
+
+    if (!email) {
+      return handleBadRequestResponse(
+        "Can't reset password without providing an email address.",
+        res
+      );
+    }
+
+    await sendResetPasswordEmail(email, "111957");
+
+    return res.json("Reset password endpoint!");
+  } catch (error) {
+    return handleErrorResponse("reset password", error, res);
+  }
+}
+
 export {
   httpLogin,
   httpSignupStudent,
   httpSignupMentor,
   httpLogout,
   httpRefreshToken,
+  httpResetPassword,
 };
