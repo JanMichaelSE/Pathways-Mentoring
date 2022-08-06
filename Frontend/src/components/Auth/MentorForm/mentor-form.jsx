@@ -15,16 +15,8 @@ import styles from "./mentor-form.module.css";
 function MentorForm() {
   const navigate = useNavigate();
   const toast = useToast();
-  const userId = useUserStore((state) => state.userId);
   const setUser = useUserStore((state) => state.setUser);
-
-  // This routing logic will change depending on what the professor
-  // tells us about the application.
-  useEffect(() => {
-    if (userId) {
-      navigate("../mentor", { replace: true });
-    }
-  }, [userId]);
+  const setTokens = useUserStore((state) => state.setTokens);
 
   async function handleSubmit(mentorInfo) {
     const userResponse = await httpSignupMentor(mentorInfo);
@@ -38,11 +30,10 @@ function MentorForm() {
       });
     }
 
-    setUser(
-      userResponse.data.userId,
-      userResponse.data.email,
-      userResponse.data.role
-    );
+    setUser(userResponse.data.email, userResponse.data.role);
+    setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
+
+    navigate("../mentor", { replace: true });
   }
 
   return (

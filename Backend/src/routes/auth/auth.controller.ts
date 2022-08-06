@@ -1,14 +1,28 @@
-import { IMentor, IUser } from "./../../types/index.d";
 import { Request, Response } from "express";
+
 import { createStudent } from "../../models/students.model";
-import { createUser, isUserAuthorized } from "../../models/users.model";
-import { IErrorResponse, IStudent } from "../../types";
-import { createMentor } from "../../models/mentors.model";
 import {
+  createUser,
+  getUserTokens,
+  isUserAuthorized,
+  updateUserTokens,
+} from "../../models/users.model";
+import { createMentor } from "../../models/mentors.model";
+
+import { IMentor, IUser, IStudent } from "./../../types/index.d";
+import {
+  buildErrorObject,
   formatPhoneNumber,
+  handleBadRequestResponse,
   handleErrorResponse,
+  isValidUUID,
   titleCase,
 } from "../../utils/helpers";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from "../../services/auth.service";
 
 async function httpLogin(req: Request, res: Response) {
   try {
@@ -18,12 +32,10 @@ async function httpLogin(req: Request, res: Response) {
     };
 
     if (!userInfo.email || !userInfo.password) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage:
-          "User requires email and password to login into the system.",
-      };
-      return res.status(error.errorCode).json({ error });
+      return handleBadRequestResponse(
+        "User requires email and password to login into the system.",
+        res
+      );
     }
 
     const userResponse = await isUserAuthorized(
@@ -36,7 +48,17 @@ async function httpLogin(req: Request, res: Response) {
       });
     }
 
-    return res.status(200).json(userResponse);
+    const accessToken = generateAccessToken(userResponse.id);
+    const refreshToken = generateRefreshToken(userResponse.id);
+
+    await updateUserTokens(userResponse.id, accessToken, refreshToken);
+
+    return res.status(200).json({
+      accessToken,
+      refreshToken,
+      email: userResponse.email,
+      role: userResponse.role,
+    });
   } catch (error) {
     return handleErrorResponse("login", error, res);
   }
@@ -70,22 +92,19 @@ async function httpSignupStudent(req: Request, res: Response) {
       !studentInfo.fieldOfStudy ||
       !studentInfo.institution
     ) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage: "Student is missing required fields for creation.",
-      };
-      return res.status(error.errorCode).json({ error });
+      return handleBadRequestResponse(
+        "Student is missing required fields for creation.",
+        res
+      );
     }
 
     if (userInfo.role !== "Student") {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage:
-          "Expected a role of 'student' but received " +
+      return handleBadRequestResponse(
+        "Expected a role of 'student' but received " +
           userInfo.role +
           " instead. Please provide the 'student' role when creating a student.",
-      };
-      return res.status(error.errorCode).json({ error });
+        res
+      );
     }
 
     const userResponse = await createUser(
@@ -99,12 +118,21 @@ async function httpSignupStudent(req: Request, res: Response) {
       });
     }
 
+    const accessToken = generateAccessToken(userResponse.id);
+    const refreshToken = generateRefreshToken(userResponse.id);
+    await updateUserTokens(userResponse.id, accessToken, refreshToken);
+
     const studentResponse = await createStudent(
       userResponse.id,
       userInfo.email,
       studentInfo
     );
-    return res.status(200).json(studentResponse);
+
+    return res.status(200).json({
+      accessToken,
+      refreshToken,
+      ...studentResponse,
+    });
   } catch (error) {
     return handleErrorResponse("signup student", error, res);
   }
@@ -142,22 +170,19 @@ async function httpSignupMentor(req: Request, res: Response) {
       !mentorInfo.facultyStatus ||
       !mentorInfo.academicDegree
     ) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage: "Mentor is missing required fields for creation.",
-      };
-      return res.status(error.errorCode).json({ error });
+      return handleBadRequestResponse(
+        "Mentor is missing required fields for creation.",
+        res
+      );
     }
 
     if (userInfo.role !== "Mentor") {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage:
-          "Expected a role of 'mentor' but received '" +
+      return handleBadRequestResponse(
+        "Expected a role of 'mentor' but received '" +
           userInfo.role +
           "' instead. Please provide the 'mentor' role when creating a mentor.",
-      };
-      return res.status(error.errorCode).json({ error });
+        res
+      );
     }
 
     const userResponse = await createUser(
@@ -171,15 +196,81 @@ async function httpSignupMentor(req: Request, res: Response) {
       });
     }
 
+    const accessToken = generateAccessToken(userResponse.id);
+    const refreshToken = generateRefreshToken(userResponse.id);
+    await updateUserTokens(userResponse.id, accessToken, refreshToken);
+
     const mentorResponse = await createMentor(
       userResponse.id,
       userInfo.email,
       mentorInfo
     );
-    return res.status(200).json(mentorResponse);
+
+    return res.status(200).json({
+      accessToken,
+      refreshToken,
+      ...mentorResponse,
+    });
   } catch (error) {
     return handleErrorResponse("signup mentor", error, res);
   }
 }
 
-export { httpLogin, httpSignupStudent, httpSignupMentor };
+async function httpLogout(req: Request, res: Response) {
+  try {
+    const userId = req.userId;
+    const isValidId = isValidUUID(userId);
+
+    if (!isValidId) {
+      return handleBadRequestResponse(
+        "This Id passed in the URL parameter is not does not have a valid format.",
+        res
+      );
+    }
+
+    await updateUserTokens(userId, "", "");
+    return res.status(200).json("User has been logged out");
+  } catch (error) {
+    return handleErrorResponse("logout", error, res);
+  }
+}
+
+async function httpRefreshToken(req: Request, res: Response) {
+  try {
+    const refreshToken = req.body.token;
+    if (!refreshToken) {
+      const error = buildErrorObject(401, "Token was not provided.");
+      return res.status(error.errorCode).json({ error: error });
+    }
+
+    const userRefreshToken = await getUserTokens(refreshToken);
+    if (!userRefreshToken || refreshToken !== userRefreshToken.refreshToken) {
+      const error = buildErrorObject(401, "Token is not valid for this users.");
+      return res.status(error.errorCode).json({ error: error });
+    }
+
+    const verifyTokenResponse = verifyRefreshToken(refreshToken);
+    if ("errorCode" in verifyTokenResponse) {
+      return res.status(verifyTokenResponse.errorCode).json({
+        error: verifyTokenResponse,
+      });
+    }
+
+    const [accessToken, refreshedToken] = verifyTokenResponse;
+    await updateUserTokens(userRefreshToken.id, accessToken, refreshedToken);
+
+    return res
+      .status(200)
+      .json({ accessToken: accessToken, refreshedToken: refreshedToken });
+  } catch (error) {
+    return handleErrorResponse("refresh token", error, res);
+  }
+}
+
+export {
+  httpLogin,
+  httpSignupStudent,
+  httpSignupMentor,
+  httpLogout,
+  httpRefreshToken,
+};

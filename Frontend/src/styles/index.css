@@ -10,6 +10,12 @@
   --font-size-regular: 14pt;
   --font-size-small: 12pt;
 
+  --button-background: linear-gradient(
+    180.71deg,
+    #fac20b 0.61%,
+    #ee7222 99.39%
+  );
+
   /* React Toastify Overriden Styles */
   --toastify-color-warning: linear-gradient(
     180.71deg,

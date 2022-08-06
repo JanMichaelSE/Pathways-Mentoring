@@ -1,4 +1,5 @@
 import express from "express";
+import { authenticateJsonWebToken } from "../../services/auth.service";
 import {
   httpAddAssessment,
   httpAnswerAssessment,
@@ -11,18 +12,26 @@ import {
 
 const router = express.Router();
 
-router.get("/", httpGetAllAssessments);
+router.get("/", authenticateJsonWebToken, httpGetAllAssessments);
 
-router.get("/:assessmentId", httpGetAssessment);
+router.get("/:assessmentId", authenticateJsonWebToken, httpGetAssessment);
 
-router.get("/answer/:assessmentId", httpGetAnswersByAssessement);
+router.get(
+  "/answer/:assessmentId",
+  authenticateJsonWebToken,
+  httpGetAnswersByAssessement
+);
 
-router.post("/", httpAddAssessment);
+router.post("/", authenticateJsonWebToken, httpAddAssessment);
 
-router.post("/answer/:assessmentId", httpAnswerAssessment);
+router.post(
+  "/answer/:assessmentId",
+  authenticateJsonWebToken,
+  httpAnswerAssessment
+);
 
-router.post("/:assessmentId", httpUpdateAssessment);
+router.post("/:assessmentId", authenticateJsonWebToken, httpUpdateAssessment);
 
-router.delete("/:assessmentId", httpDeleteAssessment);
+router.delete("/:assessmentId", authenticateJsonWebToken, httpDeleteAssessment);
 
 export default router;
