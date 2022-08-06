@@ -3,42 +3,41 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useToast } from "@chakra-ui/react";
 
-import { httpUpdateStudent, httpGetMentorbyID } from "@/api/user.api";
+import { httpUpdateMentor, httpGetMentorbyID } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
 
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
 import styles from "./mentor-profile-form.module.css";
-import { Image } from "@chakra-ui/react";
-
-import {
-  useDisclosure,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-  SimpleGrid,
-  Box,
-} from "@chakra-ui/react";
+import { Image, Flex, Center } from "@chakra-ui/react";
+import ProfileChangerPopOver from "@/components/common/ProfileChangerPopOver/profile-changer-popover";
+import ProfilePicture from "@/components/common/ProfilePicture/profile-picture";
+import { Textarea, Switch } from "@chakra-ui/react";
+import TimePickerSelector from "@/components/common/TimePickerSelector/time-picker-selector";
 
 function MentorProfileForm() {
   const toast = useToast();
   const userId = useUserStore((state) => state.userId);
   const setUser = useUserStore((state) => state.setUser);
+  const setPictureData = useUserStore((state) => state.setPictureData);
+  const pictureData = useUserStore((state) => state.pictureData);
   const [userData, setUserData] = useState({});
   const [edit, setEdit] = useState(true);
   const [close, setClose] = useState("Edit");
-  const [pictureData, setpictureData] = useState("");
-
-  const arrayImgs = [...Array(53).keys()].splice(1, 52);
+  const [dataFirstName, setDataFirstName] = useState("");
+  const [dataLastName, setDataLastName] = useState("");
+  const [count, setCount] = useState(0);
+  const [switchValue, setSwitchValue] = useState(true);
 
   useEffect(() => {
     async function loadStudentProfileInfo() {
       const mentorInfo = await httpGetMentorbyID(userId);
       setUserData(mentorInfo.data);
+      setPictureData(studentInfo.data.profilePicture);
+      var [firstName, lastName] = studentInfo.data.name.split("; ");
+      setDataFirstName(firstName);
+      setDataLastName(lastName);
 
       if (mentorInfo.hasError) {
         return toast({
@@ -52,17 +51,13 @@ function MentorProfileForm() {
     loadStudentProfileInfo();
   }, []);
 
-  function onEdit(event) {
+  function onEdit() {
     setEdit((prev) => !prev);
     if (edit == false) {
       setClose("Edit");
     } else if (edit == true) {
       setClose("X");
     }
-  }
-  function clickImage(event) {
-    console.log(event.target.id);
-    setpictureData(event.target.id);
   }
 
   async function handleSubmit(mentorInfo) {
@@ -91,144 +86,13 @@ function MentorProfileForm() {
     );
   }
 
-  function ProfilePicture() {
-    if (!userData.profilePicture || !pictureData) {
-      return (
-        <Image
-          borderRadius="full"
-          boxSize="200px"
-          src="/assets/Profile-avatar.svg"
-        ></Image>
-      );
-    } else {
-      return (
-        <svg>
-          <use
-            href={
-              "/assets/spriteAvatar.svg#" +
-              (userData.profilePicture || pictureData)
-            }
-          ></use>
-        </svg>
-      );
-    }
-  }
-  const ImageList = (props) => {
-    const images = props.images.map((image) => {
-      return (
-        <Box
-          key={image}
-          id={"avatar" + image}
-          style={{
-            backgroundColor: "white",
-            borderRadius: "20px",
-          }}
-        >
-          <svg
-            key={image}
-            id={"avatar" + image}
-            className={styles.icon}
-            onClick={clickImage}
-          >
-            <use
-              key={image}
-              id={"avatar" + image}
-              href={"/assets/spriteAvatar.svg#avatar" + image}
-            ></use>
-          </svg>
-        </Box>
-      );
-    });
-
-    return (
-      <div className={styles.avatarContainerModal}>
-        <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
-          {images}
-        </SimpleGrid>
-      </div>
-    );
-  };
-
-  function PopOver() {
-    const { onOpen, onClose, isOpen } = useDisclosure();
-
-    return (
-      <>
-        <Popover
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
-          closeOnBlur={true}
-          placement="right"
-        >
-          <div style={{ position: "relative" }}>
-            <PopoverTrigger>
-              <button
-                type="button"
-                id="avatarbutton"
-                style={{
-                  width: 58,
-                  height: 58,
-                  float: "none",
-                  background: "none",
-                  position: "relative",
-                  top: -75,
-                  right: -90,
-                }}
-                onClick={onOpen}
-                disabled={edit}
-              >
-                <Image
-                  borderRadius="full"
-                  boxSize="62px"
-                  src="/assets/Profile-Avatar-Icon.svg"
-                  alt="Avatar"
-                  m="auto"
-                />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent
-              p={5}
-              overscroll
-              backgroundColor={"var(--color-white)"}
-              w={400}
-              h={180}
-              alignItems="center"
-            >
-              <PopoverArrow />
-              <PopoverCloseButton />
-              <PopoverBody
-                maxHeight={300}
-                overflowY={"scroll"}
-                sx={{
-                  "&::-webkit-scrollbar": {
-                    width: "16px",
-                    borderRadius: "20px",
-                    backgroundColor: `rgba(0, 0, 0, 0.05)`,
-                  },
-                  "&::-webkit-scrollbar-thumb": {
-                    backgroundColor: `#0066CC`,
-                    borderRadius: "20px",
-                    height: "50px",
-                  },
-                }}
-              >
-                <ImageList images={arrayImgs} />
-              </PopoverBody>
-            </PopoverContent>
-          </div>
-        </Popover>
-      </>
-    );
-  }
-
   return (
     <div className={styles.formContainer}>
       <Formik
         enableReinitialize={true}
         initialValues={{
-          firstName: "",
-          lastName: "",
+          firstName: dataFirstName || "",
+          lastName: dataLastName || "",
           email: userData.email || "",
           phone: userData.phone || "",
           gender: userData.gender || "Select Option",
@@ -292,7 +156,7 @@ function MentorProfileForm() {
           </div>
           <div className={styles.avatarContainer}>
             <ProfilePicture enableReinitialize={true}></ProfilePicture>
-            <PopOver name="profilePicture" />
+            <ProfileChangerPopOver name="profilePicture" edit={edit} />
             <Button
               type="button"
               id="camerabutton"
@@ -406,70 +270,141 @@ function MentorProfileForm() {
             ></img>
             Bibliography
           </h1>
+          <div className={styles.formTextarea}>
+            <Textarea
+              style={{
+                borderRadius: "10px",
+                height: "150px",
+                backgroundColor: "var(--color-white)",
+              }}
+              size={"md"}
+              resize={"none"}
+              placeholder="Here is a sample placeholder"
+              onChange={(e) => setCount(e.target.value.length)}
+            />
+            <p style={{ textAlign: "right", color: "var(--color-blue-dark)" }}>
+              {1500 - count} characters left
+            </p>
+          </div>
+          <h1 className={styles.line}>
+            <img
+              className={styles.lineImg}
+              src="/assets/faculty-icon.svg"
+              style={{ marginRight: "20px" }}
+            ></img>
+            Faculty Information
+          </h1>
           <div className={styles.formInput}>
-            <Input name="description" type="text" width={350} disabled={edit} />
-            <div />
-            <h1 className={styles.line}>
-              <img
-                className={styles.lineImg}
-                src="/assets/faculty-icon.svg"
-                style={{ marginRight: "20px" }}
-              ></img>
-              Faculty Information
-            </h1>
-            <div className={styles.formInput}>
-              <Select
-                label="Academic Degree"
-                name="academicDegree"
-                width={350}
-                disabled={edit}
-              >
-                <option value="">Select Option</option>
-              </Select>
-              <Select
-                label="Department"
-                name="department"
-                width={350}
-                disabled={edit}
-              >
-                <option value="">Select Option</option>
-              </Select>
-              <Select
-                label="Faculty Status"
-                name="facultyStatus"
-                width={350}
-                disabled={edit}
-              >
-                <option value="">Select Option</option>
-              </Select>
-              <Input
-                label="Office Number"
-                name="office"
-                type="numeric"
-                width={350}
-                disabled={edit}
-              />
-              <Input
-                label="Area of Interest"
-                name="interes"
-                type="text"
-                width={350}
-                disabled={edit}
-              />
+            <Select
+              label="Academic Degree"
+              name="academicDegree"
+              width={350}
+              disabled={edit}
+            >
+              <option value="">Select Option</option>
+            </Select>
+            <Select
+              label="Department"
+              name="department"
+              width={350}
+              disabled={edit}
+            >
+              <option value="">Select Option</option>
+            </Select>
+            <Select
+              label="Faculty Status"
+              name="facultyStatus"
+              width={350}
+              disabled={edit}
+            >
+              <option value="">Select Option</option>
+            </Select>
+            <Input
+              label="Office Number"
+              name="office"
+              type="numeric"
+              width={350}
+              disabled={edit}
+            />
+            <Input
+              label="Area of Interest"
+              name="interes"
+              type="text"
+              width={350}
+              disabled={edit}
+            />
+          </div>
+          <h1 className={styles.line}>
+            <img
+              className={styles.lineImg}
+              src="/assets/hour-icon.svg"
+              style={{ marginRight: "20px" }}
+            ></img>
+            Office Hours
+          </h1>
+          <div className={styles.formSchedualeContainer}>
+            <div className={styles.formDailyContainer}>
+              <div className={styles.formDaysContainer}>
+                <Flex>
+                  <Center w={"120px"} mr={"20px"}>
+                    <h2
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "var(--font-size-subheading)",
+                        color: "var(--color-blue-dark)",
+                      }}
+                    >
+                      Wednesday
+                    </h2>
+                  </Center>
+                  <Center w={"60px"} mr={"5px"}>
+                    <Switch
+                      size={"lg"}
+                      defaultChecked
+                      onChange={() => setSwitchValue(!switchValue)}
+                    />
+                  </Center>
+                  <Center>
+                    <h3
+                      style={{
+                        fontSize: "var(--font-size-small)",
+                        color: "var(--color-blue-dark)",
+                      }}
+                    >
+                      {switchValue ? "Open" : "Close"}
+                    </h3>
+                  </Center>
+                </Flex>
+              </div>
+              <div className={styles.formTimePickerContainer}>
+                <TimePickerSelector />
+                <button
+                  type="button"
+                  style={{
+                    width: 58,
+                    height: 58,
+                    float: "none",
+                    background: "none",
+                  }}
+                >
+                  <Image
+                    borderRadius="full"
+                    boxSize="50px"
+                    src="/assets/add-icon.svg"
+                  ></Image>
+                </button>
+              </div>
             </div>
-            <h1 className={styles.line}>
-              <img
-                className={styles.lineImg}
-                src="/assets/hour-icon.svg"
-                style={{ marginRight: "20px" }}
-              ></img>
-              Office Hours
-            </h1>
-            <div className={styles.formInput}></div>
+            <div className={styles.formDailyContainer}>d</div>
+            <div className={styles.formDailyContainer}>d</div>
+            <div className={styles.formDailyContainer}>d</div>
+            <div className={styles.formDailyContainer}>d</div>
+            <div className={styles.formDailyContainer}>d</div>
+            <div className={styles.formDailyContainer}>d</div>
           </div>
 
           <div className={styles.buttonContainer}>
-            <Button type="submit">Submit</Button>
+            {!edit ? <Button type="submit">Submit</Button> : null}
           </div>
         </Form>
       </Formik>

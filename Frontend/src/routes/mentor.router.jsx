@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import Navbar from "@/components/Mentors/MentorsNavbar/mentors-navbar";
 import ContactUs from "@/pages/Common/Contact-Us/contact-us";
 import MentorProfile from "@/pages/Mentors/Profile/mentor-profile";
 import Programs from "@/pages/Mentors/Programs/programs";
@@ -10,6 +11,7 @@ function MentorRouter() {
   return (
     <>
       <IdleTimerContainer />
+      <Navbar />
       <Routes>
         <Route path="/" element={<MentorRecords />} />
         <Route path="/students" element={<Students />} />

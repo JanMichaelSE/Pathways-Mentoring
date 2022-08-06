@@ -1,12 +1,12 @@
 .container {
-  height: 200vh;
+  height: 325vh;
   padding: 20px;
   background-color: var(--color-white);
 }
 
 .containerForm {
   width: 100%;
-  height: 90rem;
+  height: 170rem;
   border-radius: 30px;
   background-color: white;
 }

@@ -9,6 +9,7 @@ export const useUserStore = create(
       email: "",
       role: "",
       logoutTimeoutId: "",
+      pictureData: "",
       refreshTokenError: {},
       setUser: (email, role) =>
         set({
@@ -19,6 +20,11 @@ export const useUserStore = create(
         set({
           accessToken: accessToken,
           refreshToken: refreshToken,
+        });
+      },
+      setPictureData: (pictureData) => {
+        set({
+          pictureData: pictureData,
         });
       },
       resetUser: () => {

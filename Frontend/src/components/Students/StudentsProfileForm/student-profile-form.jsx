@@ -11,36 +11,37 @@ import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
 import styles from "./student-profile-form.module.css";
 import { Image } from "@chakra-ui/react";
-
-import {
-  useDisclosure,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-  SimpleGrid,
-  Box,
-} from "@chakra-ui/react";
+import ProfileChangerPopOver from "@/components/common/ProfileChangerPopOver/profile-changer-popover";
+import ProfilePicture from "@/components/common/ProfilePicture/profile-picture";
 
 function StudentProfileForm() {
   const toast = useToast();
   const userId = useUserStore((state) => state.userId);
   const setUser = useUserStore((state) => state.setUser);
+  const setPictureData = useUserStore((state) => state.setPictureData);
+  const pictureData = useUserStore((state) => state.pictureData);
   const [userData, setUserData] = useState({});
   const [edit, setEdit] = useState(true);
   const [close, setClose] = useState("Edit");
-  const [pictureData, setpictureData] = useState("");
+  const [dataFirstName, setDataFirstName] = useState("");
+  const [dataLastName, setDataLastName] = useState("");
 
   const arrayImgs = [...Array(53).keys()].splice(1, 52);
+
+  // using Zustand to update selected element, set on file of popover,  getter on file of profile picture
+  // define a set on student profile form pass
+  // think about submitting a picture, if condition found in profile-picture
 
   useEffect(() => {
     async function loadStudentProfileInfo() {
       const studentInfo = await httpGetStudentbyID(userId);
       setUserData(studentInfo.data);
+      setPictureData(studentInfo.data.profilePicture);
+      var [firstName, lastName] = studentInfo.data.name.split("; ");
+      setDataFirstName(firstName);
+      setDataLastName(lastName);
+      console.log({ firstName: firstName.trim(), lastName: lastName.trim() });
       console.log(studentInfo);
-      console.log(!"");
       if (studentInfo.hasError) {
         return toast({
           description: studentInfo.errorMessage,
@@ -61,10 +62,7 @@ function StudentProfileForm() {
       setClose("X");
     }
   }
-  function clickImage(event) {
-    console.log(event.target.id);
-    setpictureData(event.target.id);
-  }
+  //ClickImage was here
 
   async function handleSubmit(studentInfo) {
     console.log(typeof studentInfo);
@@ -92,144 +90,18 @@ function StudentProfileForm() {
     );
   }
 
-  function ProfilePicture() {
-    if (!userData.profilePicture || !pictureData) {
-      return (
-        <Image
-          borderRadius="full"
-          boxSize="200px"
-          src="/assets/Profile-avatar.svg"
-        ></Image>
-      );
-    } else {
-      return (
-        <svg>
-          <use
-            href={
-              "/assets/spriteAvatar.svg#" +
-              (userData.profilePicture || pictureData)
-            }
-          ></use>
-        </svg>
-      );
-    }
-  }
-  const ImageList = (props) => {
-    const images = props.images.map((image) => {
-      return (
-        <Box
-          key={image}
-          id={"avatar" + image}
-          style={{
-            backgroundColor: "white",
-            borderRadius: "20px",
-          }}
-        >
-          <svg
-            key={image}
-            id={"avatar" + image}
-            className={styles.icon}
-            onClick={clickImage}
-          >
-            <use
-              key={image}
-              id={"avatar" + image}
-              href={"/assets/spriteAvatar.svg#avatar" + image}
-            ></use>
-          </svg>
-        </Box>
-      );
-    });
+  //ProfilePicture was here
+  //ImageList was here
 
-    return (
-      <div className={styles.avatarContainerModal}>
-        <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
-          {images}
-        </SimpleGrid>
-      </div>
-    );
-  };
-
-  function PopOver() {
-    const { onOpen, onClose, isOpen } = useDisclosure();
-
-    return (
-      <>
-        <Popover
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
-          closeOnBlur={true}
-          placement="right"
-        >
-          <div style={{ position: "relative" }}>
-            <PopoverTrigger>
-              <button
-                type="button"
-                id="avatarbutton"
-                style={{
-                  width: 58,
-                  height: 58,
-                  float: "none",
-                  background: "none",
-                  position: "relative",
-                  top: -75,
-                  right: -90,
-                }}
-                onClick={onOpen}
-                disabled={edit}
-              >
-                <Image
-                  borderRadius="full"
-                  boxSize="62px"
-                  src="/assets/Profile-Avatar-Icon.svg"
-                  alt="Avatar"
-                  m="auto"
-                />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent
-              p={5}
-              overscroll
-              backgroundColor={"var(--color-white)"}
-              w={400}
-              h={180}
-              alignItems="center"
-            >
-              <PopoverArrow />
-              <PopoverCloseButton />
-              <PopoverBody
-                maxHeight={300}
-                overflowY={"scroll"}
-                sx={{
-                  "&::-webkit-scrollbar": {
-                    width: "16px",
-                    borderRadius: "20px",
-                    backgroundColor: `rgba(0, 0, 0, 0.05)`,
-                  },
-                  "&::-webkit-scrollbar-thumb": {
-                    backgroundColor: `#0066CC`,
-                    borderRadius: "20px",
-                    height: "50px",
-                  },
-                }}
-              >
-                <ImageList images={arrayImgs} />
-              </PopoverBody>
-            </PopoverContent>
-          </div>
-        </Popover>
-      </>
-    );
-  }
+  //Popover was here
 
   return (
     <div className={styles.formContainer}>
       <Formik
         enableReinitialize={true}
         initialValues={{
-          firstName: "",
-          lastName: "",
+          firstName: dataFirstName || "",
+          lastName: dataLastName || "",
           phone: userData.phone || "",
           email: userData.email || "",
           currentPassword: "",
@@ -291,7 +163,7 @@ function StudentProfileForm() {
           </div>
           <div className={styles.avatarContainer}>
             <ProfilePicture enableReinitialize={true}></ProfilePicture>
-            <PopOver name="profilePicture" />
+            <ProfileChangerPopOver name="profilePicture" edit={edit} />
             <button
               type="button"
               id="camerabutton"
@@ -430,7 +302,7 @@ function StudentProfileForm() {
           </div>
 
           <div className={styles.buttonContainer}>
-            <Button type="submit">Submit</Button>
+            {!edit ? <Button type="submit">Submit</Button> : null}
           </div>
         </Form>
       </Formik>

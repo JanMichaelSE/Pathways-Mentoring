@@ -13,7 +13,44 @@
 .form-input div {
   margin-bottom: 2.5rem;
 }
-
+.formTextarea {
+  padding: 50px 100px 50px 100px;
+}
+.formSchedualeContainer {
+  margin-top: 50px;
+}
+.formDailyContainer {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-white);
+  margin: 50px 50px 50px 50px;
+  padding: 25px;
+  border-radius: 50px;
+  height: 100px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  -ms-border-radius: 50px;
+  -o-border-radius: 50px;
+}
+.formDaysContainer {
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  background-color: white;
+  margin-right: 10px;
+  width: 20rem;
+  height: 4.5rem;
+  border-radius: 50px;
+}
+.formTimePickerContainer {
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  background-color: white;
+  width: 76rem;
+  height: 4.5rem;
+  border-radius: 50px;
+}
 .button-container {
   margin-right: 2rem;
 }
