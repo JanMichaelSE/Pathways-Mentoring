@@ -30,6 +30,7 @@ export default function StaffCard({ cardData }) {
         <Center onClick={onOpen} py={6}>
           <Box
             px={20}
+            pt={5}
             maxW={"275px"}
             w={"full"}
             bg={"#FFFFFF"}

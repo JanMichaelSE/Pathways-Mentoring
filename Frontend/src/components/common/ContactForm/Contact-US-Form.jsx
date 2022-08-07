@@ -59,7 +59,7 @@ export default function ContactUsForm() {
             .min(10, "Phone number must be 10 digits")
             .required("Telephone is required."),
           message: Yup.string()
-            .max(1500, "Max character limit of 1500 reached.")
+            .test("len", "Max character limit of 1500 reached.", val => val.length < 1500)
             .required("Message required."),
         })}
         onSubmit={async (values) => {
@@ -103,6 +103,7 @@ export default function ContactUsForm() {
             </GridItem>
             <GridItem colSpan={2} rowSpan={3}>
               <InputMessage
+                maxlength={1500}
                 name="message"
                 type="textarea"
                 label="Message *"

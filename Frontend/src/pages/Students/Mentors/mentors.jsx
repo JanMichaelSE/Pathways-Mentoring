@@ -1,9 +1,10 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   SimpleGrid,
 } from "@chakra-ui/react";
 
 import AvatarCard from "../../../components/common/AvatarCard/AvatarCard";
+import styles from "./mentors.module.css";
 
 function Mentors() {
   let mentorData =  [
@@ -14,8 +15,8 @@ function Mentors() {
 
 
   return (
-    <>
-      <SimpleGrid columns={[1, 2, 3]} spacing='40px'>
+    <div style={{flex: 1, backgroundColor: "#f1f8fc", height: "92vh"}}>
+      <SimpleGrid columns={[1, 2, 3]} spacing='40px' className={styles.background}>
       {mentorData?.map((mentor) => (
         <AvatarCard key={mentor.id} cardData={mentor}/>
       ))}
@@ -24,7 +25,7 @@ function Mentors() {
         
         
       </Flex> */}
-    </>
+    </div>
   );
 }
 

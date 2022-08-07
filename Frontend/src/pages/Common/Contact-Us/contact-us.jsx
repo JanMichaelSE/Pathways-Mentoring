@@ -1,4 +1,3 @@
-import AvatarCard from "../../../components/common/AvatarCard/AvatarCard";
 import { Box, Grid, GridItem, HStack, Image, Text } from "@chakra-ui/react";
 import StaffCards from "../../../components/common/StaffCards/StaffCards";
 import ContactUsForm from "../../../components/common/ContactForm/Contact-US-Form";
@@ -6,8 +5,8 @@ import styles from "./contact-us.module.css";
 
 function ContactUs() {
   return (
-    <>
-      <Grid templateColumns="repeat(10, 1fr)" gap={2} mt={3}>
+    <div style={{flex: 1, backgroundColor: "#f1f8fc", height: "92vh"}}>
+      <Grid templateColumns="repeat(10, 1fr)" gap={2} >
         <GridItem justifyContent={"center"} colSpan={6} mt={6}>
           <Box
             w={"full"}
@@ -35,7 +34,7 @@ function ContactUs() {
           <StaffCards />
         </GridItem>
       </Grid>
-    </>
+    </div>
   );
 }
 
