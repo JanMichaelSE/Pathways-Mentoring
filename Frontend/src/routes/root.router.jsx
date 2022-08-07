@@ -22,8 +22,9 @@ function AuthRouter() {
       <Route
         path="/student/*"
         element={
-          
+          <ProtectedRoute>
             <StudentRouter />
+          </ProtectedRoute>
         }
       />
       <Route
