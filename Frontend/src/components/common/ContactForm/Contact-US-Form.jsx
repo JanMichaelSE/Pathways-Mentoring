@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Grid, GridItem, Checkbox } from "@chakra-ui/react";
 
 import { Formik, Form, ErrorMessage } from "formik";
@@ -6,14 +6,20 @@ import * as Yup from "yup";
 import { useToast } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
 
-import Input from "@/components/common/Input/input";
+import InputForm from "@/components/common/InputForm/InputForm"
 import InputMessage from "../InputMessage/InputMessage.jsx";
 
 import styles from "./Contact-US-Form.module.css";
 
 export default function ContactUsForm() {
   const toast = useToast();
+  const [checked, setChecked] = React.useState(false);
   const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
+
+  const handleCheckboxChange = () => { 
+    
+    setChecked(!checked);
+  };
 
   function inputWidth() {
     return isLessThan1135 ? "20rem" : "27rem";
@@ -43,7 +49,7 @@ export default function ContactUsForm() {
           email: "",
           telephone: "",
           message: "",
-          privacyPolicyAccept: false
+          privacyPolicyAccept: checked
         }}
         validationSchema={Yup.object({
           name: Yup.string().required("Name is required."),
@@ -61,6 +67,8 @@ export default function ContactUsForm() {
           message: Yup.string()
             .test("len", "Max character limit of 1500 reached.", val => val.length < 1500)
             .required("Message required."),
+          privacyPolicyAccept: Yup.bool()
+            .oneOf([true], 'Field must be checked')
         })}
         onSubmit={async (values) => {
           await handleSubmit(values);
@@ -69,7 +77,7 @@ export default function ContactUsForm() {
         <Form>
           <Grid templateColumns="repeat(2, 1fr)" gap={5}>
             <GridItem mt={5}>
-              <Input
+            <InputForm
                 name="name"
                 type="text"
                 label="Name *"
@@ -77,7 +85,7 @@ export default function ContactUsForm() {
               />
             </GridItem>
             <GridItem mt={5}>
-              <Input
+            <InputForm
                 name="topic"
                 type="text"
                 label="Topic *"
@@ -86,7 +94,7 @@ export default function ContactUsForm() {
             </GridItem>
 
             <GridItem>
-              <Input
+              <InputForm
                 name="email"
                 type="email"
                 label="Email *"
@@ -94,7 +102,7 @@ export default function ContactUsForm() {
               />
             </GridItem>
             <GridItem>
-              <Input
+            <InputForm
                 name="telephone"
                 type="tel"
                 label="Telephone *"
@@ -103,7 +111,7 @@ export default function ContactUsForm() {
             </GridItem>
             <GridItem colSpan={2} rowSpan={3}>
               <InputMessage
-                maxlength={1500}
+                maxLength={1500}
                 name="message"
                 type="textarea"
                 label="Message *"
@@ -111,7 +119,7 @@ export default function ContactUsForm() {
               />
             </GridItem>
             <GridItem colSpan={2} colStart={1}>
-              <Checkbox size="lg" colorScheme="blue">
+              <Checkbox onChange={handleCheckboxChange} value={checked} size="lg" colorScheme="blue">
                 I have read and agree to the Privacy Policy of the Polytechnic
                 University of Puerto Rico
               </Checkbox>

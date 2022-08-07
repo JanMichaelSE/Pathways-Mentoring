@@ -21,10 +21,6 @@ function Mentors() {
         <AvatarCard key={mentor.id} cardData={mentor}/>
       ))}
       </SimpleGrid>
-      {/* <Flex direction={isLargerThan768 ? "row" : "column-reverse"}>
-        
-        
-      </Flex> */}
     </div>
   );
 }

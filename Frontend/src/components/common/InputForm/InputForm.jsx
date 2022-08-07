@@ -1,8 +1,8 @@
-import { Field, useField, ErrorMessage } from "formik";
-import styles from "./inputMessage.module.css";
+import { useField, ErrorMessage } from "formik";
+import styles from "./InputForm.module.css";
 import { phoneFormat } from "@/utils/helpers";
 
-function InputMessage({ label, imgUrl, ...props }) {
+function InputForm({ label, imgUrl, ...props }) {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
@@ -42,7 +42,7 @@ function InputMessage({ label, imgUrl, ...props }) {
           {label}
         </label>
       )}
-      <Field as="textarea"
+      <input
         className={inputStyles()}
         style={{ width: props.width, backgroundImage: `url(${imgUrl})` }}
         {...field}
@@ -56,4 +56,4 @@ function InputMessage({ label, imgUrl, ...props }) {
   );
 }
 
-export default InputMessage;
+export default InputForm;
