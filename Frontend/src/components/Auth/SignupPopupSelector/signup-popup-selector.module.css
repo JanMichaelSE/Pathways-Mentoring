@@ -1,0 +1,9 @@
+.linkButton {
+  color: var(--color-blue-dark);
+}
+.buttonContainer {
+  display: flex;
+  justify-content: space-evenly;
+}
+.links {
+}

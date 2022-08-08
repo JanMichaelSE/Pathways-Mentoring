@@ -2,6 +2,8 @@ import styles from "./login.module.css";
 import Pathway_Logo from "@/assets/Pathway_Logo.png";
 import { Link } from "react-router-dom";
 import LoginForm from "../../../components/Auth/LoginForm/login-form";
+import SignupPopupSelector from "../../../components/Auth/SignupPopupSelector/signup-popup-selector";
+import ForgotPwdLoginPopup from "../../../components/Auth/ForgotPwdLoginPopup/forgotpwd-login-popup";
 
 function Login() {
   return (
@@ -15,16 +17,17 @@ function Login() {
         </div>
         <div className={styles.linkContainer}>
           <h2 className={styles.subHeading}>
-            New to Pathways?{" "}
-            <Link to={"/signup"} className={styles.navigationLink}>
+            New to Pathways? <SignupPopupSelector />
+            {/* <Link to={"/signup"} className={styles.navigationLink}>
               Create an account.
-            </Link>
+            </Link> */}
             <br />
           </h2>
           <h2 className={styles.subHeading}>
-            <Link to={"/"} className={styles.navigationLink}>
+            <ForgotPwdLoginPopup />
+            {/* <Link to={"/"} className={styles.navigationLink}>
               Forgot password?
-            </Link>
+            </Link> */}
             <br />
           </h2>
         </div>
