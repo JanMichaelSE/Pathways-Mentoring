@@ -1,3 +1,14 @@
 .linkButton {
   color: var(--color-blue-dark);
 }
+.inputContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}

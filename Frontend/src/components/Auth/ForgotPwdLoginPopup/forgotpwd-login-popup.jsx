@@ -4,26 +4,17 @@ import * as Yup from "yup";
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import mailIcon from "@/assets/mail-icon.svg";
-import { useToast } from "@chakra-ui/react";
 import {
-  Heading,
-  Avatar,
-  Box,
-  Center,
-  Text,
-  Stack,
   Image,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
   useMediaQuery,
   HStack,
-  Spacer,
-  StylesProvider,
+  useToast,
 } from "@chakra-ui/react";
 
 function ForgotPwdLoginPopup() {
@@ -48,7 +39,7 @@ function ForgotPwdLoginPopup() {
     setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
   }
   function inputWidth() {
-    return isLessThan1135 ? "22rem" : "30rem";
+    return isLessThan1135 ? "22rem" : "25rem";
   }
 
   return (
@@ -64,7 +55,12 @@ function ForgotPwdLoginPopup() {
         size={"xl"}
       >
         <ModalOverlay />
-        <ModalContent borderRadius={"60px"}>
+        <ModalContent
+          borderRadius={"60px"}
+          borderWidth={"2px"}
+          borderStyle={"dashed"}
+          borderColor={"#0066CC"}
+        >
           <ModalHeader>
             <HStack alignItems={"center"} spacing="100px">
               <Image
@@ -96,14 +92,20 @@ function ForgotPwdLoginPopup() {
               }}
             >
               <Form>
-                <Input
-                  name="email"
-                  type="text"
-                  placeholder="Email"
-                  imgUrl={mailIcon}
-                  width={inputWidth()}
-                />
-                <Button type="submit">Send</Button>
+                <div className={styles.inputContainer}>
+                  <Input
+                    name="email"
+                    type="text"
+                    placeholder="Email"
+                    imgUrl={mailIcon}
+                    width={inputWidth()}
+                  />
+                </div>
+                <div className={styles.buttonContainer}>
+                  <Button style={{ width: "12rem" }} type="submit">
+                    Send
+                  </Button>
+                </div>
               </Form>
             </Formik>
           </ModalBody>

@@ -39,7 +39,12 @@ function SignupPopupSelector() {
         size={"xl"}
       >
         <ModalOverlay />
-        <ModalContent borderRadius={"60px"}>
+        <ModalContent
+          borderRadius={"60px"}
+          borderWidth={"2px"}
+          borderStyle={"dashed"}
+          borderColor={"#0066CC"}
+        >
           <ModalHeader>
             <HStack alignItems={"center"} spacing="100px">
               <Image
