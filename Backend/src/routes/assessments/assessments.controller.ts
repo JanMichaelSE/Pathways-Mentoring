@@ -150,7 +150,7 @@ async function httpAnswerAssessment(req: Request, res: Response) {
   try {
     const assessmentId = Number(req.params.assessmentId);
     const answersInfo = {
-      userId: req.body.userId,
+      userId: req.userId,
       answers: req.body.answers,
     };
 
@@ -200,7 +200,7 @@ async function httpAnswerAssessment(req: Request, res: Response) {
   }
 }
 
-async function httpGetAnswersByAssessement(req: Request, res: Response) {
+async function httpGetAnswersByAssessment(req: Request, res: Response) {
   try {
     const assessmentId = Number(req.params.assessmentId);
     if (isNaN(assessmentId)) {
@@ -230,5 +230,5 @@ export {
   httpUpdateAssessment,
   httpDeleteAssessment,
   httpAnswerAssessment,
-  httpGetAnswersByAssessement,
+  httpGetAnswersByAssessment,
 };

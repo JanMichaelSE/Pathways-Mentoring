@@ -4,14 +4,9 @@
   height: 5rem;
   width: 100%;
   background-color: #e0e6ea80;
-  padding: 20px;
+  padding: 1rem;
+  padding-top: 0.5rem;
   border-radius: 10px;
   box-shadow: 0 0 3px var(--color-grey);
   resize: none;
-}
-
-.error-container {
-  display: block;
-  margin-left: 20px;
-  margin-top: 5px;
 }

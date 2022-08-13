@@ -1,54 +1,74 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import Button from "@/components/common/Button/button.jsx";
-import AssessmentPreview from "@/components/Students/AssessmentPreview/AssessmentPreview";
+import { useToast } from "@chakra-ui/react";
+import { httpGetAllAssessments } from "@/api/assessments.api";
+import AssessmentCard from "@/components/Students/AssessmentCard/assessment-card";
 
 import styles from "./assessments.module.css";
 
-function Assessments({ assessments }) {
+function Assessments() {
+  const toast = useToast();
+  const [assessments, setAssessments] = useState([]);
   const [sortAscending, setSortAscending] = useState(true);
-  //Initial State for the filter so that it just shows all assessments
   const [filterOption, setFilterOption] = useState("none");
 
+  useEffect(() => {
+    async function loadAllAssessments() {
+      const assessmentsResponse = await httpGetAllAssessments();
+
+      if (assessmentsResponse.hasError) {
+        return toast({
+          description: assessmentsResponse.errorMessage,
+          status: "error",
+          position: "top",
+          duration: 5000,
+        });
+      }
+
+      setAssessments(assessmentsResponse.data);
+    }
+
+    loadAllAssessments();
+  }, []);
+
+  function onSort() {
+    const toggleSort = !sortAscending;
+
+    if (toggleSort) {
+      assessments.sort((a, b) => a.name.localeCompare(b.name));
+    } else {
+      assessments.sort((a, b) => a.name.localeCompare(b.name));
+      assessments.reverse();
+    }
+
+    setAssessments(assessments);
+    setSortAscending((prev) => !prev);
+  }
+
   return (
-    <div className={styles.container}>
+    <>
       <div className={styles.buttonsContainer}>
-        <Button
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "7rem",
-            height: "3rem",
-            fontSize: "var(--font-size--regular)",
-            padding: "3px",
-            marginRight: "20px",
-          }}
-        >
+        <button className={`btn ${styles.button}`}>
           Filter
           <img src="/assets/Filter.png" />
-        </Button>
-        <Button
-          style={{
-            width: "8rem",
-            height: "3rem",
-            fontSize: "var(--font-size--regular)",
-          }}
-        >
+        </button>
+        <button className={`btn ${styles.button}`} onClick={onSort}>
           {sortAscending ? "Sort Desc" : "Sort Asc"}
-        </Button>
+        </button>
       </div>
-      <div className={styles.assessmentsContainer}>
-        <AssessmentPreview />
-        <AssessmentPreview />
-        <AssessmentPreview />
-        <AssessmentPreview />
-        <AssessmentPreview />
-        <AssessmentPreview />
-        <AssessmentPreview />
-        <AssessmentPreview />
+      <div className={styles.assessmentContainer}>
+        <div className={styles.assessmentsGrid}>
+          {assessments.map((data) => (
+            <AssessmentCard
+              key={data.id}
+              id={data.id}
+              title={data.name}
+              description={data.description}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

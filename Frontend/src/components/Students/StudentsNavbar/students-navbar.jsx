@@ -2,17 +2,20 @@ import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import styles from "./students-navbar.module.css";
 
-export default function Navbar() {
+function StudentNavbar() {
   let location = useLocation();
 
   return (
     <Fragment>
       <nav className={styles.nav}>
-        <img
-          src="/assets/Pathway_logo_small.png"
-          alt="Pathways"
-          className={styles.pathwaysLogo}
-        />
+        <div>
+          <img
+            src="/assets/Pathway_logo_small.png"
+            alt="Pathways"
+            className={styles.pathwaysLogo}
+          />
+        </div>
+
         <div className={styles.navLinksContainer}>
           <Link
             className={
@@ -55,8 +58,7 @@ export default function Navbar() {
           >
             Contact Us
           </Link>
-        </div>
-        <div className={styles.profileContainer}>
+
           <img
             src="/assets/Doorbell.svg"
             alt="NotificationBell"
@@ -75,3 +77,5 @@ export default function Navbar() {
     </Fragment>
   );
 }
+
+export default StudentNavbar;

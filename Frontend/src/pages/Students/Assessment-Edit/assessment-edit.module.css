@@ -5,7 +5,8 @@
   padding: 30px;
   padding-right: 50px;
   padding-left: 50px;
-  max-width: 100%;
+  margin: auto;
+  max-width: var(--responsive-screen-max-width);
 }
 
 .assessment-information-container {
