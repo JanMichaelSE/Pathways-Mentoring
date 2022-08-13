@@ -9,10 +9,8 @@ async function httpGetAllAssessments() {
 
   try {
     const response = await axios.get("/assessments");
-    console.log("Get All Asessments: ", response.data);
     assessmentsToReturn.data = response.data;
   } catch (error) {
-    console.log("Get All Assessments Error: ", error);
     const errorResponse = error.response.data;
     assessmentToReturn.hasError = true;
     assessmentToReturn.errorMessage = errorResponse.error.errorMessage;
@@ -30,10 +28,8 @@ async function httpGetAssessment(assessmentId) {
 
   try {
     const response = await axios.get("/assessments/" + assessmentId);
-    console.log("Get Assessment: ", response.data);
     assessmentToReturn.data = response.data;
   } catch (error) {
-    console.log("Get Assessment Error: ", error);
     const errorResponse = error.response.data;
     assessmentToReturn.hasError = true;
     assessmentToReturn.errorMessage = errorResponse.error.errorMessage;
@@ -61,7 +57,6 @@ async function httpAnswerAssessment(answers, assessmentId) {
     });
     aanswerResponse.data = response.data;
   } catch (error) {
-    console.log("Answer Assessment Error: ", error);
     const errorResponse = error.response.data;
     aanswerResponse.hasError = true;
     aanswerResponse.errorMessage = errorResponse.error.errorMessage;
