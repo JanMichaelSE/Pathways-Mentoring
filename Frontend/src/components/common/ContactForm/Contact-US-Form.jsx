@@ -119,7 +119,7 @@ export default function ContactUsForm() {
               />
             </GridItem>
             <GridItem colSpan={2} colStart={1}>
-              <Checkbox onChange={handleCheckboxChange} value={checked} size="lg" colorScheme="blue">
+              <Checkbox onChange={handleCheckboxChange} value={checked} size="lg" iconColor={"#858B8D"} colorScheme={"blackAlpha.400"}>
                 I have read and agree to the Privacy Policy of the Polytechnic
                 University of Puerto Rico
               </Checkbox>

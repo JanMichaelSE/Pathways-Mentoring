@@ -41,6 +41,10 @@ export default function AvatarCard({ cardData }) {
         >
           <Avatar
             size={"2xl"}
+            borderWidth={"2px"}
+            borderStyle={"dashed"}
+            borderColor={"#93B3D3"}
+            background={"#F1F8FC"}
             src={cardData.avatarLink}
             alt={"Avatar Alt"}
             mb={4}
@@ -91,7 +95,11 @@ export default function AvatarCard({ cardData }) {
         rounded={"27px"}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent
+          borderWidth={"2px"}
+          borderStyle={"dashed"}
+          borderColor={"#0066CC"}
+        >
           <ModalHeader>
             <HStack alignItems={"center"}>
               <Image
@@ -113,6 +121,9 @@ export default function AvatarCard({ cardData }) {
               <Stack align={"center"} justify={"center"} mx={6}>
                 <Avatar
                   size={"2xl"}
+                  background={"#F1F8FC"}
+                  borderWidth={"2px"}
+                  borderColor={"#0874E0"}
                   src={cardData.avatarLink}
                   alt={"Avatar Alt"}
                   mb={4}

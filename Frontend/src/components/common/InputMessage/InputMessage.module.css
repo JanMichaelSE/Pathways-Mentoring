@@ -6,6 +6,18 @@
     padding-bottom: 0.25rem;
     margin-left: 20px;
   }
+
+  ::-webkit-scrollbar {
+    width: 16px;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #0066CC;
+    border-radius: 20px;
+    height: 40px;
+  }
   
   .input {
     font-size: var(--font-size-regular);
@@ -14,10 +26,12 @@
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 30px;
     padding: 0 20px;
-    min-height: 100px;
+    min-height: 255px;
     width: 19rem;
-    
+    resize: none;
     transition: width 0.4s;
+    box-sizing: border-box;
+    padding: 1em;
   }
   
   .input-img {
