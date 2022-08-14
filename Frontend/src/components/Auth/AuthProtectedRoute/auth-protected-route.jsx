@@ -2,7 +2,7 @@ import { useUserStore } from "@/store/user.store";
 import { Navigate } from "react-router-dom";
 import { getJWTExpireDate } from "@/utils/auth.utils";
 
-function ProtectedRoute({ redirectPath = "/", children }) {
+function AuthProtectedRoute({ redirectPath = "/", children }) {
   const accessToken = useUserStore((state) => state.accessToken);
   const refreshToken = useUserStore((state) => state.refreshToken);
   const expirationTime = getJWTExpireDate(accessToken);
@@ -15,4 +15,4 @@ function ProtectedRoute({ redirectPath = "/", children }) {
   return children;
 }
 
-export default ProtectedRoute;
+export default AuthProtectedRoute;

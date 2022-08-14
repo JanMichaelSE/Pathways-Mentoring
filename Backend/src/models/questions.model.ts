@@ -79,19 +79,22 @@ function validateQuestionsFormat(
     if (
       question.type != "Text" &&
       question.type != "Select" &&
-      question.type != "Multi-select"
+      question.type != "Multi-select" &&
+      question.type != "Rating"
     ) {
       return buildErrorObject(
         400,
         `The question: "${question.question}" does not have a valid type assigned. Valid types are: "Text", "Select" and "Multi-select`
       );
     } else if (
-      (question.type === "Multi-select" || question.type === "Select") &&
+      (question.type === "Multi-select" ||
+        question.type === "Select" ||
+        question.type === "Rating") &&
       !question.options
     ) {
       return buildErrorObject(
         400,
-        `The question: "${question.question}" does not have a options assigned. If questions is of type "Select" or "Multi-select", options are required.`
+        `The question: "${question.question}" does not have a options assigned. If questions is of type "Select", "Multi-select" or "Rating" options are required.`
       );
     }
   }
