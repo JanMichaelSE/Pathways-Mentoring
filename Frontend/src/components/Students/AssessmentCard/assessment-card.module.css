@@ -1,0 +1,24 @@
+.assessment {
+  background-color: white;
+  font-size: var(--font-size-regular);
+  border-radius: 20px;
+  height: 13rem;
+  width: 15rem;
+  margin: 30px;
+  padding: 20px;
+}
+
+.assessment-title {
+  text-align: center;
+}
+
+.assessment-description {
+  background-color: var(--color-white);
+  font-size: var(--font-size-small);
+  border-radius: 30px;
+  height: 120px;
+  width: 200px;
+  margin-top: 20px;
+  padding: 10px;
+  box-shadow: 0 0 3px var(--color-grey);
+}

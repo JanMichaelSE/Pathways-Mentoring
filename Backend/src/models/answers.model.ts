@@ -33,15 +33,24 @@ async function createAnswers(
 
     for (const question of questions) {
       const answer = answersMap.get(question.id);
-      const isValidAnswer = question.options?.includes(answer?.answer ?? "");
+
+      let isValidAnswer = true;
+      const answers = answer?.answer.split(";") ?? [];
+      for (const _answer of answers) {
+        if (!question.options?.includes(_answer)) {
+          isValidAnswer = false;
+        }
+      }
 
       if (
-        (question.type === "Select" || question.type === "Multi-select") &&
+        (question.type === "Select" ||
+          question.type === "Multi-select" ||
+          question.type === "Rating") &&
         !isValidAnswer
       ) {
         return buildErrorObject(
           400,
-          "Could not create answer because it has provided an answer that is not within the available options of the question. If the question is of type 'Select' or 'Multi-Select', please provide a valid answer that are within the available options of that question."
+          `Could not create answer for [question id "${question.id}", question "${question.question}" because it has provided an answer that is not within the available options of the question. If the question is of type 'Select', 'Multi-Select' or 'Rating'. Please provide a valid answer that are within the available options of that question.`
         );
       }
     }
