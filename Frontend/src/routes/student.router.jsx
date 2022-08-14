@@ -14,7 +14,7 @@ function StudentRouter() {
     <>
       <Navbar />
       <div className="page-bg">
-        {/* <IdleTimerContainer /> */}
+        <IdleTimerContainer />
         <Routes>
           <Route path="/" element={<StudentRecords />} />
           <Route path="/assessments" element={<Assessments />} />

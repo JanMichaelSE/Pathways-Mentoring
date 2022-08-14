@@ -1,4 +1,6 @@
 import Axios from "axios";
+import { getState } from "@/store/user.store";
+import { setState } from "../store/user.store";
 
 const axios = Axios.create({ baseURL: "http://localhost:5000" });
 
@@ -25,31 +27,27 @@ axios.interceptors.response.use(
       if (err.response.status === 403 && !originalConfig._retry) {
         originalConfig._retry = true;
         try {
-          let userStorage = JSON.parse(
-            window.sessionStorage.getItem("user-storage")
-          );
+          const userState = getState();
 
-          const token = userStorage.state.refreshToken;
+          const token = userState.refreshToken;
           const response = await axios.post("/auth/refreshToken", {
             token: token,
           });
 
           const { accessToken, refreshedToken } = response.data;
           originalConfig.headers.Authorization = "Bearer " + accessToken;
-          userStorage.state.accessToken = accessToken;
-          userStorage.state.refreshToken = refreshedToken;
-
-          window.sessionStorage.setItem(
-            "user-storage",
-            JSON.stringify(userStorage)
-          );
+          userState.setTokens(accessToken, refreshedToken);
 
           return axios(originalConfig);
         } catch (_error) {
+          const userState = getState();
+          userState.resetUser();
+
           return Promise.reject(_error);
         }
       }
     }
+    return Promise.reject(err);
   }
 );
 

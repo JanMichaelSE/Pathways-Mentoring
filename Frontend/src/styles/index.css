@@ -16,6 +16,8 @@
     #ee7222 99.39%
   );
 
+  --modal-border-line: 3px dashed var(--color-blue-dark);
+
   --responsive-screen-max-width: 1300px;
 
   /* React Toastify Overriden Styles */
