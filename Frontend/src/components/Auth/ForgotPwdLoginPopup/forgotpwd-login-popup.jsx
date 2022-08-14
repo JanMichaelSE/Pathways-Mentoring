@@ -91,7 +91,7 @@ function ForgotPwdLoginPopup() {
                 await handleEmailSubmit(value);
               }}
             >
-              <Form>
+              <Form style={{ margin: "auto" }}>
                 <div className={styles.inputContainer}>
                   <Input
                     name="email"

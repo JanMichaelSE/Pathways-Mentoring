@@ -46,7 +46,7 @@ function SignupPopupSelector() {
           borderColor={"#0066CC"}
         >
           <ModalHeader>
-            <HStack alignItems={"center"} spacing="100px">
+            <HStack alignItems={"center"} spacing="130px">
               <Image
                 boxSize="40px"
                 objectFit="cover"
