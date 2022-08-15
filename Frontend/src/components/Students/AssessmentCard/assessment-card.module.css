@@ -6,6 +6,11 @@
   width: 15rem;
   margin: 30px;
   padding: 20px;
+  transition: all 0.2s;
+}
+
+.assessment:hover {
+  transform: scale(1.1);
 }
 
 .assessment-title {

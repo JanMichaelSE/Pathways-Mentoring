@@ -45,7 +45,7 @@ async function httpUpdateAssessment(assessment) {}
 async function httpDeleteAssessment(assessment) {}
 
 async function httpAnswerAssessment(answers, assessmentId) {
-  let aanswerResponse = {
+  let answerResponse = {
     hasError: false,
     data: null,
     errorMessage: "",
@@ -55,14 +55,14 @@ async function httpAnswerAssessment(answers, assessmentId) {
     const response = await axios.post("/assessments/answer/" + assessmentId, {
       answers,
     });
-    aanswerResponse.data = response.data;
+    answerResponse.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
-    aanswerResponse.hasError = true;
-    aanswerResponse.errorMessage = errorResponse.error.errorMessage;
+    answerResponse.hasError = true;
+    answerResponse.errorMessage = errorResponse.error.errorMessage;
   }
 
-  return aanswerResponse;
+  return answerResponse;
 }
 
 async function httpGetAnswersByAssessment() {}

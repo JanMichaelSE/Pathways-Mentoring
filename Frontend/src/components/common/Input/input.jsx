@@ -43,6 +43,7 @@ function Input({ label, imgUrl, ...props }) {
         </label>
       )}
       <input
+        autoComplete="off"
         className={inputStyles()}
         style={{
           width: props.width,

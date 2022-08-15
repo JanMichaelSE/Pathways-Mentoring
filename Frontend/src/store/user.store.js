@@ -1,7 +1,8 @@
 import create from "zustand";
+import createVanillaStore from "zustand/vanilla";
 import { persist } from "zustand/middleware";
 
-export const useUserStore = create(
+const vanillaUserStore = createVanillaStore(
   persist(
     (set) => ({
       accessToken: "",
@@ -35,3 +36,8 @@ export const useUserStore = create(
     { name: "user-storage", getStorage: () => sessionStorage }
   )
 );
+
+const useUserStore = create(vanillaUserStore);
+const { getState, setState } = vanillaUserStore;
+
+export { useUserStore, getState, setState };
