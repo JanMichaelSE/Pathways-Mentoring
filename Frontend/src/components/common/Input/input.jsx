@@ -44,7 +44,11 @@ function Input({ label, imgUrl, ...props }) {
       )}
       <input
         className={inputStyles()}
-        style={{ width: props.width, backgroundImage: `url(${imgUrl})` }}
+        style={{
+          width: props.width,
+          height: props.height,
+          backgroundImage: `url(${imgUrl})`,
+        }}
         {...field}
         {...props}
         onChange={formatInput}

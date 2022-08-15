@@ -82,6 +82,7 @@ function ResetPasswordForm() {
               placeholder="Password"
               imgUrl={lockIcon}
               width={inputWidth()}
+              height={"70px"}
             />
           </div>
 
@@ -92,6 +93,7 @@ function ResetPasswordForm() {
               placeholder="Confirm Password"
               imgUrl={lockIcon}
               width={inputWidth()}
+              height={"70px"}
             />
           </div>
 
