@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import styles from "./students-navbar.module.css";
+import ProfilePopover from "../ProfilePopOver/profile-popover";
 
 function StudentNavbar() {
   let location = useLocation();
@@ -64,13 +65,14 @@ function StudentNavbar() {
             alt="NotificationBell"
             className={styles.logoLink}
           />
-          <Link to="/student/profile">
+          <ProfilePopover classname={styles.logoLink} />
+          {/* <Link to="/student/profile">
             <img
               src="/assets/Avatars.png"
               alt="profile"
               className={styles.logoLink}
             />
-          </Link>
+          </Link> */}
         </div>
       </nav>
       <Outlet />
