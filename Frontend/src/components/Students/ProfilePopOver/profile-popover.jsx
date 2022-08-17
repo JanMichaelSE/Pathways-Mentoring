@@ -48,6 +48,7 @@ function ProfilePopover() {
         onOpen={onOpen}
         onClose={onClose}
         closeOnBlur={true}
+        // autoFocus={false}
       >
         <PopoverTrigger>
           <img
@@ -58,10 +59,10 @@ function ProfilePopover() {
           />
         </PopoverTrigger>
         <PopoverContent w={90} borderRadius={"20px"} borderColor={"#0066CC"}>
-          <PopoverArrow borderColor={"#0066CC"} />
+          <PopoverArrow bg={"blue.600"} />
           <PopoverBody>
             <SimpleGrid columns={1} justifyItems={"center"}>
-              <Link to="/student/profile" style={{ fontWeight: "600" }}>
+              <Link className={styles.profileHeader} to="/student/profile">
                 Profile
               </Link>
               <Divider
