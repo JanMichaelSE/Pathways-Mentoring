@@ -1,9 +1,8 @@
 import styles from "./login.module.css";
 import Pathway_Logo from "@/assets/Pathway_Logo.png";
-import { Link } from "react-router-dom";
-import LoginForm from "../../../components/Auth/LoginForm/login-form";
-import SignupPopupSelector from "../../../components/Auth/SignupPopupSelector/signup-popup-selector";
-import ForgotPwdLoginPopup from "../../../components/Auth/ForgotPwdLoginPopup/forgotpwd-login-popup";
+import LoginForm from "@/components/Auth/LoginForm/login-form";
+import SignupPopupSelector from "@/components/Auth/SignupPopupSelector/signup-popup-selector";
+import ForgotPwdLoginPopup from "@/components/Auth/ForgotPwdLoginPopup/forgotpwd-login-popup";
 
 function Login() {
   return (
