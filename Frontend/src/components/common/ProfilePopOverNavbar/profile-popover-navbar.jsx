@@ -1,4 +1,4 @@
-import styles from "./profile-popover.module.css";
+import styles from "./profile-popover-navbar.module.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { httpLogout } from "@/api/user.api";
@@ -11,17 +11,14 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-  PopoverHeader,
   PopoverBody,
-  PopoverFooter,
   PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor,
 } from "@chakra-ui/react";
 
 function ProfilePopover() {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const navigate = useNavigate();
+  const role = useUserStore((state) => state.role);
   const resetUser = useUserStore((state) => state.resetUser);
   const toast = useToast();
 
@@ -48,6 +45,7 @@ function ProfilePopover() {
         onOpen={onOpen}
         onClose={onClose}
         closeOnBlur={true}
+        placement={"bottom"}
         // autoFocus={false}
       >
         <PopoverTrigger>
@@ -58,11 +56,14 @@ function ProfilePopover() {
             onClick={onOpen}
           />
         </PopoverTrigger>
-        <PopoverContent w={90} borderRadius={"20px"} borderColor={"#0066CC"}>
+        <PopoverContent w={90} borderColor={"#0066CC"}>
           <PopoverArrow bg={"blue.600"} />
           <PopoverBody>
             <SimpleGrid columns={1} justifyItems={"center"}>
-              <Link className={styles.profileHeader} to="/student/profile">
+              <Link
+                className={styles.profileHeader}
+                to={`/${role.toLowerCase()}/profile`}
+              >
                 Profile
               </Link>
               <Divider

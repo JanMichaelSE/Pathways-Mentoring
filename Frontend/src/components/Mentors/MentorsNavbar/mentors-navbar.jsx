@@ -1,9 +1,9 @@
 import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import styles from "./students-navbar.module.css";
+import styles from "./mentors-navbar.module.css";
 import ProfilePopover from "@/components/common/ProfilePopOverNavbar/profile-popover-navbar";
 
-function StudentNavbar() {
+function MentorNavbar() {
   let location = useLocation();
 
   return (
@@ -20,42 +20,42 @@ function StudentNavbar() {
         <div className={styles.navLinksContainer}>
           <Link
             className={
-              location.pathname === "/student/assessments"
+              location.pathname === "/mentor" ||
+              location.pathname === "/mentor/records"
                 ? styles.activeNavLink
                 : styles.navLink
             }
-            to="/student/assessments"
-          >
-            Assessments
-          </Link>
-          <Link
-            className={
-              location.pathname === "/student" ||
-              location.pathname === "/student/records"
-                ? styles.activeNavLink
-                : styles.navLink
-            }
-            to="/student/records"
+            to="/mentor/records"
           >
             Records
           </Link>
           <Link
             className={
-              location.pathname === "/student/mentors"
+              location.pathname === "/mentor/programs"
                 ? styles.activeNavLink
                 : styles.navLink
             }
-            to="/student/mentors"
+            to="/mentor/programs"
           >
-            Mentors
+            Programs
           </Link>
           <Link
             className={
-              location.pathname === "/student/contact-us"
+              location.pathname === "/mentor/students"
                 ? styles.activeNavLink
                 : styles.navLink
             }
-            to="/student/contact-us"
+            to="/mentor/students"
+          >
+            Students
+          </Link>
+          <Link
+            className={
+              location.pathname === "/mentor/contact-us"
+                ? styles.activeNavLink
+                : styles.navLink
+            }
+            to="/mentor/contact-us"
           >
             Contact Us
           </Link>
@@ -73,4 +73,4 @@ function StudentNavbar() {
   );
 }
 
-export default StudentNavbar;
+export default MentorNavbar;
