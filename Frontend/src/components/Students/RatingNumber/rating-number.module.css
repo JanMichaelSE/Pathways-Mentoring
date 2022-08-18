@@ -1,0 +1,14 @@
+.button {
+  background: rgba(184, 213, 241, 0.5);
+  border: 3px solid rgba(0, 102, 204, 0.67);
+  border-radius: 10px;
+  padding: 0.25rem 1.25rem;
+  font-weight: bold;
+  font-size: var(--font-size-heading);
+}
+
+.button-active {
+  background: rgba(250, 194, 11, 0.5);
+  border: 3px solid #fac20b;
+  border-radius: 10px;
+}
