@@ -58,7 +58,7 @@ export default function StudentCard({ cardData }) {
             {cardData.department}
           </Text>
 
-          <Stack align={"center"} justify={"center"} direction={"row"} mt={6}>
+          <Stack align={"center"} justify={"space-around"} direction={"row"} mt={6}>
             <Image
               px={2}
               py={1}
@@ -74,14 +74,6 @@ export default function StudentCard({ cardData }) {
               objectFit="cover"
               src="/assets/Phone-Squared.svg"
               alt="Phone Squared Icon"
-            />
-            <Image
-              px={2}
-              py={1}
-              boxSize="50px"
-              objectFit="cover"
-              src="/assets/Company.svg"
-              alt="Company.svg"
             />
           </Stack>
         </Box>
