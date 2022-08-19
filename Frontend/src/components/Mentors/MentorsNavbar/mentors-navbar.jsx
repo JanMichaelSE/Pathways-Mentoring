@@ -20,12 +20,11 @@ function MentorNavbar() {
         <div className={styles.navLinksContainer}>
           <Link
             className={
-              location.pathname === "/mentor" ||
-              location.pathname === "/mentor/records"
+              location.pathname === "/mentor"
                 ? styles.activeNavLink
                 : styles.navLink
             }
-            to="/mentor/records"
+            to="/mentor"
           >
             Records
           </Link>
