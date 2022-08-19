@@ -164,28 +164,6 @@ function StudentProfileForm() {
           <div className={styles.avatarContainer}>
             <ProfilePicture enableReinitialize={true}></ProfilePicture>
             <ProfileChangerPopOver name="profilePicture" edit={edit} />
-            <button
-              type="button"
-              id="camerabutton"
-              style={{
-                width: 58,
-                height: 58,
-                float: "none",
-                background: "none",
-                position: "relative",
-                top: -100,
-                right: -25,
-              }}
-              disabled={edit}
-            >
-              <Image
-                borderRadius="full"
-                boxSize="62px"
-                src="/assets/Profile-Camera-Icon.svg"
-                alt="Avatar"
-                m="auto"
-              />
-            </button>
           </div>
 
           <h1 className={styles.line}>
