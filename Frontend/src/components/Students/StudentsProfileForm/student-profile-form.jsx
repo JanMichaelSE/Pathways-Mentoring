@@ -114,17 +114,15 @@ function StudentProfileForm() {
           profilePicture: userData.profilePicture || "",
         }}
         validationSchema={Yup.object({
-          firstName: Yup.string().required("First Name is required"),
-          lastName: Yup.string().required("Last Name is required"),
+          firstName: Yup.string(),
+          lastName: Yup.string(),
           phone: Yup.string()
             .matches(
               /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/,
               "Phone number is not valid"
             )
             .min(10, "Phone number must be 10 digits"),
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Email is required"),
+          email: Yup.string().email("Invalid email address"),
           currentPassword: Yup.string().min(
             12,
             "Current password must be at least 12 characters"
@@ -138,11 +136,19 @@ function StudentProfileForm() {
             "Passwords must match"
           ),
           // .required("Password Confirmation is required"),
-          gender: Yup.string()
-            .oneOf(["Male", "Female", "Other"])
-            .required("Gender is required"),
-          fieldOfStudy: Yup.string().required("Field of Study is required"),
-          institution: Yup.string().required("Insitution is required"),
+          gender: Yup.string().oneOf(["Male", "Female", "Other"]),
+          fieldOfStudy: Yup.string().oneOf([
+            "Architecture",
+            "Business Administration",
+            "Civil Engineering",
+            "Computer Engineering",
+            "Computer Science",
+            "Electrical Engineering",
+            "Environmental Engineering",
+            "Industrial Engineering",
+            "Mechanical Engineering",
+          ]),
+          institution: Yup.string(),
           gpa: Yup.number(),
         })}
         onSubmit={async (values) => {
@@ -256,13 +262,33 @@ function StudentProfileForm() {
             Academic Information
           </h1>
           <div className={styles.formInput}>
-            <Input
+            <Select
               label="Field Of Study"
               name="fieldOfStudy"
-              type="text"
-              width={350}
+              style={{ width: 350 }}
               disabled={edit}
-            />
+            >
+              <option value="">Select Option</option>
+              <option value="Architecture">Architecture</option>
+              <option value="Business Administration">
+                Business Administration
+              </option>
+              <option value="Civil Engineering">Civil Engineering</option>
+              <option value="Computer Engineering">Computer Engineering</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Electrical Engineering">
+                Electrical Engineering
+              </option>
+              <option value="Environmental Engineering">
+                Environmental Engineering
+              </option>
+              <option value="Industrial Engineering">
+                Industrial Engineering
+              </option>
+              <option value="Mechanical Engineering">
+                Mechanical Engineering
+              </option>
+            </Select>
             <Input
               label="Institution"
               name="institution"
