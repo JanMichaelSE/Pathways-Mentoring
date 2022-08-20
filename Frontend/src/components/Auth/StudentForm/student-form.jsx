@@ -71,7 +71,19 @@ function StudentForm() {
           gender: Yup.string()
             .oneOf(["Male", "Female", "Other"])
             .required("Gender is required"),
-          fieldOfStudy: Yup.string().required("Field of Study is required"),
+          fieldOfStudy: Yup.string()
+            .oneOf([
+              "Architecture",
+              "Business Administration",
+              "Civil Engineering",
+              "Computer Engineering",
+              "Computer Science",
+              "Electrical Engineering",
+              "Environmental Engineering",
+              "Industrial Engineering",
+              "Mechanical Engineering",
+            ])
+            .required("Field of Study is required"),
           institution: Yup.string().required("Insitution is required"),
           gpa: Yup.number(),
         })}
@@ -91,7 +103,28 @@ function StudentForm() {
               name="confirmPassword"
               type="password"
             />
-            <Input label="Field Of Study *" name="fieldOfStudy" type="text" />
+            <Select label="Field Of Study *" name="fieldOfStudy">
+              <option value="">Select Option</option>
+              <option value="Architecture">Architecture</option>
+              <option value="Business Administration">
+                Business Administration
+              </option>
+              <option value="Civil Engineering">Civil Engineering</option>
+              <option value="Computer Engineering">Computer Engineering</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Electrical Engineering">
+                Electrical Engineering
+              </option>
+              <option value="Environmental Engineering">
+                Environmental Engineering
+              </option>
+              <option value="Industrial Engineering">
+                Industrial Engineering
+              </option>
+              <option value="Mechanical Engineering">
+                Mechanical Engineering
+              </option>
+            </Select>
             <Input
               label="Institution *"
               name="institution"
