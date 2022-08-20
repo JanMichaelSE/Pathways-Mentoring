@@ -1,0 +1,12 @@
+.textarea {
+  font-size: var(--font-size-regular);
+  color: black;
+  height: 5rem;
+  width: 100%;
+  background-color: #e0e6ea80;
+  padding: 1rem;
+  padding-top: 0.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 3px var(--color-grey);
+  resize: none;
+}

@@ -1,0 +1,24 @@
+.container {
+  max-width: 600px;
+  padding: 2rem;
+  margin: auto;
+  background-color: #ffffff;
+  border-radius: 2rem;
+  border: var(--modal-border-line);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  width: 140px;
+}
+
+.title {
+  font-size: var(--font-size-heading);
+  color: var(--color-blue-dark);
+}

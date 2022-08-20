@@ -14,7 +14,7 @@ async function httpLogin(user) {
     };
 
     const response = await axios.post("/auth/login", userInfo);
-    userToReturn.data = response.data;
+    userToReturn.data = await response.data;
   } catch (error) {
     const errorResponse = error.response.data;
     if (typeof errorResponse.error.errorCode == "number") {

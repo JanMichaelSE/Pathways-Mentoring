@@ -5,7 +5,7 @@ import {
   httpAnswerAssessment,
   httpDeleteAssessment,
   httpGetAllAssessments,
-  httpGetAnswersByAssessement,
+  httpGetAnswersByAssessment,
   httpGetAssessment,
   httpUpdateAssessment,
 } from "./assessments.controller";
@@ -19,7 +19,7 @@ router.get("/:assessmentId", authenticateJsonWebToken, httpGetAssessment);
 router.get(
   "/answer/:assessmentId",
   authenticateJsonWebToken,
-  httpGetAnswersByAssessement
+  httpGetAnswersByAssessment
 );
 
 router.post("/", authenticateJsonWebToken, httpAddAssessment);

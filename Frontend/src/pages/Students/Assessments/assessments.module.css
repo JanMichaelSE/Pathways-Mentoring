@@ -1,32 +1,39 @@
-@import "@/styles/index.css";
-
-.container {
-  background-color: var(--color-white);
+.assessment-container {
+  max-width: 1300px;
+  margin: auto;
 }
 
 .buttons-container {
   display: flex;
   justify-content: flex-end;
-  padding: 2rem 4rem;
+  padding: 3rem 4rem;
 }
 
 .button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 15px;
-  width: 8rem;
-  padding: 15px 5px;
-  gap: 1rem;
+  width: 7rem;
+  height: 3rem;
+  padding: 1rem;
+  font-size: var(--font-size--regular);
+  margin-right: 1rem;
 }
 
-.assessments-container {
-  padding: 10vh 5vw;
+.assessments-grid {
   display: grid;
   align-items: center;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  justify-content: center;
+  grid-template-columns: repeat(4, minmax(250px, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(200px, 250px));
   gap: 2rem;
+  padding: 3rem;
+  padding-top: 0;
 }
 
-.assessment {
-  height: 30vh;
-  width: 15vw;
+@media screen and (max-width: 1200px) {
+  .assessments-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
 }

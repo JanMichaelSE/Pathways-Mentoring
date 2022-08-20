@@ -43,8 +43,13 @@ function Input({ label, imgUrl, ...props }) {
         </label>
       )}
       <input
+        autoComplete="off"
         className={inputStyles()}
-        style={{ width: props.width, backgroundImage: `url(${imgUrl})` }}
+        style={{
+          width: props.width,
+          height: props.height,
+          backgroundImage: `url(${imgUrl})`,
+        }}
         {...field}
         {...props}
         onChange={formatInput}
