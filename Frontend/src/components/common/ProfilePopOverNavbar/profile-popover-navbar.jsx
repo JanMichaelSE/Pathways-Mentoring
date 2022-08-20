@@ -46,7 +46,6 @@ function ProfilePopover() {
         onClose={onClose}
         closeOnBlur={true}
         placement={"bottom"}
-        // autoFocus={false}
       >
         <PopoverTrigger>
           <img

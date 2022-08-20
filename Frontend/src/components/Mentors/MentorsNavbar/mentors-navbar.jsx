@@ -30,16 +30,6 @@ function MentorNavbar() {
           </Link>
           <Link
             className={
-              location.pathname === "/mentor/programs"
-                ? styles.activeNavLink
-                : styles.navLink
-            }
-            to="/mentor/programs"
-          >
-            Programs
-          </Link>
-          <Link
-            className={
               location.pathname === "/mentor/students"
                 ? styles.activeNavLink
                 : styles.navLink
