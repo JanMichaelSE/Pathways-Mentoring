@@ -10,15 +10,17 @@ import IdleTimerContainer from "@/components/common/IdleTimerContainer/idle-time
 function MentorRouter() {
   return (
     <>
-      <IdleTimerContainer />
       <Navbar />
-      <Routes>
-        <Route path="/" element={<MentorRecords />} />
-        <Route path="/students" element={<Students />} />
-        <Route path="/programs" element={<Programs />} />
-        <Route path="/profile" element={<MentorProfile />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-      </Routes>
+      <div className="page-bg">
+        <IdleTimerContainer />
+        <Routes>
+          <Route path="/" element={<MentorRecords />} />
+          <Route path="/students" element={<Students />} />
+          <Route path="/programs" element={<Programs />} />
+          <Route path="/profile" element={<MentorProfile />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+        </Routes>
+      </div>
     </>
   );
 }

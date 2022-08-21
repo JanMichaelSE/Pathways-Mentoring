@@ -1,35 +1,30 @@
 import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import styles from "./mentors-navbar.module.css";
+import ProfilePopover from "@/components/common/ProfilePopOverNavbar/profile-popover-navbar";
 
-export default function Navbar() {
+function MentorNavbar() {
   let location = useLocation();
 
   return (
     <Fragment>
       <nav className={styles.nav}>
-        <div className={styles.logoContainer}>
-          <img src="/assets/Pathway_logo_small.png" alt="Pathways" />
+        <div>
+          <img
+            src="/assets/Pathway_logo_small.png"
+            alt="Pathways"
+            className={styles.pathwaysLogo}
+          />
         </div>
+
         <div className={styles.navLinksContainer}>
           <Link
             className={
-              location.pathname === "/mentor/assessments"
+              location.pathname === "/mentor"
                 ? styles.activeNavLink
                 : styles.navLink
             }
-            to="/mentor/assessments"
-          >
-            Assessments
-          </Link>
-          <Link
-            className={
-              location.pathname === "/mentor" ||
-              location.pathname === "/mentor/records"
-                ? styles.activeNavLink
-                : styles.navLink
-            }
-            to="/mentor/records"
+            to="/mentor"
           >
             Records
           </Link>
@@ -53,19 +48,18 @@ export default function Navbar() {
           >
             Contact Us
           </Link>
-        </div>
-        <div className={styles.profileContainer}>
+
           <img
             src="/assets/Doorbell.svg"
             alt="NotificationBell"
-            className={styles.LogoLink}
+            className={styles.logoLink}
           />
-          <Link className={styles.LogoLink} to="/mentor/profile">
-            <img src="/assets/Avatars.png" alt="profile" />
-          </Link>
+          <ProfilePopover classname={styles.logoLink} />
         </div>
       </nav>
       <Outlet />
     </Fragment>
   );
 }
+
+export default MentorNavbar;

@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import styles from "./students-navbar.module.css";
+import ProfilePopover from "@/components/common/ProfilePopOverNavbar/profile-popover-navbar";
 
 function StudentNavbar() {
   let location = useLocation();
@@ -29,12 +30,11 @@ function StudentNavbar() {
           </Link>
           <Link
             className={
-              location.pathname === "/student" ||
-              location.pathname === "/student/records"
+              location.pathname === "/student"
                 ? styles.activeNavLink
                 : styles.navLink
             }
-            to="/student/records"
+            to="/student"
           >
             Records
           </Link>
@@ -64,13 +64,7 @@ function StudentNavbar() {
             alt="NotificationBell"
             className={styles.logoLink}
           />
-          <Link to="/student/profile">
-            <img
-              src="/assets/Avatars.png"
-              alt="profile"
-              className={styles.logoLink}
-            />
-          </Link>
+          <ProfilePopover classname={styles.logoLink} />
         </div>
       </nav>
       <Outlet />

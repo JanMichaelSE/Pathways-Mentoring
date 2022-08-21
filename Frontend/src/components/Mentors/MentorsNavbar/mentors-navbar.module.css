@@ -2,35 +2,37 @@
 
 .nav {
   height: 70px;
-  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 1vh;
-  padding-bottom: 1vh;
+  padding-top: 5px;
+  padding-bottom: 5px;
   margin-bottom: 3px;
   box-shadow: 0 3px 5px var(--color-grey);
 }
 
-.logo-container {
-  height: 100%;
-  width: 15vw;
-  margin-right: 10vw;
+.pathways-logo {
+  padding: 3px;
+  width: 150px;
+  min-width: 150px;
+  transition: margin 0.5s;
 }
 
 .logo-link {
+  width: 50px;
+  min-width: 50px;
+  min-height: 50px;
   cursor: pointer;
+  margin-right: 1.5rem;
 }
 
 .nav-links-container {
-  width: 60vw;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
 .nav-link {
-  font-size: 20px;
+  font-size: var(--font-size-regular);
   text-align: center;
   color: var(--color-grey);
   text-decoration: none;
@@ -41,7 +43,8 @@
   padding: 5px 10px;
   cursor: pointer;
   box-shadow: 0 2px 2px var(--color-grey);
-  margin-right: 10px;
+  margin-right: 1.5rem;
+  transition: all 0.2s, box-shadow 1ms, color 1ms;
 }
 
 .active-nav-link {
@@ -55,31 +58,33 @@
   background-color: var(--color-white);
   padding: 5px 10px;
   cursor: pointer;
-  margin-right: 10px;
+  margin-right: 1.5rem;
   box-shadow: 0 3px 2px var(--color-blue-dark);
-}
-
-.profileContainer {
-  width: 10vw;
-  display: flex;
-  justify-content: flex-end;
-  gap: 1vw;
-  align-items: center;
-  margin: 0 20px;
+  transition: all 0.2s, box-shadow 1ms, color 1ms;
 }
 
 @media only screen and (max-width: 1100px) {
+  .pathways-logo {
+    width: 120px;
+    min-width: 120px;
+  }
+
   .nav-link {
-    font-size: 15px;
-    width: 8rem;
-    padding: 10px 5px;
-    transition: all 2s, box-shadow 1ms, color 1ms;
+    font-size: var(--font-size-small);
+    width: 7rem;
+    padding: 5px 10px;
   }
 
   .active-nav-link {
-    font-size: 15px;
-    width: 8rem;
-    padding: 10px 5px;
-    transition: all 2s, box-shadow 1ms, color 1ms;
+    font-size: var(--font-size-small);
+    width: 7rem;
+    padding: 5px 10px;
+  }
+
+  .logo-link {
+    width: 35px;
+    min-width: 35px;
+    min-height: 35px;
+    margin-right: 0.5rem;
   }
 }
