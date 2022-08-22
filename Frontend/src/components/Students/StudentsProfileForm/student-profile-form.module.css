@@ -1,0 +1,123 @@
+/* Creating Student Form Component */
+.form-container {
+  max-width: 2000px;
+}
+
+.form-input {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 2rem;
+  justify-content: space-evenly;
+}
+
+.form-input div {
+  margin-bottom: 2.5rem;
+}
+
+.button-container {
+  margin-right: 2rem;
+}
+
+/* Search Input Styles Component*/
+.input-search {
+  font-size: var(--font-size-regular);
+  background-color: var(--color-white);
+  background-image: url("../../../assets/search-icon.svg");
+  background-repeat: no-repeat;
+  background-position: top 5px left 20px;
+  border: 1px solid rgba(139, 141, 144, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  padding: 0 20px 0 70px;
+  height: 60px;
+  width: 25rem;
+}
+
+.input-search:focus {
+  outline: none;
+}
+.photoContainer {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: 30px;
+}
+
+.profileHeader {
+  color: var(--color-blue-dark);
+  font-size: var(--font-size-heading);
+  font-weight: bold;
+  text-align: left;
+}
+h1 #editbutton {
+  position: absolute;
+  right: 0;
+}
+.avatarContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonImg {
+  cursor: pointer;
+  width: 62px;
+  border-radius: 30px;
+  border: none;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  -ms-border-radius: 30px;
+  -o-border-radius: 30px;
+}
+.line {
+  display: flex;
+  flex-direction: row;
+  color: var(--color-blue-dark);
+  font-size: var(--font-size-heading);
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+}
+
+.line:before {
+  content: "";
+  display: inline-block;
+  width: 31rem;
+  height: 3px;
+  background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
+  margin-right: 80px;
+}
+.line:after {
+  content: "";
+  display: inline-block;
+  width: 31rem;
+  height: 3px;
+  background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
+  margin-left: 80px;
+}
+
+.avatarContainerModal {
+  display: flex;
+  flex-direction: column;
+}
+.icon {
+  width: 100px;
+  height: 100px;
+  margin: 0.5em;
+  display: flex;
+}
+.icon:hover {
+  cursor: pointer;
+}
+
+/*img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+  }*/
+@media only screen and (max-width: 950px) {
+  .form-input {
+    justify-content: space-between;
+  }
+}

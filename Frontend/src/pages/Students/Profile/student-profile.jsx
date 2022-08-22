@@ -1,8 +1,13 @@
-
+import StudentProfileForm from "@/components/Students/StudentsProfileForm/student-profile-form";
+import styles from "./student-profile.module.css";
 function StudentProfile() {
   return (
-    <div>Student Profile</div>
-  )
+    <div className={styles.container}>
+      <div className={styles.containerForm}>
+        <StudentProfileForm />
+      </div>
+    </div>
+  );
 }
 
-export default StudentProfile
+export default StudentProfile;

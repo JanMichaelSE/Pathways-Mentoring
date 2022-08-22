@@ -10,6 +10,7 @@ const vanillaUserStore = createVanillaStore(
       email: "",
       role: "",
       logoutTimeoutId: "",
+      pictureData: "",
       refreshTokenError: {},
       setUser: (email, role) =>
         set({
@@ -22,6 +23,11 @@ const vanillaUserStore = createVanillaStore(
           refreshToken: refreshToken,
         });
       },
+      setPictureData: (pictureData) => {
+        set({
+          pictureData: pictureData,
+        });
+      },
       resetUser: () => {
         set({
           accessToken: "",
@@ -29,6 +35,7 @@ const vanillaUserStore = createVanillaStore(
           email: "",
           role: "",
           logoutTimeoutId: "",
+          pictureData: "",
           refreshTokenError: "",
         });
       },

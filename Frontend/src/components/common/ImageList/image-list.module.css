@@ -1,0 +1,13 @@
+.avatarContainerModal {
+  display: flex;
+  flex-direction: column;
+}
+.icon {
+  width: 100px;
+  height: 100px;
+  margin: 0.5em;
+  display: flex;
+}
+.icon:hover {
+  cursor: pointer;
+}
