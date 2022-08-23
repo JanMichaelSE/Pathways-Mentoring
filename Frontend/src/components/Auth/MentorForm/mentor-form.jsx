@@ -76,7 +76,7 @@ function MentorForm() {
             .required("Gender is required"),
           academicDegree: Yup.string().required("Academic Degree is required"),
           department: Yup.string().required("Department is required"),
-          areaOfInterest: Yup.string(),
+          areaOfInterest: Yup.string().required("Area of Interest is required"),
           facultyStatus: Yup.string()
             .oneOf(["Instructor", "Assistant", "Associate", "Professor"])
             .required("Faculty Status is required"),
@@ -109,7 +109,11 @@ function MentorForm() {
               <option value="Doctorate">Computer Enginnering</option>
               <option value="Post Doctorate">Electrical Engineering</option>
             </Select>
-            <Input label="Area of Interest" name="areaOfInterest" type="text" />
+            <Input
+              label="Area of Interest *"
+              name="areaOfInterest"
+              type="text"
+            />
             <Select label="Gender *" name="gender">
               <option value="">Select Option</option>
               <option value="Male">Male</option>

@@ -1,42 +1,75 @@
 import { Fragment } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import styles from "./students-navbar.module.css";
+import ProfilePopover from "@/components/common/ProfilePopOverNavbar/profile-popover-navbar";
 
-export default function Navbar() {
+function StudentNavbar() {
+  let location = useLocation();
+
   return (
     <Fragment>
       <nav className={styles.nav}>
-        <div className={styles.logoContainer}>
-          <Link className={styles.LogoLink} to="/">
-            <img src="/assets/Pathway_logo_small.png" alt="Pathways" />
-          </Link>
+        <div>
+          <img
+            src="/assets/Pathway_logo_small.png"
+            alt="Pathways"
+            className={styles.pathwaysLogo}
+          />
         </div>
+
         <div className={styles.navLinksContainer}>
-          <Link className={styles.navLink} to="/student/assessments">
+          <Link
+            className={
+              location.pathname === "/student/assessments"
+                ? styles.activeNavLink
+                : styles.navLink
+            }
+            to="/student/assessments"
+          >
             Assessments
           </Link>
-          <Link className={styles.navLink} to="/student/records">
+          <Link
+            className={
+              location.pathname === "/student"
+                ? styles.activeNavLink
+                : styles.navLink
+            }
+            to="/student"
+          >
             Records
           </Link>
-          <Link className={styles.navLink} to="/student/mentors">
+          <Link
+            className={
+              location.pathname === "/student/mentors"
+                ? styles.activeNavLink
+                : styles.navLink
+            }
+            to="/student/mentors"
+          >
             Mentors
           </Link>
-          <Link className={styles.navLink} to="/student/contact-us">
+          <Link
+            className={
+              location.pathname === "/student/contact-us"
+                ? styles.activeNavLink
+                : styles.navLink
+            }
+            to="/student/contact-us"
+          >
             Contact Us
           </Link>
-        </div>
-        <div className={styles.profileContainer}>
+
           <img
             src="/assets/Doorbell.svg"
             alt="NotificationBell"
-            className={styles.LogoLink}
+            className={styles.logoLink}
           />
-          <Link className={styles.LogoLink} to="/student/profile">
-            <img src="/assets/Avatars.png" alt="profile" />
-          </Link>
+          <ProfilePopover classname={styles.logoLink} />
         </div>
       </nav>
       <Outlet />
     </Fragment>
   );
 }
+
+export default StudentNavbar;
