@@ -1,12 +1,13 @@
 import axios from "axios";
 
-const FROM_ADDRESS = "pathways.mentoring@outlook.com";
+const FROM_ADDRESS = process.env.SENDGRID_FROM_ADDRESS ?? "";
 const SENGRID_API_KEY = process.env.SENDGRID_API_KEY ?? "";
-const EMAIL_SEND_URL = "https://api.sendgrid.com/v3/mail/send";
-const RESET_PASSWORD_TEMPLATE_ID = "d-b93007c3d5ec4969aa37328c721b183d";
+const EMAIL_SEND_URL = process.env.SENDGRID_EMAIL_SEND_URL ?? "";
 
 async function sendResetPasswordEmail(toEmail: string, accessToken: string) {
   try {
+    const RESET_PASSWORD_TEMPLATE_ID =
+      process.env.RESET_PASSWORD_TEMPLATE_ID ?? "";
     const email = {
       from: {
         email: FROM_ADDRESS,

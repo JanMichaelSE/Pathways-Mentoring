@@ -98,7 +98,7 @@ async function httpSignupMentor(mentor) {
 }
 
 async function httpLogout() {
-  let userToReturn = {
+  let responseToReturn = {
     hasError: false,
     data: null,
     errorMessage: "",
@@ -106,16 +106,65 @@ async function httpLogout() {
 
   try {
     const response = await axios.post("/auth/logout");
-    userToReturn.data = response.data;
+    responseToReturn.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
     if (typeof errorResponse.error.errorCode == "number") {
-      userToReturn.hasError = true;
-      userToReturn.errorMessage = errorResponse.error.errorMessage;
+      responseToReturn.hasError = true;
+      responseToReturn.errorMessage = errorResponse.error.errorMessage;
     }
   }
 
-  return userToReturn;
+  return responseToReturn;
 }
 
-export { httpLogin, httpSignupStudent, httpSignupMentor, httpLogout };
+async function httpForgotPassword(email) {
+  let responseToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+
+  try {
+    const response = await axios.post("/auth/forgotPassword", { email });
+    responseToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    if (typeof errorResponse.error.errorCode == "number") {
+      responseToReturn.hasError = true;
+      responseToReturn.errorMessage = errorResponse.error.errorMessage;
+    }
+  }
+
+  return responseToReturn;
+}
+
+async function httpResetPassword(password) {
+  let responseToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+
+  try {
+    const response = await axios.post("/auth/resetPassword", { password });
+    responseToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    if (typeof errorResponse.error.errorCode == "number") {
+      responseToReturn.hasError = true;
+      responseToReturn.errorMessage = errorResponse.error.errorMessage;
+    }
+  }
+
+  return responseToReturn;
+}
+
+export {
+  httpLogin,
+  httpSignupStudent,
+  httpSignupMentor,
+  httpLogout,
+  httpForgotPassword,
+  httpResetPassword,
+};

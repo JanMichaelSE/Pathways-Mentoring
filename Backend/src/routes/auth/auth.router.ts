@@ -5,6 +5,7 @@ import {
   httpLogout,
   httpRefreshToken,
   httpResetPassword,
+  httpForgotPassword,
   httpSignupMentor,
   httpSignupStudent,
 } from "./auth.controller";
@@ -21,6 +22,8 @@ router.post("/signup/student", httpSignupStudent);
 
 router.post("/signup/mentor", httpSignupMentor);
 
-router.post("/resetPassword", httpResetPassword);
+router.post("/forgotPassword", httpForgotPassword);
+
+router.post("/resetPassword", authenticateJsonWebToken, httpResetPassword);
 
 export default router;
