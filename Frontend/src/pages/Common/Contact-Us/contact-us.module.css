@@ -1,9 +1,16 @@
+.container {
+  background-color: var(--color-white);
+  height: 92vh;
+  max-width: var(--responsive-screen-max-width);
+  margin: auto;
+}
+
 .heading {
-    font-size: 2em;
-    font-weight: bold;
-    color: var(--color-blue-dark);
+  font-size: var(--font-size-heading);
+  font-weight: bold;
+  color: var(--color-blue-dark);
 }
 
 .background {
-    background-color: var(--color-white);
+  background-color: var(--color-white);
 }
