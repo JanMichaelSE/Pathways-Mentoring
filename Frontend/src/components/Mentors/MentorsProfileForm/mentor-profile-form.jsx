@@ -132,7 +132,13 @@ function MentorProfileForm() {
             .oneOf(["Male", "Female", "Other"])
             .required("Gender is required"),
           academicDegree: Yup.string().required(),
-          description: Yup.string().required("Description is required"),
+          description: Yup.string()
+            .test(
+              "len",
+              "Max character limit of 1500 reached.",
+              (val) => val.length < 1500
+            )
+            .required("Description is required"),
           department: Yup.string().required("Department is required"),
           facultyStatus: Yup.string().required("Faculty Status is required"),
           office: Yup.string().required("Office is required"),
@@ -272,6 +278,7 @@ function MentorProfileForm() {
                 height: "150px",
                 backgroundColor: "var(--color-white)",
               }}
+              name="description"
               size={"md"}
               resize={"none"}
               placeholder="Here is a sample placeholder"
