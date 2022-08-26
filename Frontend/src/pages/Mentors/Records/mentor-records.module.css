@@ -1,0 +1,11 @@
+.gridSpace {
+  max-width: var(--responsive-screen-max-width);
+  margin: 0 auto;
+}
+
+.emptyGridSpace {
+    max-width: var(--responsive-screen-max-width);
+    margin: 0 auto;
+    background-color: var(--color-white);
+    width: 100%;
+  }

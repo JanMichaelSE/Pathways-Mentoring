@@ -37,11 +37,11 @@ function AuthRouter() {
       <Route
         path="/mentor/*"
         element={
-          <AuthProtectedRoute>
-            <RoleProtectedRoute mode="Mentor">
+          // <AuthProtectedRoute>
+          //   <RoleProtectedRoute mode="Mentor">
               <MentorRouter />
-            </RoleProtectedRoute>
-          </AuthProtectedRoute>
+          //   </RoleProtectedRoute>
+          // </AuthProtectedRoute>
         }
       />
     </Routes>
