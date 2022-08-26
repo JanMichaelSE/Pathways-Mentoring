@@ -1,5 +1,4 @@
-import styles from "./forgotpwd-lojin-popup.module.css";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
@@ -16,6 +15,9 @@ import {
   HStack,
   useToast,
 } from "@chakra-ui/react";
+import { httpForgotPassword } from "@/api/user.api";
+
+import styles from "./forgotpwd-lojin-popup.module.css";
 
 function ForgotPwdLoginPopup() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -23,8 +25,8 @@ function ForgotPwdLoginPopup() {
   const toast = useToast();
   const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
 
-  async function handleEmailSubmit(studentInfo) {
-    const userResponse = await httpLogin(studentInfo);
+  async function handleEmailSubmit(userInfo) {
+    const userResponse = await httpForgotPassword(userInfo.email);
 
     if (userResponse.hasError) {
       return toast({
@@ -35,8 +37,14 @@ function ForgotPwdLoginPopup() {
       });
     }
 
-    setUser(userResponse.data.email, userResponse.data.role);
-    setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
+    toast({
+      description:
+        "Reset Password Email Has Been Sent! Please check your inbox.",
+      status: "success",
+      position: "top",
+      duration: 5000,
+    });
+    onClose();
   }
   function inputWidth() {
     return isLessThan1135 ? "22rem" : "25rem";
@@ -88,7 +96,7 @@ function ForgotPwdLoginPopup() {
                   .required("Email is required"),
               })}
               onSubmit={async (values) => {
-                await handleEmailSubmit(value);
+                await handleEmailSubmit(values);
               }}
             >
               <Form style={{ margin: "auto" }}>

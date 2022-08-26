@@ -53,10 +53,24 @@ async function findUserByEmail(email: string): Promise<User | null> {
   }
 }
 
+async function findUserById(userId: string): Promise<User | null> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function updateUserPassword(
   user: User,
   newPassword: string
-): Promise<User | IErrorResponse> {
+): Promise<User> {
   try {
     let salt: string = generateSalt(32);
     let hashedPassword: string = sha512(newPassword, salt);
@@ -71,7 +85,15 @@ async function updateUserPassword(
       },
     });
 
-    return updatedUser;
+    const userToReturn = excludeFields(
+      updatedUser,
+      "id",
+      "password",
+      "passwordSalt",
+      "accessToken",
+      "refreshToken"
+    );
+    return userToReturn;
   } catch (error) {
     throw error;
   }
@@ -161,7 +183,6 @@ async function updateUserTokens(
 }
 
 // --- Utility Functions ---
-
 async function validateProfileUpdate(
   userInfo: IUser
 ): Promise<User | IErrorResponse> {
@@ -225,6 +246,7 @@ function sha512(password: string, salt: string) {
 export {
   createUser,
   findUserByEmail,
+  findUserById,
   updateUserPassword,
   updateUserEmail,
   isUserAuthorized,
