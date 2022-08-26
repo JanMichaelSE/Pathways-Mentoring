@@ -9,7 +9,7 @@ async function httpLogin(user) {
 
   try {
     const userInfo = {
-      email: user.email,
+      email: user.email.toLowerCase(),
       password: user.password,
     };
 
@@ -34,12 +34,12 @@ async function httpSignupStudent(student) {
   };
 
   try {
-    const name = `${student.firstName} ${student.lastName}`;
+    const name = `${student.firstName}; ${student.lastName}`;
 
     const studentInfo = {
       name: name,
       password: student.password,
-      email: student.email,
+      email: student.email.toLowerCase(),
       role: "student",
       phone: student.phone,
       gender: student.gender,
@@ -69,12 +69,12 @@ async function httpSignupMentor(mentor) {
   };
 
   try {
-    const name = `${mentor.firstName} ${mentor.lastName}`;
+    const name = `${mentor.firstName}; ${mentor.lastName}`;
 
     const mentorInfo = {
       name: name,
       password: mentor.password,
-      email: mentor.email,
+      email: mentor.email.toLowerCase(),
       role: "mentor",
       phone: mentor.phone,
       gender: mentor.gender,
@@ -151,7 +151,7 @@ async function httpUpdateStudent(student) {
     const studentInfo = {
       userId: student.userId,
       name: name,
-      email: student.email,
+      email: student.email.toLowerCase(),
       phone: student.phone,
       gender: student.gender,
       currentPassword: student.currentPassword,
@@ -209,7 +209,7 @@ async function httpUpdateMentor(mentor) {
     const mentorInfo = {
       userId: mentor.userId,
       name: name,
-      email: mentor.email,
+      email: mentor.email.toLowerCase(),
       phone: mentor.phone,
       gender: mentor.gender,
       currentPassword: mentor.currentPassword,
