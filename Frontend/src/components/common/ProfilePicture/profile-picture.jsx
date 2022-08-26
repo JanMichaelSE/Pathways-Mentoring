@@ -4,7 +4,7 @@ import styles from "./profile-picture.module.css";
 
 function ProfilePicture({ ...props }) {
   const pictureData = useUserStore((state) => state.pictureData);
-  if (pictureData == "") {
+  if (pictureData == null) {
     return <Image boxSize="200px" src="/assets/profile-avatar.svg"></Image>;
   } else {
     return (
