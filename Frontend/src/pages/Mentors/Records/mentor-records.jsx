@@ -11,10 +11,12 @@ import styles from "./mentor-records.module.css";
 
 function MentorRecords() {
   let recordData =  [
-      {"id": "1","name": "Identify Subject", "date": "6/15/2022","student": "Jan Montalvo", "rating": 5},
-      {"id": "2","name": "Identify Subject", "date": "6/15/2022","student": "Jan Montalvo", "rating": 100}, 
-      {"id": "3","name": "Identify Subject", "date": "6/15/2022","student": "Jan Montalvo", "rating": 50},
-      {"id": "4","name": "Identify Subject", "date": "6/15/2022","student": "Jan Montalvo", "rating": 5},
+      {"id": "1","name": "Identify Subject", "date": "6/10/2022","student": "Jessica Quintana", "rating": 100},
+      {"id": "2","name": "Research Literature", "date": "6/15/2022","student": "Jessica Quintana", "rating": 50}, 
+      {"id": "3","name": "Define Methodology", "date": "6/18/2022","student": "Jessica Quintana", "rating": 50},
+      {"id": "4","name": "Run Experiment / Fieldwork", "date": "6/22/2022","student": "Jessica Quintana", "rating": 5},
+      {"id": "5","name": "Gather Data", "date": "6/25/2022", "student": "Jessica Quintana", "rating": 5},
+      {"id": "5","name": "Analyze", "date": "6/30/2022", "student": "Jessica Quintana", "rating": 5},
   ]
 
 
