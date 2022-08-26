@@ -3,8 +3,11 @@ import { Request, Response } from "express";
 import { createStudent } from "../../models/students.model";
 import {
   createUser,
+  findUserByEmail,
+  findUserById,
   getUserTokens,
   isUserAuthorized,
+  updateUserPassword,
   updateUserTokens,
 } from "../../models/users.model";
 import { createMentor } from "../../models/mentors.model";
@@ -23,6 +26,7 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "../../services/auth.service";
+import { sendResetPasswordEmail } from "../../services/mail.service";
 
 async function httpLogin(req: Request, res: Response) {
   try {
@@ -267,10 +271,71 @@ async function httpRefreshToken(req: Request, res: Response) {
   }
 }
 
+async function httpForgotPassword(req: Request, res: Response) {
+  try {
+    const email = req.body.email;
+
+    if (!email) {
+      return handleBadRequestResponse(
+        "Can't reset password without providing an email address.",
+        res
+      );
+    }
+
+    const user = await findUserByEmail(email);
+    if (!user) {
+      return handleBadRequestResponse(
+        "Couldn't find user in the system. Please provide valid email address.",
+        res
+      );
+    }
+
+    const accessToken = generateAccessToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
+    await updateUserTokens(user.id, accessToken, refreshToken);
+    await sendResetPasswordEmail(email, accessToken);
+
+    return res
+      .status(200)
+      .json({ status: 200, message: "Reset Password Email has been sent." });
+  } catch (error) {
+    return handleErrorResponse("forgot password", error, res);
+  }
+}
+
+async function httpResetPassword(req: Request, res: Response) {
+  try {
+    const userId = req.userId;
+    const password = req.body.password;
+
+    if (!userId && !password) {
+      return handleBadRequestResponse(
+        "Can't reset password without providing an email address.",
+        res
+      );
+    }
+
+    const user = await findUserById(userId);
+    if (!user) {
+      return handleBadRequestResponse(
+        "Couldn't find user in the system. Please provide valid Access Token",
+        res
+      );
+    }
+
+    const updatePasswordResponse = await updateUserPassword(user, password);
+    return res.status(200).json(updatePasswordResponse);
+  } catch (error) {
+    return handleErrorResponse("reset password", error, res);
+  }
+}
+
 export {
   httpLogin,
   httpSignupStudent,
   httpSignupMentor,
   httpLogout,
   httpRefreshToken,
+  httpForgotPassword,
+  httpResetPassword,
 };

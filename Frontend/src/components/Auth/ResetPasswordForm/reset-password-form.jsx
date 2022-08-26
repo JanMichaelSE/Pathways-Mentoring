@@ -1,40 +1,34 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Formik, Form, ErrorMessage } from "formik";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useToast } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
+import { useUserStore } from "@/store/user.store";
 
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
-
 import lockIcon from "@/assets/secure-icon.svg";
-import styles from "./reset-password-form.module.css";
 
-import { httpLogin } from "@/api/user.api";
-import { useUserStore } from "@/store/user.store";
+import { httpResetPassword } from "@/api/user.api";
+
+import styles from "./reset-password-form.module.css";
 
 function ResetPasswordForm() {
   const navigate = useNavigate();
-  const role = useUserStore((state) => state.role);
-  const setUser = useUserStore((state) => state.setUser);
+  const [searchParams, setSearchParams] = useSearchParams();
   const setTokens = useUserStore((state) => state.setTokens);
 
   const toast = useToast();
   const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
 
   useEffect(() => {
-    if (role == "Student") {
-      navigate("../student", { replace: true });
-    } else if (role == "Mentor") {
-      navigate("../mentor", { replace: true });
-    } else if (role == "Admin") {
-      navigate("../admin", { replace: true });
-    }
-  }, [role]);
+    const accessToken = searchParams.get("token");
+    setTokens(accessToken, "");
+  }, []);
 
-  async function handleSubmit(studentInfo) {
-    const userResponse = await httpLogin(studentInfo);
+  async function handleResetPasswordSubmit(studentInfo) {
+    const userResponse = await httpResetPassword(studentInfo.password);
 
     if (userResponse.hasError) {
       return toast({
@@ -45,8 +39,14 @@ function ResetPasswordForm() {
       });
     }
 
-    setUser(userResponse.data.email, userResponse.data.role);
-    setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
+    toast({
+      description: "Password has been reset! You may now login.",
+      status: "success",
+      position: "top",
+      duration: 5000,
+    });
+
+    navigate("../", { replace: true });
   }
 
   function inputWidth() {
@@ -70,7 +70,7 @@ function ResetPasswordForm() {
         ),
       })}
       onSubmit={async (values) => {
-        await handleSubmit(values);
+        await handleResetPasswordSubmit(values);
       }}
     >
       <Form>
