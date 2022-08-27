@@ -62,6 +62,7 @@ function ProfilePopover() {
               <Link
                 className={styles.profileHeader}
                 to={`/${role.toLowerCase()}/profile`}
+                onClick={onClose}
               >
                 Profile
               </Link>

@@ -18,6 +18,16 @@
   margin-right: 2rem;
 }
 
+.inputContainer {
+  display: grid;
+  grid-template-columns: max-content max-content max-content;
+  column-gap: 40px;
+  row-gap: 40px;
+  justify-content: space-around;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
 /* Search Input Styles Component*/
 .input-search {
   font-size: var(--font-size-regular);
@@ -80,21 +90,59 @@ h1 #editbutton {
   align-items: center;
 }
 
-.line:before {
+#personal-info:before {
   content: "";
   display: inline-block;
-  width: 31rem;
+  width: 40rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
-  margin-right: 80px;
+  margin-right: auto;
+  margin-left: 30px;
 }
-.line:after {
+#personal-info:after {
   content: "";
   display: inline-block;
-  width: 31rem;
+  width: 40rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
-  margin-left: 80px;
+  margin-left: auto;
+  margin-right: 30px;
+}
+#changePassword:before {
+  content: "";
+  display: inline-block;
+  width: 41.7rem;
+  height: 3px;
+  background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
+  margin-right: auto;
+  margin-left: 30px;
+}
+#changePassword:after {
+  content: "";
+  display: inline-block;
+  width: 41.7rem;
+  height: 3px;
+  background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
+  margin-left: auto;
+  margin-right: 30px;
+}
+#academicInfo:before {
+  content: "";
+  display: inline-block;
+  width: 39.5rem;
+  height: 3px;
+  background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
+  margin-right: auto;
+  margin-left: 30px;
+}
+#academicInfo:after {
+  content: "";
+  display: inline-block;
+  width: 39.5rem;
+  height: 3px;
+  background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
+  margin-left: auto;
+  margin-right: 30px;
 }
 
 .avatarContainerModal {
@@ -111,12 +159,35 @@ h1 #editbutton {
   cursor: pointer;
 }
 
-/*img {
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-  }*/
-@media only screen and (max-width: 950px) {
+@media only screen and (max-width: 1420px) {
+  #personal-info:before {
+    width: 24.3rem;
+  }
+  #personal-info:after {
+    width: 24.3rem;
+  }
+  #changePassword:before {
+    width: 26rem;
+  }
+  #changePassword:after {
+    width: 26rem;
+  }
+  #academicInfo:before {
+    width: 23.8rem;
+  }
+  #academicInfo:after {
+    width: 23.8rem;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .inputContainer {
+    display: grid;
+    grid-template-columns: max-content max-content max-content;
+    column-gap: 20px;
+    row-gap: 40px;
+    justify-content: space-evenly;
+  }
   .form-input {
     justify-content: space-between;
   }

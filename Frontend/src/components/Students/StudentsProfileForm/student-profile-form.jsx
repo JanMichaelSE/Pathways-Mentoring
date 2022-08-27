@@ -10,7 +10,7 @@ import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
 import styles from "./student-profile-form.module.css";
-import { SimpleGrid, Box } from "@chakra-ui/react";
+import { SimpleGrid, Box, useMediaQuery } from "@chakra-ui/react";
 import ProfileChangerPopOver from "@/components/common/ProfileChangerPopOver/profile-changer-popover";
 import ProfilePicture from "@/components/common/ProfilePicture/profile-picture";
 
@@ -26,6 +26,8 @@ function StudentProfileForm() {
   const [dataFirstName, setDataFirstName] = useState("");
   const [dataLastName, setDataLastName] = useState("");
 
+  const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
+  const [isLessThan1420] = useMediaQuery("(max-width: 1420px)");
   // using Zustand to update selected element, set on file of popover,  getter on file of profile picture
   // define a set on student profile form pass
   // think about submitting a picture, if condition found in profile-picture
@@ -58,7 +60,6 @@ function StudentProfileForm() {
       setClose("X");
     }
   }
-  //ClickImage was here
 
   async function handleSubmit(studentInfo) {
     const studentInfoWithID = {
@@ -81,6 +82,36 @@ function StudentProfileForm() {
       userResponse.data.email,
       userResponse.data.role
     );
+  }
+
+  function inputWidth() {
+    if (isLessThan1135) {
+      return "14rem";
+    } else if (isLessThan1420) {
+      return "20rem";
+    } else {
+      return "26rem";
+    }
+  }
+
+  function inputWidthField() {
+    if (isLessThan1135) {
+      return "18rem";
+    } else if (isLessThan1420) {
+      return "20rem";
+    } else {
+      return "26rem";
+    }
+  }
+
+  function inputWidthAcademic() {
+    if (isLessThan1135) {
+      return "10rem";
+    } else if (isLessThan1420) {
+      return "20rem";
+    } else {
+      return "26rem";
+    }
   }
 
   return (
@@ -160,7 +191,7 @@ function StudentProfileForm() {
             <ProfileChangerPopOver name="profilePicture" edit={edit} />
           </div>
 
-          <h1 className={styles.line}>
+          <h1 className={styles.line} id={styles.personalInfo}>
             <img
               className={styles.lineImg}
               src="/assets/more-info.svg"
@@ -170,18 +201,13 @@ function StudentProfileForm() {
           </h1>
 
           {/* <div className={styles.formInput}> */}
-          <SimpleGrid
-            columns={3}
-            spacing={"40px"}
-            justifyItems={"center"}
-            p={"50px"}
-          >
+          <div className={styles.inputContainer}>
             <Box>
               <Input
                 label="First Name"
                 name="firstName"
                 type="text"
-                width={400}
+                width={inputWidth()}
                 disabled={edit}
               />
             </Box>
@@ -190,7 +216,7 @@ function StudentProfileForm() {
                 label="Last Name"
                 name="lastName"
                 type="text"
-                width={400}
+                width={inputWidth()}
                 disabled={edit}
               />
             </Box>
@@ -199,7 +225,7 @@ function StudentProfileForm() {
                 label="Email"
                 name="email"
                 type="text"
-                width={400}
+                width={inputWidth()}
                 disabled={edit}
               />
             </Box>
@@ -208,7 +234,7 @@ function StudentProfileForm() {
                 label="Phone"
                 name="phone"
                 type="tel"
-                width={400}
+                width={inputWidth()}
                 disabled={edit}
               />
             </Box>
@@ -216,7 +242,7 @@ function StudentProfileForm() {
               <Select
                 label="Gender"
                 name="gender"
-                style={{ width: 350 }}
+                style={{ width: inputWidth() }}
                 disabled={edit}
               >
                 <option value="">Select Option</option>
@@ -225,9 +251,9 @@ function StudentProfileForm() {
                 <option value="Other">Other</option>
               </Select>
             </Box>
-          </SimpleGrid>
+          </div>
           {/* </div> */}
-          <h1 className={styles.line}>
+          <h1 className={styles.line} id={styles.changePassword}>
             <img
               className={styles.lineImg}
               src="/assets/password-icon.svg"
@@ -235,30 +261,30 @@ function StudentProfileForm() {
             ></img>
             Change Password
           </h1>
-          <div className={styles.formInput}>
+          <div className={styles.inputContainer}>
             <Input
               label="Current Password"
               name="currentPassword"
               type="password"
-              width={350}
+              width={inputWidth()}
               disabled={edit}
             />
             <Input
               label="Password"
               name="password"
               type="password"
-              width={350}
+              width={inputWidth()}
               disabled={edit}
             />
             <Input
               label="Confirm Password"
               name="confirmPassword"
               type="password"
-              width={350}
+              width={inputWidth()}
               disabled={edit}
             />
           </div>
-          <h1 className={styles.line}>
+          <h1 className={styles.line} id={styles.academicInfo}>
             <img
               className={styles.lineImg}
               src="/assets/academic-icon.svg"
@@ -266,11 +292,11 @@ function StudentProfileForm() {
             ></img>
             Academic Information
           </h1>
-          <div className={styles.formInput}>
+          <div className={styles.inputContainer}>
             <Select
               label="Field Of Study"
               name="fieldOfStudy"
-              style={{ width: 350 }}
+              style={{ width: inputWidthField() }}
               disabled={edit}
             >
               <option value="">Select Option</option>
@@ -298,14 +324,14 @@ function StudentProfileForm() {
               label="Institution"
               name="institution"
               type="institution"
-              width={350}
+              width={inputWidthAcademic()}
               disabled={edit}
             />
             <Input
               label="GPA"
               name="gpa"
               type="numeric"
-              width={350}
+              width={inputWidthAcademic()}
               disabled={edit}
             />
           </div>

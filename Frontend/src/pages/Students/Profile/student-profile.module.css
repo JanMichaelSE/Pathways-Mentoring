@@ -1,12 +1,12 @@
 .container {
-  height: 175vh;
+  height: auto;
   padding: 20px;
   background-color: var(--color-white);
 }
 
 .containerForm {
   width: 100%;
-  height: 90rem;
+  height: 95rem;
   border-radius: 30px;
   background-color: white;
 }
@@ -17,4 +17,10 @@
 button {
   margin: 30px;
   width: 100px;
+}
+
+@media only screen and (max-width: 1135px) {
+  .containerForm {
+    height: 96rem;
+  }
 }
