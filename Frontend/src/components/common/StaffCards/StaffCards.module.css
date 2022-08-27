@@ -1,5 +1,5 @@
 .heading {
-    font-size: 2em;
-    font-weight: bold;
-    color: var(--color-blue-dark);
+  font-size: var(--font-size-heading);
+  font-weight: bold;
+  color: var(--color-blue-dark);
 }

@@ -27,7 +27,7 @@ export default function StaffCard({ cardData }) {
 
   return (
     <>
-      <Center onClick={onOpen} py={6}>
+      <Center onClick={onOpen} py={6} cursor={"pointer"}>
         <Box
           px={20}
           pt={5}

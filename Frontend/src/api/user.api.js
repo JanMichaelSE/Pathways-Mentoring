@@ -160,6 +160,29 @@ async function httpResetPassword(password) {
   return responseToReturn;
 }
 
+async function httpSendContactForm(contactInfo) {
+  let responseToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+
+  try {
+    const response = await axios.post("/contact-us", contactInfo);
+    responseToReturn.data = response.data;
+    console.log("Response: ", responseToReturn.data);
+  } catch (error) {
+    console.log("Error Response: ", error);
+    const errorResponse = error.response.data;
+    if (typeof errorResponse.error.errorCode == "number") {
+      responseToReturn.hasError = true;
+      responseToReturn.errorMessage = errorResponse.error.errorMessage;
+    }
+  }
+
+  return responseToReturn;
+}
+
 async function httpGetStudentbyID() {
   let userToReturn = {
     hasError: false,
@@ -288,6 +311,7 @@ export {
   httpLogout,
   httpForgotPassword,
   httpResetPassword,
+  httpSendContactForm,
   httpGetStudentbyID,
   httpUpdateStudent,
   httpGetMentorbyID,
