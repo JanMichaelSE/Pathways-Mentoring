@@ -10,7 +10,7 @@ import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
 import styles from "./student-profile-form.module.css";
-import { SimpleGrid, Box, useMediaQuery } from "@chakra-ui/react";
+import { Box, useMediaQuery } from "@chakra-ui/react";
 import ProfileChangerPopOver from "@/components/common/ProfileChangerPopOver/profile-changer-popover";
 import ProfilePicture from "@/components/common/ProfilePicture/profile-picture";
 
@@ -77,11 +77,15 @@ function StudentProfileForm() {
       });
     }
 
-    setUser(
-      userResponse.data.userId,
-      userResponse.data.email,
-      userResponse.data.role
-    );
+    // setUser(userResponse.data.email);
+    onEdit();
+    return toast({
+      title: "Update Success!",
+      description: "The changes were made.",
+      status: "success",
+      position: "top",
+      duration: 7000,
+    });
   }
 
   function inputWidth() {
