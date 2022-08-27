@@ -1,22 +1,23 @@
 import { Box, Grid, GridItem, HStack, Image, Text } from "@chakra-ui/react";
-import StaffCards from "../../../components/common/StaffCards/StaffCards";
-import ContactUsForm from "../../../components/common/ContactForm/Contact-US-Form";
+import StaffCards from "@/components/common/StaffCards/StaffCards";
+import ContactUsForm from "@/components/common/ContactForm/Contact-US-Form";
 import styles from "./contact-us.module.css";
 
 function ContactUs() {
   return (
-    <div style={{flex: 1, backgroundColor: "#f1f8fc", height: "92vh"}}>
-      <Grid templateColumns="repeat(10, 1fr)" gap={2} >
-        <GridItem justifyContent={"center"} colSpan={6} mt={6}>
+    <div className={styles.container}>
+      <Grid templateColumns="repeat(10, 1fr)" gap={2}>
+        <GridItem justifyContent={"center"} colSpan={7} mt={6}>
           <Box
-            w={"full"}
-            h={"3xl"}
+            w={"100%"}
+            maxWidth={"991px"}
+            h={"100%"}
             bg={"#FFFFFF"}
             boxShadow={"2xl"}
             rounded={"lg"}
             p={10}
             textAlign={"center"}
-            ml={7}
+            mx={"auto"}
           >
             <HStack>
               <Image
@@ -30,7 +31,7 @@ function ContactUs() {
             <ContactUsForm />
           </Box>
         </GridItem>
-        <GridItem colSpan={4}>
+        <GridItem colSpan={3} mt={6}>
           <StaffCards />
         </GridItem>
       </Grid>
