@@ -1,15 +1,17 @@
-import { Box, Grid, GridItem, HStack, Image, Text } from "@chakra-ui/react";
+import { Box, Grid, GridItem, HStack, Image, Text, useMediaQuery} from "@chakra-ui/react";
 import StaffCards from "@/components/common/StaffCards/StaffCards";
 import ContactUsForm from "@/components/common/ContactForm/Contact-US-Form";
 import styles from "./contact-us.module.css";
 
+
 function ContactUs() {
+  const [isLargerThan940] = useMediaQuery('(min-width: 940px)')
   return (
     <div className={styles.container}>
       <Grid templateColumns="repeat(10, 1fr)" gap={2}>
-        <GridItem justifyContent={"center"} colSpan={7} mt={6}>
+        <GridItem justifyContent={"center"} colSpan={isLargerThan940 ? 7 : 10} mt={6}>
           <Box
-            w={"100%"}
+            w={isLargerThan940 ? "100" : "87%"}
             maxWidth={"991px"}
             h={"100%"}
             bg={"#FFFFFF"}
@@ -31,7 +33,7 @@ function ContactUs() {
             <ContactUsForm />
           </Box>
         </GridItem>
-        <GridItem colSpan={3} mt={6}>
+        <GridItem colSpan={isLargerThan940 ? 3 : 10} mt={6}>
           <StaffCards />
         </GridItem>
       </Grid>
