@@ -3,10 +3,11 @@ import {
   Box,
   HStack,
   SimpleGrid,
-  Text
+  Text,
+  Image
 } from "@chakra-ui/react";
 
-import Record from "../../../components/Students/Record/StudentRecord";
+import StudentRecord from "../../../components/Students/Record/StudentRecord";
 import styles from "./student-records.module.css";
 
 function StudentRecords() {
@@ -22,8 +23,15 @@ function StudentRecords() {
 
   return (
     <div style={{flex: 1, backgroundColor: "#f1f8fc", height: "92vh"}}>
-      <HStack align={"right"}>
-        
+      <HStack justifyContent={"end"} pt={15}>
+        <div className={styles.lastButton}>
+          <HStack justifyContent={"center"} alignContent={"center"}>
+            <Text>
+              Filter
+            </Text>
+            <Image src='../../assets/Filter.png' alt='Filter Icon' />
+          </HStack>
+        </div>
       </HStack>
       <SimpleGrid columns={[1, 2, 3]} spacing='40px' className={styles.gridSpace}>
       {recordData.length === 0 ?
@@ -35,7 +43,7 @@ function StudentRecords() {
         </Box>
         :
         recordData?.map((record) => (
-          <Record key={record.id} recordData={record}/>
+          <StudentRecord key={record.id} recordData={record}/>
         ))
       }
       
