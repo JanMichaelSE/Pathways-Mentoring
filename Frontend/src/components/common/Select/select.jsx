@@ -11,9 +11,15 @@ function Select({ label, ...props }) {
   }
 
   function labelStyles() {
-    return meta.touched && meta.error
-      ? `${styles.label} label-error`
-      : styles.label;
+    let classNames = styles.label;
+
+    if (meta.touched && meta.error) {
+      classNames += " label-error";
+    }
+    if (props.isBlue) {
+      classNames += " " + styles.blueFont;
+    }
+    return classNames;
   }
 
   return (

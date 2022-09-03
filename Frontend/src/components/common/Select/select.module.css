@@ -7,6 +7,10 @@
   margin-left: 20px;
 }
 
+.blue-font {
+  color: var(--color-blue-dark);
+}
+
 .select {
   -webkit-appearance: none;
   -moz-appearance: none;
