@@ -1,10 +1,11 @@
 import { Field, useField, ErrorMessage } from "formik";
-import styles from "./inputMessage.module.css";
-import { phoneFormat } from "@/utils/helpers";
+import styles from "./InputMessage.module.css";
+import { useState } from "react";
 
-function InputMessage({ label, imgUrl, ...props }) {
+function InputMessage({ label, bottomCount, countNumber, ...props }) {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
+  const [count, setCount] = useState(countNumber);
 
   function inputStyles() {
     let classNames = styles.input;
@@ -12,46 +13,49 @@ function InputMessage({ label, imgUrl, ...props }) {
     if (meta.touched && meta.error) {
       classNames += " input-error";
     }
-    if (imgUrl) {
-      classNames += " " + styles.inputImg;
-    }
 
     return classNames;
   }
 
   function labelStyles() {
-    return meta.touched && meta.error
-      ? `${styles.label} label-error`
-      : styles.label;
+    let classNames = styles.label;
+
+    if (meta.touched && meta.error) {
+      classNames += " label-error";
+    }
+    if (props.isBlue) {
+      classNames += " " + styles.blueFont;
+    }
+    return classNames;
   }
 
-  function formatInput(event) {
+  function setterCountInput(event) {
     const value = event.target.value;
-
-    if (props.type === "tel") {
-      return setValue(phoneFormat(value));
-    }
-
+    setCount(value.length);
     setValue(value);
   }
 
   return (
     <div>
       {label && (
-        <label className={labelStyles()} style={{textAlign: "left", color: "#0066cc"}} htmlFor={props.id || props.name}>
+        <label className={labelStyles()} htmlFor={props.id || props.name}>
           {label}
         </label>
       )}
-      <Field as="textarea"
+      <Field
+        as="textarea"
         className={inputStyles()}
-        style={{ width: props.width, backgroundImage: `url(${imgUrl})` }}
+        style={{ width: props.width }}
         {...field}
         {...props}
-        onChange={formatInput}
+        onChange={setterCountInput}
       />
       <span className={`error ${styles.errorContainer}`}>
         <ErrorMessage name={props.name} />
       </span>
+      {bottomCount && (
+        <p className={styles.inputCount}>{1500 - count} characters left</p>
+      )}
     </div>
   );
 }
