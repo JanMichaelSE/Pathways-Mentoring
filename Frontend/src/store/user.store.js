@@ -23,6 +23,11 @@ const vanillaUserStore = createVanillaStore(
           refreshToken: refreshToken,
         });
       },
+      setEmail: (email) => {
+        set({
+          email: email,
+        });
+      },
       setPictureData: (pictureData) => {
         set({
           pictureData: pictureData,
