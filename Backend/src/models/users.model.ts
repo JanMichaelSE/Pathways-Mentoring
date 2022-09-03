@@ -99,10 +99,7 @@ async function updateUserPassword(
   }
 }
 
-async function updateUserEmail(
-  user: User,
-  email: string
-): Promise<User | IErrorResponse> {
+async function updateUserEmail(user: User, email: string): Promise<User> {
   try {
     const updatedUser = await prisma.user.update({
       where: {
@@ -198,7 +195,7 @@ async function validateProfileUpdate(
     }
 
     // Validate if Email Already Exists
-    if (userInfo.email !== user.email) {
+    if (userInfo.email !== user.email && !!userInfo.email) {
       const userWithEmailExists = await findUserByEmail(userInfo.email);
       if (userWithEmailExists) {
         return buildErrorObject(400, "A user with this email already exists.");
