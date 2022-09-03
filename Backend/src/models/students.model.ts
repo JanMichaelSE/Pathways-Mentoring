@@ -86,6 +86,7 @@ async function findStudentByUserId(userId: string): Promise<Student | null> {
 
 async function updateStudent(
   id: string,
+  email: string,
   studentInfo: IStudent
 ): Promise<Student | IErrorResponse> {
   try {
@@ -95,16 +96,17 @@ async function updateStudent(
       },
       data: {
         name: !!studentInfo.name ? studentInfo.name : undefined,
+        email: !!email ? email : undefined,
         phone: !!studentInfo.phone ? studentInfo.phone : undefined,
         gender: !!studentInfo.gender ? studentInfo.gender : undefined,
-        fieldOfStudy: studentInfo.fieldOfStudy
+        fieldOfStudy: !!studentInfo.fieldOfStudy
           ? studentInfo.fieldOfStudy
           : undefined,
-        institution: studentInfo.institution
+        institution: !!studentInfo.institution
           ? studentInfo.institution
           : undefined,
         gpa: studentInfo.gpa,
-        graduationDate: studentInfo.graduationDate
+        graduationDate: !!studentInfo.graduationDate
           ? new Date(studentInfo.graduationDate)
           : undefined,
         profilePicture: studentInfo.profilePicture,

@@ -82,6 +82,7 @@ async function findMentorByEmail(email: string): Promise<Mentor | null> {
 
 async function updateMentor(
   id: string,
+  email: string,
   mentorInfo: IMentor
 ): Promise<Mentor | IErrorResponse> {
   try {
@@ -91,6 +92,7 @@ async function updateMentor(
       },
       data: {
         name: !!mentorInfo.name ? mentorInfo.name : undefined,
+        email: !!email ? email : undefined,
         phone: !!mentorInfo.phone ? mentorInfo.phone : undefined,
         gender: !!mentorInfo.gender ? mentorInfo.gender : undefined,
         description: mentorInfo.description,
