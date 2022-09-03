@@ -111,7 +111,9 @@ async function httpUpdateMentorProfile(req: Request, res: Response) {
       });
     }
 
-    await updateUserEmail(validatedUserResponse, userInfo.email);
+    if (userInfo.email) {
+      await updateUserEmail(validatedUserResponse, userInfo.email);
+    }
 
     if (userInfo.newPassword) {
       await updateUserPassword(validatedUserResponse, userInfo.newPassword);
@@ -119,6 +121,7 @@ async function httpUpdateMentorProfile(req: Request, res: Response) {
 
     const updateMentorResponse = await updateMentor(
       validatedMentorResponse.id,
+      userInfo.email,
       mentorInfo
     );
 

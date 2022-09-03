@@ -120,7 +120,9 @@ async function httpUpdateStudentProfile(req: Request, res: Response) {
       });
     }
 
-    await updateUserEmail(validatedUserResponse, userInfo.email);
+    if (userInfo.email) {
+      await updateUserEmail(validatedUserResponse, userInfo.email);
+    }
 
     if (userInfo.newPassword) {
       await updateUserPassword(validatedUserResponse, userInfo.newPassword);
@@ -128,6 +130,7 @@ async function httpUpdateStudentProfile(req: Request, res: Response) {
 
     const updateStudentResponse = await updateStudent(
       validatedStudentResponse.id,
+      userInfo.email,
       studentInfo
     );
 
