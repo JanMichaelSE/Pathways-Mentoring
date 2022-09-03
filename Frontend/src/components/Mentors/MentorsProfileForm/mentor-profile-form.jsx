@@ -1,19 +1,26 @@
 import { useEffect, useState, useRef } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useToast } from "@chakra-ui/react";
+import { Spinner, useToast } from "@chakra-ui/react";
 
 import { httpUpdateMentor, httpGetMentorbyID } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
 
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
+import InputMessage from "@/components/common/InputMessage/InputMessage";
 import Select from "@/components/common/Select/select";
 import styles from "./mentor-profile-form.module.css";
 import { Image, Flex, Center } from "@chakra-ui/react";
 import ProfileChangerPopOver from "@/components/common/ProfileChangerPopOver/profile-changer-popover";
 import ProfilePicture from "@/components/common/ProfilePicture/profile-picture";
-import { Textarea, Switch, SimpleGrid, Box } from "@chakra-ui/react";
+import {
+  Textarea,
+  Switch,
+  SimpleGrid,
+  Box,
+  useMediaQuery,
+} from "@chakra-ui/react";
 import TimePickerSelector from "@/components/common/TimePickerSelector/time-picker-selector";
 
 function MentorProfileForm() {
@@ -27,17 +34,17 @@ function MentorProfileForm() {
   const [close, setClose] = useState("Edit");
   const [dataFirstName, setDataFirstName] = useState("");
   const [dataLastName, setDataLastName] = useState("");
-  const [count, setCount] = useState(0);
+  const [countNumber, setCountNumber] = useState(0);
   const [switchValue, setSwitchValue] = useState(true);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
+  const [isLessThan1420] = useMediaQuery("(max-width: 1420px)");
 
   useEffect(() => {
     async function loadStudentProfileInfo() {
       const mentorInfo = await httpGetMentorbyID(userId);
-      setUserData(mentorInfo.data);
-      setPictureData(mentorInfo.data.profilePicture);
-      var [firstName, lastName] = mentorInfo.data.name.split("; ");
-      setDataFirstName(firstName);
-      setDataLastName(lastName);
 
       if (mentorInfo.hasError) {
         return toast({
@@ -47,6 +54,13 @@ function MentorProfileForm() {
           duration: 5000,
         });
       }
+      setUserData(mentorInfo.data);
+      setPictureData(mentorInfo.data.profilePicture);
+      var [firstName, lastName] = mentorInfo.data.name.split("; ");
+      setCountNumber(mentorInfo.data.description.length);
+      setDataFirstName(firstName);
+      setDataLastName(lastName);
+      setIsLoading(false);
     }
     loadStudentProfileInfo();
   }, []);
@@ -86,6 +100,60 @@ function MentorProfileForm() {
     );
   }
 
+  function inputWidth() {
+    if (isLessThan1135) {
+      return "12rem";
+    } else if (isLessThan1420) {
+      return "20rem";
+    } else {
+      return "26rem";
+    }
+  }
+
+  function inputMessageWidth() {
+    if (isLessThan1135) {
+      return "40rem";
+    } else if (isLessThan1420) {
+      return "60rem";
+    } else {
+      return "90rem";
+    }
+  }
+
+  function inputWidthField() {
+    if (isLessThan1135) {
+      return "18rem";
+    } else if (isLessThan1420) {
+      return "20rem";
+    } else {
+      return "26rem";
+    }
+  }
+
+  function inputWidthAcademic() {
+    if (isLessThan1135) {
+      return "10rem";
+    } else if (isLessThan1420) {
+      return "20rem";
+    } else {
+      return "26rem";
+    }
+  }
+  // if aqui antes de que el loade mi form va hacer el spinner
+  if (isLoading) {
+    return (
+      <Spinner
+        thickness="5px"
+        speed="0.65s"
+        emptyColor="gray.200"
+        color="blue.500"
+        size="xl"
+        position="absolute"
+        top="30%"
+        left="50%"
+      />
+    );
+  }
   return (
     <div className={styles.formContainer}>
       <Formik
@@ -136,7 +204,7 @@ function MentorProfileForm() {
             .test(
               "len",
               "Max character limit of 1500 reached.",
-              (val) => val.length < 1500
+              (val) => (val?.length || 0) < 1500
             )
             .required("Description is required"),
           department: Yup.string().required("Department is required"),
@@ -165,7 +233,7 @@ function MentorProfileForm() {
             <ProfileChangerPopOver name="profilePicture" edit={edit} />
           </div>
 
-          <h1 className={styles.line}>
+          <h1 className={styles.line} id={styles.personalInfo}>
             <img
               className={styles.lineImg}
               src="/assets/more-info.svg"
@@ -175,19 +243,15 @@ function MentorProfileForm() {
           </h1>
 
           {/* <div className={styles.formInput}> */}
-          <SimpleGrid
-            columns={3}
-            spacing={"40px"}
-            justifyItems={"center"}
-            p={"50px"}
-          >
+          <div className={styles.inputContainer}>
             <Box>
               <Input
                 label="First Name"
                 name="firstName"
                 type="text"
-                width={400}
+                width={inputWidth()}
                 disabled={edit}
+                isBlue={true}
               />
             </Box>
             <Box>
@@ -195,8 +259,9 @@ function MentorProfileForm() {
                 label="Last Name"
                 name="lastName"
                 type="text"
-                width={400}
+                width={inputWidth()}
                 disabled={edit}
+                isBlue={true}
               />
             </Box>
             <Box>
@@ -204,8 +269,9 @@ function MentorProfileForm() {
                 label="Email"
                 name="email"
                 type="text"
-                width={400}
+                width={inputWidth()}
                 disabled={edit}
+                isBlue={true}
               />
             </Box>
             <Box>
@@ -213,16 +279,18 @@ function MentorProfileForm() {
                 label="Phone"
                 name="phone"
                 type="tel"
-                width={400}
+                width={inputWidth()}
                 disabled={edit}
+                isBlue={true}
               />
             </Box>
             <Box>
               <Select
                 label="Gender"
                 name="gender"
-                style={{ width: 350 }}
+                style={{ width: inputWidth() }}
                 disabled={edit}
+                isBlue={true}
               >
                 <option value="">Select Option</option>
                 <option value="Male">Male</option>
@@ -230,9 +298,9 @@ function MentorProfileForm() {
                 <option value="Other">Other</option>
               </Select>
             </Box>
-          </SimpleGrid>
+          </div>
           {/* </div> */}
-          <h1 className={styles.line}>
+          <h1 className={styles.line} id={styles.changePassword}>
             <img
               className={styles.lineImg}
               src="/assets/password-icon.svg"
@@ -240,30 +308,33 @@ function MentorProfileForm() {
             ></img>
             Change Password
           </h1>
-          <div className={styles.formInput}>
+          <div className={styles.inputContainer}>
             <Input
               label="Current Password"
               name="currentPassword"
               type="password"
-              width={350}
+              width={inputWidth()}
               disabled={edit}
+              isBlue={true}
             />
             <Input
               label="Password"
               name="password"
               type="password"
-              width={350}
+              width={inputWidth()}
               disabled={edit}
+              isBlue={true}
             />
             <Input
               label="Confirm Password"
               name="confirmPassword"
               type="password"
-              width={350}
+              width={inputWidth()}
               disabled={edit}
+              isBlue={true}
             />
           </div>
-          <h1 className={styles.line}>
+          <h1 className={styles.line} id={styles.bibliography}>
             <img
               className={styles.lineImg}
               src="/assets/bibliography-icon.svg"
@@ -271,24 +342,19 @@ function MentorProfileForm() {
             ></img>
             Bibliography
           </h1>
-          <div className={styles.formTextarea}>
-            <Textarea
-              style={{
-                borderRadius: "10px",
-                height: "150px",
-                backgroundColor: "var(--color-white)",
-              }}
+          <div className={styles.bibliographyContainer}>
+            <InputMessage
               name="description"
-              size={"md"}
-              resize={"none"}
               placeholder="Here is a sample placeholder"
-              onChange={(e) => setCount(e.target.value.length)}
+              width={inputMessageWidth()}
+              bottomCount={true}
+              countNumber={countNumber}
+              disabled={edit}
+              isBlue={true}
+              maxLength={1500}
             />
-            <p style={{ textAlign: "right", color: "var(--color-blue-dark)" }}>
-              {1500 - count} characters left
-            </p>
           </div>
-          <h1 className={styles.line}>
+          <h1 className={styles.line} id={styles.facultyInfo}>
             <img
               className={styles.lineImg}
               src="/assets/faculty-icon.svg"
@@ -296,28 +362,31 @@ function MentorProfileForm() {
             ></img>
             Faculty Information
           </h1>
-          <div className={styles.formInput}>
+          <div className={styles.facultyContainer}>
             <Select
               label="Academic Degree"
               name="academicDegree"
-              width={350}
+              style={{ width: inputWidth() }}
               disabled={edit}
+              isBlue={true}
             >
               <option value="">Select Option</option>
             </Select>
             <Select
               label="Department"
               name="department"
-              width={350}
+              style={{ width: inputWidth() }}
               disabled={edit}
+              isBlue={true}
             >
               <option value="">Select Option</option>
             </Select>
             <Select
               label="Faculty Status"
               name="facultyStatus"
-              width={350}
+              style={{ width: inputWidth() }}
               disabled={edit}
+              isBlue={true}
             >
               <option value="">Select Option</option>
             </Select>
@@ -325,18 +394,20 @@ function MentorProfileForm() {
               label="Office Number"
               name="office"
               type="numeric"
-              width={350}
+              width={inputWidth()}
               disabled={edit}
+              isBlue={true}
             />
             <Input
               label="Area of Interest"
               name="interes"
               type="text"
-              width={350}
+              width={inputWidth()}
               disabled={edit}
+              isBlue={true}
             />
           </div>
-          <h1 className={styles.line}>
+          <h1 className={styles.line} id={styles.officeHours}>
             <img
               className={styles.lineImg}
               src="/assets/clock-icon.svg"
@@ -344,6 +415,18 @@ function MentorProfileForm() {
             ></img>
             Office Hours
           </h1>
+          <p className={styles.headerOfficeHours}>
+            Configure the standard hours of operation for this location.
+          </p>
+
+          {/* el tiempo completo como string
+              @;%-
+              monday%1:00:am-2:00:am@3:00:am-4:00:am
+              [][][]=.split(:)
+
+              <schedule props.settiempo>
+              <Timepicker>
+          */}
           <div className={styles.formSchedualeContainer}>
             <div className={styles.formDailyContainer}>
               <div className={styles.formDaysContainer}>

@@ -1,6 +1,7 @@
 /* Creating Student Form Component */
 .form-container {
   max-width: 2000px;
+  margin: auto;
 }
 
 .form-input {

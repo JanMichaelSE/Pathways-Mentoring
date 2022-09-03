@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useToast } from "@chakra-ui/react";
+import { Spinner, useToast } from "@chakra-ui/react";
 
 import { httpUpdateStudent, httpGetStudentbyID } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
@@ -17,7 +17,7 @@ import ProfilePicture from "@/components/common/ProfilePicture/profile-picture";
 function StudentProfileForm() {
   const toast = useToast();
   const userId = useUserStore((state) => state.userId);
-  const setUser = useUserStore((state) => state.setUser);
+  const setEmail = useUserStore((state) => state.setEmail);
   const setPictureData = useUserStore((state) => state.setPictureData);
   const pictureData = useUserStore((state) => state.pictureData);
   const [userData, setUserData] = useState({});
@@ -25,6 +25,8 @@ function StudentProfileForm() {
   const [close, setClose] = useState("Edit");
   const [dataFirstName, setDataFirstName] = useState("");
   const [dataLastName, setDataLastName] = useState("");
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
   const [isLessThan1420] = useMediaQuery("(max-width: 1420px)");
@@ -35,11 +37,7 @@ function StudentProfileForm() {
   useEffect(() => {
     async function loadStudentProfileInfo() {
       const studentInfo = await httpGetStudentbyID(userId);
-      setUserData(studentInfo.data);
-      setPictureData(studentInfo.data.profilePicture);
-      var [firstName, lastName] = studentInfo.data.name.split("; ");
-      setDataFirstName(firstName);
-      setDataLastName(lastName);
+
       if (studentInfo.hasError) {
         return toast({
           description: studentInfo.errorMessage,
@@ -48,6 +46,12 @@ function StudentProfileForm() {
           duration: 5000,
         });
       }
+      setUserData(studentInfo.data);
+      setPictureData(studentInfo.data.profilePicture);
+      var [firstName, lastName] = studentInfo.data.name.split("; ");
+      setDataFirstName(firstName);
+      setDataLastName(lastName);
+      setIsLoading(false);
     }
     loadStudentProfileInfo();
   }, []);
@@ -77,7 +81,7 @@ function StudentProfileForm() {
       });
     }
 
-    // setUser(userResponse.data.email);
+    setEmail(userResponse.data.email);
     onEdit();
     return toast({
       title: "Update Success!",
@@ -118,6 +122,20 @@ function StudentProfileForm() {
     }
   }
 
+  if (isLoading) {
+    return (
+      <Spinner
+        thickness="5px"
+        speed="0.65s"
+        emptyColor="gray.200"
+        color="blue.500"
+        size="xl"
+        position="absolute"
+        top="30%"
+        left="50%"
+      />
+    );
+  }
   return (
     <div className={styles.formContainer}>
       <Formik
