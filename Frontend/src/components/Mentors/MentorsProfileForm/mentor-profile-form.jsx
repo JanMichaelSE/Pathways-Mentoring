@@ -26,7 +26,7 @@ import TimePickerSelector from "@/components/common/TimePickerSelector/time-pick
 function MentorProfileForm() {
   const toast = useToast();
   const userId = useUserStore((state) => state.userId);
-  const setUser = useUserStore((state) => state.setUser);
+  const setEmail = useUserStore((state) => state.setEmail);
   const setPictureData = useUserStore((state) => state.setPictureData);
   const pictureData = useUserStore((state) => state.pictureData);
   const [userData, setUserData] = useState({});
@@ -93,11 +93,15 @@ function MentorProfileForm() {
       });
     }
 
-    setUser(
-      userResponse.data.userId,
-      userResponse.data.email,
-      userResponse.data.role
-    );
+    setEmail(userResponse.data.email);
+    onEdit();
+    return toast({
+      title: "Update Success!",
+      description: "The changes were made.",
+      status: "success",
+      position: "top",
+      duration: 7000,
+    });
   }
 
   function inputWidth() {
@@ -176,41 +180,38 @@ function MentorProfileForm() {
           officeHours: "",
         }}
         validationSchema={Yup.object({
-          firstName: Yup.string().required("First Name is required"),
-          lastName: Yup.string().required("Last Name is required"),
+          firstName: Yup.string(),
+          lastName: Yup.string(),
           phone: Yup.string()
             .matches(
               /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/,
               "Phone number is not valid"
             )
             .min(10, "Phone number must be 10 digits"),
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Email is required"),
-          currentPassword: Yup.string()
-            .min(12, "Current password must be at least 12 characters")
-            .required("Current password is required"),
-          password: Yup.string()
-            .min(12, "Password must be at least 12 characters")
-            .required("Password is required"),
-          confirmPassword: Yup.string()
-            .oneOf([Yup.ref("password"), null], "Passwords must match")
-            .required("Password Confirmation is required"),
-          gender: Yup.string()
-            .oneOf(["Male", "Female", "Other"])
-            .required("Gender is required"),
+          email: Yup.string().email("Invalid email address"),
+          currentPassword: Yup.string().min(
+            12,
+            "Current password must be at least 12 characters"
+          ),
+          password: Yup.string().min(
+            12,
+            "Password must be at least 12 characters"
+          ),
+          confirmPassword: Yup.string().oneOf(
+            [Yup.ref("password"), null],
+            "Passwords must match"
+          ),
+          gender: Yup.string().oneOf(["Male", "Female", "Other"]),
           academicDegree: Yup.string().required(),
-          description: Yup.string()
-            .test(
-              "len",
-              "Max character limit of 1500 reached.",
-              (val) => (val?.length || 0) < 1500
-            )
-            .required("Description is required"),
-          department: Yup.string().required("Department is required"),
-          facultyStatus: Yup.string().required("Faculty Status is required"),
-          office: Yup.string().required("Office is required"),
-          officeHourst: Yup.string().required("Office Hours is required"),
+          description: Yup.string().test(
+            "len",
+            "Max character limit of 1500 reached.",
+            (val) => (val?.length || 0) < 1500
+          ),
+          department: Yup.string(),
+          facultyStatus: Yup.string(),
+          office: Yup.string(),
+          officeHourst: Yup.string(),
         })}
         onSubmit={async (values) => {
           await handleSubmit(values);
