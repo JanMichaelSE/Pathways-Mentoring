@@ -34,7 +34,7 @@ async function httpSignupStudent(student) {
   };
 
   try {
-    const name = `${student.firstName} ${student.lastName}`;
+    const name = `${student.firstName}; ${student.lastName}`;
 
     const studentInfo = {
       name: name,
@@ -69,7 +69,7 @@ async function httpSignupMentor(mentor) {
   };
 
   try {
-    const name = `${mentor.firstName} ${mentor.lastName}`;
+    const name = `${mentor.firstName}; ${mentor.lastName}`;
 
     const mentorInfo = {
       name: name,

@@ -20,6 +20,16 @@ function StudentNavbar() {
         <div className={styles.navLinksContainer}>
           <Link
             className={
+              location.pathname === "/student/development-plan"
+                ? styles.activeNavLink
+                : styles.navLink
+            }
+            to="/student/development-plan"
+          >
+            Development Plan
+          </Link>
+          <Link
+            className={
               location.pathname === "/student/assessments"
                 ? styles.activeNavLink
                 : styles.navLink
@@ -58,12 +68,6 @@ function StudentNavbar() {
           >
             Contact Us
           </Link>
-
-          <img
-            src="/assets/Doorbell.svg"
-            alt="NotificationBell"
-            className={styles.logoLink}
-          />
           <ProfilePopover classname={styles.logoLink} />
         </div>
       </nav>

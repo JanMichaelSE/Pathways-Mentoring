@@ -29,10 +29,10 @@ function StudentForm() {
       });
     }
 
-    setUser(userResponse.data.email, userResponse.data.role);
+    setUser(userResponse.data.email, "Student");
     setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
 
-    navigate("../student", { replace: true });
+    navigate("../student/assessments", { replace: true });
   }
 
   return (

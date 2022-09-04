@@ -1,9 +1,9 @@
 import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import styles from "./mentors-navbar.module.css";
+import styles from "./admin-navbar.module.css";
 import ProfilePopover from "@/components/common/ProfilePopOverNavbar/profile-popover-navbar";
 
-function MentorNavbar() {
+function AdminNavbar() {
   let location = useLocation();
 
   return (
@@ -20,33 +20,13 @@ function MentorNavbar() {
         <div className={styles.navLinksContainer}>
           <Link
             className={
-              location.pathname === "/mentor"
+              location.pathname === "/admin"
                 ? styles.activeNavLink
                 : styles.navLink
             }
-            to="/mentor"
+            to="/admin"
           >
-            Records
-          </Link>
-          <Link
-            className={
-              location.pathname === "/mentor/students"
-                ? styles.activeNavLink
-                : styles.navLink
-            }
-            to="/mentor/students"
-          >
-            Students
-          </Link>
-          <Link
-            className={
-              location.pathname === "/mentor/contact-us"
-                ? styles.activeNavLink
-                : styles.navLink
-            }
-            to="/mentor/contact-us"
-          >
-            Contact Us
+            Users
           </Link>
           <ProfilePopover classname={styles.logoLink} />
         </div>
@@ -56,4 +36,4 @@ function MentorNavbar() {
   );
 }
 
-export default MentorNavbar;
+export default AdminNavbar;
