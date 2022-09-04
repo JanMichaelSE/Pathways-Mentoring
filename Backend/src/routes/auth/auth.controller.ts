@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 
+import { IMentor, IUser, IStudent } from "./../../types/index.d";
+
 import { createStudent } from "../../models/students.model";
 import {
   createUser,
@@ -7,20 +9,23 @@ import {
   findUserById,
   getUserTokens,
   isUserAuthorized,
+  updateUserEmail,
   updateUserPassword,
   updateUserTokens,
+  validateProfileUpdate,
 } from "../../models/users.model";
 import { createMentor } from "../../models/mentors.model";
 
-import { IMentor, IUser, IStudent } from "./../../types/index.d";
 import {
   buildErrorObject,
+  excludeFields,
   formatPhoneNumber,
   handleBadRequestResponse,
   handleErrorResponse,
   isValidUUID,
   titleCase,
 } from "../../utils/helpers";
+
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -220,6 +225,100 @@ async function httpSignupMentor(req: Request, res: Response) {
   }
 }
 
+async function httpSignupAdmin(req: Request, res: Response) {
+  try {
+    const userInfo = {
+      email: req.body.email,
+      password: req.body.password,
+      role: "Admin",
+    };
+
+    if (!userInfo.email || !userInfo.password || !userInfo.role) {
+      return handleBadRequestResponse(
+        "The following fields need to be provided in order to signup: 'email' and 'password'.",
+        res
+      );
+    }
+
+    const createdUser = await createUser(
+      userInfo.email,
+      userInfo.password,
+      userInfo.role
+    );
+    if ("errorCode" in createdUser) {
+      return res.status(createdUser.errorCode).json({
+        error: createdUser,
+      });
+    }
+
+    const accessToken = generateAccessToken(createdUser.id);
+    const refreshToken = generateRefreshToken(createdUser.id);
+    const updatedUser = await updateUserTokens(
+      createdUser.id,
+      accessToken,
+      refreshToken
+    );
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    return handleErrorResponse("signup admin", error, res);
+  }
+}
+
+async function httpUpdateAdmin(req: Request, res: Response) {
+  try {
+    const userId = req.userId;
+    const isValidId = isValidUUID(userId);
+
+    if (!isValidId) {
+      return handleBadRequestResponse(
+        "This Id passed in the URL parameter is not does not have a valid format.",
+        res
+      );
+    }
+
+    const userInfo: IUser = {
+      id: userId,
+      email: req.body.email,
+      password: req.body.currentPassword,
+      newPassword: req.body.newPassword,
+    };
+    const validatedUserResponse = await validateProfileUpdate(userInfo);
+    if ("errorCode" in validatedUserResponse) {
+      return res.status(validatedUserResponse.errorCode).json({
+        error: validatedUserResponse,
+      });
+    }
+
+    if (userInfo.email) {
+      await updateUserEmail(validatedUserResponse, userInfo.email);
+    }
+
+    if (userInfo.newPassword) {
+      await updateUserPassword(validatedUserResponse, userInfo.newPassword);
+    }
+
+    const updatedUser = await findUserById(userId);
+    if (!updatedUser) {
+      return handleBadRequestResponse(
+        "Couldn't find user in the system. Please provide valid Access Token",
+        res
+      );
+    }
+
+    const userFiltered = excludeFields(
+      updatedUser,
+      "id",
+      "password",
+      "passwordSalt"
+    );
+
+    return res.status(200).json(userFiltered);
+  } catch (error) {
+    return handleErrorResponse("update admin", error, res);
+  }
+}
+
 async function httpLogout(req: Request, res: Response) {
   try {
     const userId = req.userId;
@@ -334,6 +433,8 @@ export {
   httpLogin,
   httpSignupStudent,
   httpSignupMentor,
+  httpSignupAdmin,
+  httpUpdateAdmin,
   httpLogout,
   httpRefreshToken,
   httpForgotPassword,

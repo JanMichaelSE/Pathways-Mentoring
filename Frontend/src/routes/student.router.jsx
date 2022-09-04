@@ -2,6 +2,8 @@ import { Route, Routes } from "react-router-dom";
 import Navbar from "@/components/Students/StudentsNavbar/students-navbar";
 
 import StudentRecords from "@/pages/Students/Records/student-records";
+import RecordView from "@/pages/Students/Record-View/student-record-view";
+import DevelopmentPlan from "@/pages/Students/Development-Plan/development-plan";
 import AssessmentEdit from "@/pages/Students/Assessment-Edit/assessment-edit";
 import Assessments from "@/pages/Students/Assessments/assessments";
 import Mentors from "@/pages/Students/Mentors/mentors";
@@ -17,6 +19,8 @@ function StudentRouter() {
         <IdleTimerContainer />
         <Routes>
           <Route path="/" element={<StudentRecords />} />
+          <Route path="/records/:recordId" element={<RecordView />} />
+          <Route path="/development-plan" element={<DevelopmentPlan />} />
           <Route path="/assessments" element={<Assessments />} />
           <Route path="/assessments/:id" element={<AssessmentEdit />} />
           <Route path="/mentors" element={<Mentors />} />

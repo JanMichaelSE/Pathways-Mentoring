@@ -163,9 +163,9 @@ async function updateUserTokens(
   userId: string,
   accessToken: string,
   refreshToken: string
-): Promise<void> {
+): Promise<User> {
   try {
-    await prisma.user.update({
+    const user = await prisma.user.update({
       where: {
         id: userId,
       },
@@ -174,6 +174,9 @@ async function updateUserTokens(
         refreshToken: refreshToken,
       },
     });
+
+    const userFiltered = excludeFields(user, "id", "password", "passwordSalt");
+    return userFiltered;
   } catch (error) {
     throw error;
   }
