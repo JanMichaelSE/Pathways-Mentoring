@@ -28,7 +28,7 @@ function StudentForm() {
         duration: 5000,
       });
     }
-    console.log("Role:", userResponse.data.role);
+
     setUser(userResponse.data.email, "Student");
     setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
 
