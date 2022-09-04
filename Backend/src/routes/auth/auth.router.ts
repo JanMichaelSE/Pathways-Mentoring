@@ -8,6 +8,8 @@ import {
   httpForgotPassword,
   httpSignupMentor,
   httpSignupStudent,
+  httpSignupAdmin,
+  httpUpdateAdmin,
 } from "./auth.controller";
 
 const router = express.Router();
@@ -21,6 +23,10 @@ router.post("/logout", authenticateJsonWebToken, httpLogout);
 router.post("/signup/student", httpSignupStudent);
 
 router.post("/signup/mentor", httpSignupMentor);
+
+router.post("/signup/admin", httpSignupAdmin);
+
+router.post("/admin/profile", authenticateJsonWebToken, httpUpdateAdmin);
 
 router.post("/forgotPassword", httpForgotPassword);
 
