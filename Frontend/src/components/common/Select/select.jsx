@@ -1,7 +1,7 @@
 import { useField, ErrorMessage } from "formik";
 import styles from "./select.module.css";
 
-function Select({ label, ...props }) {
+function Select({ label, isBlue, ...props }) {
   const [field, meta] = useField(props);
 
   function selectStyles() {
@@ -16,7 +16,7 @@ function Select({ label, ...props }) {
     if (meta.touched && meta.error) {
       classNames += " label-error";
     }
-    if (props.isBlue) {
+    if (isBlue) {
       classNames += " " + styles.blueFont;
     }
     return classNames;

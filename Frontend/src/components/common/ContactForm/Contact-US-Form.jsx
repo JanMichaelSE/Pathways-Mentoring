@@ -127,6 +127,7 @@ export default function ContactUsForm() {
                 type="textarea"
                 label="Message *"
                 width={inputMessageWidth()}
+                isBlue={true}
               />
             </GridItem>
             <GridItem colStart={2}>

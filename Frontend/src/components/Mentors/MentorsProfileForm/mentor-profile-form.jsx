@@ -11,17 +11,10 @@ import Input from "@/components/common/Input/input";
 import InputMessage from "@/components/common/InputMessage/InputMessage";
 import Select from "@/components/common/Select/select";
 import styles from "./mentor-profile-form.module.css";
-import { Image, Flex, Center } from "@chakra-ui/react";
 import ProfileChangerPopOver from "@/components/common/ProfileChangerPopOver/profile-changer-popover";
 import ProfilePicture from "@/components/common/ProfilePicture/profile-picture";
-import {
-  Textarea,
-  Switch,
-  SimpleGrid,
-  Box,
-  useMediaQuery,
-} from "@chakra-ui/react";
-import TimePickerSelector from "@/components/common/TimePickerSelector/time-picker-selector";
+import { Box, useMediaQuery } from "@chakra-ui/react";
+import Schedule from "@/components/common/Schedule/schedule";
 
 function MentorProfileForm() {
   const toast = useToast();
@@ -35,7 +28,6 @@ function MentorProfileForm() {
   const [dataFirstName, setDataFirstName] = useState("");
   const [dataLastName, setDataLastName] = useState("");
   const [countNumber, setCountNumber] = useState(0);
-  const [switchValue, setSwitchValue] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -401,7 +393,7 @@ function MentorProfileForm() {
             />
             <Input
               label="Area of Interest"
-              name="interes"
+              name="interests"
               type="text"
               width={inputWidth()}
               disabled={edit}
@@ -419,76 +411,7 @@ function MentorProfileForm() {
           <p className={styles.headerOfficeHours}>
             Configure the standard hours of operation for this location.
           </p>
-
-          {/* el tiempo completo como string
-              @;%-
-              monday%1:00:am-2:00:am@3:00:am-4:00:am
-              [][][]=.split(:)
-
-              <schedule props.settiempo>
-              <Timepicker>
-          */}
-          <div className={styles.formSchedualeContainer}>
-            <div className={styles.formDailyContainer}>
-              <div className={styles.formDaysContainer}>
-                <Flex>
-                  <Center w={"120px"} mr={"20px"}>
-                    <h2
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: "var(--font-size-subheading)",
-                        color: "var(--color-blue-dark)",
-                      }}
-                    >
-                      Wednesday
-                    </h2>
-                  </Center>
-                  <Center w={"60px"} mr={"5px"}>
-                    <Switch
-                      size={"lg"}
-                      defaultChecked
-                      onChange={() => setSwitchValue(!switchValue)}
-                    />
-                  </Center>
-                  <Center>
-                    <h3
-                      style={{
-                        fontSize: "var(--font-size-small)",
-                        color: "var(--color-blue-dark)",
-                      }}
-                    >
-                      {switchValue ? "Open" : "Close"}
-                    </h3>
-                  </Center>
-                </Flex>
-              </div>
-              <div className={styles.formTimePickerContainer}>
-                <TimePickerSelector />
-                <button
-                  type="button"
-                  style={{
-                    width: 58,
-                    height: 58,
-                    float: "none",
-                    background: "none",
-                  }}
-                >
-                  <Image
-                    borderRadius="full"
-                    boxSize="50px"
-                    src="/assets/add-icon.svg"
-                  ></Image>
-                </button>
-              </div>
-            </div>
-            <div className={styles.formDailyContainer}>d</div>
-            <div className={styles.formDailyContainer}>d</div>
-            <div className={styles.formDailyContainer}>d</div>
-            <div className={styles.formDailyContainer}>d</div>
-            <div className={styles.formDailyContainer}>d</div>
-            <div className={styles.formDailyContainer}>d</div>
-          </div>
-
+          <Schedule name="officeHours" />
           <div className={styles.buttonContainer}>
             {!edit ? <Button type="submit">Submit</Button> : null}
           </div>

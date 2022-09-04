@@ -2,7 +2,7 @@ import { Field, useField, ErrorMessage } from "formik";
 import styles from "./InputMessage.module.css";
 import { useState } from "react";
 
-function InputMessage({ label, bottomCount, countNumber, ...props }) {
+function InputMessage({ label, bottomCount, countNumber, isBlue, ...props }) {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
   const [count, setCount] = useState(countNumber);
@@ -23,7 +23,7 @@ function InputMessage({ label, bottomCount, countNumber, ...props }) {
     if (meta.touched && meta.error) {
       classNames += " label-error";
     }
-    if (props.isBlue) {
+    if (isBlue) {
       classNames += " " + styles.blueFont;
     }
     return classNames;

@@ -2,7 +2,7 @@ import { useField, ErrorMessage } from "formik";
 import styles from "./input.module.css";
 import { phoneFormat } from "@/utils/helpers";
 
-function Input({ label, imgUrl, ...props }) {
+function Input({ label, imgUrl, isBlue, ...props }) {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
@@ -25,7 +25,7 @@ function Input({ label, imgUrl, ...props }) {
     if (meta.touched && meta.error) {
       classNames += " label-error";
     }
-    if (props.isBlue) {
+    if (isBlue) {
       classNames += " " + styles.blueFont;
     }
     return classNames;

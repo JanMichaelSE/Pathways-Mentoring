@@ -3,7 +3,7 @@
   text-align: left;
   font-size: var(--font-size-regular);
   font-weight: bold;
-  color: var(--color-blue-dark);
+  color: #5c5d60;
   padding-bottom: 0.25rem;
   margin-left: 20px;
 }
@@ -19,7 +19,7 @@
 }
 
 .input::-webkit-scrollbar-thumb {
-  background-color: #0066cc;
+  background-color: var(--color-blue-dark);
   border-radius: 20px;
   height: 40px;
 }
