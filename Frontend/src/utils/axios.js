@@ -1,6 +1,5 @@
 import Axios from "axios";
 import { getState } from "@/store/user.store";
-import { setState } from "../store/user.store";
 
 const axios = Axios.create({ baseURL: "http://localhost:5000" });
 

@@ -72,10 +72,9 @@ model Student {
 
 model Record {
   id           String   @id @default(uuid()) @db.Uuid
-  stage        String   @db.VarChar(255)
-  finished     Boolean? @default(false)
-  approved     Boolean? @default(false)
-  rating       Decimal?
+  title        String   @db.VarChar(255)
+  description  String?
+  stage        String?  @default("New") @db.VarChar(255)
   createdDate  DateTime @default(now()) @db.Timestamptz(6)
   lastModified DateTime @default(now()) @db.Timestamptz(6)
   mentorId     String   @db.Uuid
@@ -86,11 +85,12 @@ model Record {
 }
 
 model Note {
-  id           Int      @id @default(autoincrement())
-  createdDate  DateTime @default(now()) @db.Timestamptz(6)
-  lastModified DateTime @default(now()) @db.Timestamptz(6)
-  recordId     String   @db.Uuid
-  record       Record   @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  id           Int       @id @default(autoincrement())
+  createdDate  DateTime  @default(now()) @db.Timestamptz(6)
+  lastModified DateTime  @default(now()) @db.Timestamptz(6)
+  recordId     String    @db.Uuid
+  record       Record    @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  messages     Message[]
 }
 
 model Message {
@@ -102,6 +102,8 @@ model Message {
   sender       User     @relation(name: "sender", fields: [senderId], references: [id], onDelete: Cascade)
   receiverId   String   @db.Uuid
   receiver     User     @relation(name: "receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  noteId       Int
+  note         Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
 }
 
 model Assessment {

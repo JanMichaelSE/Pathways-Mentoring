@@ -77,8 +77,7 @@ async function findStudentByUserId(userId: string): Promise<Student | null> {
       return null;
     }
 
-    const studentWithoutId = excludeFields(student, "id");
-    return studentWithoutId;
+    return student;
   } catch (error) {
     throw error;
   }
