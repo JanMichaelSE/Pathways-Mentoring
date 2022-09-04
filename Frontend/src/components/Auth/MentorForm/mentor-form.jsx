@@ -30,7 +30,7 @@ function MentorForm() {
       });
     }
 
-    setUser(userResponse.data.email, userResponse.data.role);
+    setUser(userResponse.data.email, "Mentor");
     setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
 
     navigate("../mentor", { replace: true });

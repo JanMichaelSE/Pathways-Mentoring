@@ -28,11 +28,11 @@ function StudentForm() {
         duration: 5000,
       });
     }
-
-    setUser(userResponse.data.email, userResponse.data.role);
+    console.log("Role:", userResponse.data.role);
+    setUser(userResponse.data.email, "Student");
     setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
 
-    navigate("../student", { replace: true });
+    navigate("../student/assessments", { replace: true });
   }
 
   return (
