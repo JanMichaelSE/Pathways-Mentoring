@@ -48,12 +48,6 @@ function MentorNavbar() {
           >
             Contact Us
           </Link>
-
-          <img
-            src="/assets/Doorbell.svg"
-            alt="NotificationBell"
-            className={styles.logoLink}
-          />
           <ProfilePopover classname={styles.logoLink} />
         </div>
       </nav>
