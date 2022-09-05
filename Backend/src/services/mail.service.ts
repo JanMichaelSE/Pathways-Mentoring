@@ -55,9 +55,6 @@ async function sendContactFormEmail(
   try {
     const CONTACT_US_TEMPLATE_ID = process.env.CONTACT_US_TEMPLATE_ID ?? "";
     const CONTACT_US_ADDRESS = process.env.CONTACT_US_ADDRESS ?? "";
-    console.log("Template: ", CONTACT_US_TEMPLATE_ID);
-    console.log("Address: ", CONTACT_US_ADDRESS);
-
     const _email = {
       from: {
         email: FROM_ADDRESS,
@@ -99,4 +96,54 @@ async function sendContactFormEmail(
   }
 }
 
-export { sendResetPasswordEmail, sendContactFormEmail };
+async function sendRequestMentorshipEmail(
+  toEmail: string,
+  studentName: string,
+  studentId: string
+) {
+  try {
+    const REQUEST_MENTORSHIP_TEMPLATE_ID =
+      process.env.REQUEST_MENTORSHIP_TEMPLATE_ID ?? "";
+    const _email = {
+      from: {
+        email: FROM_ADDRESS,
+        name: "Pathways Mentoring",
+      },
+      template_id: REQUEST_MENTORSHIP_TEMPLATE_ID,
+      personalizations: [
+        {
+          to: [
+            {
+              email: toEmail,
+            },
+          ],
+          dynamic_template_data: {
+            name: studentName,
+            studentId: studentId,
+          },
+        },
+      ],
+      reply_to: {
+        email: FROM_ADDRESS,
+        name: "Reply",
+      },
+    };
+
+    return axios({
+      method: "post",
+      url: EMAIL_SEND_URL,
+      headers: {
+        Authorization: `Bearer ${SENGRID_API_KEY}`,
+      },
+      data: _email,
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
+export {
+  sendResetPasswordEmail,
+  sendContactFormEmail,
+  sendRequestMentorshipEmail,
+};

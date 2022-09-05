@@ -20,9 +20,9 @@ import {
   handleBadRequestResponse,
   handleErrorResponse,
   handleNotFoundResponse,
-  isValidUUID,
   titleCase,
 } from "../../utils/helpers";
+import { sendRequestMentorshipEmail } from "../../services/mail.service";
 
 async function httpGetAllStudents(req: Request, res: Response) {
   try {
@@ -55,24 +55,15 @@ async function httpGetAllStudentsByMentor(req: Request, res: Response) {
 async function httpGetStudentProfileByUserId(req: Request, res: Response) {
   try {
     const userId = req.userId;
-    const isValidId = isValidUUID(userId);
-
-    if (!isValidId) {
-      return handleBadRequestResponse(
-        "This Id passed in the URL parameter is not does not have a valid format.",
-        res
-      );
-    }
-
-    const studentResponse = await findStudentByUserId(userId);
-    if (!studentResponse) {
+    const student = await findStudentByUserId(userId);
+    if (!student) {
       return handleBadRequestResponse(
         "This student does not exist in the system.",
         res
       );
     }
 
-    return res.status(200).json(studentResponse);
+    return res.status(200).json(student);
   } catch (error) {
     return handleErrorResponse("get student by user id", error, res);
   }
@@ -80,18 +71,8 @@ async function httpGetStudentProfileByUserId(req: Request, res: Response) {
 
 async function httpUpdateStudentProfile(req: Request, res: Response) {
   try {
-    const userId = req.userId;
-    const isValidId = isValidUUID(userId);
-
-    if (!isValidId) {
-      return handleBadRequestResponse(
-        "This Id passed in the URL parameter is not does not have a valid format.",
-        res
-      );
-    }
-
     const userInfo: IUser = {
-      id: userId,
+      id: req.userId,
       email: req.body.email,
       password: req.body.currentPassword,
       newPassword: req.body.newPassword,
@@ -107,39 +88,58 @@ async function httpUpdateStudentProfile(req: Request, res: Response) {
       profilePicture: req.body.profilePicture,
     };
 
-    const validatedUserResponse = await validateProfileUpdate(userInfo);
-    if ("errorCode" in validatedUserResponse) {
-      return res.status(validatedUserResponse.errorCode).json({
-        error: validatedUserResponse,
+    const validatedUser = await validateProfileUpdate(userInfo);
+    if ("errorCode" in validatedUser) {
+      return res.status(validatedUser.errorCode).json({
+        error: validatedUser,
       });
     }
 
-    const validatedStudentResponse = await validateStudentExists(
-      validatedUserResponse.id
-    );
-    if ("errorCode" in validatedStudentResponse) {
-      return res.status(validatedStudentResponse.errorCode).json({
-        error: validatedStudentResponse,
+    const validatedStudent = await validateStudentExists(validatedUser.id);
+    if ("errorCode" in validatedStudent) {
+      return res.status(validatedStudent.errorCode).json({
+        error: validatedStudent,
       });
     }
 
     if (userInfo.email) {
-      await updateUserEmail(validatedUserResponse, userInfo.email);
+      await updateUserEmail(validatedUser, userInfo.email);
     }
 
     if (userInfo.newPassword) {
-      await updateUserPassword(validatedUserResponse, userInfo.newPassword);
+      await updateUserPassword(validatedUser, userInfo.newPassword);
     }
 
-    const updateStudentResponse = await updateStudent(
-      validatedStudentResponse.id,
+    const updatedStudent = await updateStudent(
+      validatedStudent.id,
       userInfo.email,
       studentInfo
     );
 
-    return res.status(200).json(updateStudentResponse);
+    return res.status(200).json(updatedStudent);
   } catch (error) {
     return handleErrorResponse("update student profile", error, res);
+  }
+}
+
+async function httpRequestMentorship(req: Request, res: Response) {
+  try {
+    const userId = req.userId;
+    const toEmail = req.body.toEmail;
+
+    const student = await findStudentByUserId(userId);
+    if (!student) {
+      return handleBadRequestResponse(
+        "This student does not exist in the system.",
+        res
+      );
+    }
+
+    await sendRequestMentorshipEmail(toEmail, student.name, student.id);
+
+    return res.status(200).json("Mentorship Request has been sent.");
+  } catch (error) {
+    return handleErrorResponse("request mentorship", error, res);
   }
 }
 
@@ -148,4 +148,5 @@ export {
   httpGetAllStudentsByMentor,
   httpGetStudentProfileByUserId,
   httpUpdateStudentProfile,
+  httpRequestMentorship,
 };

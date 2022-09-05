@@ -1,3 +1,7 @@
+/*
+This service provides hardcoded data that must be consumed by the server in different endpoints & models.
+*/
+
 function recordData() {
   return [
     {
