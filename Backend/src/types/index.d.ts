@@ -77,6 +77,13 @@ export interface IAnswerResposne {
   lastModified: Date;
 }
 
+export interface IMessage {
+  message: string;
+  senderId: string;
+  receiverId: string;
+  noteId: string;
+}
+
 // --- THIS NEEDS REFACTORING ---
 declare global {
   namespace Express {

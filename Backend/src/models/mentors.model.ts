@@ -60,8 +60,7 @@ async function findMentorByUserId(userId: string): Promise<Mentor | null> {
       return null;
     }
 
-    const mentorWithoutId = excludeFields(mentor, "id");
-    return mentorWithoutId;
+    return mentor;
   } catch (error) {
     throw error;
   }
