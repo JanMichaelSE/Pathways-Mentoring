@@ -1,5 +1,25 @@
-import app from './app';
+import http from "http";
+import { Server } from "socket.io";
+import app from "./app";
+import { handleSocketEvents } from "./services/socket.service";
 
-let PORT = 5000;
+const PORT = process.env.SERVER_PORT ?? 5000;
 
-app.listen(PORT, () => console.log(`Server is running http://localhost:${PORT}`));
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+// Listen for when the client connects via socket.io-client
+io.on("connection", (socket) => {
+  console.log(`User connected ${socket.id}`);
+
+  handleSocketEvents(socket);
+});
+
+server.listen(PORT, () =>
+  console.log(`Server is running http://localhost:${PORT}`)
+);
