@@ -2,4 +2,5 @@
   font-size: var(--font-size-heading);
   font-weight: bold;
   color: var(--color-blue-dark);
+  text-align: center;
 }
