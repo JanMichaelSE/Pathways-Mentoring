@@ -208,13 +208,44 @@ export default function AvatarCard({ cardData }) {
                 maxWidth={"2xl"}
                 justifyContent="center"
               >
-                <Image
-                  boxSize="50px"
-                  objectFit="cover"
-                  src="/assets/info.svg"
-                  alt="info.svg"
+                <Avatar
+                  size={"lg"}
+                  borderWidth={"2px"}
+                  borderColor={"#99A9B9"}
+                  background={"#5389BE"}
+                  src={"/assets/info.svg"}
+                  alt={"Avatar Alt"}
+                  pos={"relative"}
+                  p={3}
                 />
-                <Text fontWeight={"400"}>
+                <Text fontWeight={"400"} textAlign={"justify"}>
+                  Jan Montalvo, MS serves as the Assistant Vice Chancellor for
+                  Career Advancement, International and Postdoctoral Services at
+                  the University of California, San Francisco.
+                </Text>
+              </HStack>
+              <HStack
+                px={3}
+                py={3}
+                rounded={"27px"}
+                bg={"#D9E4EA"}
+                mx={3}
+                mb={5}
+                boxShadow={"md"}
+                maxWidth={"2xl"}
+                justifyContent="center"
+              >
+                <Avatar
+                  size={"lg"}
+                  borderWidth={"2px"}
+                  borderColor={"#99A9B9"}
+                  background={"#5389BE"}
+                  src={"/assets/Person_Calendar.png"}
+                  alt={"Avatar Alt"}
+                  pos={"relative"}
+                  p={3}
+                />
+                <Text fontWeight={"400"} textAlign={"justify"}>
                   Will only accept calls on fridays at work. If need of any
                   other information please contact me by email. In any case I am
                   available on Monday and Friday from 12:00 PM to 4:00 PM.

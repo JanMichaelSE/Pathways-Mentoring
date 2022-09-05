@@ -1,9 +1,11 @@
 import React from "react";
-import { Center, Text } from "@chakra-ui/react";
+import { Center, Stack, Text, useMediaQuery } from "@chakra-ui/react";
 import StaffCard from "../StaffCard/StaffCard";
 import styles from "./StaffCards.module.css";
 
 export default function StaffCards() {
+  const [isLargerThan940] = useMediaQuery('(min-width: 940px)')
+
   let staffData = [
     {
       id: "1",
@@ -27,12 +29,14 @@ export default function StaffCards() {
 
   return (
     <>
-      <Center flexDirection={"column"} mx={5}>
+      <Stack flexDirection={"column"} mx={5} mb={isLargerThan940 ? 0 : 270}>
         <Text className={styles.heading}>Pathways Staff</Text>
+        <Stack flexDirection={isLargerThan940 ? "column" : "row"} justifyContent={"space-around"}>
         {staffData?.map((staff) => (
           <StaffCard key={staff.id} cardData={staff} />
         ))}
-      </Center>
+        </Stack>
+      </Stack>
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useToast } from "@chakra-ui/react";
@@ -17,6 +17,7 @@ import { useUserStore } from "@/store/user.store";
 
 function LoginForm() {
   const navigate = useNavigate();
+  const location = useLocation();
   const role = useUserStore((state) => state.role);
   const setUser = useUserStore((state) => state.setUser);
   const setTokens = useUserStore((state) => state.setTokens);
@@ -25,12 +26,14 @@ function LoginForm() {
   const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
 
   useEffect(() => {
-    if (role == "Student") {
-      navigate("../student", { replace: true });
+    if (role && location.state?.from) {
+      navigate(location.state.from);
+    } else if (role == "Student") {
+      navigate("../student");
     } else if (role == "Mentor") {
-      navigate("../mentor", { replace: true });
+      navigate("../mentor");
     } else if (role == "Admin") {
-      navigate("../admin", { replace: true });
+      navigate("../admin");
     }
   }, [role]);
 
