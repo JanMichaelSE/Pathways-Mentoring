@@ -4,6 +4,7 @@ import {
   httpGetAllStudents,
   httpGetAllStudentsByMentor,
   httpGetStudentProfileByUserId,
+  httpRequestMentorship,
   httpUpdateStudentProfile,
 } from "./students.controller";
 
@@ -20,5 +21,7 @@ router.get("/", authenticateJsonWebToken, httpGetAllStudents);
 router.get("/profile", authenticateJsonWebToken, httpGetStudentProfileByUserId);
 
 router.post("/", authenticateJsonWebToken, httpUpdateStudentProfile);
+
+router.post("/request-mentorship", authenticateJsonWebToken, httpRequestMentorship);
 
 export default router;
