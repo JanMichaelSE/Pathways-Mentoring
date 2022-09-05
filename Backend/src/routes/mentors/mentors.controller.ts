@@ -88,13 +88,6 @@ async function httpUpdateMentorProfile(req: Request, res: Response) {
       profilePicture: req.body.profilePicture,
     };
 
-    if (!userInfo.id) {
-      return handleBadRequestResponse(
-        "To update the mentor profile, the id of the user is required in the request.",
-        res
-      );
-    }
-
     const validatedUserResponse = await validateProfileUpdate(userInfo);
     if ("errorCode" in validatedUserResponse) {
       return res.status(validatedUserResponse.errorCode).json({
