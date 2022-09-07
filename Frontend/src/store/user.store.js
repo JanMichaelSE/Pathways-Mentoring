@@ -12,6 +12,15 @@ const vanillaUserStore = createVanillaStore(
       logoutTimeoutId: "",
       pictureData: "",
       refreshTokenError: {},
+      schedule: {
+        sunday: "",
+        monday: "",
+        tuesday: "",
+        wednesday: "",
+        thursday: "",
+        friday: "",
+        saturday: "",
+      },
       setUser: (email, role) =>
         set({
           email: email,
@@ -33,6 +42,11 @@ const vanillaUserStore = createVanillaStore(
           pictureData: pictureData,
         });
       },
+      setSchedule: (schedule) => {
+        set({
+          schedule: schedule,
+        });
+      },
       resetUser: () => {
         set({
           accessToken: "",
@@ -42,6 +56,15 @@ const vanillaUserStore = createVanillaStore(
           logoutTimeoutId: "",
           pictureData: "",
           refreshTokenError: "",
+          schedule: {
+            sunday: "",
+            monday: "",
+            tuesday: "",
+            wednesday: "",
+            thursday: "",
+            friday: "",
+            saturday: "",
+          },
         });
       },
     }),

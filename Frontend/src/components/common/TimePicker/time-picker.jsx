@@ -10,14 +10,14 @@ function TimePickerComponent() {
 
   const hourarray = hours.map((hour) => {
     return (
-      <option value={hour.toString().padStart(2, "0")}>
+      <option key={hour} value={hour.toString().padStart(2, "0")}>
         {hour.toString().padStart(2, "0")}
       </option>
     );
   });
   const minutearray = minutes.map((minute) => {
     return (
-      <option value={minute.toString().padStart(2, "0")}>
+      <option key={minute} value={minute.toString().padStart(2, "0")}>
         {minute.toString().padStart(2, "0")}
       </option>
     );
