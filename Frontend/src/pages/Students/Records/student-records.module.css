@@ -1,0 +1,28 @@
+.gridSpace {
+  max-width: var(--responsive-screen-max-width);
+  margin: 0 auto;
+}
+
+.emptyGridSpace {
+  max-width: var(--responsive-screen-max-width);
+  margin: 0 auto;
+  background-color: var(--color-white);
+  width: 100%;
+}
+
+.lastButton {
+  display: flex;
+  cursor: pointer;
+  font-size: var(--font-size-subheading);
+  font-weight: bold;
+  color: var(--color-white);
+  width: 180px;
+  height: 55px;
+  align-content: center;
+  background: linear-gradient(180.71deg, #FAC20B 0.61%, #EE7222 99.39%);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  border: none;
+  margin-right: 50px;
+  justify-content: center;
+}
