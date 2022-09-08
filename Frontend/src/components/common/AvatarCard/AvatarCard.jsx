@@ -45,7 +45,7 @@ export default function AvatarCard({ cardData }) {
             borderStyle={"dashed"}
             borderColor={"#93B3D3"}
             background={"#F1F8FC"}
-            src={cardData.avatarLink}
+            src={cardData.profilePicture}
             alt={"Avatar Alt"}
             mb={4}
             pos={"relative"}
@@ -124,7 +124,7 @@ export default function AvatarCard({ cardData }) {
                   background={"#F1F8FC"}
                   borderWidth={"2px"}
                   borderColor={"#0874E0"}
-                  src={cardData.avatarLink}
+                  src={cardData.profilePicture}
                   alt={"Avatar Alt"}
                   mb={4}
                   p={5}
@@ -159,7 +159,7 @@ export default function AvatarCard({ cardData }) {
                     src="/assets/cellphone.svg"
                     alt="Cellphone.svg"
                   />
-                  <Text fontWeight={"400"}>{cardData.telephone}</Text>
+                  <Text fontWeight={"400"}>{cardData.phone}</Text>
                 </HStack>
                 <HStack
                   px={3}
@@ -219,9 +219,7 @@ export default function AvatarCard({ cardData }) {
                   p={3}
                 />
                 <Text fontWeight={"400"} textAlign={"justify"}>
-                  Jan Montalvo, MS serves as the Assistant Vice Chancellor for
-                  Career Advancement, International and Postdoctoral Services at
-                  the University of California, San Francisco.
+                  {cardData.description}
                 </Text>
               </HStack>
               <HStack
@@ -246,9 +244,7 @@ export default function AvatarCard({ cardData }) {
                   p={3}
                 />
                 <Text fontWeight={"400"} textAlign={"justify"}>
-                  Will only accept calls on fridays at work. If need of any
-                  other information please contact me by email. In any case I am
-                  available on Monday and Friday from 12:00 PM to 4:00 PM.
+                  {cardData.officeHours}
                 </Text>
               </HStack>
             </Center>
