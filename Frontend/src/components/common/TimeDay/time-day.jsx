@@ -1,20 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./time-day.module.css";
 import { Flex, Center, Switch, Image } from "@chakra-ui/react";
 import TimePickerSelector from "@/components/common/TimePickerSelector/time-picker-selector";
 
 function TimeDay(props) {
-  const [switchValue, setSwitchValue] = useState(true);
+  const [switchValue, setSwitchValue] = useState(false);
   const [clickValue, setClickValue] = useState(true);
-  if (props.time.includes("@")) {
-    const timeSplit = props.time.split("@");
-    console.log(timeSplit);
-    // console.log(`Time: ${props.day}: `, props.time);
-  } else {
-    const timeSplit = props.time;
-    console.log(`Time: ${props.day}: `, timeSplit);
+  const [timeSplit, setTimeSplit] = useState([]);
+  //   var timeSplit = [];
+
+  useEffect(() => {
+    var [buttonValue, tugleValue, value] = splitTimeInTwo(props.time);
+    setSwitchValue(tugleValue);
+    setClickValue(buttonValue);
+    setTimeSplit(value);
+  }, []);
+
+  function splitTimeInTwo(time) {
+    let buttonValue = true;
+    let tugleValue = false;
+
+    if (time.length === 0) {
+      buttonValue = true;
+      const value = "";
+      return [buttonValue, tugleValue, value];
+    }
+
+    if (time.includes("@")) {
+      buttonValue = false;
+      tugleValue = true;
+      const value = time.split("@");
+      return [buttonValue, tugleValue, value];
+    } else {
+      buttonValue = true;
+      tugleValue = true;
+      const value = time;
+      return [buttonValue, tugleValue, value];
+    }
   }
-  //   console.log(`Time: ${props.day}: `, props.time);
 
   return (
     <>
@@ -36,8 +59,9 @@ function TimeDay(props) {
               <Center w={"60px"} mr={"5px"}>
                 <Switch
                   size={"lg"}
-                  defaultChecked
+                  isChecked={switchValue}
                   onChange={() => setSwitchValue(!switchValue)}
+                  isDisabled={props.edit}
                 />
               </Center>
               <Center>
@@ -57,7 +81,7 @@ function TimeDay(props) {
               <>
                 {clickValue ? (
                   <>
-                    <TimePickerSelector />
+                    <TimePickerSelector value={timeSplit} edit={props.edit} />
                     <button
                       type="button"
                       style={{
@@ -77,13 +101,19 @@ function TimeDay(props) {
                   </>
                 ) : (
                   <>
-                    <TimePickerSelector />
+                    <TimePickerSelector
+                      value={timeSplit[0]}
+                      edit={props.edit}
+                    />
                     <Image
                       borderRadius="full"
                       boxSize="50px"
                       src="/assets/slash-icon.svg"
                     ></Image>
-                    <TimePickerSelector />
+                    <TimePickerSelector
+                      value={timeSplit[1]}
+                      edit={props.edit}
+                    />
                     <button
                       type="button"
                       style={{
@@ -93,6 +123,7 @@ function TimeDay(props) {
                         background: "none",
                       }}
                       onClick={() => setClickValue(!clickValue)}
+                      disabled={props.edit}
                     >
                       <Image
                         borderRadius="full"
@@ -104,7 +135,7 @@ function TimeDay(props) {
                 )}
               </>
             ) : (
-              <text>No time will be selected</text>
+              <p className={styles.timeMessage}>No time will be selected</p>
             )}
           </div>
         </div>

@@ -411,7 +411,11 @@ function MentorProfileForm() {
           <p className={styles.headerOfficeHours}>
             Configure the standard hours of operation for this location.
           </p>
-          <Schedule name="officeHours" />
+          <Schedule
+            name="officeHours"
+            value={userData.officeHours}
+            edit={edit}
+          />
           <div className={styles.buttonContainer}>
             {!edit ? <Button type="submit">Submit</Button> : null}
           </div>
