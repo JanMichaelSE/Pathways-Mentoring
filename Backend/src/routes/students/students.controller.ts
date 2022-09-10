@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 
-import { findMentorByEmail } from "../../models/mentors.model";
 import {
   findAllStudents,
   findStudentByUserId,
-  findStudentsByMentor,
   updateStudent,
   validateStudentExists,
 } from "../../models/students.model";
@@ -19,7 +17,6 @@ import {
   formatPhoneNumber,
   handleBadRequestResponse,
   handleErrorResponse,
-  handleNotFoundResponse,
   titleCase,
 } from "../../utils/helpers";
 import { sendRequestMentorshipEmail } from "../../services/mail.service";
@@ -30,25 +27,6 @@ async function httpGetAllStudents(req: Request, res: Response) {
     return res.status(200).json(students);
   } catch (error) {
     return handleErrorResponse("get all students", error, res);
-  }
-}
-
-async function httpGetAllStudentsByMentor(req: Request, res: Response) {
-  try {
-    const requestEmail = req.params.email;
-    const mentor = await findMentorByEmail(requestEmail);
-
-    if (!mentor) {
-      return handleNotFoundResponse(
-        "A mentor with this email doesn't exist.",
-        res
-      );
-    }
-
-    const students = await findStudentsByMentor(mentor.id);
-    return res.status(200).json(students);
-  } catch (error) {
-    return handleErrorResponse("get students by mentor", error, res);
   }
 }
 
@@ -145,7 +123,6 @@ async function httpRequestMentorship(req: Request, res: Response) {
 
 export {
   httpGetAllStudents,
-  httpGetAllStudentsByMentor,
   httpGetStudentProfileByUserId,
   httpUpdateStudentProfile,
   httpRequestMentorship,

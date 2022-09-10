@@ -17,8 +17,10 @@ import {
   formatPhoneNumber,
   handleBadRequestResponse,
   handleErrorResponse,
+  handleNotFoundResponse,
   titleCase,
 } from "../../utils/helpers";
+import { findStudentsByMentor } from "../../models/students.model";
 
 async function httpGetAllMentors(req: Request, res: Response) {
   try {
@@ -34,15 +36,27 @@ async function httpGetMentorProfileByUserId(req: Request, res: Response) {
     const userId = req.userId;
     const mentorResponse = await findMentorByUserId(userId);
     if (!mentorResponse) {
-      return handleBadRequestResponse(
-        "This mentor does not exist in the system.",
-        res
-      );
+      return handleBadRequestResponse("This mentor does not exist in the system.", res);
     }
 
     return res.status(200).json(mentorResponse);
   } catch (error) {
     return handleErrorResponse("get mentor by user id", error, res);
+  }
+}
+
+async function httpGetAllStudentsByMentor(req: Request, res: Response) {
+  try {
+    const userId = req.userId;
+    const mentor = await findMentorByUserId(userId);
+    if (!mentor) {
+      return handleNotFoundResponse("A mentor with this email doesn't exist.", res);
+    }
+
+    const students = await findStudentsByMentor(mentor.id);
+    return res.status(200).json(students);
+  } catch (error) {
+    return handleErrorResponse("get students by mentor", error, res);
   }
 }
 
@@ -75,9 +89,7 @@ async function httpUpdateMentorProfile(req: Request, res: Response) {
       });
     }
 
-    const validatedMentorResponse = await validateMentorExists(
-      validatedUserResponse.id
-    );
+    const validatedMentorResponse = await validateMentorExists(validatedUserResponse.id);
     if ("errorCode" in validatedMentorResponse) {
       return res.status(validatedMentorResponse.errorCode).json({
         error: validatedMentorResponse,
@@ -104,8 +116,18 @@ async function httpUpdateMentorProfile(req: Request, res: Response) {
   }
 }
 
+async function httpAcceptMentorshipRequest(req: Request, res: Response) {
+  try {
+    return res.status(200).json("Accept Mentorship Endpoint");
+  } catch (error) {
+    return handleErrorResponse("accept mentorship request", error, res);
+  }
+}
+
 export {
   httpGetAllMentors,
-  httpUpdateMentorProfile,
   httpGetMentorProfileByUserId,
+  httpGetAllStudentsByMentor,
+  httpUpdateMentorProfile,
+  httpAcceptMentorshipRequest,
 };
