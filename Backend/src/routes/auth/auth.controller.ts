@@ -31,7 +31,7 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "../../services/auth.service";
-import { sendResetPasswordEmail } from "../../services/mail.service";
+import { sendRequestMentorAccessEmail, sendResetPasswordEmail } from "../../services/mail.service";
 
 async function httpLogin(req: Request, res: Response) {
   try {
@@ -47,10 +47,7 @@ async function httpLogin(req: Request, res: Response) {
       );
     }
 
-    const userResponse = await isUserAuthorized(
-      userInfo.email,
-      userInfo.password
-    );
+    const userResponse = await isUserAuthorized(userInfo.email, userInfo.password);
     if ("errorCode" in userResponse) {
       return res.status(userResponse.errorCode).json({
         error: userResponse,
@@ -67,6 +64,7 @@ async function httpLogin(req: Request, res: Response) {
       refreshToken,
       email: userResponse.email,
       role: userResponse.role,
+      isApproved: userResponse.isApproved,
     });
   } catch (error) {
     return handleErrorResponse("login", error, res);
@@ -101,10 +99,7 @@ async function httpSignupStudent(req: Request, res: Response) {
       !studentInfo.fieldOfStudy ||
       !studentInfo.institution
     ) {
-      return handleBadRequestResponse(
-        "Student is missing required fields for creation.",
-        res
-      );
+      return handleBadRequestResponse("Student is missing required fields for creation.", res);
     }
 
     if (userInfo.role !== "Student") {
@@ -116,11 +111,7 @@ async function httpSignupStudent(req: Request, res: Response) {
       );
     }
 
-    const userResponse = await createUser(
-      userInfo.email,
-      userInfo.password,
-      userInfo.role
-    );
+    const userResponse = await createUser(userInfo.email, userInfo.password, userInfo.role, true);
     if ("errorCode" in userResponse) {
       return res.status(userResponse.errorCode).json({
         error: userResponse,
@@ -131,16 +122,13 @@ async function httpSignupStudent(req: Request, res: Response) {
     const refreshToken = generateRefreshToken(userResponse.id);
     await updateUserTokens(userResponse.id, accessToken, refreshToken);
 
-    const studentResponse = await createStudent(
-      userResponse.id,
-      userInfo.email,
-      studentInfo
-    );
+    const studentResponse = await createStudent(userResponse.id, userInfo.email, studentInfo);
 
     return res.status(200).json({
       accessToken,
       refreshToken,
       ...studentResponse,
+      isApproved: true,
     });
   } catch (error) {
     return handleErrorResponse("signup student", error, res);
@@ -156,6 +144,7 @@ async function httpSignupMentor(req: Request, res: Response) {
     };
     const mentorInfo: IMentor = {
       name: titleCase(req.body.name),
+      email: req.body.email,
       phone: formatPhoneNumber(req.body.phone),
       gender: titleCase(req.body.gender),
       department: titleCase(req.body.department),
@@ -179,10 +168,7 @@ async function httpSignupMentor(req: Request, res: Response) {
       !mentorInfo.facultyStatus ||
       !mentorInfo.academicDegree
     ) {
-      return handleBadRequestResponse(
-        "Mentor is missing required fields for creation.",
-        res
-      );
+      return handleBadRequestResponse("Mentor is missing required fields for creation.", res);
     }
 
     if (userInfo.role !== "Mentor") {
@@ -194,31 +180,25 @@ async function httpSignupMentor(req: Request, res: Response) {
       );
     }
 
-    const userResponse = await createUser(
-      userInfo.email,
-      userInfo.password,
-      userInfo.role
-    );
+    const userResponse = await createUser(userInfo.email, userInfo.password, userInfo.role, false);
     if ("errorCode" in userResponse) {
       return res.status(userResponse.errorCode).json({
         error: userResponse,
       });
     }
 
-    const accessToken = generateAccessToken(userResponse.id);
-    const refreshToken = generateRefreshToken(userResponse.id);
-    await updateUserTokens(userResponse.id, accessToken, refreshToken);
+    const mentorResponse = await createMentor(userResponse.id, userInfo.email, mentorInfo);
+    if ("errorCode" in mentorResponse) {
+      return res.status(mentorResponse.errorCode).json({
+        error: mentorResponse,
+      });
+    }
 
-    const mentorResponse = await createMentor(
-      userResponse.id,
-      userInfo.email,
-      mentorInfo
-    );
+    await sendRequestMentorAccessEmail(mentorResponse.id, mentorInfo);
 
     return res.status(200).json({
-      accessToken,
-      refreshToken,
       ...mentorResponse,
+      isApproved: false,
     });
   } catch (error) {
     return handleErrorResponse("signup mentor", error, res);
@@ -240,11 +220,7 @@ async function httpSignupAdmin(req: Request, res: Response) {
       );
     }
 
-    const createdUser = await createUser(
-      userInfo.email,
-      userInfo.password,
-      userInfo.role
-    );
+    const createdUser = await createUser(userInfo.email, userInfo.password, userInfo.role, true);
     if ("errorCode" in createdUser) {
       return res.status(createdUser.errorCode).json({
         error: createdUser,
@@ -253,11 +229,7 @@ async function httpSignupAdmin(req: Request, res: Response) {
 
     const accessToken = generateAccessToken(createdUser.id);
     const refreshToken = generateRefreshToken(createdUser.id);
-    const updatedUser = await updateUserTokens(
-      createdUser.id,
-      accessToken,
-      refreshToken
-    );
+    const updatedUser = await updateUserTokens(createdUser.id, accessToken, refreshToken);
 
     return res.status(200).json(updatedUser);
   } catch (error) {
@@ -282,6 +254,7 @@ async function httpUpdateAdmin(req: Request, res: Response) {
       email: req.body.email,
       password: req.body.currentPassword,
       newPassword: req.body.newPassword,
+      isApproved: true,
     };
     const validatedUserResponse = await validateProfileUpdate(userInfo);
     if ("errorCode" in validatedUserResponse) {
@@ -306,12 +279,7 @@ async function httpUpdateAdmin(req: Request, res: Response) {
       );
     }
 
-    const userFiltered = excludeFields(
-      updatedUser,
-      "id",
-      "password",
-      "passwordSalt"
-    );
+    const userFiltered = excludeFields(updatedUser, "id", "password", "passwordSalt");
 
     return res.status(200).json(userFiltered);
   } catch (error) {
@@ -362,9 +330,7 @@ async function httpRefreshToken(req: Request, res: Response) {
     const [accessToken, refreshedToken] = verifyTokenResponse;
     await updateUserTokens(userRefreshToken.id, accessToken, refreshedToken);
 
-    return res
-      .status(200)
-      .json({ accessToken: accessToken, refreshedToken: refreshedToken });
+    return res.status(200).json({ accessToken: accessToken, refreshedToken: refreshedToken });
   } catch (error) {
     return handleErrorResponse("refresh token", error, res);
   }
@@ -394,9 +360,7 @@ async function httpForgotPassword(req: Request, res: Response) {
     await updateUserTokens(user.id, accessToken, refreshToken);
     await sendResetPasswordEmail(email, accessToken);
 
-    return res
-      .status(200)
-      .json({ status: 200, message: "Reset Password Email has been sent." });
+    return res.status(200).json({ status: 200, message: "Reset Password Email has been sent." });
   } catch (error) {
     return handleErrorResponse("forgot password", error, res);
   }

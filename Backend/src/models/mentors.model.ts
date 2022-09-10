@@ -39,10 +39,26 @@ async function createMentor(
 async function findAllMentors(): Promise<Mentor[]> {
   try {
     const mentors = await prisma.mentor.findMany();
-    const mentorsWithoutId = mentors.map((mentor) =>
-      excludeFields(mentor, "id")
-    );
+    const mentorsWithoutId = mentors.map((mentor) => excludeFields(mentor, "id"));
     return mentorsWithoutId;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function findMentorById(mentorId: string): Promise<Mentor | null> {
+  try {
+    const mentor = await prisma.mentor.findUnique({
+      where: {
+        id: mentorId,
+      },
+    });
+
+    if (!mentor) {
+      return null;
+    }
+
+    return mentor;
   } catch (error) {
     throw error;
   }
@@ -79,6 +95,22 @@ async function findMentorByEmail(email: string): Promise<Mentor | null> {
   }
 }
 
+async function findUnApprovedMentors(): Promise<Mentor[]> {
+  try {
+    const mentors = await prisma.mentor.findMany({
+      where: {
+        user: {
+          isApproved: false,
+        },
+      },
+    });
+
+    return mentors;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function updateMentor(
   id: string,
   email: string,
@@ -97,9 +129,7 @@ async function updateMentor(
         description: mentorInfo.description,
         interests: mentorInfo.interests,
         department: !!mentorInfo.department ? mentorInfo.department : undefined,
-        academicDegree: !!mentorInfo.academicDegree
-          ? mentorInfo.academicDegree
-          : undefined,
+        academicDegree: !!mentorInfo.academicDegree ? mentorInfo.academicDegree : undefined,
         office: mentorInfo.office,
         officeHours: mentorInfo.officeHours,
         profilePicture: mentorInfo.profilePicture,
@@ -113,9 +143,7 @@ async function updateMentor(
   }
 }
 
-async function validateMentorExists(
-  userId: string
-): Promise<Mentor | IErrorResponse> {
+async function validateMentorExists(userId: string): Promise<Mentor | IErrorResponse> {
   try {
     const mentor = await prisma.mentor.findUnique({
       where: {
@@ -135,8 +163,10 @@ async function validateMentorExists(
 export {
   createMentor,
   findAllMentors,
+  findMentorById,
   findMentorByUserId,
   findMentorByEmail,
+  findUnApprovedMentors,
   updateMentor,
   validateMentorExists,
 };

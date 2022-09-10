@@ -9,6 +9,7 @@ export interface IUser {
   password: string;
   newPassword?: string;
   role?: string;
+  isApproved?: boolean;
 }
 
 export interface IStudent {
@@ -25,6 +26,7 @@ export interface IStudent {
 
 export interface IMentor {
   name: string;
+  email?: string;
   phone: string;
   gender: string;
   department: string;

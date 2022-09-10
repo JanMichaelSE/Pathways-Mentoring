@@ -2,7 +2,7 @@ import { Record } from "@prisma/client";
 import { prisma } from "../database";
 import { recordData } from "../services/data.service";
 
-async function getAllRecords(): Promise<Record[]> {
+async function findAllRecords(): Promise<Record[]> {
   try {
     const records = await prisma.record.findMany();
     return records;
@@ -11,10 +11,49 @@ async function getAllRecords(): Promise<Record[]> {
   }
 }
 
-async function createRecords(
-  mentorId: string,
-  studentId: string
-): Promise<Record[]> {
+async function findRecordsByStudent(studentId: string): Promise<Record[]> {
+  try {
+    const records = await prisma.record.findMany({
+      where: {
+        studentId: studentId,
+      },
+      include: {
+        mentor: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    return records;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function findRecordsByMentor(mentorId: string): Promise<Record[]> {
+  try {
+    const records = await prisma.record.findMany({
+      where: {
+        mentorId: mentorId,
+      },
+      include: {
+        student: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    return records;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function createRecords(mentorId: string, studentId: string): Promise<Record[]> {
   try {
     let records = recordData().map((record) => {
       record.studentId = studentId;
@@ -61,4 +100,4 @@ async function updateRecord(recordId: string, stage: string): Promise<Record> {
   }
 }
 
-export { getAllRecords, createRecords, updateRecord };
+export { findAllRecords, findRecordsByStudent, findRecordsByMentor, createRecords, updateRecord };
