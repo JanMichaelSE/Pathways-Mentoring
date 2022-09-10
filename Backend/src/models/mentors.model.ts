@@ -95,6 +95,22 @@ async function findMentorByEmail(email: string): Promise<Mentor | null> {
   }
 }
 
+async function findUnApprovedMentors(): Promise<Mentor[]> {
+  try {
+    const mentors = await prisma.mentor.findMany({
+      where: {
+        user: {
+          isApproved: false,
+        },
+      },
+    });
+
+    return mentors;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function updateMentor(
   id: string,
   email: string,
@@ -150,6 +166,7 @@ export {
   findMentorById,
   findMentorByUserId,
   findMentorByEmail,
+  findUnApprovedMentors,
   updateMentor,
   validateMentorExists,
 };

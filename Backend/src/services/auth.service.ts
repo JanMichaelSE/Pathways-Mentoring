@@ -5,11 +5,7 @@ import jwt from "jsonwebtoken";
 import { buildErrorObject } from "../utils/helpers";
 import { getUserTokens } from "../models/users.model";
 
-async function authenticateJsonWebToken(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+async function authenticateJsonWebToken(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -19,20 +15,14 @@ async function authenticateJsonWebToken(
   }
 
   const userTokens = await getUserTokens(token);
-  if (token !== userTokens?.accessToken) {
-    const error = buildErrorObject(
-      403,
-      "Your are not authorized to access these resources."
-    );
+  if (token !== userTokens?.accessToken || userTokens.isApproved == false) {
+    const error = buildErrorObject(403, "Your are not authorized to access these resources.");
     return res.status(error.errorCode).json({ error: error });
   }
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || "", (err, user) => {
     if (err) {
-      const error = buildErrorObject(
-        403,
-        "Your are not authorized to access these resources."
-      );
+      const error = buildErrorObject(403, "Your are not authorized to access these resources.");
       return res.status(error.errorCode).json({ error: error });
     }
 
@@ -56,25 +46,19 @@ function generateRefreshToken(userId: string): string {
   });
 }
 
-function verifyRefreshToken(
-  refreshToken: string
-): [string, string] | IErrorResponse {
+function verifyRefreshToken(refreshToken: string): [string, string] | IErrorResponse {
   let accessToken = "";
   let refreshedToken = "";
 
-  jwt.verify(
-    refreshToken,
-    process.env.REFRESH_TOKEN_SECRET || "",
-    (err, user) => {
-      if (err) {
-        return buildErrorObject(403, "Token has expired.");
-      }
-
-      const userId = user as { id: string; iat: number; exp: number };
-      accessToken = generateAccessToken(userId.id);
-      refreshedToken = generateRefreshToken(userId.id);
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET || "", (err, user) => {
+    if (err) {
+      return buildErrorObject(403, "Token has expired.");
     }
-  );
+
+    const userId = user as { id: string; iat: number; exp: number };
+    accessToken = generateAccessToken(userId.id);
+    refreshedToken = generateRefreshToken(userId.id);
+  });
 
   return [accessToken, refreshedToken];
 }

@@ -5,8 +5,11 @@ import {
   findAllMentors,
   updateMentor,
   validateMentorExists,
+  findUnApprovedMentors,
+  findMentorById,
 } from "../../models/mentors.model";
 import {
+  updateUserApproval,
   updateUserEmail,
   updateUserPassword,
   validateProfileUpdate,
@@ -18,6 +21,7 @@ import {
   handleBadRequestResponse,
   handleErrorResponse,
   handleNotFoundResponse,
+  isValidUUID,
   titleCase,
 } from "../../utils/helpers";
 import {
@@ -27,7 +31,10 @@ import {
   validateStudentIdExists,
 } from "../../models/students.model";
 import { createRecords } from "../../models/records.model";
-import { sendAcceptedMentorshipEmail } from "../../services/mail.service";
+import {
+  sendAcceptedMentorshipEmail,
+  sendApprovedMentorAccessEmail,
+} from "../../services/mail.service";
 
 async function httpGetAllMentors(req: Request, res: Response) {
   try {
@@ -64,6 +71,15 @@ async function httpGetAllStudentsByMentor(req: Request, res: Response) {
     return res.status(200).json(students);
   } catch (error) {
     return handleErrorResponse("get students by mentor", error, res);
+  }
+}
+
+async function httpGetUnApprovedMentors(req: Request, res: Response) {
+  try {
+    const mentors = await findUnApprovedMentors();
+    return res.status(200).json(mentors);
+  } catch (error) {
+    return handleErrorResponse("get unapproved mentors", error, res);
   }
 }
 
@@ -152,10 +168,38 @@ async function httpAcceptMentorshipRequest(req: Request, res: Response) {
   }
 }
 
+async function httpApproveMentorAccess(req: Request, res: Response) {
+  try {
+    const mentorId = req.body.mentorId;
+
+    const isValid = await isValidUUID(mentorId);
+    if (!isValid) {
+      return handleBadRequestResponse(
+        "This Id passed in the request does not have a valid format.",
+        res
+      );
+    }
+
+    const mentor = await findMentorById(mentorId);
+    if (!mentor) {
+      return handleNotFoundResponse("No mentor exists with the provided Id.", res);
+    }
+
+    const updatedUser = await updateUserApproval(mentor.userId, true);
+    await sendApprovedMentorAccessEmail(mentor.email);
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    return handleErrorResponse("approve mentor access", error, res);
+  }
+}
+
 export {
   httpGetAllMentors,
   httpGetMentorProfileByUserId,
   httpGetAllStudentsByMentor,
   httpUpdateMentorProfile,
   httpAcceptMentorshipRequest,
+  httpGetUnApprovedMentors,
+  httpApproveMentorAccess,
 };
