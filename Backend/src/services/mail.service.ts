@@ -176,9 +176,51 @@ async function sendAcceptedMentorshipEmail(toEmail: string, mentorName: string) 
   }
 }
 
+async function sendCanceledMentorshipEmail(toEmail: string, name: string, studentName: string) {
+  try {
+    const CANCELED_MENTORSHIP_TEMPLATE_ID = process.env.CANCELED_MENTORSHIP_TEMPLATE_ID ?? "";
+    const _email = {
+      from: {
+        email: FROM_ADDRESS,
+        name: "Pathways Mentoring",
+      },
+      template_id: CANCELED_MENTORSHIP_TEMPLATE_ID,
+      personalizations: [
+        {
+          to: [
+            {
+              email: toEmail,
+            },
+          ],
+          dynamic_template_data: {
+            name: name,
+            studentName: studentName,
+          },
+        },
+      ],
+      reply_to: {
+        email: FROM_ADDRESS,
+        name: "Reply",
+      },
+    };
+
+    return axios({
+      method: "post",
+      url: EMAIL_SEND_URL,
+      headers: {
+        Authorization: `Bearer ${SENGRID_API_KEY}`,
+      },
+      data: _email,
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   sendResetPasswordEmail,
   sendContactFormEmail,
   sendRequestMentorshipEmail,
   sendAcceptedMentorshipEmail,
+  sendCanceledMentorshipEmail,
 };
