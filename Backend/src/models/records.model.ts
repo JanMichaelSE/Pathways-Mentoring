@@ -2,7 +2,7 @@ import { Record } from "@prisma/client";
 import { prisma } from "../database";
 import { recordData } from "../services/data.service";
 
-async function getAllRecords(): Promise<Record[]> {
+async function findAllRecords(): Promise<Record[]> {
   try {
     const records = await prisma.record.findMany();
     return records;
@@ -11,7 +11,7 @@ async function getAllRecords(): Promise<Record[]> {
   }
 }
 
-async function getRecordsByStudent(studentId: string): Promise<Record[]> {
+async function findRecordsByStudent(studentId: string): Promise<Record[]> {
   try {
     const records = await prisma.record.findMany({
       where: {
@@ -32,7 +32,7 @@ async function getRecordsByStudent(studentId: string): Promise<Record[]> {
   }
 }
 
-async function getRecordsByMentor(mentorId: string): Promise<Record[]> {
+async function findRecordsByMentor(mentorId: string): Promise<Record[]> {
   try {
     const records = await prisma.record.findMany({
       where: {
@@ -100,4 +100,4 @@ async function updateRecord(recordId: string, stage: string): Promise<Record> {
   }
 }
 
-export { getAllRecords, getRecordsByStudent, getRecordsByMentor, createRecords, updateRecord };
+export { findAllRecords, findRecordsByStudent, findRecordsByMentor, createRecords, updateRecord };

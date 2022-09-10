@@ -2,9 +2,9 @@ import { Response, Request } from "express";
 import { findMentorByUserId } from "../../models/mentors.model";
 import {
   createRecords,
-  getAllRecords,
-  getRecordsByMentor,
-  getRecordsByStudent,
+  findAllRecords,
+  findRecordsByMentor,
+  findRecordsByStudent,
   updateRecord,
 } from "../../models/records.model";
 import { findStudentByUserId } from "../../models/students.model";
@@ -17,7 +17,7 @@ import {
 
 async function httpGetAllRecords(req: Request, res: Response) {
   try {
-    const records = await getAllRecords();
+    const records = await findAllRecords();
     return res.status(200).json(records);
   } catch (error) {
     return handleErrorResponse("get all records", error, res);
@@ -33,7 +33,7 @@ async function httpGetRecordsByStudent(req: Request, res: Response) {
       return handleNotFoundResponse("No student with this access token found.", res);
     }
 
-    const records = await getRecordsByStudent(student.id);
+    const records = await findRecordsByStudent(student.id);
 
     return res.status(200).json(records);
   } catch (error) {
@@ -50,7 +50,7 @@ async function httpGetRecordsByMentor(req: Request, res: Response) {
       return handleNotFoundResponse("No mentor with this access token found.", res);
     }
 
-    const records = await getRecordsByMentor(mentor.id);
+    const records = await findRecordsByMentor(mentor.id);
 
     return res.status(200).json(records);
   } catch (error) {
