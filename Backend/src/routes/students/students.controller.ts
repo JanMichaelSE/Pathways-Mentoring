@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
 
-import { findMentorByEmail } from "../../models/mentors.model";
 import {
   findAllStudents,
+  findStudentById,
   findStudentByUserId,
-  findStudentsByMentor,
   updateStudent,
+  updateStudentMentorship,
   validateStudentExists,
 } from "../../models/students.model";
 import {
+  findUserById,
   updateUserEmail,
   updateUserPassword,
   validateProfileUpdate,
@@ -22,7 +23,11 @@ import {
   handleNotFoundResponse,
   titleCase,
 } from "../../utils/helpers";
-import { sendRequestMentorshipEmail } from "../../services/mail.service";
+import {
+  sendCanceledMentorshipEmail,
+  sendRequestMentorshipEmail,
+} from "../../services/mail.service";
+import { findMentorById, findMentorByUserId } from "../../models/mentors.model";
 
 async function httpGetAllStudents(req: Request, res: Response) {
   try {
@@ -33,34 +38,12 @@ async function httpGetAllStudents(req: Request, res: Response) {
   }
 }
 
-async function httpGetAllStudentsByMentor(req: Request, res: Response) {
-  try {
-    const requestEmail = req.params.email;
-    const mentor = await findMentorByEmail(requestEmail);
-
-    if (!mentor) {
-      return handleNotFoundResponse(
-        "A mentor with this email doesn't exist.",
-        res
-      );
-    }
-
-    const students = await findStudentsByMentor(mentor.id);
-    return res.status(200).json(students);
-  } catch (error) {
-    return handleErrorResponse("get students by mentor", error, res);
-  }
-}
-
 async function httpGetStudentProfileByUserId(req: Request, res: Response) {
   try {
     const userId = req.userId;
     const student = await findStudentByUserId(userId);
     if (!student) {
-      return handleBadRequestResponse(
-        "This student does not exist in the system.",
-        res
-      );
+      return handleBadRequestResponse("This student does not exist in the system.", res);
     }
 
     return res.status(200).json(student);
@@ -110,11 +93,7 @@ async function httpUpdateStudentProfile(req: Request, res: Response) {
       await updateUserPassword(validatedUser, userInfo.newPassword);
     }
 
-    const updatedStudent = await updateStudent(
-      validatedStudent.id,
-      userInfo.email,
-      studentInfo
-    );
+    const updatedStudent = await updateStudent(validatedStudent.id, userInfo.email, studentInfo);
 
     return res.status(200).json(updatedStudent);
   } catch (error) {
@@ -129,10 +108,7 @@ async function httpRequestMentorship(req: Request, res: Response) {
 
     const student = await findStudentByUserId(userId);
     if (!student) {
-      return handleBadRequestResponse(
-        "This student does not exist in the system.",
-        res
-      );
+      return handleBadRequestResponse("This student does not exist in the system.", res);
     }
 
     await sendRequestMentorshipEmail(toEmail, student.name, student.id);
@@ -143,10 +119,76 @@ async function httpRequestMentorship(req: Request, res: Response) {
   }
 }
 
+async function httpCancelMentorship(req: Request, res: Response) {
+  try {
+    const userId = req.userId;
+    const studentId = req.body.studentId;
+
+    const user = await findUserById(userId);
+    if (!user) {
+      return handleNotFoundResponse("A user with this access token doesn't exist.", res);
+    }
+
+    let updatedStudent;
+    if (user.role == "Student") {
+      const student = await findStudentByUserId(user.id);
+      if (!student) {
+        return handleNotFoundResponse("A student with this ID doesn't exist.", res);
+      }
+
+      if (!student.mentorId) {
+        return handleBadRequestResponse("Student doesn't have any mentor assigned.", res);
+      }
+
+      const mentor = await findMentorById(student.mentorId);
+      if (!mentor) {
+        return handleBadRequestResponse(
+          "Mentor related to student doesn't exist in the system.",
+          res
+        );
+      }
+
+      updatedStudent = await updateStudentMentorship(student.id, null);
+      await sendCanceledMentorshipEmail(mentor.email, student.name, student.name);
+    } else {
+      const mentor = await findMentorByUserId(userId);
+      if (!mentor) {
+        return handleNotFoundResponse("A mentor with this ID doesn't exist.", res);
+      }
+
+      if (!studentId) {
+        return handleBadRequestResponse(
+          "Mentors must provide a student id inorder to cancel student mentorship.",
+          res
+        );
+      }
+
+      const student = await findStudentById(studentId);
+      if (!student) {
+        return handleNotFoundResponse("A student with this ID doesn't exist.", res);
+      }
+
+      if (student.mentorId != mentor.id) {
+        return handleBadRequestResponse(
+          "This student does not have a mentorship agreement with this mentor.",
+          res
+        );
+      }
+
+      updatedStudent = await updateStudentMentorship(student.id, null);
+      await sendCanceledMentorshipEmail(student.email, mentor.name, student.name);
+    }
+
+    return res.status(200).json(updatedStudent);
+  } catch (error) {
+    return handleErrorResponse("cancel mentorship", error, res);
+  }
+}
+
 export {
   httpGetAllStudents,
-  httpGetAllStudentsByMentor,
   httpGetStudentProfileByUserId,
   httpUpdateStudentProfile,
   httpRequestMentorship,
+  httpCancelMentorship,
 };

@@ -10,7 +10,8 @@ import { getUserIdFromToken } from "../services/auth.service";
 async function createUser(
   email: string,
   password: string,
-  role: string
+  role: string,
+  isApproved: boolean
 ): Promise<User | IErrorResponse> {
   try {
     const existingUser = await findUserByEmail(email);
@@ -30,6 +31,7 @@ async function createUser(
         password: hashedPassword,
         passwordSalt: salt,
         role: role,
+        isApproved: isApproved,
       },
     });
 
@@ -67,10 +69,7 @@ async function findUserById(userId: string): Promise<User | null> {
   }
 }
 
-async function updateUserPassword(
-  user: User,
-  newPassword: string
-): Promise<User> {
+async function updateUserPassword(user: User, newPassword: string): Promise<User> {
   try {
     let salt: string = generateSalt(32);
     let hashedPassword: string = sha512(newPassword, salt);
@@ -116,10 +115,7 @@ async function updateUserEmail(user: User, email: string): Promise<User> {
   }
 }
 
-async function isUserAuthorized(
-  email: string,
-  password: string
-): Promise<User | IErrorResponse> {
+async function isUserAuthorized(email: string, password: string): Promise<User | IErrorResponse> {
   try {
     const user = await findUserByEmail(email);
     if (!user) {
@@ -128,10 +124,11 @@ async function isUserAuthorized(
 
     let hashedPasswordFromRequest = sha512(password, user.passwordSalt);
     if (hashedPasswordFromRequest !== user.password) {
-      return buildErrorObject(
-        401,
-        "Provided password is incorrect for this user."
-      );
+      return buildErrorObject(401, "Provided password is incorrect for this user.");
+    }
+
+    if (!user.isApproved) {
+      return buildErrorObject(400, "User does not have approval to access the system.");
     }
 
     const userWithoutPassord = excludeFields(user, "password", "passwordSalt");
@@ -182,10 +179,26 @@ async function updateUserTokens(
   }
 }
 
+async function updateUserApproval(userId: string, approval: boolean): Promise<User> {
+  try {
+    const user = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        isApproved: approval,
+      },
+    });
+
+    const userFiltered = excludeFields(user, "id", "password", "passwordSalt");
+    return userFiltered;
+  } catch (error) {
+    throw error;
+  }
+}
+
 // --- Utility Functions ---
-async function validateProfileUpdate(
-  userInfo: IUser
-): Promise<User | IErrorResponse> {
+async function validateProfileUpdate(userInfo: IUser): Promise<User | IErrorResponse> {
   try {
     // Validate that User Exists
     const user = await prisma.user.findUnique({
@@ -206,20 +219,10 @@ async function validateProfileUpdate(
     }
 
     // Validate Passwords Match
-    if (
-      userInfo.password &&
-      userInfo.newPassword &&
-      userInfo.password !== userInfo.newPassword
-    ) {
-      let hashedPasswordFromRequest = sha512(
-        userInfo.password,
-        user.passwordSalt
-      );
+    if (userInfo.password && userInfo.newPassword && userInfo.password !== userInfo.newPassword) {
+      let hashedPasswordFromRequest = sha512(userInfo.password, user.passwordSalt);
       if (hashedPasswordFromRequest !== user.password) {
-        return buildErrorObject(
-          401,
-          "Current password is incorrect for this user."
-        );
+        return buildErrorObject(401, "Current password is incorrect for this user.");
       }
     }
 
@@ -250,7 +253,8 @@ export {
   updateUserPassword,
   updateUserEmail,
   isUserAuthorized,
-  validateProfileUpdate,
   getUserTokens,
   updateUserTokens,
+  updateUserApproval,
+  validateProfileUpdate,
 };
