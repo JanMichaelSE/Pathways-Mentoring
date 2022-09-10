@@ -46,6 +46,24 @@ async function findAllStudents(): Promise<Student[]> {
   }
 }
 
+async function findStudentById(studentId: string): Promise<Student | null> {
+  try {
+    const student = await prisma.student.findUnique({
+      where: {
+        id: studentId,
+      },
+    });
+
+    if (!student) {
+      return null;
+    }
+
+    return student;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function findStudentsByMentor(mentorId: string): Promise<Student[]> {
   try {
     const students = await prisma.student.findMany({
@@ -113,7 +131,10 @@ async function updateStudent(
   }
 }
 
-async function updateStudentMentorship(studentId: string, mentorId: string): Promise<Student> {
+async function updateStudentMentorship(
+  studentId: string,
+  mentorId: string | null
+): Promise<Student> {
   try {
     const student = await prisma.student.update({
       where: {
@@ -167,6 +188,7 @@ async function validateStudentIdExists(studentId: string): Promise<Student | IEr
 export {
   createStudent,
   findAllStudents,
+  findStudentById,
   findStudentsByMentor,
   findStudentByUserId,
   updateStudent,
