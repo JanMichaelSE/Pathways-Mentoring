@@ -117,15 +117,16 @@ model Assessment {
 }
 
 model Question {
-  id           Int        @id @default(autoincrement())
-  question     String
-  type         String     @db.VarChar(255)
-  options      String?
-  createdDate  DateTime   @default(now()) @db.Timestamptz(6)
-  lastModified DateTime   @default(now()) @db.Timestamptz(6)
-  assessmentId Int
-  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-  answers      Answer[]
+  id                Int         @id @default(autoincrement())
+  question          String
+  type              String      @db.VarChar(255)
+  isDevelopmentPlan Boolean?    @default(false)
+  options           String?
+  createdDate       DateTime    @default(now()) @db.Timestamptz(6)
+  lastModified      DateTime    @default(now()) @db.Timestamptz(6)
+  assessmentId      Int?
+  assessment        Assessment? @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  answers           Answer[]
 }
 
 model Answer {

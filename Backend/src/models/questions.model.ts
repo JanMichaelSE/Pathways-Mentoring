@@ -5,10 +5,22 @@ import { Question } from "@prisma/client";
 import { IErrorResponse, IQuestion } from "../types";
 import { buildErrorObject, titleCase } from "../utils/helpers";
 
-async function deleteQuestions(
-  questions: IQuestion[],
-  assessmentId: number
-): Promise<void> {
+// TODO: MUST REVISIT After Assessment Thought Process.
+async function findDevelopmentPlanQuestions(): Promise<Question[]> {
+  try {
+    const questions = await prisma.question.findMany({
+      where: {
+        isDevelopmentPlan: true,
+      },
+    });
+
+    return questions;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function deleteQuestions(questions: IQuestion[], assessmentId: number): Promise<void> {
   try {
     const existingQuestions = await prisma.question.findMany({
       where: {
@@ -17,9 +29,7 @@ async function deleteQuestions(
     });
 
     const questionIds = questions.map((q) => q.id);
-    const questionsToDelete = existingQuestions.filter(
-      (q) => !questionIds.includes(q.id)
-    );
+    const questionsToDelete = existingQuestions.filter((q) => !questionIds.includes(q.id));
 
     for (const question of questionsToDelete) {
       await prisma.question.delete({
@@ -33,10 +43,7 @@ async function deleteQuestions(
   }
 }
 
-async function upsertQuestions(
-  questions: IQuestion[],
-  assessmentId: number
-): Promise<Question[]> {
+async function upsertQuestions(questions: IQuestion[], assessmentId?: number): Promise<Question[]> {
   try {
     let questionsToReturn: Question[] = [];
     for (const question of questions) {
@@ -50,11 +57,13 @@ async function upsertQuestions(
           type: question.type,
           options: question.options,
           assessmentId: assessmentId,
+          isDevelopmentPlan: question.isDevelopmentPlan,
         },
         update: {
           question: question.question,
           type: question.type,
           options: question.options,
+          isDevelopmentPlan: question.isDevelopmentPlan,
         },
       });
       questionsToReturn.push(questionUpserted);
@@ -66,9 +75,7 @@ async function upsertQuestions(
   }
 }
 
-function validateQuestionsFormat(
-  questions: IQuestion[]
-): IQuestion[] | IErrorResponse {
+function validateQuestionsFormat(questions: IQuestion[]): IQuestion[] | IErrorResponse {
   // Transform Questions to have proper title casing type
   questions.forEach((q) => {
     q.type = titleCase(q.type);
@@ -80,11 +87,12 @@ function validateQuestionsFormat(
       question.type != "Text" &&
       question.type != "Select" &&
       question.type != "Multi-select" &&
-      question.type != "Rating"
+      question.type != "Rating" &&
+      question.type != "Multi-Answer"
     ) {
       return buildErrorObject(
         400,
-        `The question: "${question.question}" does not have a valid type assigned. Valid types are: "Text", "Select" and "Multi-select`
+        `The question: "${question.question}" does not have a valid type assigned. Valid types are: "Text", "Select", "Multi-select", "Rating" and "Multi-Answer"`
       );
     } else if (
       (question.type === "Multi-select" ||
@@ -102,4 +110,4 @@ function validateQuestionsFormat(
   return questions;
 }
 
-export { deleteQuestions, upsertQuestions, validateQuestionsFormat };
+export { findDevelopmentPlanQuestions, deleteQuestions, upsertQuestions, validateQuestionsFormat };
