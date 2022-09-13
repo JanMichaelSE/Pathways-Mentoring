@@ -3,7 +3,7 @@ import { Server } from "socket.io";
 import app from "./app";
 import { handleSocketEvents } from "./services/socket.service";
 
-const PORT = process.env.SERVER_PORT ?? 5000;
+const PORT = process.env.SERVER_PORT ?? 8000;
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -20,6 +20,4 @@ io.on("connection", (socket) => {
   handleSocketEvents(socket);
 });
 
-server.listen(PORT, () =>
-  console.log(`Server is running http://localhost:${PORT}`)
-);
+server.listen(PORT, () => console.log(`Server is running http://localhost:${PORT}`));
