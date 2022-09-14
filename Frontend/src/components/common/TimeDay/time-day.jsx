@@ -25,7 +25,10 @@ function TimeDay({ day, time, edit }) {
 
   // Handle Schedule Data
   useEffect(() => {
-    if ((firstInterval && !hasSecondInterval) || (firstInterval && secondInterval)) {
+    if (
+      (firstInterval && !hasSecondInterval) ||
+      (firstInterval && secondInterval)
+    ) {
       console.log("Use Effect Value 1 time day:", firstInterval);
       console.log("Use Effect Value 2 time day:", secondInterval);
 
@@ -40,8 +43,18 @@ function TimeDay({ day, time, edit }) {
         setSchedule(schedule);
         setScheduleStatus({ ...scheduleStatus });
       }
+    } else {
+      if (!switchValue) {
+        schedule[day] = `%/`;
+        scheduleStatus[day] = true;
+        setSchedule(schedule);
+        setScheduleStatus({ ...scheduleStatus });
+      } else {
+        scheduleStatus[day] = false;
+        setScheduleStatus({ ...scheduleStatus });
+      }
     }
-  }, [firstInterval, secondInterval]);
+  }, [firstInterval, secondInterval, switchValue]);
 
   function updateFirstInterval(tiempo) {
     console.log("Time Day Value Interval 1: ", tiempo);
@@ -120,7 +133,11 @@ function TimeDay({ day, time, edit }) {
                       edit={edit}
                       updateInterval={updateFirstInterval}
                     />
-                    <Image borderRadius="full" boxSize="50px" src="/assets/slash-icon.svg"></Image>
+                    <Image
+                      borderRadius="full"
+                      boxSize="50px"
+                      src="/assets/slash-icon.svg"
+                    ></Image>
                     <TimePickerSelector
                       time={timeSplit[1]}
                       edit={edit}
@@ -135,7 +152,9 @@ function TimeDay({ day, time, edit }) {
                         background: "none",
                       }}
                       onClick={() =>
-                        setHasSecondInterval((hasSecondInterval) => !hasSecondInterval)
+                        setHasSecondInterval(
+                          (hasSecondInterval) => !hasSecondInterval
+                        )
                       }
                       disabled={edit}
                     >
@@ -162,10 +181,16 @@ function TimeDay({ day, time, edit }) {
                         background: "none",
                       }}
                       onClick={() =>
-                        setHasSecondInterval((hasSecondInterval) => !hasSecondInterval)
+                        setHasSecondInterval(
+                          (hasSecondInterval) => !hasSecondInterval
+                        )
                       }
                     >
-                      <Image borderRadius="full" boxSize="50px" src="/assets/add-icon.svg"></Image>
+                      <Image
+                        borderRadius="full"
+                        boxSize="50px"
+                        src="/assets/add-icon.svg"
+                      ></Image>
                     </button>
                   </>
                 )}
