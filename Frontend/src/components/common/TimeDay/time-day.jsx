@@ -4,71 +4,73 @@ import { Flex, Center, Switch, Image } from "@chakra-ui/react";
 import TimePickerSelector from "@/components/common/TimePickerSelector/time-picker-selector";
 import { useUserStore } from "@/store/user.store";
 
-function TimeDay(props) {
-  const [switchValue, setSwitchValue] = useState(false);
-  const [clickValue, setClickValue] = useState(true);
-  const [timeSplit, setTimeSplit] = useState([]);
-  const [valueInterval1, setValueInterval1] = useState("");
-  const [valueInterval2, setValueInterval2] = useState("");
-  const submitValue = useUserStore((state) => state.submitValue);
+function TimeDay({ day, time, edit }) {
   const schedule = useUserStore((state) => state.schedule);
-  //   var timeSplit = [];
+  const setSchedule = useUserStore((state) => state.setSchedule);
+  const scheduleStatus = useUserStore((state) => state.scheduleStatus);
+  const setScheduleStatus = useUserStore((state) => state.setScheduleStatus);
+  const [switchValue, setSwitchValue] = useState(false);
+  const [hasSecondInterval, setHasSecondInterval] = useState(false);
+  const [timeSplit, setTimeSplit] = useState([]);
+  const [firstInterval, setFirstInterval] = useState("");
+  const [secondInterval, setSecondInterval] = useState("");
 
+  // Load Initial Data
   useEffect(() => {
-    var [buttonValue, tugleValue, value] = splitTimeInTwo(props.time);
-    setSwitchValue(tugleValue);
-    setClickValue(buttonValue);
-    setTimeSplit(value);
+    var [isOneInterval, hasDayOpen, timeSplit] = splitTimeInTwo(time);
+    setSwitchValue(hasDayOpen);
+    setHasSecondInterval(!isOneInterval);
+    setTimeSplit(timeSplit);
   }, []);
 
+  // Handle Schedule Data
   useEffect(() => {
-    if (submitValue == true) {
-      // console.log("submitValue timeday:", submitValue);
+    if ((firstInterval && !hasSecondInterval) || (firstInterval && secondInterval)) {
+      console.log("Use Effect Value 1 time day:", firstInterval);
+      console.log("Use Effect Value 2 time day:", secondInterval);
 
-      console.log("Value 1 time day:", valueInterval1);
-      console.log("Value 2 time day:", valueInterval2);
-
-      if (clickValue == true) {
-        schedule[props.day] = `%${valueInterval1}/`;
-        props.updatetime(true);
+      if (hasSecondInterval) {
+        schedule[day] = `%${firstInterval}@${secondInterval}/`;
+        scheduleStatus[day] = !scheduleStatus[day];
+        setSchedule(schedule);
+        setScheduleStatus({ ...scheduleStatus });
       } else {
-        schedule[props.day] = `%${valueInterval1}@${valueInterval2}/`;
-        props.updatetime(true);
+        schedule[day] = `%${firstInterval}/`;
+        scheduleStatus[day] = !scheduleStatus[day];
+        setSchedule(schedule);
+        setScheduleStatus({ ...scheduleStatus });
       }
     }
-  }, [valueInterval1, valueInterval2]);
+  }, [firstInterval, secondInterval]);
 
   function updateFirstInterval(tiempo) {
-    console.log("tiempo1: ", tiempo);
-    setValueInterval1(tiempo);
-    console.log("Value Interval 1: ", valueInterval1);
+    console.log("Time Day Value Interval 1: ", tiempo);
+    setFirstInterval(tiempo);
   }
   function updateSecondInterval(tiempo) {
-    setValueInterval2(tiempo);
-    console.log("Value Interval 2: ", valueInterval2);
+    console.log("Time Day Value Interval 2: ", tiempo);
+    setSecondInterval(tiempo);
   }
 
   function splitTimeInTwo(time) {
-    let buttonValue = true;
-    let tugleValue = false;
+    let isOneInterval = true;
+    let hasDayOpen = false;
+    let timeSplit = "";
 
     if (time.length === 0) {
-      buttonValue = true;
-      const value = "";
-      return [buttonValue, tugleValue, value];
+      isOneInterval = true;
+      timeSplit = "";
+    } else if (time.includes("@")) {
+      isOneInterval = false;
+      hasDayOpen = true;
+      timeSplit = time.split("@");
+    } else {
+      isOneInterval = true;
+      hasDayOpen = true;
+      timeSplit = time;
     }
 
-    if (time.includes("@")) {
-      buttonValue = false;
-      tugleValue = true;
-      const value = time.split("@");
-      return [buttonValue, tugleValue, value];
-    } else {
-      buttonValue = true;
-      tugleValue = true;
-      const value = time;
-      return [buttonValue, tugleValue, value];
-    }
+    return [isOneInterval, hasDayOpen, timeSplit];
   }
 
   return (
@@ -85,15 +87,15 @@ function TimeDay(props) {
                     color: "var(--color-blue-dark)",
                   }}
                 >
-                  {props.day.charAt(0).toUpperCase() + props.day.slice(1)}
+                  {day.charAt(0).toUpperCase() + day.slice(1)}
                 </h2>
               </Center>
               <Center w={"60px"} mr={"5px"}>
                 <Switch
                   size={"lg"}
                   isChecked={switchValue}
-                  onChange={() => setSwitchValue(!switchValue)}
-                  isDisabled={props.edit}
+                  onChange={() => setSwitchValue((switchValue) => !switchValue)}
+                  isDisabled={edit}
                 />
               </Center>
               <Center>
@@ -111,12 +113,18 @@ function TimeDay(props) {
           <div className={styles.formTimePickerContainer}>
             {switchValue ? (
               <>
-                {clickValue ? (
+                {hasSecondInterval ? (
                   <>
                     <TimePickerSelector
-                      value={timeSplit}
-                      edit={props.edit}
-                      updatetime={updateFirstInterval}
+                      time={timeSplit[0]}
+                      edit={edit}
+                      updateInterval={updateFirstInterval}
+                    />
+                    <Image borderRadius="full" boxSize="50px" src="/assets/slash-icon.svg"></Image>
+                    <TimePickerSelector
+                      time={timeSplit[1]}
+                      edit={edit}
+                      updateInterval={updateSecondInterval}
                     />
                     <button
                       type="button"
@@ -126,48 +134,38 @@ function TimeDay(props) {
                         float: "none",
                         background: "none",
                       }}
-                      onClick={() => setClickValue(!clickValue)}
-                    >
-                      <Image
-                        borderRadius="full"
-                        boxSize="50px"
-                        src="/assets/add-icon.svg"
-                      ></Image>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <TimePickerSelector
-                      value={timeSplit[0]}
-                      edit={props.edit}
-                      updatetime={updateFirstInterval}
-                    />
-                    <Image
-                      borderRadius="full"
-                      boxSize="50px"
-                      src="/assets/slash-icon.svg"
-                    ></Image>
-                    <TimePickerSelector
-                      value={timeSplit[1]}
-                      edit={props.edit}
-                      updatetime={updateSecondInterval}
-                    />
-                    <button
-                      type="button"
-                      style={{
-                        width: 58,
-                        height: 58,
-                        float: "none",
-                        background: "none",
-                      }}
-                      onClick={() => setClickValue(!clickValue)}
-                      disabled={props.edit}
+                      onClick={() =>
+                        setHasSecondInterval((hasSecondInterval) => !hasSecondInterval)
+                      }
+                      disabled={edit}
                     >
                       <Image
                         borderRadius="full"
                         boxSize="50px"
                         src="/assets/subtract-icon.svg"
                       ></Image>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <TimePickerSelector
+                      time={timeSplit}
+                      edit={edit}
+                      updateInterval={updateFirstInterval}
+                    />
+                    <button
+                      type="button"
+                      style={{
+                        width: 58,
+                        height: 58,
+                        float: "none",
+                        background: "none",
+                      }}
+                      onClick={() =>
+                        setHasSecondInterval((hasSecondInterval) => !hasSecondInterval)
+                      }
+                    >
+                      <Image borderRadius="full" boxSize="50px" src="/assets/add-icon.svg"></Image>
                     </button>
                   </>
                 )}

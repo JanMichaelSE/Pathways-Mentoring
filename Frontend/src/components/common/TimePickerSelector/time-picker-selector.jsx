@@ -1,55 +1,45 @@
-import TimePickerComponent from "../TimePicker/time-picker";
 import { useState, useEffect } from "react";
-import styles from "./time-picker-selector.module.css";
-import { Spinner, Flex, Center, Text } from "@chakra-ui/react";
-import { useUserStore } from "@/store/user.store";
 
-function TimePickerSelector(props) {
+import { Spinner, Flex, Center, Text } from "@chakra-ui/react";
+
+import TimePickerComponent from "../TimePicker/time-picker";
+
+import styles from "./time-picker-selector.module.css";
+
+function TimePickerSelector({ time, edit, updateInterval }) {
   const [timeSplit, setTimeSplit] = useState(["", ""]);
   const [isLoading, setIsLoading] = useState(true);
-  const [valueInterval1, setValueInterval1] = useState("");
-  const [valueInterval2, setValueInterval2] = useState("");
-  const submitValue = useUserStore((state) => state.submitValue);
+  const [firstInterval, setFirstInterval] = useState("");
+  const [secondInterval, setSecondInterval] = useState("");
 
+  // Load Initial Data
   useEffect(() => {
-    var timeValue = splitTime(props.value);
+    var timeValue = splitTime(time);
     setTimeSplit(timeValue);
     setIsLoading(false);
   }, []);
 
+  // Handle Schedule Data
   useEffect(() => {
-    if (submitValue == true) {
-      console.log("Value 1:", valueInterval1);
-      console.log("Value 2:", valueInterval2);
-      if (valueInterval1 != null && valueInterval2 != null) {
-        props.updatetime(`${valueInterval1}-${valueInterval2}`);
-      }
+    console.log("Use Effect Time Selector Picker Value 1:", firstInterval);
+    console.log("Use Effect Time Selector Picker Value 2:", secondInterval);
+    if (firstInterval && secondInterval) {
+      updateInterval(`${firstInterval}-${secondInterval}`);
     }
-  }, [valueInterval1, valueInterval2]);
+  }, [firstInterval, secondInterval]);
 
   const updateFirstInterval = (tiempo) => {
-    console.log("tiempo en time selector antes: ", tiempo);
-    setValueInterval1(tiempo);
-    console.log("tiempo en time selector despues: ", valueInterval1);
+    console.log("Time Picker Selector Value Interval 1: ", tiempo);
+    setFirstInterval(tiempo);
   };
 
   const updateSecondInterval = (tiempo) => {
-    setValueInterval2(tiempo);
-    console.log("Value Interval 2: ", valueInterval2);
+    console.log("Time Picker Selector Value Interval 2: ", tiempo);
+    setSecondInterval(tiempo);
   };
 
-  // function updateFirstInterval(tiempo) {
-  //   console.log("tiempo1: ", tiempo);
-  //   setValueInterval1(tiempo);
-  //   console.log("Value Interval 1: ", valueInterval1);
-  // }
-  // function updateSecondInterval(tiempo) {
-  //   setValueInterval2(tiempo);
-  //   console.log("Value Interval 2: ", valueInterval2);
-  // }
-
   function splitTime(time) {
-    if (time.includes("-")) {
+    if (time && time.includes("-")) {
       return time.split("-");
     }
     return ["", ""];
@@ -75,8 +65,8 @@ function TimePickerSelector(props) {
         <Center w={"120px"} mr={"10px"}>
           <TimePickerComponent
             value={timeSplit[0]}
-            edit={props.edit}
-            updatetimepicker={updateFirstInterval}
+            edit={edit}
+            updateTimePickerInterval={updateFirstInterval}
           />
         </Center>
         <Center w={"30px"} mr={"10px"}>
@@ -85,8 +75,8 @@ function TimePickerSelector(props) {
         <Center w={"120px"} mr={"10px"}>
           <TimePickerComponent
             value={timeSplit[1]}
-            edit={props.edit}
-            updatetimepicker={updateSecondInterval}
+            edit={edit}
+            updateTimePickerInterval={updateSecondInterval}
           />
         </Center>
       </Flex>

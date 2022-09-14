@@ -1,68 +1,49 @@
-import { useState, useField, useEffect } from "react";
-import styles from "./schedule.module.css";
+import { useState, useEffect } from "react";
+
 import { useUserStore } from "@/store/user.store";
 
-import { Spinner, Flex, Center, Switch, Image } from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/react";
 import TimeDay from "../TimeDay/time-day";
 
-function Schedule(props) {
-  //   const [field, meta, helpers] = useField(props);
+import styles from "./schedule.module.css";
 
+function Schedule({ scheduleValue, edit, onReadyToSubmit }) {
+  const scheduleStatus = useUserStore((state) => state.scheduleStatus);
   const schedule = useUserStore((state) => state.schedule);
   const setSchedule = useUserStore((state) => state.setSchedule);
-  const submitValue = useUserStore((state) => state.submitValue);
-  const days = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
+  const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
   const [isLoading, setIsLoading] = useState(true);
 
-  /*   const serverData = "";
-    const serverData =
-      "sunday%01:00:am-02:00:am/monday%01:00:am-02:00:am@03:00:am-04:00:am/tuesday%01:00:am-02:00:am@03:00:am-04:00:am/wednesday%01:00:am-02:00:am@03:00:am-04:00:am/thursday%01:00:am-02:00:am@03:00:am-04:00:am/friday%01:00:am-02:00:am@03:00:am-04:00:am/saturday%01:00:am-02:00:am@03:00:am-04:00:am";
-  sunday%1:00:am-2:00:am@3:00:am-4:00:am  monday%1:00:am-2:00:am@3:00:am-4:00:am  tuesday%1:00:am-2:00:am@3:00:am-4:00:am  wednesday%1:00:am-2:00:am@3:00:am-4:00:am  thursday%1:00:am-2:00:am@3:00:am-4:00:am  friday%1:00:am-2:00:am@3:00:am-4:00:am  saturday%1:00:am-2:00:am@3:00:am-4:00:am
-  key = day
-  Function to fill up map
-  1:00:am-2:00:am
-
-  variable == true estoy en submit form   store value  le notifica a todos lo componentes usando esa variable   useEffect  -> submitVar
-  func timeSelector se llama updatefirstinterval(tiempo1), updatesecondinterval(tiempo2) que se la pasa prop updatetimepicker
-
-  timeselector useEffect*/
-
+  // Load Initial Data
   useEffect(() => {
-    transformSchedule(props.value, schedule);
+    transformSchedule(scheduleValue, schedule);
     setSchedule(schedule);
     setIsLoading(false);
   }, []);
 
+  // Handle Submit Transformed Schedule
   useEffect(() => {
-    if (submitValue == true) {
-      console.log("submitValue schedule:", submitValue);
-      transformScheduleToString(schedule);
-      console.log("check final string:", sendTime);
+    console.log("Schedule Status: ", scheduleStatus);
+    if (
+      scheduleStatus.sunday &&
+      scheduleStatus.monday &&
+      scheduleStatus.tuesday &&
+      scheduleStatus.wednesday &&
+      scheduleStatus.thursday &&
+      scheduleStatus.friday &&
+      scheduleStatus.saturday
+    ) {
+      const transformedSchedule = transformScheduleToString(schedule);
+      onReadyToSubmit(true, transformedSchedule);
     }
-  }, [schedule]);
-
-  function updateTime() {
-    console.log("Time - before: ", time);
-    setTime(time + 1);
-    console.log("Time - after: ", time);
-    if (time == "7") {
-      console.log("Time - inside condition: ", time);
-      setSchedule(schedule);
-    }
-  }
+  }, [scheduleStatus]);
 
   function transformScheduleToString(schedule) {
-    setSendTime(
-      `sunday${schedule["sunday"]}monday${schedule["monday"]}tuesday${schedule["tuesday"]}wednesday${schedule["wednesday"]}thursday${schedule["thursday"]}friday${schedule["friday"]}saturday${schedule["saturday"]}`
-    );
+    const transformedSchedule = `sunday${schedule["sunday"]}monday${schedule["monday"]}tuesday${schedule["tuesday"]}wednesday${schedule["wednesday"]}thursday${schedule["thursday"]}friday${schedule["friday"]}saturday${schedule["saturday"]}`;
+
+    console.log("Transformed Schedule: ", transformedSchedule);
+
+    return transformedSchedule;
   }
 
   function transformSchedule(serverData, schedule) {
@@ -74,14 +55,6 @@ function Schedule(props) {
     }
   }
 
-  /* el tiempo completo como string
-              @;%-
-              monday%1:00:am-2:00:am@3:00:am-4:00:am/tuesday%1:00:am-2:00:am@3:00:am-4:00:am/wednesday%
-              [][][]=.split(:)
-
-              <schedule props.settiempo>
-              <Timepicker>
-          */
   if (isLoading) {
     return (
       <Spinner
@@ -100,14 +73,7 @@ function Schedule(props) {
     <>
       <div>
         {days.map((day) => (
-          <TimeDay
-            key={day}
-            day={day}
-            time={schedule[day]}
-            edit={props.edit}
-            updatetime={updateTime}
-            timeToString={setSendTime}
-          />
+          <TimeDay key={day} day={day} time={schedule[day]} edit={edit} />
         ))}
       </div>
     </>

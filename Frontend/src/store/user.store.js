@@ -12,8 +12,17 @@ const vanillaUserStore = createVanillaStore(
       logoutTimeoutId: "",
       pictureData: "",
       refreshTokenError: {},
-      submitValue: false,
+      isSubmitting: false,
       time: "0",
+      scheduleStatus: {
+        sunday: false,
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+      },
       schedule: {
         sunday: "",
         monday: "",
@@ -44,9 +53,9 @@ const vanillaUserStore = createVanillaStore(
           pictureData: pictureData,
         });
       },
-      setSubmitValue: (submitValue) => {
+      setIsSubmitting: (isSubmitting) => {
         set({
-          submitValue: submitValue,
+          isSubmitting: isSubmitting,
         });
       },
       setTime: (time) => {
@@ -59,6 +68,11 @@ const vanillaUserStore = createVanillaStore(
           schedule: schedule,
         });
       },
+      setScheduleStatus: (scheduleStatus) => {
+        set({
+          scheduleStatus: scheduleStatus,
+        });
+      },
       resetUser: () => {
         set({
           accessToken: "",
@@ -68,7 +82,7 @@ const vanillaUserStore = createVanillaStore(
           logoutTimeoutId: "",
           pictureData: "",
           refreshTokenError: "",
-          submitValue: false,
+          isSubmitting: false,
           time: "0",
           schedule: {
             sunday: "",
@@ -78,6 +92,15 @@ const vanillaUserStore = createVanillaStore(
             thursday: "",
             friday: "",
             saturday: "",
+          },
+          scheduleStatus: {
+            sunday: false,
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
+            saturday: false,
           },
         });
       },

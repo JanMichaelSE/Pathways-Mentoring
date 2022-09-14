@@ -1,56 +1,29 @@
 import { useState, useEffect } from "react";
-import styles from "./time-picker.module.css";
+
 import { Spinner } from "@chakra-ui/react";
 import { useUserStore } from "@/store/user.store";
 
-function TimePickerComponent(props) {
+import styles from "./time-picker.module.css";
+
+function TimePickerComponent({ value, edit, updateTimePickerInterval }) {
+  const isSubmitting = useUserStore((state) => state.isSubmitting);
   const [time, setTime] = useState(["", "", ""]);
   const [isLoading, setIsLoading] = useState(true);
-  const [hour, setHour] = useState("");
-  const [minute, setMinute] = useState("");
-  const [meridian, setMeridien] = useState("");
-  const submitValue = useUserStore((state) => state.submitValue);
-  // console.log(props);
 
+  // Load Initial Data
   useEffect(() => {
-    var timeValue = splitTime(props.value);
+    const timeValue = splitTime(value);
     setTime(timeValue);
     setIsLoading(false);
   }, []);
 
+  // Handle Schedule Data
   useEffect(() => {
-    if (submitValue == true) {
-      console.log("submitValue timepicker:", submitValue);
-      props.updatetimepicker(`${time[0]}:${time[1]}:${time[2]}`);
+    if (isSubmitting == true) {
+      console.log("SubmitValue timepicker:", isSubmitting);
+      updateTimePickerInterval(`${time[0]}:${time[1]}:${time[2]}`);
     }
-  }, [submitValue]);
-
-  // [hour, minute, meri]
-  // [hour, minute, meri] [hour, minute, meri]
-
-  //hour:minute:meri
-  //func set
-  /* valor1 = 1 fun
-   valor2 = 2 fun
-   var truevalue =false
-   if (valor1 != null && valor2 != null)
-   {
-       1timeDay((${valor1}-${valor2}))
-    }
-
-   } */
-
-  // timeSelector
-  // useEffect(() => {
-  //   if (valor1 != null && valor2 != null)
-  //    {
-  //     1timeDay((${valor1}-${valor2}))
-  //    }
-  //
-  //   return () => {
-  //     second;
-  //   };
-  // }, [submitvar]);
+  }, [isSubmitting]);
 
   function splitTime(time) {
     if (time.includes(":")) {
@@ -60,22 +33,16 @@ function TimePickerComponent(props) {
   }
 
   function handleChangeHour(e) {
-    console.log(time);
     time[0] = e.target.value;
     setTime(time);
-    console.log(time);
   }
   function handleChangeMinute(e) {
-    console.log(time);
     time[1] = e.target.value;
     setTime(time);
-    console.log(time);
   }
   function handleChangeMeridian(e) {
-    console.log(time);
     time[2] = e.target.value;
     setTime(time);
-    console.log(time);
   }
 
   const hours = [...Array(13).keys()].splice(1, 12);
@@ -119,7 +86,7 @@ function TimePickerComponent(props) {
             name="time"
             className={styles.hr}
             defaultValue={time[0]}
-            disabled={props.edit}
+            disabled={edit}
             onChange={handleChangeHour}
           >
             <option value="00">00</option>
@@ -134,7 +101,7 @@ function TimePickerComponent(props) {
             name="time"
             className={styles.min}
             defaultValue={time[1]}
-            disabled={props.edit}
+            disabled={edit}
             onChange={handleChangeMinute}
           >
             <option value="00">00</option>
@@ -147,7 +114,7 @@ function TimePickerComponent(props) {
               name="time"
               className={styles.meri}
               defaultValue={time[2]}
-              disabled={props.edit}
+              disabled={edit}
               onChange={handleChangeMeridian}
             >
               <option value="am">am</option>
