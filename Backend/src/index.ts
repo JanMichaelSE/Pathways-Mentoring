@@ -9,7 +9,7 @@ import {
 } from "./services/data.service";
 import { handleSocketEvents } from "./services/socket.service";
 
-const PORT = process.env.SERVER_PORT ?? 5000;
+const PORT = process.env.SERVER_PORT ?? 8000;
 
 const server = http.createServer(app);
 const io = new Server(server, {
