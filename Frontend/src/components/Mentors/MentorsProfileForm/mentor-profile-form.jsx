@@ -22,6 +22,8 @@ function MentorProfileForm() {
   const setEmail = useUserStore((state) => state.setEmail);
   const setPictureData = useUserStore((state) => state.setPictureData);
   const pictureData = useUserStore((state) => state.pictureData);
+  const setSubmitValue = useUserStore((state) => state.setSubmitValue);
+  const submitValue = useUserStore((state) => state.submitValue);
   const [userData, setUserData] = useState({});
   const [edit, setEdit] = useState(true);
   const [close, setClose] = useState("Edit");
@@ -67,26 +69,30 @@ function MentorProfileForm() {
   }
 
   async function handleSubmit(mentorInfo) {
-    console.log(typeof mentorInfo);
-    const mentorInfoWithID = {
-      userId: userId,
-      ...mentorInfo,
-      profilePicture: pictureData,
-    };
-    console.log(mentorInfoWithID);
-    const userResponse = await httpUpdateMentor(mentorInfo);
+    setSubmitValue(!submitValue);
+    setTimeout(5000);
+    console.log("Waited 5s");
+    //console.log(typeof mentorInfo);
+    // const mentorInfoWithID = {
+    //   userId: userId,
+    //   ...mentorInfo,
+    //   profilePicture: pictureData,
+    // };
+    // console.log(mentorInfoWithID);
+    // const userResponse = await httpUpdateMentor(mentorInfo);
 
-    if (userResponse.hasError) {
-      return toast({
-        description: userResponse.errorMessage,
-        status: "error",
-        position: "top",
-        duration: 5000,
-      });
-    }
+    // if (userResponse.hasError) {
+    //   return toast({
+    //     description: userResponse.errorMessage,
+    //     status: "error",
+    //     position: "top",
+    //     duration: 5000,
+    //   });
+    // }
 
-    setEmail(userResponse.data.email);
+    // setEmail(userResponse.data.email);
     onEdit();
+    //setSubmitValue(false);
     return toast({
       title: "Update Success!",
       description: "The changes were made.",

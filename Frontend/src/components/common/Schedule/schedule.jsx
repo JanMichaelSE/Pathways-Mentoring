@@ -10,6 +10,7 @@ function Schedule(props) {
 
   const schedule = useUserStore((state) => state.schedule);
   const setSchedule = useUserStore((state) => state.setSchedule);
+  const submitValue = useUserStore((state) => state.submitValue);
   const days = [
     "sunday",
     "monday",
@@ -21,20 +22,48 @@ function Schedule(props) {
   ];
   const [isLoading, setIsLoading] = useState(true);
 
-  //   const serverData = "";
+  /*   const serverData = "";
+    const serverData =
+      "sunday%01:00:am-02:00:am/monday%01:00:am-02:00:am@03:00:am-04:00:am/tuesday%01:00:am-02:00:am@03:00:am-04:00:am/wednesday%01:00:am-02:00:am@03:00:am-04:00:am/thursday%01:00:am-02:00:am@03:00:am-04:00:am/friday%01:00:am-02:00:am@03:00:am-04:00:am/saturday%01:00:am-02:00:am@03:00:am-04:00:am";
+  sunday%1:00:am-2:00:am@3:00:am-4:00:am  monday%1:00:am-2:00:am@3:00:am-4:00:am  tuesday%1:00:am-2:00:am@3:00:am-4:00:am  wednesday%1:00:am-2:00:am@3:00:am-4:00:am  thursday%1:00:am-2:00:am@3:00:am-4:00:am  friday%1:00:am-2:00:am@3:00:am-4:00:am  saturday%1:00:am-2:00:am@3:00:am-4:00:am
+  key = day
+  Function to fill up map
+  1:00:am-2:00:am
 
-  //   const serverData =
-  //     "sunday%01:00:am-02:00:am/monday%01:00:am-02:00:am@03:00:am-04:00:am/tuesday%01:00:am-02:00:am@03:00:am-04:00:am/wednesday%01:00:am-02:00:am@03:00:am-04:00:am/thursday%01:00:am-02:00:am@03:00:am-04:00:am/friday%01:00:am-02:00:am@03:00:am-04:00:am/saturday%01:00:am-02:00:am@03:00:am-04:00:am";
-  // sunday%1:00:am-2:00:am@3:00:am-4:00:am  monday%1:00:am-2:00:am@3:00:am-4:00:am  tuesday%1:00:am-2:00:am@3:00:am-4:00:am  wednesday%1:00:am-2:00:am@3:00:am-4:00:am  thursday%1:00:am-2:00:am@3:00:am-4:00:am  friday%1:00:am-2:00:am@3:00:am-4:00:am  saturday%1:00:am-2:00:am@3:00:am-4:00:am
-  // key = day
-  // Function to fill up map
-  // 1:00:am-2:00:am
+  variable == true estoy en submit form   store value  le notifica a todos lo componentes usando esa variable   useEffect  -> submitVar
+  func timeSelector se llama updatefirstinterval(tiempo1), updatesecondinterval(tiempo2) que se la pasa prop updatetimepicker
+
+  timeselector useEffect*/
 
   useEffect(() => {
     transformSchedule(props.value, schedule);
     setSchedule(schedule);
     setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    if (submitValue == true) {
+      console.log("submitValue schedule:", submitValue);
+      transformScheduleToString(schedule);
+      console.log("check final string:", sendTime);
+    }
+  }, [schedule]);
+
+  function updateTime() {
+    console.log("Time - before: ", time);
+    setTime(time + 1);
+    console.log("Time - after: ", time);
+    if (time == "7") {
+      console.log("Time - inside condition: ", time);
+      setSchedule(schedule);
+    }
+  }
+
+  function transformScheduleToString(schedule) {
+    setSendTime(
+      `sunday${schedule["sunday"]}monday${schedule["monday"]}tuesday${schedule["tuesday"]}wednesday${schedule["wednesday"]}thursday${schedule["thursday"]}friday${schedule["friday"]}saturday${schedule["saturday"]}`
+    );
+  }
 
   function transformSchedule(serverData, schedule) {
     const daysInterval = serverData.split("/");
@@ -44,6 +73,7 @@ function Schedule(props) {
       schedule[timeSplit[0]] = timeSplit[1];
     }
   }
+
   /* el tiempo completo como string
               @;%-
               monday%1:00:am-2:00:am@3:00:am-4:00:am/tuesday%1:00:am-2:00:am@3:00:am-4:00:am/wednesday%
@@ -70,7 +100,14 @@ function Schedule(props) {
     <>
       <div>
         {days.map((day) => (
-          <TimeDay key={day} day={day} time={schedule[day]} edit={props.edit} />
+          <TimeDay
+            key={day}
+            day={day}
+            time={schedule[day]}
+            edit={props.edit}
+            updatetime={updateTime}
+            timeToString={setSendTime}
+          />
         ))}
       </div>
     </>

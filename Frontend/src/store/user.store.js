@@ -12,6 +12,8 @@ const vanillaUserStore = createVanillaStore(
       logoutTimeoutId: "",
       pictureData: "",
       refreshTokenError: {},
+      submitValue: false,
+      time: "0",
       schedule: {
         sunday: "",
         monday: "",
@@ -42,6 +44,16 @@ const vanillaUserStore = createVanillaStore(
           pictureData: pictureData,
         });
       },
+      setSubmitValue: (submitValue) => {
+        set({
+          submitValue: submitValue,
+        });
+      },
+      setTime: (time) => {
+        set({
+          time: time,
+        });
+      },
       setSchedule: (schedule) => {
         set({
           schedule: schedule,
@@ -56,6 +68,8 @@ const vanillaUserStore = createVanillaStore(
           logoutTimeoutId: "",
           pictureData: "",
           refreshTokenError: "",
+          submitValue: false,
+          time: "0",
           schedule: {
             sunday: "",
             monday: "",

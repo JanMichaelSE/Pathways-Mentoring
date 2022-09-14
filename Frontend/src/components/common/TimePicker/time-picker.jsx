@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./time-picker.module.css";
 import { Spinner } from "@chakra-ui/react";
+import { useUserStore } from "@/store/user.store";
 
 function TimePickerComponent(props) {
   const [time, setTime] = useState(["", "", ""]);
@@ -8,7 +9,8 @@ function TimePickerComponent(props) {
   const [hour, setHour] = useState("");
   const [minute, setMinute] = useState("");
   const [meridian, setMeridien] = useState("");
-  const [test, setTest] = useState(["00", "00", "am"]);
+  const submitValue = useUserStore((state) => state.submitValue);
+  // console.log(props);
 
   useEffect(() => {
     var timeValue = splitTime(props.value);
@@ -16,13 +18,39 @@ function TimePickerComponent(props) {
     setIsLoading(false);
   }, []);
 
-  // useEffect(() => {
-  //   first;
+  useEffect(() => {
+    if (submitValue == true) {
+      console.log("submitValue timepicker:", submitValue);
+      props.updatetimepicker(`${time[0]}:${time[1]}:${time[2]}`);
+    }
+  }, [submitValue]);
 
+  // [hour, minute, meri]
+  // [hour, minute, meri] [hour, minute, meri]
+
+  //hour:minute:meri
+  //func set
+  /* valor1 = 1 fun
+   valor2 = 2 fun
+   var truevalue =false
+   if (valor1 != null && valor2 != null)
+   {
+       1timeDay((${valor1}-${valor2}))
+    }
+
+   } */
+
+  // timeSelector
+  // useEffect(() => {
+  //   if (valor1 != null && valor2 != null)
+  //    {
+  //     1timeDay((${valor1}-${valor2}))
+  //    }
+  //
   //   return () => {
   //     second;
   //   };
-  // }, [time[0], time[1], time[2]]);
+  // }, [submitvar]);
 
   function splitTime(time) {
     if (time.includes(":")) {
@@ -32,19 +60,22 @@ function TimePickerComponent(props) {
   }
 
   function handleChangeHour(e) {
-    console.log(test);
-    test.splice(0, 1, e.target.value);
-    console.log(test);
+    console.log(time);
+    time[0] = e.target.value;
+    setTime(time);
+    console.log(time);
   }
   function handleChangeMinute(e) {
-    console.log(test);
-    test.splice(1, 1, e.target.value);
-    console.log(test);
+    console.log(time);
+    time[1] = e.target.value;
+    setTime(time);
+    console.log(time);
   }
   function handleChangeMeridian(e) {
-    console.log(test);
-    test.splice(2, 1, e.target.value);
-    console.log(test);
+    console.log(time);
+    time[2] = e.target.value;
+    setTime(time);
+    console.log(time);
   }
 
   const hours = [...Array(13).keys()].splice(1, 12);
