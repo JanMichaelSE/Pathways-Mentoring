@@ -9,6 +9,7 @@ function TimeDay({ day, time, edit }) {
   const setSchedule = useUserStore((state) => state.setSchedule);
   const scheduleStatus = useUserStore((state) => state.scheduleStatus);
   const setScheduleStatus = useUserStore((state) => state.setScheduleStatus);
+  const isSubmitting = useUserStore((state) => state.isSubmitting);
   const [switchValue, setSwitchValue] = useState(false);
   const [hasSecondInterval, setHasSecondInterval] = useState(false);
   const [timeSplit, setTimeSplit] = useState([]);
@@ -25,36 +26,39 @@ function TimeDay({ day, time, edit }) {
 
   // Handle Schedule Data
   useEffect(() => {
-    if (
-      (firstInterval && !hasSecondInterval) ||
-      (firstInterval && secondInterval)
-    ) {
-      console.log("Use Effect Value 1 time day:", firstInterval);
-      console.log("Use Effect Value 2 time day:", secondInterval);
+    if (isSubmitting) {
+      if (
+        (firstInterval && !hasSecondInterval) ||
+        (firstInterval && secondInterval)
+      ) {
+        console.log("Use Effect Value 1 time day:", firstInterval);
+        console.log("Use Effect Value 2 time day:", secondInterval);
 
-      if (hasSecondInterval) {
-        schedule[day] = `%${firstInterval}@${secondInterval}/`;
-        scheduleStatus[day] = !scheduleStatus[day];
-        setSchedule(schedule);
-        setScheduleStatus({ ...scheduleStatus });
+        if (hasSecondInterval) {
+          schedule[day] = `%${firstInterval}@${secondInterval}/`;
+          scheduleStatus[day] = !scheduleStatus[day];
+          setSchedule(schedule);
+          setScheduleStatus({ ...scheduleStatus });
+        } else {
+          schedule[day] = `%${firstInterval}/`;
+          scheduleStatus[day] = !scheduleStatus[day];
+          setSchedule(schedule);
+          setScheduleStatus({ ...scheduleStatus });
+        }
       } else {
-        schedule[day] = `%${firstInterval}/`;
-        scheduleStatus[day] = !scheduleStatus[day];
-        setSchedule(schedule);
-        setScheduleStatus({ ...scheduleStatus });
-      }
-    } else {
-      if (!switchValue) {
-        schedule[day] = `%/`;
-        scheduleStatus[day] = true;
-        setSchedule(schedule);
-        setScheduleStatus({ ...scheduleStatus });
-      } else {
-        scheduleStatus[day] = false;
-        setScheduleStatus({ ...scheduleStatus });
+        console.log("switchValue: ", switchValue);
+        if (!switchValue) {
+          schedule[day] = `%/`;
+          scheduleStatus[day] = true;
+          setSchedule(schedule);
+          setScheduleStatus({ ...scheduleStatus });
+        } else {
+          scheduleStatus[day] = false;
+          setScheduleStatus({ ...scheduleStatus });
+        }
       }
     }
-  }, [firstInterval, secondInterval, switchValue]);
+  }, [firstInterval, secondInterval, isSubmitting]);
 
   function updateFirstInterval(tiempo) {
     console.log("Time Day Value Interval 1: ", tiempo);

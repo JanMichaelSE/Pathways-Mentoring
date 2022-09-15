@@ -25,6 +25,7 @@ function MentorProfileForm() {
   const pictureData = useUserStore((state) => state.pictureData);
   const setIsSubmitting = useUserStore((state) => state.setIsSubmitting);
   const isSubmitting = useUserStore((state) => state.isSubmitting);
+  const setScheduleStatus = useUserStore((state) => state.setScheduleStatus);
   const [userData, setUserData] = useState({});
   const [edit, setEdit] = useState(true);
   const [close, setClose] = useState("Edit");
@@ -33,6 +34,16 @@ function MentorProfileForm() {
   const [countNumber, setCountNumber] = useState(0);
   const [isReadyToSubmit, setIsReadyToSubmit] = useState(false);
   const [transformedSchedule, setTransformedSchedule] = useState("");
+  const [mentorData, setMentorData] = useState({});
+  const scheduleStatus = {
+    sunday: false,
+    monday: false,
+    tuesday: false,
+    wednesday: false,
+    thursday: false,
+    friday: false,
+    saturday: false,
+  };
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -64,22 +75,53 @@ function MentorProfileForm() {
 
   // Handles Form Submission
   useEffect(() => {
+    async function submit(mentorInfo) {
+      const userResponse = await httpUpdateMentor(mentorInfo);
+
+      if (userResponse.hasError) {
+        setIsSubmitting(false);
+        setIsReadyToSubmit(false);
+        return toast({
+          description: userResponse.errorMessage,
+          status: "error",
+          position: "top",
+          duration: 5000,
+        });
+      }
+      setEmail(userResponse.data.email);
+      onEdit();
+      setIsSubmitting(false);
+      setIsReadyToSubmit(false);
+      setScheduleStatus(scheduleStatus);
+      return toast({
+        title: "Update Success!",
+        description: "The changes were made.",
+        status: "success",
+        position: "top",
+        duration: 7000,
+      });
+    }
+
     console.log("Handle Form Submission Use Effect");
+    console.log("Is ready to submit: ", isReadyToSubmit);
+    console.log("Is Submitting: ", isSubmitting);
     if (isReadyToSubmit && isSubmitting) {
       // --- Logic to submit ---
       console.log("Is Submitting After Changes.");
       console.log("Transformed Schedule Updated: ", transformedSchedule);
-      // console.log(typeof mentorInfo);
-      // const mentorInfoWithID = {
-      //   userId: userId,
-      //   ...mentorInfo,
-      //   profilePicture: pictureData,
-      // };
-      // console.log(mentorInfoWithID);
-      // const userResponse = await httpUpdateMentor(mentorInfo);
+      console.log(typeof mentorData);
+      const mentorInfoWithID = {
+        userId: userId,
+        ...mentorData,
+        profilePicture: pictureData,
+        officeHours: transformedSchedule,
+      };
+      console.log(mentorInfoWithID);
+      submit(mentorInfoWithID);
+      // const userResponse = await httpUpdateMentor(mentorInfoWithID);
 
       // if (userResponse.hasError) {
-      //   return toast({
+      //   toast({
       //     description: userResponse.errorMessage,
       //     status: "error",
       //     position: "top",
@@ -88,16 +130,17 @@ function MentorProfileForm() {
       // }
 
       // setEmail(userResponse.data.email);
-      onEdit();
-      toast({
-        title: "Update Success!",
-        description: "The changes were made.",
-        status: "success",
-        position: "top",
-        duration: 7000,
-      });
+      // onEdit();
+      // toast({
+      //   title: "Update Success!",
+      //   description: "The changes were made.",
+      //   status: "success",
+      //   position: "top",
+      //   duration: 7000,
+      // });
+      // setIsSubmitting(false);
+      // setIsReadyToSubmit(false);
     }
-    setIsSubmitting(false);
   }, [isReadyToSubmit]);
 
   function onEdit() {
@@ -108,9 +151,10 @@ function MentorProfileForm() {
       setClose("X");
     }
   }
-
+  //test
   async function handleSubmit(mentorInfo) {
     setIsSubmitting(true);
+    setMentorData(mentorInfo);
   }
 
   function onReadyToSubmit(isReady, schedule) {
@@ -205,9 +249,18 @@ function MentorProfileForm() {
             )
             .min(10, "Phone number must be 10 digits"),
           email: Yup.string().email("Invalid email address"),
-          currentPassword: Yup.string().min(12, "Current password must be at least 12 characters"),
-          password: Yup.string().min(12, "Password must be at least 12 characters"),
-          confirmPassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords must match"),
+          currentPassword: Yup.string().min(
+            12,
+            "Current password must be at least 12 characters"
+          ),
+          password: Yup.string().min(
+            12,
+            "Password must be at least 12 characters"
+          ),
+          confirmPassword: Yup.string().oneOf(
+            [Yup.ref("password"), null],
+            "Passwords must match"
+          ),
           gender: Yup.string().oneOf(["Male", "Female", "Other"]),
           academicDegree: Yup.string().required(),
           description: Yup.string().test(
@@ -218,7 +271,7 @@ function MentorProfileForm() {
           department: Yup.string(),
           facultyStatus: Yup.string(),
           office: Yup.string(),
-          officeHourst: Yup.string(),
+          officeHours: Yup.string(),
         })}
         onSubmit={async (values) => {
           await handleSubmit(values);
@@ -227,7 +280,12 @@ function MentorProfileForm() {
         <Form className={styles.formContainer}>
           <div className={styles.photoContainer}>
             <h1 className={styles.profileHeader}>My Profile</h1>
-            <Button type="button" id="editbutton" style={{ width: 130 }} onClick={onEdit}>
+            <Button
+              type="button"
+              id="editbutton"
+              style={{ width: 130 }}
+              onClick={onEdit}
+            >
               {close}
             </Button>
           </div>
