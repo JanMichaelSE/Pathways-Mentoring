@@ -5,12 +5,22 @@ import { Question } from "@prisma/client";
 import { IErrorResponse, IQuestion } from "../types";
 import { buildErrorObject, titleCase } from "../utils/helpers";
 
-// TODO: MUST REVISIT After Assessment Thought Process.
-async function findDevelopmentPlanQuestions(): Promise<Question[]> {
+async function findDevelopmentPlanQuestionsWithAnswers(userId?: string): Promise<Question[]> {
   try {
     const questions = await prisma.question.findMany({
       where: {
         isDevelopmentPlan: true,
+      },
+      include: {
+        answers: {
+          where: {
+            userId: userId,
+          },
+          select: {
+            id: true,
+            answer: true,
+          },
+        },
       },
     });
 
@@ -110,4 +120,9 @@ function validateQuestionsFormat(questions: IQuestion[]): IQuestion[] | IErrorRe
   return questions;
 }
 
-export { findDevelopmentPlanQuestions, deleteQuestions, upsertQuestions, validateQuestionsFormat };
+export {
+  findDevelopmentPlanQuestionsWithAnswers,
+  deleteQuestions,
+  upsertQuestions,
+  validateQuestionsFormat,
+};

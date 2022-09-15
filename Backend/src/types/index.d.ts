@@ -89,7 +89,6 @@ export interface IMessage {
   noteId: string;
 }
 
-// --- THIS NEEDS REFACTORING ---
 declare global {
   namespace Express {
     interface Request {

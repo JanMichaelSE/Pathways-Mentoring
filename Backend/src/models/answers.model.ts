@@ -1,7 +1,7 @@
 import { Assessment } from "./../../node_modules/.prisma/client/index.d";
 import { prisma } from "../database";
 
-import { Answer, Prisma, Question } from "@prisma/client";
+import { Answer, Question } from "@prisma/client";
 
 import { buildErrorObject, excludeFields } from "../utils/helpers";
 import {
@@ -140,8 +140,6 @@ async function findAssessmentAnswersByUserId(
   }
 }
 
-// TODO: findDevelopmentPlanAnswersByUser(userId)
-
 async function findAnswersByAssessment(
   assessmentId: number
 ): Promise<IAnsweredAssessment | IErrorResponse> {
@@ -202,7 +200,5 @@ async function findAnswersByAssessment(
     throw error;
   }
 }
-
-async function findAnswersByDevelopmentPlan() {}
 
 export { upsertAnswers, findAnswersByAssessment, findAssessmentAnswersByUserId };

@@ -4,7 +4,7 @@ import { Assessment } from "@prisma/client";
 
 import { deleteQuestions, upsertQuestions, validateQuestionsFormat } from "./questions.model";
 
-import { IAnsweredAssessment, IAssessment, IErrorResponse, IQuestion } from "./../types/index.d";
+import { IAssessment, IErrorResponse, IQuestion } from "./../types/index.d";
 import { buildErrorObject } from "../utils/helpers";
 import { findAssessmentAnswersByUserId } from "./answers.model";
 
@@ -45,18 +45,6 @@ async function findAllAssessments(): Promise<Assessment[]> {
     throw error;
   }
 }
-
-// TODO: findPathwaysAssessmentDataByUserId(userId)
-// -----------------------------
-// Task: This has to return the Assessment with its Questions and Answers
-// for the user who requested it.
-// -----------------------------
-// Thought Process: Once the Assessment is request by the user. We perform
-// a search by the assessment title and this will provide us with the Assessment
-// Id, with this we can request the questions related to the Assessment. Now that
-// we have the questions we can make a request of the answers by user id related to
-// these questions.
-// -----------------------------
 
 async function findPathwaysAssessmentDataByUserId(userId: string): Promise<IAssessment | null> {
   try {

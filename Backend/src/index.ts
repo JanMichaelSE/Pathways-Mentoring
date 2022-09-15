@@ -2,7 +2,7 @@ import http from "http";
 import { Server } from "socket.io";
 import app from "./app";
 import { createAssessment, doesPathwayAssessmentExist } from "./models/assessments.model";
-import { findDevelopmentPlanQuestions, upsertQuestions } from "./models/questions.model";
+import { findDevelopmentPlanQuestionsWithAnswers, upsertQuestions } from "./models/questions.model";
 import {
   initialAssessmentQuestionsData,
   initialDevelopmentPlanData,
@@ -21,7 +21,6 @@ const io = new Server(server, {
 
 async function loadServerInitialData() {
   const assessmentExists = await doesPathwayAssessmentExist();
-  console.log("Does Pathways Assessment Exist: ", assessmentExists);
   if (!assessmentExists) {
     const pathwaysQuestions = initialAssessmentQuestionsData();
     await createAssessment(
@@ -31,8 +30,7 @@ async function loadServerInitialData() {
     );
   }
 
-  const developmentPlan = await findDevelopmentPlanQuestions();
-  console.log("Development Plan Initial Questions: ", developmentPlan.length);
+  const developmentPlan = await findDevelopmentPlanQuestionsWithAnswers();
   if (developmentPlan.length === 0) {
     const developPlanInitialQuestions = initialDevelopmentPlanData();
     await upsertQuestions(developPlanInitialQuestions);
