@@ -301,6 +301,127 @@ async function sendApprovedMentorAccessEmail(toEmail: string) {
   }
 }
 
+async function sendSubmitRecordEmail(toEmail: string, studentName: string, recordId: string) {
+  try {
+    const SUBMIT_RECORD_TEMPLATE_ID = process.env.SUBMIT_RECORD_TEMPLATE_ID ?? "";
+    const _email = {
+      from: {
+        email: FROM_ADDRESS,
+        name: "Pathways Mentoring",
+      },
+      template_id: SUBMIT_RECORD_TEMPLATE_ID,
+      personalizations: [
+        {
+          to: [
+            {
+              email: toEmail,
+            },
+          ],
+          dynamic_template_data: {
+            studentName: studentName,
+            recordId: recordId,
+          },
+        },
+      ],
+      reply_to: {
+        email: FROM_ADDRESS,
+        name: "Reply",
+      },
+    };
+
+    return axios({
+      method: "post",
+      url: EMAIL_SEND_URL,
+      headers: {
+        Authorization: `Bearer ${SENGRID_API_KEY}`,
+      },
+      data: _email,
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function sendRecordApprovedEmail(toEmail: string, mentorName: string) {
+  try {
+    const RECORD_APPROVED_TEMPLATE_ID = process.env.RECORD_APPROVED_TEMPLATE_ID ?? "";
+    const _email = {
+      from: {
+        email: FROM_ADDRESS,
+        name: "Pathways Mentoring",
+      },
+      template_id: RECORD_APPROVED_TEMPLATE_ID,
+      personalizations: [
+        {
+          to: [
+            {
+              email: toEmail,
+            },
+          ],
+          dynamic_template_data: {
+            mentorName: mentorName,
+          },
+        },
+      ],
+      reply_to: {
+        email: FROM_ADDRESS,
+        name: "Reply",
+      },
+    };
+
+    return axios({
+      method: "post",
+      url: EMAIL_SEND_URL,
+      headers: {
+        Authorization: `Bearer ${SENGRID_API_KEY}`,
+      },
+      data: _email,
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function sendRecordRejectedEmail(toEmail: string, mentorName: string) {
+  try {
+    const RECORD_REJECTED_TEMPLATE_ID = process.env.RECORD_REJECTED_TEMPLATE_ID ?? "";
+    const _email = {
+      from: {
+        email: FROM_ADDRESS,
+        name: "Pathways Mentoring",
+      },
+      template_id: RECORD_REJECTED_TEMPLATE_ID,
+      personalizations: [
+        {
+          to: [
+            {
+              email: toEmail,
+            },
+          ],
+          dynamic_template_data: {
+            mentorName: mentorName,
+          },
+        },
+      ],
+      reply_to: {
+        email: FROM_ADDRESS,
+        name: "Reply",
+      },
+    };
+
+    return axios({
+      method: "post",
+      url: EMAIL_SEND_URL,
+      headers: {
+        Authorization: `Bearer ${SENGRID_API_KEY}`,
+      },
+      data: _email,
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   sendResetPasswordEmail,
   sendContactFormEmail,
@@ -309,4 +430,7 @@ export {
   sendCanceledMentorshipEmail,
   sendRequestMentorAccessEmail,
   sendApprovedMentorAccessEmail,
+  sendSubmitRecordEmail,
+  sendRecordApprovedEmail,
+  sendRecordRejectedEmail,
 };
