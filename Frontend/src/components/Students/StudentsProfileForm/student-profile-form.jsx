@@ -30,9 +30,6 @@ function StudentProfileForm() {
 
   const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
   const [isLessThan1420] = useMediaQuery("(max-width: 1420px)");
-  // using Zustand to update selected element, set on file of popover,  getter on file of profile picture
-  // define a set on student profile form pass
-  // think about submitting a picture, if condition found in profile-picture
 
   useEffect(() => {
     async function loadStudentProfileInfo() {
@@ -176,7 +173,6 @@ function StudentProfileForm() {
             [Yup.ref("password"), null],
             "Passwords must match"
           ),
-          // .required("Password Confirmation is required"),
           gender: Yup.string().oneOf(["Male", "Female", "Other"]),
           fieldOfStudy: Yup.string().oneOf([
             "Architecture",
@@ -221,8 +217,6 @@ function StudentProfileForm() {
             ></img>
             Personal Information
           </h1>
-
-          {/* <div className={styles.formInput}> */}
           <div className={styles.inputContainer}>
             <Box>
               <Input
