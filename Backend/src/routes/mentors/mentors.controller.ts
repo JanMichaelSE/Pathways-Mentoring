@@ -27,7 +27,6 @@ import {
 import {
   findStudentsByMentor,
   updateStudentMentorship,
-  validateStudentExists,
   validateStudentIdExists,
 } from "../../models/students.model";
 import { createRecords } from "../../models/records.model";

@@ -7,6 +7,7 @@ import {
   httpGetAllAssessments,
   httpGetAnswersByAssessment,
   httpGetAssessment,
+  httpGetPathwaysAssessment,
   httpUpdateAssessment,
 } from "./assessments.controller";
 
@@ -14,21 +15,15 @@ const router = express.Router();
 
 router.get("/", authenticateJsonWebToken, httpGetAllAssessments);
 
+router.get("/pathways", authenticateJsonWebToken, httpGetPathwaysAssessment);
+
 router.get("/:assessmentId", authenticateJsonWebToken, httpGetAssessment);
 
-router.get(
-  "/answer/:assessmentId",
-  authenticateJsonWebToken,
-  httpGetAnswersByAssessment
-);
+router.get("/answer/:assessmentId", authenticateJsonWebToken, httpGetAnswersByAssessment);
 
 router.post("/", authenticateJsonWebToken, httpAddAssessment);
 
-router.post(
-  "/answer/:assessmentId",
-  authenticateJsonWebToken,
-  httpAnswerAssessment
-);
+router.post("/answer/:assessmentId", authenticateJsonWebToken, httpAnswerAssessment);
 
 router.post("/:assessmentId", authenticateJsonWebToken, httpUpdateAssessment);
 
