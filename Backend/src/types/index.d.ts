@@ -52,6 +52,9 @@ export interface IQuestion {
   type: string;
   options?: string;
   assessmentId?: number;
+  answerId?: number;
+  answer?: string;
+  isDevelopmentPlan?: boolean;
 }
 
 export interface IAnswer {
@@ -86,7 +89,6 @@ export interface IMessage {
   noteId: string;
 }
 
-// --- THIS NEEDS REFACTORING ---
 declare global {
   namespace Express {
     interface Request {
