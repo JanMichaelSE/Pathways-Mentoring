@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { Spinner, Flex, Center, Text } from "@chakra-ui/react";
 
-import TimePickerComponent from "../TimePicker/time-picker";
+import TimePickerComponent from "@/components/Mentors/TimeComponents/TimePicker/time-picker";
 
 import styles from "./time-picker-selector.module.css";
 

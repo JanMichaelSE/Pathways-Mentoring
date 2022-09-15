@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./time-day.module.css";
 import { Flex, Center, Switch, Image } from "@chakra-ui/react";
-import TimePickerSelector from "@/components/common/TimePickerSelector/time-picker-selector";
+import TimePickerSelector from "@/components/Mentors/TimeComponents/TimePickerSelector/time-picker-selector";
 import { useUserStore } from "@/store/user.store";
 
 function TimeDay({ day, time, edit }) {

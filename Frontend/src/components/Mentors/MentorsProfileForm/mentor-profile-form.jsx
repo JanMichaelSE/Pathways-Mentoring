@@ -14,7 +14,7 @@ import styles from "./mentor-profile-form.module.css";
 import ProfileChangerPopOver from "@/components/common/ProfileChangerPopOver/profile-changer-popover";
 import ProfilePicture from "@/components/common/ProfilePicture/profile-picture";
 import { Box, useMediaQuery } from "@chakra-ui/react";
-import Schedule from "@/components/common/Schedule/schedule";
+import Schedule from "@/components/Mentors/TimeComponents/Schedule/schedule";
 
 function MentorProfileForm() {
   const toast = useToast();
@@ -118,28 +118,6 @@ function MentorProfileForm() {
       };
       console.log(mentorInfoWithID);
       submit(mentorInfoWithID);
-      // const userResponse = await httpUpdateMentor(mentorInfoWithID);
-
-      // if (userResponse.hasError) {
-      //   toast({
-      //     description: userResponse.errorMessage,
-      //     status: "error",
-      //     position: "top",
-      //     duration: 5000,
-      //   });
-      // }
-
-      // setEmail(userResponse.data.email);
-      // onEdit();
-      // toast({
-      //   title: "Update Success!",
-      //   description: "The changes were made.",
-      //   status: "success",
-      //   position: "top",
-      //   duration: 7000,
-      // });
-      // setIsSubmitting(false);
-      // setIsReadyToSubmit(false);
     }
   }, [isReadyToSubmit]);
 
@@ -151,7 +129,7 @@ function MentorProfileForm() {
       setClose("X");
     }
   }
-  //test
+
   async function handleSubmit(mentorInfo) {
     setIsSubmitting(true);
     setMentorData(mentorInfo);

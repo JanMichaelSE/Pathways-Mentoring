@@ -294,7 +294,6 @@ async function httpUpdateMentor(mentor) {
 
     userToReturn.data = response.data;
   } catch (error) {
-    console.log("error linea 297: ", error);
     const errorResponse = error.response.data;
     if (typeof errorResponse.error.errorCode == "number") {
       userToReturn.hasError = true;

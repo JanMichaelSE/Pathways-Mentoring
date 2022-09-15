@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useUserStore } from "@/store/user.store";
 
 import { Spinner } from "@chakra-ui/react";
-import TimeDay from "../TimeDay/time-day";
+import TimeDay from "@/components/Mentors/TimeComponents/TimeDay/time-day";
 
 import styles from "./schedule.module.css";
 
@@ -11,7 +11,15 @@ function Schedule({ scheduleValue, edit, onReadyToSubmit }) {
   const scheduleStatus = useUserStore((state) => state.scheduleStatus);
   const schedule = useUserStore((state) => state.schedule);
   const setSchedule = useUserStore((state) => state.setSchedule);
-  const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+  const days = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
   const [isLoading, setIsLoading] = useState(true);
 
   // Load Initial Data

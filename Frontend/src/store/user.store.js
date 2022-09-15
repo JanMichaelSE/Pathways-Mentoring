@@ -13,7 +13,6 @@ const vanillaUserStore = createVanillaStore(
       pictureData: "",
       refreshTokenError: {},
       isSubmitting: false,
-      time: "0",
       scheduleStatus: {
         sunday: false,
         monday: false,
@@ -58,11 +57,6 @@ const vanillaUserStore = createVanillaStore(
           isSubmitting: isSubmitting,
         });
       },
-      setTime: (time) => {
-        set({
-          time: time,
-        });
-      },
       setSchedule: (schedule) => {
         set({
           schedule: schedule,
@@ -83,7 +77,6 @@ const vanillaUserStore = createVanillaStore(
           pictureData: "",
           refreshTokenError: "",
           isSubmitting: false,
-          time: "0",
           schedule: {
             sunday: "",
             monday: "",
