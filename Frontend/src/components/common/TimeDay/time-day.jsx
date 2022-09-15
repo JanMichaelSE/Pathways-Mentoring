@@ -28,20 +28,20 @@ function TimeDay({ day, time, edit }) {
   useEffect(() => {
     if (isSubmitting) {
       if (
-        (firstInterval && !hasSecondInterval) ||
-        (firstInterval && secondInterval)
+        (firstInterval && !hasSecondInterval && switchValue) ||
+        (firstInterval && secondInterval && switchValue)
       ) {
         console.log("Use Effect Value 1 time day:", firstInterval);
         console.log("Use Effect Value 2 time day:", secondInterval);
 
         if (hasSecondInterval) {
           schedule[day] = `%${firstInterval}@${secondInterval}/`;
-          scheduleStatus[day] = !scheduleStatus[day];
+          scheduleStatus[day] = true;
           setSchedule(schedule);
           setScheduleStatus({ ...scheduleStatus });
         } else {
           schedule[day] = `%${firstInterval}/`;
-          scheduleStatus[day] = !scheduleStatus[day];
+          scheduleStatus[day] = true;
           setSchedule(schedule);
           setScheduleStatus({ ...scheduleStatus });
         }
