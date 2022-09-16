@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { Spinner, Flex, Center, Text } from "@chakra-ui/react";
+import { Spinner, Text } from "@chakra-ui/react";
 
 import TimePickerComponent from "@/components/Mentors/TimeComponents/TimePicker/time-picker";
 
@@ -61,25 +61,25 @@ function TimePickerSelector({ time, edit, updateInterval }) {
   }
   return (
     <>
-      <Flex>
-        <Center w={"120px"} mr={"10px"}>
+      <div className={styles.timePickerSelectorContainer}>
+        <div className={styles.timePickerComponentContainer}>
           <TimePickerComponent
             value={timeSplit[0]}
             edit={edit}
             updateTimePickerInterval={updateFirstInterval}
           />
-        </Center>
-        <Center w={"30px"} mr={"10px"}>
+        </div>
+        <div className={styles.midpointContainer}>
           <Text>to</Text>
-        </Center>
-        <Center w={"120px"} mr={"10px"}>
+        </div>
+        <div className={styles.timePickerComponentContainer}>
           <TimePickerComponent
             value={timeSplit[1]}
             edit={edit}
             updateTimePickerInterval={updateSecondInterval}
           />
-        </Center>
-      </Flex>
+        </div>
+      </div>
     </>
   );
 }

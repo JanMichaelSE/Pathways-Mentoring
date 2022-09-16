@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./time-day.module.css";
-import { Flex, Center, Switch, Image } from "@chakra-ui/react";
+import { Flex, Center, Switch, Image, useMediaQuery } from "@chakra-ui/react";
 import TimePickerSelector from "@/components/Mentors/TimeComponents/TimePickerSelector/time-picker-selector";
 import { useUserStore } from "@/store/user.store";
 
@@ -15,6 +15,8 @@ function TimeDay({ day, time, edit }) {
   const [timeSplit, setTimeSplit] = useState([]);
   const [firstInterval, setFirstInterval] = useState("");
   const [secondInterval, setSecondInterval] = useState("");
+
+  const [isLessThan1350] = useMediaQuery("(max-width: 1350px)");
 
   // Load Initial Data
   useEffect(() => {
@@ -90,13 +92,21 @@ function TimeDay({ day, time, edit }) {
     return [isOneInterval, hasDayOpen, timeSplit];
   }
 
+  function switchLessThan1350() {
+    if (isLessThan1350) {
+      return "md";
+    } else {
+      return "lg";
+    }
+  }
+
   return (
     <>
       <div className={styles.formScheduleContainer}>
         <div className={styles.formDailyContainer}>
           <div className={styles.formDaysContainer}>
-            <Flex>
-              <Center w={"120px"} mr={"20px"}>
+            <div className={styles.dayContainer}>
+              <div className={styles.days}>
                 <h2
                   style={{
                     fontWeight: "bold",
@@ -106,16 +116,16 @@ function TimeDay({ day, time, edit }) {
                 >
                   {day.charAt(0).toUpperCase() + day.slice(1)}
                 </h2>
-              </Center>
-              <Center w={"60px"} mr={"5px"}>
+              </div>
+              <div className={styles.switchContainer} w={"60px"} mr={"5px"}>
                 <Switch
                   size={"lg"}
                   isChecked={switchValue}
                   onChange={() => setSwitchValue((switchValue) => !switchValue)}
                   isDisabled={edit}
                 />
-              </Center>
-              <Center>
+              </div>
+              <div className={styles.statusContainer}>
                 <h3
                   style={{
                     fontSize: "var(--font-size-small)",
@@ -124,8 +134,8 @@ function TimeDay({ day, time, edit }) {
                 >
                   {switchValue ? "Open" : "Close"}
                 </h3>
-              </Center>
-            </Flex>
+              </div>
+            </div>
           </div>
           <div className={styles.formTimePickerContainer}>
             {switchValue ? (
@@ -138,6 +148,7 @@ function TimeDay({ day, time, edit }) {
                       updateInterval={updateFirstInterval}
                     />
                     <Image
+                      className={styles.separator}
                       borderRadius="full"
                       boxSize="50px"
                       src="/assets/slash-icon.svg"

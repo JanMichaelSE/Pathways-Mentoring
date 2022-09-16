@@ -93,7 +93,7 @@ function MentorForm() {
               <option value="">Select Option</option>
               <option value="Master">Master</option>
               <option value="Doctorate">Doctorate</option>
-              <option value="Post Doctorate">Post Doctorate</option>
+              <option value="Post Doctoral">Post Doctoral</option>
             </Select>
             <Input label="Phone *" name="phone" type="tel" />
             <Input label="Email *" name="email" type="text" />
@@ -106,8 +106,10 @@ function MentorForm() {
             <Select label="Department *" name="department">
               <option value="">Select Option</option>
               <option value="Computer Science">Computer Science</option>
-              <option value="Doctorate">Computer Enginnering</option>
-              <option value="Post Doctorate">Electrical Engineering</option>
+              <option value="Computer Engineering">Computer Engineering</option>
+              <option value="Electrical Engineering">
+                Electrical Engineering
+              </option>
             </Select>
             <Input
               label="Area of Interest *"

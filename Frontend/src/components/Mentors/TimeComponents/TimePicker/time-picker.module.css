@@ -12,7 +12,7 @@ input[name="time"] {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 100%;
+  width: 140px;
   max-width: 300px;
   background-color: #f3f3f3;
   border-radius: 6px;
@@ -46,6 +46,7 @@ input[name="time"] {
   border: none;
   outline: none;
   display: block;
+  height: 30px;
   width: 100%;
   text-align: center;
   font-family: "Saira", sans-serif;
@@ -69,4 +70,30 @@ input[name="time"] {
 }
 
 .timePickable {
+}
+
+@media only screen and (max-width: 1350px) {
+  .timePicker {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100px;
+    max-width: 300px;
+    background-color: #f3f3f3;
+    border-radius: 6px;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
+    color: #53565a;
+    font-size: 16px;
+    font-weight: 700;
+    user-select: none;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+    transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
+    -ms-transition: 0.3s;
+    -o-transition: 0.3s;
+  }
 }

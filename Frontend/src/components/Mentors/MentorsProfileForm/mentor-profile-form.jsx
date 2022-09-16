@@ -247,7 +247,12 @@ function MentorProfileForm() {
             (val) => (val?.length || 0) < 1500
           ),
           department: Yup.string(),
-          facultyStatus: Yup.string(),
+          facultyStatus: Yup.string().oneOf([
+            "Instructor",
+            "Assistant",
+            "Associate",
+            "Professor",
+          ]),
           office: Yup.string(),
           officeHours: Yup.string(),
         })}
@@ -410,6 +415,9 @@ function MentorProfileForm() {
               isBlue={true}
             >
               <option value="">Select Option</option>
+              <option value="Master">Master</option>
+              <option value="Doctorate">Doctorate</option>
+              <option value="Post Doctoral">Post Doctoral</option>
             </Select>
             <Select
               label="Department"
@@ -419,6 +427,11 @@ function MentorProfileForm() {
               isBlue={true}
             >
               <option value="">Select Option</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Computer Engineering">Computer Engineering</option>
+              <option value="Electrical Engineering">
+                Electrical Engineering
+              </option>
             </Select>
             <Select
               label="Faculty Status"
@@ -428,6 +441,10 @@ function MentorProfileForm() {
               isBlue={true}
             >
               <option value="">Select Option</option>
+              <option value="Instructor">Instructor</option>
+              <option value="Assistant">Assistant</option>
+              <option value="Associate">Associate</option>
+              <option value="Professor">Professor</option>
             </Select>
             <Input
               label="Office Number"

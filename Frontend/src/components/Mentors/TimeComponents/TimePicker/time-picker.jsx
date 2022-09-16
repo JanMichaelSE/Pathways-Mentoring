@@ -108,7 +108,10 @@ function TimePickerComponent({ value, edit, updateTimePickerInterval }) {
             {minutearray}
           </select>
           <div className={styles.minDown}></div>
-          <div className={styles.separator}></div>
+          <div
+            className={styles.separator}
+            style={{ marginRight: "5px" }}
+          ></div>
           <div className={styles.meridiem}>
             <select
               name="time"
