@@ -203,7 +203,11 @@ function TimeDay({ day, time, edit }) {
                     >
                       <Image
                         borderRadius="full"
-                        boxSize="50px"
+                        // boxSize="50px"
+                        w={"50px"}
+                        h={"50px"}
+                        minHeight={"50px"}
+                        minWidth={"50px"}
                         src="/assets/add-icon.svg"
                       ></Image>
                     </button>

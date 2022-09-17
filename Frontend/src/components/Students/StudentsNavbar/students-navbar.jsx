@@ -1,10 +1,13 @@
 import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { useMediaQuery } from "@chakra-ui/react";
 import styles from "./students-navbar.module.css";
 import ProfilePopover from "@/components/common/ProfilePopOverNavbar/profile-popover-navbar";
 
 function StudentNavbar() {
   let location = useLocation();
+
+  const [isLessThan1100] = useMediaQuery("(max-width: 1100px)");
 
   return (
     <Fragment>
@@ -26,7 +29,7 @@ function StudentNavbar() {
             }
             to="/student/development-plan"
           >
-            Development Plan
+            IDP
           </Link>
           <Link
             className={

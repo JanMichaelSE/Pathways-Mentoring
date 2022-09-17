@@ -193,3 +193,19 @@ h1 #editbutton {
     justify-content: space-between;
   }
 }
+
+@media only screen and (max-width: 950px) {
+  .inputContainer {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    column-gap: 40px;
+    row-gap: 40px;
+    justify-content: space-around;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  .form-input {
+    justify-content: space-between;
+  }
+}

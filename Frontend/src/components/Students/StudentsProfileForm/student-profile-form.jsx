@@ -28,6 +28,7 @@ function StudentProfileForm() {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const [isLessThan950] = useMediaQuery("(max-width: 950px)");
   const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
   const [isLessThan1420] = useMediaQuery("(max-width: 1420px)");
 
@@ -90,12 +91,16 @@ function StudentProfileForm() {
   }
 
   function inputWidth() {
-    if (isLessThan1135) {
-      return "14rem";
-    } else if (isLessThan1420) {
+    if (isLessThan950) {
       return "20rem";
     } else {
-      return "26rem";
+      if (isLessThan1135) {
+        return "14rem";
+      } else if (isLessThan1420) {
+        return "20rem";
+      } else {
+        return "26rem";
+      }
     }
   }
 
@@ -110,12 +115,16 @@ function StudentProfileForm() {
   }
 
   function inputWidthAcademic() {
-    if (isLessThan1135) {
-      return "10rem";
-    } else if (isLessThan1420) {
+    if (isLessThan950) {
       return "20rem";
     } else {
-      return "26rem";
+      if (isLessThan1135) {
+        return "10rem";
+      } else if (isLessThan1420) {
+        return "20rem";
+      } else {
+        return "26rem";
+      }
     }
   }
 

@@ -47,6 +47,7 @@ function MentorProfileForm() {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const [isLessThan820] = useMediaQuery("(max-width: 820px)");
   const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
   const [isLessThan1420] = useMediaQuery("(max-width: 1420px)");
 
@@ -142,12 +143,16 @@ function MentorProfileForm() {
   }
 
   function inputWidth() {
-    if (isLessThan1135) {
-      return "12rem";
-    } else if (isLessThan1420) {
+    if (isLessThan820) {
       return "20rem";
     } else {
-      return "26rem";
+      if (isLessThan1135) {
+        return "17rem";
+      } else if (isLessThan1420) {
+        return "20rem";
+      } else {
+        return "26rem";
+      }
     }
   }
 
