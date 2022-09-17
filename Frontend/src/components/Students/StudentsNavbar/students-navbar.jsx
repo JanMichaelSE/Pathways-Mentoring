@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@chakra-ui/react";
 import styles from "./students-navbar.module.css";
-import ProfilePopover from "@/components/common/ProfilePopOverNavbar/profile-popover-navbar";
+import NavbarPopOverMenu from "@/components/common/NavbarPopOverMenu/navbar-popover-menu";
 
 function StudentNavbar() {
   let location = useLocation();
@@ -71,7 +71,7 @@ function StudentNavbar() {
           >
             Contact Us
           </Link>
-          <ProfilePopover classname={styles.logoLink} />
+          <NavbarPopOverMenu classname={styles.logoLink} />
         </div>
       </nav>
       <Outlet />

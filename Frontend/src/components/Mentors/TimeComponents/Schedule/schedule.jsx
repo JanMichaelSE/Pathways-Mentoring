@@ -5,8 +5,6 @@ import { useUserStore } from "@/store/user.store";
 import { Spinner } from "@chakra-ui/react";
 import TimeDay from "@/components/Mentors/TimeComponents/TimeDay/time-day";
 
-import styles from "./schedule.module.css";
-
 function Schedule({ scheduleValue, edit, onReadyToSubmit }) {
   const scheduleStatus = useUserStore((state) => state.scheduleStatus);
   const schedule = useUserStore((state) => state.schedule);
@@ -31,7 +29,6 @@ function Schedule({ scheduleValue, edit, onReadyToSubmit }) {
 
   // Handle Submit Transformed Schedule
   useEffect(() => {
-    console.log("Schedule Status: ", scheduleStatus);
     if (
       scheduleStatus.sunday &&
       scheduleStatus.monday &&
@@ -48,9 +45,6 @@ function Schedule({ scheduleValue, edit, onReadyToSubmit }) {
 
   function transformScheduleToString(schedule) {
     const transformedSchedule = `sunday${schedule["sunday"]}monday${schedule["monday"]}tuesday${schedule["tuesday"]}wednesday${schedule["wednesday"]}thursday${schedule["thursday"]}friday${schedule["friday"]}saturday${schedule["saturday"]}`;
-
-    console.log("Transformed Schedule: ", transformedSchedule);
-
     return transformedSchedule;
   }
 

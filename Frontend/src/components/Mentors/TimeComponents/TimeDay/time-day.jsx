@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./time-day.module.css";
-import { Flex, Center, Switch, Image, useMediaQuery } from "@chakra-ui/react";
+import { Switch, Image } from "@chakra-ui/react";
 import TimePickerSelector from "@/components/Mentors/TimeComponents/TimePickerSelector/time-picker-selector";
 import { useUserStore } from "@/store/user.store";
 
@@ -15,8 +15,6 @@ function TimeDay({ day, time, edit }) {
   const [timeSplit, setTimeSplit] = useState([]);
   const [firstInterval, setFirstInterval] = useState("");
   const [secondInterval, setSecondInterval] = useState("");
-
-  const [isLessThan1350] = useMediaQuery("(max-width: 1350px)");
 
   // Load Initial Data
   useEffect(() => {
@@ -33,9 +31,6 @@ function TimeDay({ day, time, edit }) {
         (firstInterval && !hasSecondInterval && switchValue) ||
         (firstInterval && secondInterval && switchValue)
       ) {
-        console.log("Use Effect Value 1 time day:", firstInterval);
-        console.log("Use Effect Value 2 time day:", secondInterval);
-
         if (hasSecondInterval) {
           schedule[day] = `%${firstInterval}@${secondInterval}/`;
           scheduleStatus[day] = true;
@@ -48,7 +43,6 @@ function TimeDay({ day, time, edit }) {
           setScheduleStatus({ ...scheduleStatus });
         }
       } else {
-        console.log("switchValue: ", switchValue);
         if (!switchValue) {
           schedule[day] = `%/`;
           scheduleStatus[day] = true;
@@ -63,11 +57,9 @@ function TimeDay({ day, time, edit }) {
   }, [firstInterval, secondInterval, isSubmitting]);
 
   function updateFirstInterval(tiempo) {
-    console.log("Time Day Value Interval 1: ", tiempo);
     setFirstInterval(tiempo);
   }
   function updateSecondInterval(tiempo) {
-    console.log("Time Day Value Interval 2: ", tiempo);
     setSecondInterval(tiempo);
   }
 
@@ -90,14 +82,6 @@ function TimeDay({ day, time, edit }) {
     }
 
     return [isOneInterval, hasDayOpen, timeSplit];
-  }
-
-  function switchLessThan1350() {
-    if (isLessThan1350) {
-      return "md";
-    } else {
-      return "lg";
-    }
   }
 
   return (
@@ -200,10 +184,10 @@ function TimeDay({ day, time, edit }) {
                           (hasSecondInterval) => !hasSecondInterval
                         )
                       }
+                      disabled={edit}
                     >
                       <Image
                         borderRadius="full"
-                        // boxSize="50px"
                         w={"50px"}
                         h={"50px"}
                         minHeight={"50px"}

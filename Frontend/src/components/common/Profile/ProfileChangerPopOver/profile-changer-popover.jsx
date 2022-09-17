@@ -9,7 +9,6 @@ import {
   Image,
 } from "@chakra-ui/react";
 import ImageList from "../ImageList/image-list";
-import { useUserStore } from "@/store/user.store";
 
 function ProfileChangerPopOver({ ...props }) {
   const { onOpen, onClose, isOpen } = useDisclosure();

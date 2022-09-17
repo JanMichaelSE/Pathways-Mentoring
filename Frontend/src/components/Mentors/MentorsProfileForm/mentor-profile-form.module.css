@@ -125,7 +125,7 @@ h1 #editbutton {
 #personal-info:before {
   content: "";
   display: inline-block;
-  width: 40rem;
+  width: 32rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
   margin-right: auto;
@@ -135,7 +135,7 @@ h1 #editbutton {
 #personal-info:after {
   content: "";
   display: inline-block;
-  width: 40rem;
+  width: 32rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
   margin-left: auto;
@@ -145,7 +145,7 @@ h1 #editbutton {
 #changePassword:before {
   content: "";
   display: inline-block;
-  width: 41.7rem;
+  width: 33rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
   margin-right: auto;
@@ -155,7 +155,7 @@ h1 #editbutton {
 #changePassword:after {
   content: "";
   display: inline-block;
-  width: 41.7rem;
+  width: 33rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
   margin-left: auto;
@@ -165,7 +165,7 @@ h1 #editbutton {
 #bibliography:before {
   content: "";
   display: inline-block;
-  width: 41.7rem;
+  width: 38rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
   margin-right: auto;
@@ -175,7 +175,7 @@ h1 #editbutton {
 #bibliography:after {
   content: "";
   display: inline-block;
-  width: 41.7rem;
+  width: 38rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
   margin-left: auto;
@@ -185,7 +185,7 @@ h1 #editbutton {
 #facultyInfo:before {
   content: "";
   display: inline-block;
-  width: 41.7rem;
+  width: 33rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
   margin-right: auto;
@@ -195,7 +195,7 @@ h1 #editbutton {
 #facultyInfo:after {
   content: "";
   display: inline-block;
-  width: 41.7rem;
+  width: 33rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
   margin-left: auto;
@@ -205,7 +205,7 @@ h1 #editbutton {
 #officeHours:before {
   content: "";
   display: inline-block;
-  width: 41.7rem;
+  width: 35rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
   margin-right: auto;
@@ -215,14 +215,14 @@ h1 #editbutton {
 #officeHours:after {
   content: "";
   display: inline-block;
-  width: 41.7rem;
+  width: 35rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
   margin-left: auto;
   margin-right: 30px;
 }
 
-@media only screen and (max-width: 1420px) {
+@media only screen and (max-width: 1550px) {
   #personal-info:before {
     width: 24.3rem;
   }
@@ -234,6 +234,21 @@ h1 #editbutton {
   }
   #changePassword:after {
     width: 26rem;
+  }
+  #facultyInfo:before {
+    width: 25rem;
+  }
+
+  #facultyInfo:after {
+    width: 25rem;
+  }
+
+  #officeHours:before {
+    width: 23rem;
+  }
+
+  #officeHours:after {
+    width: 23rem;
   }
 }
 @media only screen and (max-width: 950px) {

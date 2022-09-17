@@ -75,7 +75,19 @@ function MentorForm() {
             .oneOf(["Male", "Female", "Other"])
             .required("Gender is required"),
           academicDegree: Yup.string().required("Academic Degree is required"),
-          department: Yup.string().required("Department is required"),
+          department: Yup.string()
+            .oneOf([
+              "Architecture",
+              "Business Administration",
+              "Civil Engineering",
+              "Computer Engineering",
+              "Computer Science",
+              "Electrical Engineering",
+              "Environmental Engineering",
+              "Industrial Engineering",
+              "Mechanical Engineering",
+            ])
+            .required("Department is required"),
           areaOfInterest: Yup.string().required("Area of Interest is required"),
           facultyStatus: Yup.string()
             .oneOf(["Instructor", "Assistant", "Associate", "Professor"])
@@ -105,10 +117,24 @@ function MentorForm() {
             />
             <Select label="Department *" name="department">
               <option value="">Select Option</option>
-              <option value="Computer Science">Computer Science</option>
+              <option value="Architecture">Architecture</option>
+              <option value="Business Administration">
+                Business Administration
+              </option>
+              <option value="Civil Engineering">Civil Engineering</option>
               <option value="Computer Engineering">Computer Engineering</option>
+              <option value="Computer Science">Computer Science</option>
               <option value="Electrical Engineering">
                 Electrical Engineering
+              </option>
+              <option value="Environmental Engineering">
+                Environmental Engineering
+              </option>
+              <option value="Industrial Engineering">
+                Industrial Engineering
+              </option>
+              <option value="Mechanical Engineering">
+                Mechanical Engineering
               </option>
             </Select>
             <Input

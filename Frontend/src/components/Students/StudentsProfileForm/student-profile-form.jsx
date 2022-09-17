@@ -11,8 +11,8 @@ import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
 import styles from "./student-profile-form.module.css";
 import { Box, useMediaQuery } from "@chakra-ui/react";
-import ProfileChangerPopOver from "@/components/common/ProfileChangerPopOver/profile-changer-popover";
-import ProfilePicture from "@/components/common/ProfilePicture/profile-picture";
+import ProfileChangerPopOver from "@/components/common/Profile/ProfileChangerPopOver/profile-changer-popover";
+import ProfilePicture from "@/components/common/Profile/ProfilePicture/profile-picture";
 
 function StudentProfileForm() {
   const toast = useToast();

@@ -94,7 +94,7 @@ h1 #editbutton {
 #personal-info:before {
   content: "";
   display: inline-block;
-  width: 40rem;
+  width: 32rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
   margin-right: auto;
@@ -103,7 +103,7 @@ h1 #editbutton {
 #personal-info:after {
   content: "";
   display: inline-block;
-  width: 40rem;
+  width: 32rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
   margin-left: auto;
@@ -112,7 +112,7 @@ h1 #editbutton {
 #changePassword:before {
   content: "";
   display: inline-block;
-  width: 41.7rem;
+  width: 33rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
   margin-right: auto;
@@ -121,7 +121,7 @@ h1 #editbutton {
 #changePassword:after {
   content: "";
   display: inline-block;
-  width: 41.7rem;
+  width: 33rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
   margin-left: auto;
@@ -130,7 +130,7 @@ h1 #editbutton {
 #academicInfo:before {
   content: "";
   display: inline-block;
-  width: 39.5rem;
+  width: 32rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
   margin-right: auto;
@@ -139,7 +139,7 @@ h1 #editbutton {
 #academicInfo:after {
   content: "";
   display: inline-block;
-  width: 39.5rem;
+  width: 32rem;
   height: 3px;
   background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
   margin-left: auto;
@@ -160,7 +160,7 @@ h1 #editbutton {
   cursor: pointer;
 }
 
-@media only screen and (max-width: 1420px) {
+@media only screen and (max-width: 1550px) {
   #personal-info:before {
     width: 24.3rem;
   }

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Spinner, useToast } from "@chakra-ui/react";
@@ -11,15 +11,14 @@ import Input from "@/components/common/Input/input";
 import InputMessage from "@/components/common/InputMessage/InputMessage";
 import Select from "@/components/common/Select/select";
 import styles from "./mentor-profile-form.module.css";
-import ProfileChangerPopOver from "@/components/common/ProfileChangerPopOver/profile-changer-popover";
-import ProfilePicture from "@/components/common/ProfilePicture/profile-picture";
+import ProfileChangerPopOver from "@/components/common/Profile/ProfileChangerPopOver/profile-changer-popover";
+import ProfilePicture from "@/components/common/Profile/ProfilePicture/profile-picture";
 import { Box, useMediaQuery } from "@chakra-ui/react";
 import Schedule from "@/components/Mentors/TimeComponents/Schedule/schedule";
 
 function MentorProfileForm() {
   const toast = useToast();
   const userId = useUserStore((state) => state.userId);
-  const schedule = useUserStore((state) => state.schedule);
   const setEmail = useUserStore((state) => state.setEmail);
   const setPictureData = useUserStore((state) => state.setPictureData);
   const pictureData = useUserStore((state) => state.pictureData);
@@ -103,21 +102,14 @@ function MentorProfileForm() {
       });
     }
 
-    console.log("Handle Form Submission Use Effect");
-    console.log("Is ready to submit: ", isReadyToSubmit);
-    console.log("Is Submitting: ", isSubmitting);
     if (isReadyToSubmit && isSubmitting) {
       // --- Logic to submit ---
-      console.log("Is Submitting After Changes.");
-      console.log("Transformed Schedule Updated: ", transformedSchedule);
-      console.log(typeof mentorData);
       const mentorInfoWithID = {
         userId: userId,
         ...mentorData,
         profilePicture: pictureData,
         officeHours: transformedSchedule,
       };
-      console.log(mentorInfoWithID);
       submit(mentorInfoWithID);
     }
   }, [isReadyToSubmit]);
@@ -137,7 +129,6 @@ function MentorProfileForm() {
   }
 
   function onReadyToSubmit(isReady, schedule) {
-    console.log("On Ready To Submit: ", isReady);
     setTransformedSchedule(schedule);
     setIsReadyToSubmit(isReady);
   }
@@ -166,27 +157,6 @@ function MentorProfileForm() {
     }
   }
 
-  function inputWidthField() {
-    if (isLessThan1135) {
-      return "18rem";
-    } else if (isLessThan1420) {
-      return "20rem";
-    } else {
-      return "26rem";
-    }
-  }
-
-  function inputWidthAcademic() {
-    if (isLessThan1135) {
-      return "10rem";
-    } else if (isLessThan1420) {
-      return "20rem";
-    } else {
-      return "26rem";
-    }
-  }
-
-  // if aqui antes de que el loade mi form va hacer el spinner
   if (isLoading) {
     return (
       <Spinner
@@ -251,7 +221,17 @@ function MentorProfileForm() {
             "Max character limit of 1500 reached.",
             (val) => (val?.length || 0) < 1500
           ),
-          department: Yup.string(),
+          department: Yup.string().oneOf([
+            "Architecture",
+            "Business Administration",
+            "Civil Engineering",
+            "Computer Engineering",
+            "Computer Science",
+            "Electrical Engineering",
+            "Environmental Engineering",
+            "Industrial Engineering",
+            "Mechanical Engineering",
+          ]),
           facultyStatus: Yup.string().oneOf([
             "Instructor",
             "Assistant",
@@ -290,8 +270,6 @@ function MentorProfileForm() {
             ></img>
             Personal Information
           </h1>
-
-          {/* <div className={styles.formInput}> */}
           <div className={styles.inputContainer}>
             <Box>
               <Input
@@ -348,7 +326,6 @@ function MentorProfileForm() {
               </Select>
             </Box>
           </div>
-          {/* </div> */}
           <h1 className={styles.line} id={styles.changePassword}>
             <img
               className={styles.lineImg}
@@ -432,10 +409,24 @@ function MentorProfileForm() {
               isBlue={true}
             >
               <option value="">Select Option</option>
-              <option value="Computer Science">Computer Science</option>
+              <option value="Architecture">Architecture</option>
+              <option value="Business Administration">
+                Business Administration
+              </option>
+              <option value="Civil Engineering">Civil Engineering</option>
               <option value="Computer Engineering">Computer Engineering</option>
+              <option value="Computer Science">Computer Science</option>
               <option value="Electrical Engineering">
                 Electrical Engineering
+              </option>
+              <option value="Environmental Engineering">
+                Environmental Engineering
+              </option>
+              <option value="Industrial Engineering">
+                Industrial Engineering
+              </option>
+              <option value="Mechanical Engineering">
+                Mechanical Engineering
               </option>
             </Select>
             <Select

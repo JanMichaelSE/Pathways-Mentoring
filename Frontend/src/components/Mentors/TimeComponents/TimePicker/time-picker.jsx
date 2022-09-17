@@ -20,7 +20,6 @@ function TimePickerComponent({ value, edit, updateTimePickerInterval }) {
   // Handle Schedule Data
   useEffect(() => {
     if (isSubmitting == true) {
-      console.log("SubmitValue timepicker:", isSubmitting);
       updateTimePickerInterval(`${time[0]}:${time[1]}:${time[2]}`);
     }
   }, [isSubmitting]);

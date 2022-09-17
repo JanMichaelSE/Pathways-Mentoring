@@ -21,20 +21,16 @@ function TimePickerSelector({ time, edit, updateInterval }) {
 
   // Handle Schedule Data
   useEffect(() => {
-    console.log("Use Effect Time Selector Picker Value 1:", firstInterval);
-    console.log("Use Effect Time Selector Picker Value 2:", secondInterval);
     if (firstInterval && secondInterval) {
       updateInterval(`${firstInterval}-${secondInterval}`);
     }
   }, [firstInterval, secondInterval]);
 
   const updateFirstInterval = (tiempo) => {
-    console.log("Time Picker Selector Value Interval 1: ", tiempo);
     setFirstInterval(tiempo);
   };
 
   const updateSecondInterval = (tiempo) => {
-    console.log("Time Picker Selector Value Interval 2: ", tiempo);
     setSecondInterval(tiempo);
   };
 

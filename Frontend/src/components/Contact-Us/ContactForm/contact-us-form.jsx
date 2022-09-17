@@ -6,10 +6,10 @@ import { useToast } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
 
 import InputForm from "@/components/common/InputForm/InputForm";
-import InputMessage from "../InputMessage/InputMessage.jsx";
+import InputMessage from "@/components/common/InputMessage/InputMessage.jsx";
 import { httpSendContactForm } from "@/api/user.api.js";
 
-import styles from "./Contact-US-Form.module.css";
+import styles from "./contact-us-form.module.css";
 
 export default function ContactUsForm() {
   const toast = useToast();

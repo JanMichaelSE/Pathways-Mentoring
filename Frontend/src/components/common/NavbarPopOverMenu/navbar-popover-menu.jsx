@@ -1,4 +1,4 @@
-import styles from "./profile-popover-navbar.module.css";
+import styles from "./navbar-popover-menu.module.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { httpLogout } from "@/api/user.api";
@@ -15,7 +15,7 @@ import {
   PopoverArrow,
 } from "@chakra-ui/react";
 
-function ProfilePopover() {
+function NavbarPopOverMenu() {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const navigate = useNavigate();
   const role = useUserStore((state) => state.role);
@@ -85,4 +85,4 @@ function ProfilePopover() {
     </>
   );
 }
-export default ProfilePopover;
+export default NavbarPopOverMenu;
