@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { findMentorByUserId } from "../../models/mentors.model";
+import { findMentorById, findMentorByUserId } from "../../models/mentors.model";
 import {
   createRecords,
   findAllRecords,
@@ -7,7 +7,12 @@ import {
   findRecordsByStudent,
   updateRecord,
 } from "../../models/records.model";
-import { findStudentByUserId } from "../../models/students.model";
+import { findStudentById, findStudentByUserId } from "../../models/students.model";
+import {
+  sendRecordApprovedEmail,
+  sendRecordRejectedEmail,
+  sendSubmitRecordEmail,
+} from "../../services/mail.service";
 import {
   handleBadRequestResponse,
   handleErrorResponse,
@@ -111,10 +116,99 @@ async function httpUpdateRecord(req: Request, res: Response) {
   }
 }
 
-async function httpDeleteRecord(req: Request, res: Response) {
+async function httpSubmitRecord(req: Request, res: Response) {
   try {
+    const userId = req.userId;
+    const recordId = req.body.recordId;
+    const mentorId = req.body.mentorId;
+
+    if (!recordId && !mentorId) {
+      return handleBadRequestResponse(
+        "Record Id and Mentor Id are required to submit record.",
+        res
+      );
+    }
+
+    const mentor = await findMentorById(mentorId);
+    if (!mentor) {
+      return handleBadRequestResponse("No mentor with this Id exists in the system.", res);
+    }
+
+    const student = await findStudentByUserId(userId);
+    if (!student) {
+      return handleBadRequestResponse("No student with this Id exits in the system", res);
+    }
+
+    const record = await updateRecord(recordId, "Pending Approval");
+    await sendSubmitRecordEmail(mentor.email, student.name, record.id);
+
+    return res.status(200).json(record);
   } catch (error) {
-    return handleErrorResponse("delete record", error, res);
+    return handleErrorResponse("submit record", error, res);
+  }
+}
+
+async function httpApproveRecord(req: Request, res: Response) {
+  try {
+    const userId = req.userId;
+    const recordId = req.body.recordId;
+    const studentId = req.body.studentId;
+
+    if (!recordId && !studentId) {
+      return handleBadRequestResponse(
+        "Record Id and Student Id are required to approve record.",
+        res
+      );
+    }
+
+    const mentor = await findMentorByUserId(userId);
+    if (!mentor) {
+      return handleBadRequestResponse("No mentor with this Id exists in the system.", res);
+    }
+
+    const student = await findStudentById(studentId);
+    if (!student) {
+      return handleBadRequestResponse("No student with this Id exits in the system", res);
+    }
+
+    const record = await updateRecord(recordId, "Approved");
+    await sendRecordApprovedEmail(student.email, mentor.name);
+
+    return res.status(200).json(record);
+  } catch (error) {
+    return handleErrorResponse("approve record", error, res);
+  }
+}
+
+async function httpRejectRecord(req: Request, res: Response) {
+  try {
+    const userId = req.userId;
+    const recordId = req.body.recordId;
+    const studentId = req.body.studentId;
+
+    if (!recordId && !studentId) {
+      return handleBadRequestResponse(
+        "Record Id and Student Id are required to approve record.",
+        res
+      );
+    }
+
+    const mentor = await findMentorByUserId(userId);
+    if (!mentor) {
+      return handleBadRequestResponse("No mentor with this Id exists in the system.", res);
+    }
+
+    const student = await findStudentById(studentId);
+    if (!student) {
+      return handleBadRequestResponse("No student with this Id exits in the system", res);
+    }
+
+    const record = await updateRecord(recordId, "New");
+    await sendRecordRejectedEmail(student.email, mentor.name);
+
+    return res.status(200).json(record);
+  } catch (error) {
+    return handleErrorResponse("reject record", error, res);
   }
 }
 
@@ -124,4 +218,7 @@ export {
   httpGetRecordsByMentor,
   httpCreateRecords,
   httpUpdateRecord,
+  httpSubmitRecord,
+  httpApproveRecord,
+  httpRejectRecord,
 };

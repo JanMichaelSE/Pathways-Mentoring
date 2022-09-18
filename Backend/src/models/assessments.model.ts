@@ -2,14 +2,11 @@ import { prisma } from "../database";
 
 import { Assessment } from "@prisma/client";
 
-import {
-  deleteQuestions,
-  upsertQuestions,
-  validateQuestionsFormat,
-} from "./questions.model";
+import { deleteQuestions, upsertQuestions, validateQuestionsFormat } from "./questions.model";
 
 import { IAssessment, IErrorResponse, IQuestion } from "./../types/index.d";
 import { buildErrorObject } from "../utils/helpers";
+import { findAssessmentAnswersByUserId } from "./answers.model";
 
 async function createAssessment(
   name: string,
@@ -40,7 +37,7 @@ async function createAssessment(
   }
 }
 
-async function getAllAssessments(): Promise<Assessment[]> {
+async function findAllAssessments(): Promise<Assessment[]> {
   try {
     const assessments = await prisma.assessment.findMany();
     return assessments;
@@ -49,9 +46,29 @@ async function getAllAssessments(): Promise<Assessment[]> {
   }
 }
 
-async function getAssessmentWithQuestionsById(
-  id: number
-): Promise<Assessment | null> {
+async function findPathwaysAssessmentDataByUserId(userId: string): Promise<IAssessment | null> {
+  try {
+    const assessment = await prisma.assessment.findFirst({
+      where: {
+        name: "Pathways Assessment",
+      },
+      include: {
+        questions: true,
+      },
+    });
+
+    if (!assessment) {
+      return null;
+    }
+
+    const assessmentInfo = findAssessmentAnswersByUserId(assessment, assessment?.questions, userId);
+    return assessmentInfo;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function findAssessmentWithQuestionsById(id: number): Promise<Assessment | null> {
   try {
     const assessment = await prisma.assessment.findUnique({
       where: {
@@ -73,14 +90,9 @@ async function updateAssessment(
   assessmentId: number
 ): Promise<Assessment | IErrorResponse> {
   try {
-    const existingAssessment = await getAssessmentWithQuestionsById(
-      assessmentId
-    );
+    const existingAssessment = await findAssessmentWithQuestionsById(assessmentId);
     if (!existingAssessment) {
-      return buildErrorObject(
-        400,
-        "An Assessment with this Id does not exist."
-      );
+      return buildErrorObject(400, "An Assessment with this Id does not exist.");
     }
 
     const questionsTransformed = validateQuestionsFormat(assessment.questions);
@@ -100,9 +112,7 @@ async function updateAssessment(
     await deleteQuestions(questionsTransformed, assessmentId);
     await upsertQuestions(questionsTransformed, assessmentId);
 
-    const updatedAssessment = await getAssessmentWithQuestionsById(
-      assessmentId
-    );
+    const updatedAssessment = await findAssessmentWithQuestionsById(assessmentId);
     // @ts-ignore - Ignore Null since we already checked if Id is Valid
     return updatedAssessment;
   } catch (error) {
@@ -110,9 +120,7 @@ async function updateAssessment(
   }
 }
 
-async function deleteAssessment(
-  assessmentId: number
-): Promise<Assessment | IErrorResponse> {
+async function deleteAssessment(assessmentId: number): Promise<Assessment | IErrorResponse> {
   try {
     const existingAssessment = await prisma.assessment.findUnique({
       where: {
@@ -120,10 +128,7 @@ async function deleteAssessment(
       },
     });
     if (!existingAssessment) {
-      return buildErrorObject(
-        400,
-        "An Assessment with this Id does not exist."
-      );
+      return buildErrorObject(400, "An Assessment with this Id does not exist.");
     }
 
     const deletedAssessment = await prisma.assessment.delete({
@@ -137,10 +142,26 @@ async function deleteAssessment(
   }
 }
 
+async function doesPathwayAssessmentExist(): Promise<boolean> {
+  try {
+    const assessment = await prisma.assessment.findFirst({
+      where: {
+        name: "Pathways Assessment",
+      },
+    });
+
+    return !!assessment;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   createAssessment,
-  getAllAssessments,
-  getAssessmentWithQuestionsById,
+  findAllAssessments,
+  findAssessmentWithQuestionsById,
+  findPathwaysAssessmentDataByUserId,
   updateAssessment,
   deleteAssessment,
+  doesPathwayAssessmentExist,
 };

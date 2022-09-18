@@ -1,14 +1,12 @@
 import { Request, Response } from "express";
 
-import {
-  createAnswers,
-  findAnswersByAssessment,
-} from "../../models/answers.model";
+import { upsertAnswers, findAnswersByAssessment } from "../../models/answers.model";
 import {
   createAssessment,
   deleteAssessment,
-  getAllAssessments,
-  getAssessmentWithQuestionsById,
+  findAllAssessments,
+  findAssessmentWithQuestionsById,
+  findPathwaysAssessmentDataByUserId,
   updateAssessment,
 } from "../../models/assessments.model";
 
@@ -23,7 +21,7 @@ import { validateAssessmentRequiredFields } from "./assessments.helpers";
 
 async function httpGetAllAssessments(req: Request, res: Response) {
   try {
-    const assessmentsResponse = await getAllAssessments();
+    const assessmentsResponse = await findAllAssessments();
     return res.status(200).json(assessmentsResponse);
   } catch (error) {
     return handleErrorResponse("get all assessments", error, res);
@@ -34,25 +32,32 @@ async function httpGetAssessment(req: Request, res: Response) {
   try {
     const assessmentId = Number(req.params.assessmentId);
     if (isNaN(assessmentId)) {
-      return handleBadRequestResponse(
-        "Assessment Id parameter must be of type number.",
-        res
-      );
+      return handleBadRequestResponse("Assessment Id parameter must be of type number.", res);
     }
 
-    const assessmentResponse = await getAssessmentWithQuestionsById(
-      assessmentId
-    );
+    const assessmentResponse = await findAssessmentWithQuestionsById(assessmentId);
     if (!assessmentResponse) {
-      return handleNotFoundResponse(
-        "An assessment with this Id doesn't exist.",
-        res
-      );
+      return handleNotFoundResponse("An assessment with this Id doesn't exist.", res);
     }
 
     return res.status(200).json(assessmentResponse);
   } catch (error) {
     return handleErrorResponse("get assessment", error, res);
+  }
+}
+
+async function httpGetPathwaysAssessment(req: Request, res: Response) {
+  try {
+    const userId = req.userId;
+
+    const assessment = await findPathwaysAssessmentDataByUserId(userId);
+    if (!assessment) {
+      return handleNotFoundResponse("The system did not find the pathways assessment.", res);
+    }
+
+    return res.status(200).json(assessment);
+  } catch (error) {
+    return handleErrorResponse("get pathways assessment", error, res);
   }
 }
 
@@ -64,8 +69,7 @@ async function httpAddAssessment(req: Request, res: Response) {
       questions: req.body.questions,
     };
 
-    const validAssessmentInfo =
-      validateAssessmentRequiredFields(assessmentInfo);
+    const validAssessmentInfo = validateAssessmentRequiredFields(assessmentInfo);
     if ("errorCode" in validAssessmentInfo) {
       return res
         .status(validAssessmentInfo.errorCode)
@@ -94,10 +98,7 @@ async function httpUpdateAssessment(req: Request, res: Response) {
   try {
     const assessmentId = Number(req.params.assessmentId);
     if (isNaN(assessmentId)) {
-      return handleBadRequestResponse(
-        "Assessment Id parameter must be of type number.",
-        res
-      );
+      return handleBadRequestResponse("Assessment Id parameter must be of type number.", res);
     }
 
     const assessmentInfo: IAssessment = {
@@ -105,18 +106,14 @@ async function httpUpdateAssessment(req: Request, res: Response) {
       description: req.body.description,
       questions: req.body.questions,
     };
-    const validAssessmentInfo =
-      validateAssessmentRequiredFields(assessmentInfo);
+    const validAssessmentInfo = validateAssessmentRequiredFields(assessmentInfo);
     if ("errorCode" in validAssessmentInfo) {
       return res
         .status(validAssessmentInfo.errorCode)
         .json({ error: validAssessmentInfo.errorMessage });
     }
 
-    const assessmentResponse = await updateAssessment(
-      validAssessmentInfo,
-      assessmentId
-    );
+    const assessmentResponse = await updateAssessment(validAssessmentInfo, assessmentId);
     return res.status(200).json(assessmentResponse);
   } catch (error) {
     return handleErrorResponse("update assessment", error, res);
@@ -127,10 +124,7 @@ async function httpDeleteAssessment(req: Request, res: Response) {
   try {
     const assessmentId = Number(req.params.assessmentId);
     if (isNaN(assessmentId)) {
-      return handleBadRequestResponse(
-        "Assessment Id parameter must be of type number.",
-        res
-      );
+      return handleBadRequestResponse("Assessment Id parameter must be of type number.", res);
     }
 
     const assessmentResponse = await deleteAssessment(assessmentId);
@@ -162,10 +156,7 @@ async function httpAnswerAssessment(req: Request, res: Response) {
     }
 
     if (isNaN(assessmentId)) {
-      return handleBadRequestResponse(
-        "Assessment Id parameter must be of type number.",
-        res
-      );
+      return handleBadRequestResponse("Assessment Id parameter must be of type number.", res);
     }
 
     for (const answer of answersInfo.answers) {
@@ -181,20 +172,21 @@ async function httpAnswerAssessment(req: Request, res: Response) {
     let answersToCreate: IAnswer[] = [];
     for (const answer of answersInfo.answers) {
       answersToCreate.push({
+        id: answer.id,
         userId: answersInfo.userId,
         questionId: answer.questionId,
         answer: answer.answer,
       });
     }
 
-    const answersResponse = await createAnswers(answersToCreate);
+    const answersResponse = await upsertAnswers(answersToCreate, answersInfo.userId);
     if ("errorCode" in answersResponse) {
       return res.status(answersResponse.errorCode).json({
         error: answersResponse,
       });
     }
 
-    return res.status(200).json({ createdCount: answersResponse.count });
+    return res.status(200).json(answersResponse);
   } catch (error) {
     return handleErrorResponse("answering assessment", error, res);
   }
@@ -204,10 +196,7 @@ async function httpGetAnswersByAssessment(req: Request, res: Response) {
   try {
     const assessmentId = Number(req.params.assessmentId);
     if (isNaN(assessmentId)) {
-      return handleBadRequestResponse(
-        "Assessment Id must be of type parameter.",
-        res
-      );
+      return handleBadRequestResponse("Assessment Id must be of type parameter.", res);
     }
 
     const answersResponse = await findAnswersByAssessment(assessmentId);
@@ -227,6 +216,7 @@ export {
   httpAddAssessment,
   httpGetAllAssessments,
   httpGetAssessment,
+  httpGetPathwaysAssessment,
   httpUpdateAssessment,
   httpDeleteAssessment,
   httpAnswerAssessment,
