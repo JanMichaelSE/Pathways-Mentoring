@@ -1,28 +1,38 @@
-import React, { Fragment, useState, useEffect } from "react";
-import {
-  HStack,
-  SimpleGrid,
-  Text,
-  Image,
-  Spinner,
-  useToast,
-} from "@chakra-ui/react";
-import styles from "./manage-users.module.css";
+import React, { useState, useEffect } from "react";
+
+import { httpGetAllMentors } from "@/api/mentors.api";
+
+import { SimpleGrid, Spinner, useToast } from "@chakra-ui/react";
+
+import MentorCard from "@/components/Admin/MentorCard/mentor-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
+import styles from "./manage-users.module.css";
 
 function ManageUsers() {
   const toast = useToast();
   const [mentors, setMentors] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect(() => {
-  //   asyn function loadAllMentors
+  useEffect(() => {
+    async function loadAllMentors() {
+      const mentorsResponse = await httpGetAllMentors();
 
-  //   return () => {
-  //     second
-  //   }
-  // }, [third])
+      if (mentorsResponse.hasError) {
+        return toast({
+          description: mentorsResponse.errorMessage,
+          status: "error",
+          position: "top",
+          duration: 5000,
+        });
+      }
+
+      setMentors(mentorsResponse.data);
+      setIsLoading(false);
+    }
+
+    loadAllMentors();
+  }, []);
 
   function loadMentorComponent() {
     if (isLoading) {
@@ -40,7 +50,7 @@ function ManageUsers() {
           />
         </div>
       );
-    } else if (mentors.length === 1) {
+    } else if (mentors.length === 0) {
       return (
         <div className={styles.noUsers}>
           <NoItemsFound title="No Users Pending" icon={SadFaceIcon} />
@@ -48,9 +58,15 @@ function ManageUsers() {
       );
     } else {
       return (
-        <>
-          <div>Manage Users</div>
-        </>
+        <SimpleGrid
+          columns={[1, 2, 3]}
+          spacing="40px"
+          className={styles.background}
+        >
+          {mentors?.map((mentor) => (
+            <MentorCard key={mentor.id} cardData={mentor} />
+          ))}
+        </SimpleGrid>
       );
     }
   }

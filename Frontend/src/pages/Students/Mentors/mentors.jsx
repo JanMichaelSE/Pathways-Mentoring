@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { SimpleGrid, Spinner, useToast } from "@chakra-ui/react";
-import httpGetAllMentors from "@/api/mentors.api";
+import { httpGetAllMentors } from "@/api/mentors.api";
 import AvatarCard from "../../../components/common/AvatarCard/AvatarCard";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
@@ -46,20 +46,18 @@ function Mentors() {
         />
       );
     } else if (mentorData.length === 0) {
-      return (
-        <NoItemsFound title="No Mentors added yet." icon={SadFaceIcon} />
-      );
+      return <NoItemsFound title="No Mentors added yet." icon={SadFaceIcon} />;
     } else {
       return (
         <SimpleGrid
-        columns={[1, 2, 3]}
-        spacing="40px"
-        className={styles.background}
-      >
-        {mentorData?.map((mentor) => (
-          <AvatarCard key={mentor.id} cardData={mentor} />
-        ))}
-      </SimpleGrid>
+          columns={[1, 2, 3]}
+          spacing="40px"
+          className={styles.background}
+        >
+          {mentorData?.map((mentor) => (
+            <AvatarCard key={mentor.id} cardData={mentor} />
+          ))}
+        </SimpleGrid>
       );
     }
   }
