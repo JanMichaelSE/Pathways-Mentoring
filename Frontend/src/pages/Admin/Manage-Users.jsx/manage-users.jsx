@@ -16,6 +16,14 @@ function ManageUsers() {
   const [mentors, setMentors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // useEffect(() => {
+  //   asyn function loadAllMentors
+
+  //   return () => {
+  //     second
+  //   }
+  // }, [third])
+
   function loadMentorComponent() {
     if (isLoading) {
       return (
@@ -32,7 +40,7 @@ function ManageUsers() {
           />
         </div>
       );
-    } else if (mentors.length === 0) {
+    } else if (mentors.length === 1) {
       return (
         <div className={styles.noUsers}>
           <NoItemsFound title="No Users Pending" icon={SadFaceIcon} />
