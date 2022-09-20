@@ -7,6 +7,10 @@
   margin-left: 20px;
 }
 
+.blue-font {
+  color: var(--color-blue-dark);
+}
+
 .input {
   font-size: var(--font-size-regular);
   background-color: var(--color-white);

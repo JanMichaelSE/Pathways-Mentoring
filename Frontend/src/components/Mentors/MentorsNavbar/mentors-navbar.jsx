@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import styles from "./mentors-navbar.module.css";
-import ProfilePopover from "@/components/common/ProfilePopOverNavbar/profile-popover-navbar";
+import NavbarPopOverMenu from "@/components/common/NavbarPopOverMenu/navbar-popover-menu";
 
 function MentorNavbar() {
   let location = useLocation();
@@ -48,7 +48,7 @@ function MentorNavbar() {
           >
             Contact Us
           </Link>
-          <ProfilePopover classname={styles.logoLink} />
+          <NavbarPopOverMenu classname={styles.logoLink} />
         </div>
       </nav>
       <Outlet />

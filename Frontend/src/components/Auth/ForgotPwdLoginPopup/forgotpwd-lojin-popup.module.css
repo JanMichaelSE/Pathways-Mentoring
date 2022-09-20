@@ -1,5 +1,6 @@
 .linkButton {
   color: var(--color-blue-dark);
+  width: inherit;
 }
 .inputContainer {
   display: flex;

@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import styles from "./admin-navbar.module.css";
-import ProfilePopover from "@/components/common/ProfilePopOverNavbar/profile-popover-navbar";
+import NavbarPopOverMenu from "@/components/common/NavbarPopOverMenu/navbar-popover-menu";
 
 function AdminNavbar() {
   let location = useLocation();
@@ -28,7 +28,7 @@ function AdminNavbar() {
           >
             Users
           </Link>
-          <ProfilePopover classname={styles.logoLink} />
+          <NavbarPopOverMenu classname={styles.logoLink} />
         </div>
       </nav>
       <Outlet />
