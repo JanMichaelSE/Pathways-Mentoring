@@ -24,7 +24,6 @@ export default function ContactUsForm() {
   }
 
   async function handleSubmit(contactInfo) {
-    console.log("Contact Values: ", contactInfo);
     const response = await httpSendContactForm(contactInfo);
 
     if (response.hasError) {
@@ -39,7 +38,7 @@ export default function ContactUsForm() {
 
     return toast({
       title: "Form Sent!",
-      description: "Pathjways Staff will communicate back soon.",
+      description: "Pathways Staff will communicate back soon.",
       status: "success",
       position: "top",
       duration: 7000,

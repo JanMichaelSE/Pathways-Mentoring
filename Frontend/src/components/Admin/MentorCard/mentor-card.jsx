@@ -22,27 +22,14 @@ import {
 } from "@chakra-ui/react";
 import styles from "./mentor-card.module.css";
 
-function MentorCard({ cardData }) {
+function MentorCard({ cardData, buttonFunction }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
   const toast = useToast();
+  const [firstName, lastName] = cardData.name.split("; ");
 
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
-
-  async function acceptMentor() {
-    console.log("Info of card data: ", cardData.userId);
-    const userResponse = await httpApproveMentorAccess(cardData.userId);
-
-    if (userResponse.hasError) {
-      return toast({
-        description: userResponse.errorMessage,
-        status: "error",
-        position: "top",
-        duration: 5000,
-      });
-    }
-  }
 
   return (
     <>
@@ -70,7 +57,7 @@ function MentorCard({ cardData }) {
             p={3}
           />
           <Heading fontSize={"2xl"} fontFamily={"body"}>
-            {cardData.name}
+            {`${firstName} ${lastName}`}
           </Heading>
           <Text fontWeight={600} color={"gray.500"} mb={4}>
             {cardData.department}
@@ -131,7 +118,7 @@ function MentorCard({ cardData }) {
               <button
                 type="button"
                 className={styles.button}
-                onClick={acceptMentor}
+                onClick={buttonFunction(cardData)}
               >
                 Accept Mentor
               </button>
@@ -151,7 +138,7 @@ function MentorCard({ cardData }) {
                   p={5}
                 />
                 <Heading fontSize={"2xl"} fontFamily={"body"}>
-                  {cardData.name}
+                  {`${firstName} ${lastName}`}
                 </Heading>
                 <Text fontWeight={600} color={"gray.500"}>
                   {cardData.department}

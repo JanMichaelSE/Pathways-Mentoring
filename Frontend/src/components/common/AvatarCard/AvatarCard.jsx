@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  useToast,
   Heading,
   Avatar,
   Box,
@@ -19,10 +20,12 @@ import {
 } from "@chakra-ui/react";
 import styles from "./AvatarCard.module.css";
 
-export default function AvatarCard({ cardData }) {
+export default function AvatarCard({ cardData, buttonFunction }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
+  const toast = useToast();
+  const [firstName, lastName] = cardData.name.split("; ");
 
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
 
@@ -52,7 +55,7 @@ export default function AvatarCard({ cardData }) {
             p={3}
           />
           <Heading fontSize={"2xl"} fontFamily={"body"}>
-            {cardData.name}
+            {`${firstName} ${lastName}`}
           </Heading>
           <Text fontWeight={600} color={"gray.500"} mb={4}>
             {cardData.department}
@@ -130,7 +133,7 @@ export default function AvatarCard({ cardData }) {
                   p={5}
                 />
                 <Heading fontSize={"2xl"} fontFamily={"body"}>
-                  {cardData.name}
+                  {`${firstName} ${lastName}`}
                 </Heading>
                 <Text fontWeight={600} color={"gray.500"}>
                   {cardData.department}

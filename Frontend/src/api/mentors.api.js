@@ -19,6 +19,25 @@ async function httpGetAllMentors() {
   return mentorsToReturn;
 }
 
+async function httpGetUnapprovedMentors() {
+  let mentorsToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+
+  try {
+    const response = await axios.get("/mentors/unapproved");
+    mentorsToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    mentorsToReturn.hasError = true;
+    mentorsToReturn.errorMessage = errorResponse.error.errorMessage;
+  }
+
+  return mentorsToReturn;
+}
+
 async function httpApproveMentorAccess(userId) {
   let userToReturn = {
     hasError: false,
@@ -45,4 +64,4 @@ async function httpApproveMentorAccess(userId) {
 
   return userToReturn;
 }
-export { httpGetAllMentors, httpApproveMentorAccess };
+export { httpGetAllMentors, httpGetUnapprovedMentors, httpApproveMentorAccess };

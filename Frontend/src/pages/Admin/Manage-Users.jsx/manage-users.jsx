@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-import { httpGetAllMentors } from "@/api/mentors.api";
+import {
+  httpGetUnapprovedMentors,
+  httpApproveMentorAccess,
+} from "@/api/mentors.api";
 
 import { SimpleGrid, Spinner, useToast } from "@chakra-ui/react";
 
@@ -16,7 +19,7 @@ function ManageUsers() {
 
   useEffect(() => {
     async function loadAllMentors() {
-      const mentorsResponse = await httpGetAllMentors();
+      const mentorsResponse = await httpGetUnapprovedMentors();
 
       if (mentorsResponse.hasError) {
         return toast({
@@ -33,6 +36,28 @@ function ManageUsers() {
 
     loadAllMentors();
   }, []);
+
+  async function acceptMentor(cardData) {
+    console.log("Info of card data: ", cardData.id);
+    const userResponse = await httpApproveMentorAccess(cardData.id);
+
+    if (userResponse.hasError) {
+      return toast({
+        description: userResponse.errorMessage,
+        status: "error",
+        position: "top",
+        duration: 5000,
+      });
+    }
+
+    return toast({
+      title: "Approved!",
+      description: "Mentor access has been approved!",
+      status: "success",
+      position: "top",
+      duration: 7000,
+    });
+  }
 
   function loadMentorComponent() {
     if (isLoading) {
@@ -64,7 +89,11 @@ function ManageUsers() {
           className={styles.background}
         >
           {mentors?.map((mentor) => (
-            <MentorCard key={mentor.id} cardData={mentor} />
+            <MentorCard
+              key={mentor.id}
+              cardData={mentor}
+              buttonFunction={acceptMentor}
+            />
           ))}
         </SimpleGrid>
       );
