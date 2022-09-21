@@ -38,7 +38,13 @@ async function createMentor(
 
 async function findAllMentors(): Promise<Mentor[]> {
   try {
-    const mentors = await prisma.mentor.findMany();
+    const mentors = await prisma.mentor.findMany({
+      where: {
+        user: {
+          isApproved: true,
+        },
+      },
+    });
     const mentorsWithoutId = mentors.map((mentor) => excludeFields(mentor, "id"));
     return mentorsWithoutId;
   } catch (error) {

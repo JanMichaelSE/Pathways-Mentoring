@@ -140,7 +140,8 @@ async function httpSubmitRecord(req: Request, res: Response) {
     }
 
     const record = await updateRecord(recordId, "Pending Approval");
-    await sendSubmitRecordEmail(mentor.email, student.name, record.id);
+    let studentFormattedName = student.name.replace(";", "");
+    await sendSubmitRecordEmail(mentor.email, studentFormattedName, record.id);
 
     return res.status(200).json(record);
   } catch (error) {
@@ -172,7 +173,8 @@ async function httpApproveRecord(req: Request, res: Response) {
     }
 
     const record = await updateRecord(recordId, "Approved");
-    await sendRecordApprovedEmail(student.email, mentor.name);
+    let mentorFormattedName = mentor.name.replace(";", "");
+    await sendRecordApprovedEmail(student.email, mentorFormattedName);
 
     return res.status(200).json(record);
   } catch (error) {
@@ -204,7 +206,8 @@ async function httpRejectRecord(req: Request, res: Response) {
     }
 
     const record = await updateRecord(recordId, "New");
-    await sendRecordRejectedEmail(student.email, mentor.name);
+    let mentorFormattedName = mentor.name.replace(";", "");
+    await sendRecordRejectedEmail(student.email, mentorFormattedName);
 
     return res.status(200).json(record);
   } catch (error) {
