@@ -39,11 +39,7 @@ function excludeFields<T, Key extends keyof T>(record: T, ...keys: Key[]): T {
   return record;
 }
 
-function handleErrorResponse(
-  failedAt: string,
-  error: any,
-  res: Response
-): Response {
+function handleErrorResponse(failedAt: string, error: any, res: Response): Response {
   errorLogger(error);
   const errorResponse: IErrorResponse = {
     errorCode: 500,
