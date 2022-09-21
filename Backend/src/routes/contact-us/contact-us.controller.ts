@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import { sendContactFormEmail } from "../../services/mail.service";
-import {
-  handleBadRequestResponse,
-  handleErrorResponse,
-} from "../../utils/helpers";
+import { handleBadRequestResponse, handleErrorResponse } from "../../utils/helpers";
 
 async function httpSendContactFormEmail(req: Request, res: Response) {
   try {
@@ -20,17 +17,12 @@ async function httpSendContactFormEmail(req: Request, res: Response) {
       );
     }
 
-    await sendContactFormEmail(name, topic, phone, email, message);
+    let formattedName = name.replace(";", "");
+    await sendContactFormEmail(formattedName, topic, phone, email, message);
 
-    return res
-      .status(200)
-      .json({ status: 200, message: "Contact Us Form Email has been sent." });
+    return res.status(200).json({ status: 200, message: "Contact Us Form Email has been sent." });
   } catch (error) {
-    return handleErrorResponse(
-      "send contact form submission email",
-      error,
-      res
-    );
+    return handleErrorResponse("send contact form submission email", error, res);
   }
 }
 

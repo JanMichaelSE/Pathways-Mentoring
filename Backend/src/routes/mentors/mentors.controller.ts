@@ -156,7 +156,8 @@ async function httpAcceptMentorshipRequest(req: Request, res: Response) {
 
     const updatedStudent = await updateStudentMentorship(student.id, mentor.id);
     const records = await createRecords(mentor.id, student.id);
-    await sendAcceptedMentorshipEmail(student.email, mentor.name);
+    let mentorFormattedName = mentor.name.replace(";", "");
+    await sendAcceptedMentorshipEmail(student.email, mentorFormattedName);
 
     return res.status(200).json({
       student: updatedStudent,

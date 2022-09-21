@@ -111,7 +111,8 @@ async function httpRequestMentorship(req: Request, res: Response) {
       return handleBadRequestResponse("This student does not exist in the system.", res);
     }
 
-    await sendRequestMentorshipEmail(toEmail, student.name, student.id);
+    let formattedName = student.name.replace(";", "");
+    await sendRequestMentorshipEmail(toEmail, formattedName, student.id);
 
     return res.status(200).json("Mentorship Request has been sent.");
   } catch (error) {
@@ -149,7 +150,8 @@ async function httpCancelMentorship(req: Request, res: Response) {
       }
 
       updatedStudent = await updateStudentMentorship(student.id, null);
-      await sendCanceledMentorshipEmail(mentor.email, student.name, student.name);
+      let studentFormattedName = student.name.replace(";", "");
+      await sendCanceledMentorshipEmail(mentor.email, studentFormattedName, studentFormattedName);
     } else {
       const mentor = await findMentorByUserId(userId);
       if (!mentor) {
@@ -176,7 +178,9 @@ async function httpCancelMentorship(req: Request, res: Response) {
       }
 
       updatedStudent = await updateStudentMentorship(student.id, null);
-      await sendCanceledMentorshipEmail(student.email, mentor.name, student.name);
+      let mentorFormattedName = mentor.name.replace(";", "");
+      let studentFormmatedName = student.name.replace(";", "");
+      await sendCanceledMentorshipEmail(student.email, mentorFormattedName, studentFormmatedName);
     }
 
     return res.status(200).json(updatedStudent);
