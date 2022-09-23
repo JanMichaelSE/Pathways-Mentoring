@@ -21,8 +21,7 @@ function StudentRouter() {
           <Route path="/" element={<StudentRecords />} />
           <Route path="/records/:recordId" element={<RecordView />} />
           <Route path="/development-plan" element={<DevelopmentPlan />} />
-          <Route path="/assessments" element={<Assessments />} />
-          <Route path="/assessments/:id" element={<AssessmentEdit />} />
+          <Route path="/assessments" element={<AssessmentEdit />} />
           <Route path="/mentors" element={<Mentors />} />
           <Route path="/profile" element={<StudentProfile />} />
           <Route path="/contact-us" element={<ContactUs />} />

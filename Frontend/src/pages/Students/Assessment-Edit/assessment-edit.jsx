@@ -5,12 +5,11 @@ import { useToast } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Spinner } from "@chakra-ui/react";
 
-import { httpGetAssessment } from "@/api/assessments.api";
+import { httpGetPathwaysAssessment, httpAnswerAssessment } from "@/api/assessments.api";
 import QuestionGenerator from "@/components/Students/QuestionGenerator/question-generator";
 import Button from "@/components/common/Button/button.jsx";
 
 import styles from "./assessment-edit.module.css";
-import { httpAnswerAssessment } from "../../../api/assessments.api";
 
 function AssessmentsEdit() {
   const navigate = useNavigate();
@@ -24,7 +23,7 @@ function AssessmentsEdit() {
 
   useEffect(() => {
     async function loadAssessmentInfo() {
-      const assessmentResponse = await httpGetAssessment(assessmentId);
+      const assessmentResponse = await httpGetPathwaysAssessment();
 
       if (assessmentResponse.hasError) {
         return toast({
@@ -49,9 +48,7 @@ function AssessmentsEdit() {
 
   function questionValidation(type) {
     if (type == "Multi-select" || type == "Select") {
-      return Yup.array()
-        .min(1, "Must select atleast 1 option.")
-        .required("Question is required");
+      return Yup.array().min(1, "Must select atleast 1 option.").required("Question is required");
     } else {
       return Yup.string().required("Question is required");
     }
@@ -142,9 +139,7 @@ function AssessmentsEdit() {
             <h1 className={styles.assessmentTitle}>{assessment.name}</h1>
             <div className={styles.assessmentDescriptionContainer}>
               <h1>Description:</h1>
-              <p className={styles.assessmentDescription}>
-                {assessment.description}
-              </p>
+              <p className={styles.assessmentDescription}>{assessment.description}</p>
             </div>
           </div>
           {assessment.questions.map((question, index) => (

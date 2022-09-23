@@ -10,7 +10,9 @@ function QuestionCard({ number, question, meta, children }) {
   return (
     <div className={questionContainerStyles()}>
       <div className={styles.questionHeader}>
-        <div className={styles.numberContainer}>{number}</div>
+        <div className={styles.numberContainer}>
+          <p>{number}</p>
+        </div>
         <h1 className={styles.question}>{question}</h1>
       </div>
       <div className={styles.answer}>{children}</div>
