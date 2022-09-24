@@ -20,7 +20,7 @@ async function httpGetAllAssessments() {
   return assessmentsToReturn;
 }
 
-// --- Deprecated for MVP ---
+// --- This function is deprecated for MVP ---
 async function httpGetAssessment(assessmentId) {
   let assessmentToReturn = {
     hasError: false,

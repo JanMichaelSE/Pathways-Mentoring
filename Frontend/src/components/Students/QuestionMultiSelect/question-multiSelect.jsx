@@ -16,11 +16,22 @@ function QuestionMultiSelect({ number, question, ...props }) {
     setValue(values);
   }
 
+  function getDefaultValues() {
+    let values = [];
+
+    for (const value of field.value) {
+      values.push({ value: value, label: value });
+    }
+
+    return values;
+  }
+
   return (
     <QuestionCard number={number} question={question} meta={meta}>
       <Select
         closeMenuOnScroll={false}
         isMulti
+        defaultValue={getDefaultValues}
         options={options}
         styles={styles}
         placeholder="Select Option"

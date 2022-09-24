@@ -186,7 +186,10 @@ async function httpAnswerAssessment(req: Request, res: Response) {
       });
     }
 
-    return res.status(200).json(answersResponse);
+    const userId = req.userId;
+    const assessmentAnswered = await findPathwaysAssessmentDataByUserId(userId);
+
+    return res.status(200).json(assessmentAnswered);
   } catch (error) {
     return handleErrorResponse("answering assessment", error, res);
   }
