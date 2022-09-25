@@ -7,7 +7,7 @@ import {
 
 import { SimpleGrid, Spinner, useToast } from "@chakra-ui/react";
 
-import MentorCard from "@/components/Admin/MentorCard/mentor-card";
+import AvatarCard from "@/components/common/AvatarCard/avatar-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
 import styles from "./manage-users.module.css";
@@ -89,10 +89,11 @@ function ManageUsers() {
           className={styles.background}
         >
           {mentors?.map((mentor) => (
-            <MentorCard
+            <AvatarCard
               key={mentor.id}
               cardData={mentor}
               buttonFunction={acceptMentor}
+              messageButton={"Accept Mentor"}
             />
           ))}
         </SimpleGrid>
