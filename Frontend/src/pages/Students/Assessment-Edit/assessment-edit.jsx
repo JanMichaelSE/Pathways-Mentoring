@@ -109,8 +109,6 @@ function AssessmentsEdit() {
 
     const answerResponse = await httpAnswerAssessment(_answers, assessment.id);
 
-    console.log("Answer Response: ", answerResponse);
-
     if (answerResponse.hasError) {
       return toast({
         description: answerResponse.errorMessage,
@@ -126,6 +124,8 @@ function AssessmentsEdit() {
       position: "top",
       duration: 5000,
     });
+
+    setAssessment(answerResponse.data);
 
     navigate("../assessment-results", { replace: true });
   }

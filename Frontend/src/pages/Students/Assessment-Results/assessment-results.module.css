@@ -6,3 +6,9 @@
   margin: auto;
   max-width: var(--responsive-screen-max-width);
 }
+
+.button-container {
+  margin-top: 1.5rem;
+  margin-bottom: 4rem;
+  float: right;
+}
