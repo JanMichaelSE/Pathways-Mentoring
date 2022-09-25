@@ -11,7 +11,6 @@ function RatingNumber({ number, activeList, onActiveClick }) {
   }
 
   function getRatingText() {
-    console.log("Number: ", number);
     if (number === "5") {
       return <p className={styles.ratingText}>Very High</p>;
     } else if (number === "1") {

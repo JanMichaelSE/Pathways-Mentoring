@@ -6,7 +6,6 @@ import MentorForm from "@/components/Auth/MentorForm/mentor-form";
 function Signup() {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("role") || "";
-  console.log(searchTerm);
   return (
     <>
       <div className={styles.container}>

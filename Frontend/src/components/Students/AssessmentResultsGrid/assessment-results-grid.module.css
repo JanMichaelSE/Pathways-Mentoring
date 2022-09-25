@@ -9,3 +9,11 @@
   grid-template-columns: repeat(5, 1fr);
   grid-column-gap: 2rem;
 }
+
+@media only screen and (max-width: 1040px) {
+  .container {
+    display: block;
+    background-color: var(--color-white);
+    box-shadow: none;
+  }
+}

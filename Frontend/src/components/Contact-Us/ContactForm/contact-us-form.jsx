@@ -24,13 +24,11 @@ export default function ContactUsForm() {
   }
 
   async function handleSubmit(contactInfo) {
-    console.log("Contact Values: ", contactInfo);
     const response = await httpSendContactForm(contactInfo);
 
     if (response.hasError) {
       return toast({
-        description:
-          "Submission of Contact Us Form failed. Please try again later.",
+        description: "Submission of Contact Us Form failed. Please try again later.",
         status: "error",
         position: "top",
         duration: 5000,
@@ -59,9 +57,7 @@ export default function ContactUsForm() {
         validationSchema={Yup.object({
           name: Yup.string().required("Name is required."),
           topic: Yup.string().required("Topic is required."),
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Email is required."),
+          email: Yup.string().email("Invalid email address").required("Email is required."),
           phone: Yup.string()
             .matches(
               /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/,
@@ -70,16 +66,9 @@ export default function ContactUsForm() {
             .min(10, "Phone number must be 10 digits")
             .required("Telephone is required."),
           message: Yup.string()
-            .test(
-              "len",
-              "Max character limit of 1500 reached.",
-              (val) => (val?.length || 0) < 1500
-            )
+            .test("len", "Max character limit of 1500 reached.", (val) => (val?.length || 0) < 1500)
             .required("Message required."),
-          privacyPolicyAccept: Yup.bool().oneOf(
-            [true],
-            "Field must be checked"
-          ),
+          privacyPolicyAccept: Yup.bool().oneOf([true], "Field must be checked"),
         })}
         onSubmit={async (values) => {
           await handleSubmit(values);
@@ -88,37 +77,17 @@ export default function ContactUsForm() {
         <Form>
           <Grid templateColumns="repeat(2, 1fr)" gap={5}>
             <GridItem mt={5}>
-              <InputForm
-                name="name"
-                type="text"
-                label="Name *"
-                width={inputWidth()}
-              />
+              <InputForm name="name" type="text" label="Name *" width={inputWidth()} />
             </GridItem>
             <GridItem mt={5}>
-              <InputForm
-                name="topic"
-                type="text"
-                label="Topic *"
-                width={inputWidth()}
-              />
+              <InputForm name="topic" type="text" label="Topic *" width={inputWidth()} />
             </GridItem>
 
             <GridItem>
-              <InputForm
-                name="email"
-                type="email"
-                label="Email *"
-                width={inputWidth()}
-              />
+              <InputForm name="email" type="email" label="Email *" width={inputWidth()} />
             </GridItem>
             <GridItem>
-              <InputForm
-                name="phone"
-                type="tel"
-                label="Telephone *"
-                width={inputWidth()}
-              />
+              <InputForm name="phone" type="tel" label="Telephone *" width={inputWidth()} />
             </GridItem>
             <GridItem colSpan={2} rowSpan={3}>
               <InputMessage
