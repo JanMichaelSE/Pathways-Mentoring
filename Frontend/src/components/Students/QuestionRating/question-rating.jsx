@@ -10,8 +10,14 @@ function QuestionRating({ number, question, ...props }) {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
   const options = props.options.split(";");
-  const initActiveOptions = options.map(() => false);
-  const [activeList, setActiveList] = useState(initActiveOptions);
+  const initialActiveOptions = getInitialActiveOptions();
+  const [activeList, setActiveList] = useState(initialActiveOptions);
+
+  function getInitialActiveOptions() {
+    return options.map((option) => {
+      return option == field.value;
+    });
+  }
 
   function onActiveClick(activeIndex) {
     let newActiveList = [];
