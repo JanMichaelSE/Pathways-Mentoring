@@ -60,7 +60,6 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
           />
           <Heading fontSize={"2xl"} fontFamily={"body"}>
             {`${firstName} ${lastName}`}
-            {console.log("Profile picture: ", cardData.profilePicture)}
           </Heading>
           <Text fontWeight={600} color={"gray.500"} mb={4}>
             {cardData.department}
