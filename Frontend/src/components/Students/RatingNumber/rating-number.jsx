@@ -10,14 +10,27 @@ function RatingNumber({ number, activeList, onActiveClick }) {
     onActiveClick(number - 1);
   }
 
+  function getRatingText() {
+    if (number === "5") {
+      return <p className={styles.ratingText}>Very High</p>;
+    } else if (number === "1") {
+      return <p className={styles.ratingText}>Very Low</p>;
+    } else {
+      return "";
+    }
+  }
+
   return (
-    <button
-      type="button"
-      className={`${styles.button} ${toggleActiveStyles()}`}
-      onClick={onButtonClick}
-    >
-      {number}
-    </button>
+    <div>
+      <button
+        type="button"
+        className={`${styles.button} ${toggleActiveStyles()}`}
+        onClick={onButtonClick}
+      >
+        {number}
+      </button>
+      {getRatingText()}
+    </div>
   );
 }
 

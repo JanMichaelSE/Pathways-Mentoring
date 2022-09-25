@@ -1,6 +1,4 @@
-@import "@/styles/index.css";
-
-.assessment-container {
+.container {
   background-color: var(--color-white);
   padding: 60px;
   padding-right: 70px;
@@ -10,7 +8,7 @@
 }
 
 .button-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
+  margin-top: 1.5rem;
+  margin-bottom: 4rem;
+  float: right;
 }

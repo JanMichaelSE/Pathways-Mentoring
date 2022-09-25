@@ -1,5 +1,6 @@
 .rating-container {
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  align-items: baseline;
+  margin-top: 1rem;
 }

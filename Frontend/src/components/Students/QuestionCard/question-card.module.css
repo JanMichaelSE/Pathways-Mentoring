@@ -1,10 +1,11 @@
 .question-container {
   text-align: center;
   background-color: white;
-  height: 11rem;
+  min-height: 11rem;
   border-radius: 30px;
   box-shadow: 0 0 3px var(--color-grey);
   margin-top: 20px;
+  padding-bottom: 2rem;
 }
 
 .question-header {

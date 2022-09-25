@@ -1,3 +1,9 @@
+/*
+ THIS PAGE HAS BEEN DEPRICATED DURING THE INITIAL PHASE OF THE FIRST
+ MVP. THE PAGE HAS BEEN KEPT BECAUSE IS STILL PLANNED TO BE INCLUDED
+ IN A FUTURE RELEASE OF PATHWAYS CAPSTONE PART 2
+*/
+
 import { useState, useEffect } from "react";
 
 import { Spinner, useToast } from "@chakra-ui/react";
@@ -64,9 +70,7 @@ function Assessments() {
         />
       );
     } else if (assessments.length === 0) {
-      return (
-        <NoItemsFound title="No assessment created yet" icon={SadFaceIcon} />
-      );
+      return <NoItemsFound title="No assessment created yet" icon={SadFaceIcon} />;
     } else {
       return (
         <div className={styles.assessmentsGrid}>
@@ -94,9 +98,7 @@ function Assessments() {
           {sortAscending ? "Sort Desc" : "Sort Asc"}
         </button>
       </div>
-      <div className={styles.assessmentContainer}>
-        {loadAssessmentsComponent()}
-      </div>
+      <div className={styles.assessmentContainer}>{loadAssessmentsComponent()}</div>
     </>
   );
 }

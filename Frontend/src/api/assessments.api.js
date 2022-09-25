@@ -1,5 +1,6 @@
 import axios from "@/utils/axios";
 
+// --- Deprecated for MVP ---
 async function httpGetAllAssessments() {
   let assessmentsToReturn = {
     hasError: false,
@@ -19,6 +20,7 @@ async function httpGetAllAssessments() {
   return assessmentsToReturn;
 }
 
+// --- This function is deprecated for MVP ---
 async function httpGetAssessment(assessmentId) {
   let assessmentToReturn = {
     hasError: false,
@@ -38,11 +40,24 @@ async function httpGetAssessment(assessmentId) {
   return assessmentToReturn;
 }
 
-async function httpAddAssessment(assessment) {}
+async function httpGetPathwaysAssessment() {
+  let assessmentToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
 
-async function httpUpdateAssessment(assessment) {}
+  try {
+    const response = await axios.get("/assessments/pathways");
+    assessmentToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    assessmentToReturn.hasError = true;
+    assessmentToReturn.errorMessage = errorResponse.error.errorMessage;
+  }
 
-async function httpDeleteAssessment(assessment) {}
+  return assessmentToReturn;
+}
 
 async function httpAnswerAssessment(answers, assessmentId) {
   let answerResponse = {
@@ -65,6 +80,9 @@ async function httpAnswerAssessment(answers, assessmentId) {
   return answerResponse;
 }
 
-async function httpGetAnswersByAssessment() {}
-
-export { httpGetAllAssessments, httpGetAssessment, httpAnswerAssessment };
+export {
+  httpGetAllAssessments,
+  httpGetAssessment,
+  httpAnswerAssessment,
+  httpGetPathwaysAssessment,
+};

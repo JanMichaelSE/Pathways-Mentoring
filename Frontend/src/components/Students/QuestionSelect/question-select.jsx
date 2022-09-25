@@ -15,10 +15,16 @@ function QuestionSelect({ number, question, ...props }) {
     setValue([selectValue.value]);
   }
 
+  function getDefaultValue() {
+    let value = field.value.length > 0 ? field.value[0] : "";
+    return { value: value, label: value };
+  }
+
   return (
     <QuestionCard number={number} question={question} meta={meta}>
       <Select
         closeMenuOnScroll={false}
+        defaultValue={getDefaultValue()}
         options={_options}
         styles={styles}
         placeholder="Select Option"

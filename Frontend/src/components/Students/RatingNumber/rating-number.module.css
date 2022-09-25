@@ -12,3 +12,9 @@
   border: 3px solid #fac20b;
   border-radius: 10px;
 }
+
+.rating-text {
+  font-weight: bold;
+  font-size: var(--font-size-regular);
+  margin-top: 0.25rem;
+}

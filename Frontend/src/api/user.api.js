@@ -171,9 +171,7 @@ async function httpSendContactForm(contactInfo) {
   try {
     const response = await axios.post("/contact-us", contactInfo);
     responseToReturn.data = response.data;
-    console.log("Response: ", responseToReturn.data);
   } catch (error) {
-    console.log("Error Response: ", error);
     const errorResponse = error.response.data;
     if (typeof errorResponse.error.errorCode == "number") {
       responseToReturn.hasError = true;

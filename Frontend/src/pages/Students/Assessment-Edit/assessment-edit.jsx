@@ -2,29 +2,30 @@ import { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useToast } from "@chakra-ui/react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Spinner } from "@chakra-ui/react";
 
-import { httpGetAssessment } from "@/api/assessments.api";
+import { useAssessmentStore } from "@/store/assessment.store";
+import { httpGetPathwaysAssessment, httpAnswerAssessment } from "@/api/assessments.api";
+
 import QuestionGenerator from "@/components/Students/QuestionGenerator/question-generator";
 import Button from "@/components/common/Button/button.jsx";
+import DescriptionCard from "@/components/common/DescriptionCard/description-card";
 
 import styles from "./assessment-edit.module.css";
-import { httpAnswerAssessment } from "../../../api/assessments.api";
 
 function AssessmentsEdit() {
   const navigate = useNavigate();
-  const params = useParams();
   const toast = useToast();
-  const assessmentId = params.id;
-  const [assessment, setAssessment] = useState({});
+  const assessment = useAssessmentStore((state) => state.assessment);
+  const setAssessment = useAssessmentStore((state) => state.setAssessment);
   const [formInitialValues, setFormInitialValues] = useState({});
   const [formValidationSchema, setFormValidationSchema] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadAssessmentInfo() {
-      const assessmentResponse = await httpGetAssessment(assessmentId);
+      const assessmentResponse = await httpGetPathwaysAssessment();
 
       if (assessmentResponse.hasError) {
         return toast({
@@ -40,18 +41,32 @@ function AssessmentsEdit() {
       setIsLoading(false);
     }
 
-    loadAssessmentInfo();
+    if (assessment == null) {
+      loadAssessmentInfo();
+    } else {
+      initForm(assessment);
+      setIsLoading(false);
+    }
   }, []);
 
-  function questionInitialValue(type) {
-    return type == "Multi-select" || type == "Select" ? [] : "";
+  function questionInitialValue(question) {
+    let initialValue = null;
+
+    if (question.answer && (question.type == "Multi-select" || question.type == "Select")) {
+      let selectValues = question.answer.split(";");
+      initialValue = selectValues;
+    } else if (question.answer) {
+      initialValue = question.answer;
+    } else {
+      initialValue = question.type == "Multi-select" || question.type == "Select" ? [] : "";
+    }
+
+    return initialValue;
   }
 
   function questionValidation(type) {
     if (type == "Multi-select" || type == "Select") {
-      return Yup.array()
-        .min(1, "Must select atleast 1 option.")
-        .required("Question is required");
+      return Yup.array().min(1, "Must select atleast 1 option.").required("Question is required");
     } else {
       return Yup.string().required("Question is required");
     }
@@ -64,7 +79,7 @@ function AssessmentsEdit() {
 
     for (const question of _questions) {
       let key = question.id;
-      _initialValues[key] = questionInitialValue(question.type);
+      _initialValues[key] = questionInitialValue(question);
       _validationSchema[key] = questionValidation(question.type);
     }
 
@@ -92,7 +107,7 @@ function AssessmentsEdit() {
       _answers.push(newAnswer);
     }
 
-    const answerResponse = await httpAnswerAssessment(_answers, assessmentId);
+    const answerResponse = await httpAnswerAssessment(_answers, assessment.id);
 
     if (answerResponse.hasError) {
       return toast({
@@ -110,7 +125,9 @@ function AssessmentsEdit() {
       duration: 5000,
     });
 
-    navigate("../assessments", { replace: true });
+    setAssessment(answerResponse.data);
+
+    navigate("../assessment-results", { replace: true });
   }
 
   if (isLoading) {
@@ -129,7 +146,7 @@ function AssessmentsEdit() {
   }
 
   return (
-    <div className={styles.assessmentContainer}>
+    <>
       <Formik
         initialValues={formInitialValues}
         validationSchema={formValidationSchema}
@@ -138,15 +155,7 @@ function AssessmentsEdit() {
         }}
       >
         <Form className={styles.assessmentContainer}>
-          <div className={styles.assessmentInformationContainer}>
-            <h1 className={styles.assessmentTitle}>{assessment.name}</h1>
-            <div className={styles.assessmentDescriptionContainer}>
-              <h1>Description:</h1>
-              <p className={styles.assessmentDescription}>
-                {assessment.description}
-              </p>
-            </div>
-          </div>
+          <DescriptionCard title={assessment.name} description={assessment.description} />
           {assessment.questions.map((question, index) => (
             <QuestionGenerator
               key={question.id}
@@ -163,7 +172,7 @@ function AssessmentsEdit() {
           </div>
         </Form>
       </Formik>
-    </div>
+    </>
   );
 }
 

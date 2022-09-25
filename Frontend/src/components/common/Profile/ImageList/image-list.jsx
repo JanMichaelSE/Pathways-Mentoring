@@ -5,7 +5,6 @@ const ImageList = (props) => {
   const setPictureData = useUserStore((state) => state.setPictureData);
 
   function clickImage(event) {
-    console.log(event.target.id);
     setPictureData(event.target.id);
   }
   const images = props.images.map((image) => {
@@ -18,12 +17,7 @@ const ImageList = (props) => {
           borderRadius: "20px",
         }}
       >
-        <svg
-          key={image}
-          id={"avatar" + image}
-          className={styles.icon}
-          onClick={clickImage}
-        >
+        <svg key={image} id={"avatar" + image} className={styles.icon} onClick={clickImage}>
           <use
             key={image}
             id={"avatar" + image}
