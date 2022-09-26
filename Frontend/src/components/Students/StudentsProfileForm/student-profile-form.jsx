@@ -3,7 +3,10 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Spinner, useToast } from "@chakra-ui/react";
 
-import { httpUpdateStudent, httpGetStudentbyID } from "@/api/user.api";
+import {
+  httpUpdateStudentProfile,
+  httpGetStudentByUserId,
+} from "@/api/students.api";
 import { useUserStore } from "@/store/user.store";
 
 import Button from "@/components/common/Button/button";
@@ -34,7 +37,7 @@ function StudentProfileForm() {
 
   useEffect(() => {
     async function loadStudentProfileInfo() {
-      const studentInfo = await httpGetStudentbyID(userId);
+      const studentInfo = await httpGetStudentByUserId(userId);
 
       if (studentInfo.hasError) {
         return toast({
@@ -69,7 +72,7 @@ function StudentProfileForm() {
       ...studentInfo,
       profilePicture: pictureData,
     };
-    const userResponse = await httpUpdateStudent(studentInfoWithID);
+    const userResponse = await httpUpdateStudentProfile(studentInfoWithID);
     if (userResponse.hasError) {
       return toast({
         description: userResponse.errorMessage,

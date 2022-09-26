@@ -3,7 +3,10 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Spinner, useToast } from "@chakra-ui/react";
 
-import { httpUpdateMentor, httpGetMentorbyID } from "@/api/user.api";
+import {
+  httpUpdateMentorProfile,
+  httpGetMentorByUserId,
+} from "@/api/mentors.api";
 import { useUserStore } from "@/store/user.store";
 
 import Button from "@/components/common/Button/button";
@@ -51,8 +54,8 @@ function MentorProfileForm() {
   const [isLessThan1420] = useMediaQuery("(max-width: 1420px)");
 
   useEffect(() => {
-    async function loadStudentProfileInfo() {
-      const mentorInfo = await httpGetMentorbyID(userId);
+    async function loadMentorProfileInfo() {
+      const mentorInfo = await httpGetMentorByUserId(userId);
 
       if (mentorInfo.hasError) {
         return toast({
@@ -65,18 +68,22 @@ function MentorProfileForm() {
       setUserData(mentorInfo.data);
       setPictureData(mentorInfo.data.profilePicture);
       var [firstName, lastName] = mentorInfo.data.name.split("; ");
-      setCountNumber(mentorInfo.data.description.length);
+      if (mentorInfo.data.description == null) {
+        setCountNumber(0);
+      } else {
+        setCountNumber(mentorInfo.data.description.length);
+      }
       setDataFirstName(firstName);
       setDataLastName(lastName);
       setIsLoading(false);
     }
-    loadStudentProfileInfo();
+    loadMentorProfileInfo();
   }, []);
 
   // Handles Form Submission
   useEffect(() => {
     async function submit(mentorInfo) {
-      const userResponse = await httpUpdateMentor(mentorInfo);
+      const userResponse = await httpUpdateMentorProfile(mentorInfo);
 
       if (userResponse.hasError) {
         setIsSubmitting(false);

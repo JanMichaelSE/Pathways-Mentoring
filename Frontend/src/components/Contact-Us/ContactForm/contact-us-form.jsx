@@ -37,7 +37,7 @@ export default function ContactUsForm() {
 
     return toast({
       title: "Form Sent!",
-      description: "Pathjways Staff will communicate back soon.",
+      description: "Pathways Staff will communicate back soon.",
       status: "success",
       position: "top",
       duration: 7000,

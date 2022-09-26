@@ -1,3 +1,7 @@
 .background {
-    background-color: var(--color-white);
+  background-color: var(--color-white);
+}
+
+.noUsers {
+  padding-top: 100px;
 }

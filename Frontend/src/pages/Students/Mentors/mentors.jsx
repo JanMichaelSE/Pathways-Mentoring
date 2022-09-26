@@ -1,7 +1,8 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SimpleGrid, Spinner, useToast } from "@chakra-ui/react";
-import httpGetAllMentors from "@/api/mentors.api";
-import AvatarCard from "../../../components/common/AvatarCard/AvatarCard";
+import { httpGetAllMentors } from "@/api/mentors.api";
+import { httpRequestMentorship } from "@/api/students.api";
+import AvatarCard from "../../../components/common/AvatarCard/avatar-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
 import styles from "./mentors.module.css";
@@ -31,6 +32,28 @@ function Mentors() {
     loadAllMentors();
   }, []);
 
+  async function RequestMentoring(cardData) {
+    console.log("Info of card data: ", cardData.email);
+    const userResponse = await httpRequestMentorship(cardData.email);
+
+    if (userResponse.hasError) {
+      return toast({
+        description: userResponse.errorMessage,
+        status: "error",
+        position: "top",
+        duration: 5000,
+      });
+    }
+
+    return toast({
+      title: "Mentorship Request!",
+      description: "Mentorship has been requested!",
+      status: "success",
+      position: "top",
+      duration: 7000,
+    });
+  }
+
   function loadMentorsComponent() {
     if (isLoading) {
       return (
@@ -47,19 +70,27 @@ function Mentors() {
       );
     } else if (mentorData.length === 0) {
       return (
-        <NoItemsFound title="No Mentors added yet." icon={SadFaceIcon} />
+        <div className={styles.noUsers}>
+          <NoItemsFound title="No Mentors added yet." icon={SadFaceIcon} />
+        </div>
       );
     } else {
       return (
         <SimpleGrid
-        columns={[1, 2, 3]}
-        spacing="40px"
-        className={styles.background}
-      >
-        {mentorData?.map((mentor) => (
-          <AvatarCard key={mentor.id} cardData={mentor} />
-        ))}
-      </SimpleGrid>
+          columns={[1, 2, 3]}
+          spacing="40px"
+          className={styles.background}
+        >
+          {mentorData?.map((mentor) => (
+            <AvatarCard
+              key={mentor.userId}
+              cardData={mentor}
+              buttonFunction={RequestMentoring}
+              messageButton={"Request Mentoring"}
+              studentSide={true}
+            />
+          ))}
+        </SimpleGrid>
       );
     }
   }
