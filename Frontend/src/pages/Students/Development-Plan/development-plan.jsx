@@ -24,12 +24,12 @@ function DevelopmentPlan() {
   );
   const [formInitialValues, setFormInitialValues] = useState({});
   const [formValidationSchema, setFormValidationSchema] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function loadDevelopmentPlanInfo() {
       const DevelopmentPlanResponse = await httpGetDevelopmentPlanQuestion();
-
+      console.log("Development Plan response: ", DevelopmentPlanResponse.data);
       if (DevelopmentPlanResponse.hasError) {
         return toast({
           description: DevelopmentPlanResponse.errorMessage,
@@ -39,11 +39,52 @@ function DevelopmentPlan() {
         });
       }
     }
+    loadDevelopmentPlanInfo();
+  }, []);
 
-    return () => {
-      second;
-    };
-  }, [third]);
+  function questionInitialValue(question) {
+    let initialValue = null;
+
+    if (
+      question.answer &&
+      (question.type == "Multi-Answer" || question.type == "Select")
+    ) {
+      let selectValues = question.answer.split(";");
+      initialValue = selectValues;
+    } else if (question.answer) {
+      initialValue = question.answer;
+    } else {
+      initialValue =
+        question.type == "Multi-Answer" || question.type == "Select" ? [] : "";
+    }
+
+    return initialValue;
+  }
+
+  function questionValidation(type) {
+    if (type == "Multi-Answer" || type == "Select") {
+      return Yup.array()
+        .min(1, "Must select atleast 1 option.")
+        .required("Question is required");
+    } else {
+      return Yup.string().required("Question is required");
+    }
+  }
+
+  function initForm(developmentPlanData) {
+    let _initialValues = {};
+    let _validationSchema = {};
+    let _questions = developmentPlanData.questions;
+
+    for (const question of _questions) {
+      let key = question.id;
+      _initialValues[key] = questionInitialValue(question);
+      _validationSchema[key] = questionValidation(question.type);
+    }
+
+    setFormInitialValues(_initialValues);
+    setFormValidationSchema(Yup.object().shape({ ..._validationSchema }));
+  }
 
   async function handleSubmit(assessmentInfo) {
     // let _answers = [];
@@ -106,12 +147,14 @@ function DevelopmentPlan() {
           await handleSubmit(values);
         }}
       >
-        <Form className={styles.assessmentContainer}>
+        <Form className={styles.developerPlanContainer}>
           <DescriptionCard
-            title={assessment.name}
-            description={assessment.description}
+            title={"Individual Development Plan"}
+            description={
+              "The Individual Development Plan (IDP) supports undergraduate researchers to set goals and identify strategies that will help them to reach those goals. It is a self-tracking tool that can also be used to facilitate mentor-mentee communication and alignment of expectations. "
+            }
           />
-          {assessment.questions.map((question, index) => (
+          {/* {assessment.questions.map((question, index) => (
             <QuestionGenerator
               key={question.id}
               id={question.id}
@@ -120,7 +163,7 @@ function DevelopmentPlan() {
               type={question.type}
               options={question.options}
             />
-          ))}
+          ))} */}
 
           <div className={styles.buttonContainer}>
             <Button>Submit</Button>
