@@ -7,6 +7,7 @@ import {
   validateMentorExists,
   findUnApprovedMentors,
   findMentorById,
+  findMentorByStudentId,
 } from "../../models/mentors.model";
 import {
   updateUserApproval,
@@ -25,6 +26,7 @@ import {
   titleCase,
 } from "../../utils/helpers";
 import {
+  findStudentByUserId,
   findStudentsByMentor,
   updateStudentMentorship,
   validateStudentIdExists,
@@ -37,7 +39,28 @@ import {
 
 async function httpGetAllMentors(req: Request, res: Response) {
   try {
-    const mentors = await findAllMentors();
+    const userId = req.userId;
+    const student = await findStudentByUserId(userId);
+    if (!student) {
+      return handleBadRequestResponse("A student with this Id doesn't exist.", res);
+    }
+
+    let mentors = await findAllMentors();
+    let studentMentor = await findMentorByStudentId(student.id);
+    mentors = mentors.map((m) => {
+      if (m.id === studentMentor[0]?.id) {
+        return {
+          ...m,
+          isActiveMentor: true,
+        };
+      } else {
+        return {
+          ...m,
+          isActiveMentor: false,
+        };
+      }
+    });
+
     return res.status(200).json(mentors);
   } catch (error) {
     return handleErrorResponse("get all mentors", error, res);

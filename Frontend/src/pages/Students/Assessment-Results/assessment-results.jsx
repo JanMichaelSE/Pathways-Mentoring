@@ -23,12 +23,15 @@ function AssessmentResults() {
 
   return (
     <div className={styles.container}>
-      <DescriptionCard
-        title={"Assessment Results"}
-        description={
-          "Below is a summary of your self-assessment for skills and knowledge.  This assessment will be used to recommend career paths that may be a good fit you.  We recommend that you look this over to confirm that you have ranked each item appropriately. You might also find it helpful to ask a mentor or colleague their opinion of your proficiency on each of these skills and knowledge areas. "
-        }
-      />
+      <DescriptionCard title={"Assessment Results"}>
+        <p>
+          Below is a summary of your self-assessment for skills and knowledge. This assessment will
+          be used to recommend career paths that may be a good fit you. We recommend that you look
+          this over to confirm that you have ranked each item appropriately. You might also find it
+          helpful to ask a mentor or colleague their opinion of your proficiency on each of these
+          skills and knowledge areas.
+        </p>
+      </DescriptionCard>
       <AssessmentResultsGrid assessmentResults={assessment} />
 
       <div className={styles.buttonContainer}>

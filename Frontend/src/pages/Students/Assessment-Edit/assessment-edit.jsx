@@ -155,7 +155,9 @@ function AssessmentsEdit() {
         }}
       >
         <Form className={styles.assessmentContainer}>
-          <DescriptionCard title={assessment.name} description={assessment.description} />
+          <DescriptionCard title={assessment.name}>
+            <p>{assessment.description}</p>
+          </DescriptionCard>
           {assessment.questions.map((question, index) => (
             <QuestionGenerator
               key={question.id}
