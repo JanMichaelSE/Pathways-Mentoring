@@ -19,10 +19,17 @@
   width: 180px;
   height: 55px;
   align-content: center;
-  background: linear-gradient(180.71deg, #FAC20B 0.61%, #EE7222 99.39%);
+  background: linear-gradient(180.71deg, #fac20b 0.61%, #ee7222 99.39%);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
   border: none;
   margin-right: 50px;
   justify-content: center;
+}
+
+@media only screen and (max-width: 1024px) {
+  .gridSpace {
+    grid-template-columns: repeat(2, 1fr) !important;
+    margin: 0 2rem;
+  }
 }
