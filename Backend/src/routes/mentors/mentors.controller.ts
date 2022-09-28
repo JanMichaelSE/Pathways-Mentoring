@@ -177,7 +177,7 @@ async function httpAcceptMentorshipRequest(req: Request, res: Response) {
       return handleNotFoundResponse("A mentor with this ID doesn't exist.", res);
     }
 
-    const updatedStudent = await updateStudentMentorship(student.id, mentor.id);
+    const updatedStudent = await updateStudentMentorship(student.id, mentor.id, false);
     const records = await createRecords(mentor.id, student.id);
     let mentorFormattedName = mentor.name.replace(";", "");
     await sendAcceptedMentorshipEmail(student.email, mentorFormattedName);

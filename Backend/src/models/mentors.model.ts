@@ -56,11 +56,22 @@ async function findMentorByStudentId(studentId: string): Promise<Mentor[]> {
   try {
     const mentor = await prisma.mentor.findMany({
       where: {
-        students: {
-          some: {
-            id: studentId,
+        AND: [
+          {
+            students: {
+              some: {
+                id: studentId,
+              },
+            },
           },
-        },
+          {
+            students: {
+              some: {
+                isPendingMentorshipApproval: false,
+              },
+            },
+          },
+        ],
       },
     });
 
