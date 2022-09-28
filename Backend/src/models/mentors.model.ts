@@ -45,8 +45,37 @@ async function findAllMentors(): Promise<Mentor[]> {
         },
       },
     });
-    const mentorsWithoutId = mentors.map((mentor) => excludeFields(mentor, "id"));
+    const mentorsWithoutId = mentors.map((mentor) => excludeFields(mentor, "userId"));
     return mentorsWithoutId;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function findMentorByStudentId(studentId: string): Promise<Mentor[]> {
+  try {
+    const mentor = await prisma.mentor.findMany({
+      where: {
+        AND: [
+          {
+            students: {
+              some: {
+                id: studentId,
+              },
+            },
+          },
+          {
+            students: {
+              some: {
+                isPendingMentorshipApproval: false,
+              },
+            },
+          },
+        ],
+      },
+    });
+
+    return mentor;
   } catch (error) {
     throw error;
   }
@@ -169,6 +198,7 @@ async function validateMentorExists(userId: string): Promise<Mentor | IErrorResp
 export {
   createMentor,
   findAllMentors,
+  findMentorByStudentId,
   findMentorById,
   findMentorByUserId,
   findMentorByEmail,

@@ -133,7 +133,8 @@ async function updateStudent(
 
 async function updateStudentMentorship(
   studentId: string,
-  mentorId: string | null
+  mentorId?: string | null,
+  isPendingMentorshipApproval?: boolean
 ): Promise<Student> {
   try {
     const student = await prisma.student.update({
@@ -142,6 +143,7 @@ async function updateStudentMentorship(
       },
       data: {
         mentorId: mentorId,
+        isPendingMentorshipApproval: isPendingMentorshipApproval,
       },
     });
 

@@ -27,7 +27,7 @@ import {
   sendCanceledMentorshipEmail,
   sendRequestMentorshipEmail,
 } from "../../services/mail.service";
-import { findMentorById, findMentorByUserId } from "../../models/mentors.model";
+import { findMentorByEmail, findMentorById, findMentorByUserId } from "../../models/mentors.model";
 
 async function httpGetAllStudents(req: Request, res: Response) {
   try {
@@ -104,15 +104,26 @@ async function httpUpdateStudentProfile(req: Request, res: Response) {
 async function httpRequestMentorship(req: Request, res: Response) {
   try {
     const userId = req.userId;
-    const toEmail = req.body.toEmail;
+    const mentorEmail = req.body.mentorEmail;
+
+    if (!mentorEmail) {
+      return handleBadRequestResponse("A mentor email must be provided.", res);
+    }
 
     const student = await findStudentByUserId(userId);
     if (!student) {
       return handleBadRequestResponse("This student does not exist in the system.", res);
     }
 
+    const mentor = await findMentorByEmail(mentorEmail);
+    if (!mentor) {
+      return handleBadRequestResponse("This mentor does not exist in the system.", res);
+    }
+
+    await updateStudentMentorship(student.id, mentor.id, true);
+
     let formattedName = student.name.replace(";", "");
-    await sendRequestMentorshipEmail(toEmail, formattedName, student.id);
+    await sendRequestMentorshipEmail(mentorEmail, formattedName, student.id);
 
     return res.status(200).json("Mentorship Request has been sent.");
   } catch (error) {
@@ -185,7 +196,7 @@ async function httpCancelMentorship(req: Request, res: Response) {
 
     return res.status(200).json(updatedStudent);
   } catch (error) {
-    return handleErrorResponse("cancel mentorship", error, res);
+    return handleErrorResponse("mentor cancels mentorship", error, res);
   }
 }
 
