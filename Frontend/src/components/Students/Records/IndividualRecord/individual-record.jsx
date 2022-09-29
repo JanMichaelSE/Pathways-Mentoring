@@ -1,4 +1,5 @@
 import React from "react";
+import Notes from "../Notes/notes";
 import styles from "./individual-record.module.css";
 
 function IndividualRecord({ title, description }) {
@@ -29,6 +30,7 @@ function IndividualRecord({ title, description }) {
           ></img>
           Notes
         </h1>
+        <Notes />
       </div>
     </>
   );
