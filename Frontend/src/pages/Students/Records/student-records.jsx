@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { HStack, SimpleGrid, Text, Image, Spinner, useToast } from "@chakra-ui/react";
+import {
+  HStack,
+  SimpleGrid,
+  Text,
+  Image,
+  Spinner,
+  useToast,
+} from "@chakra-ui/react";
 
 import RecordCard from "@/components/Students/Records/record-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
@@ -37,7 +44,13 @@ function StudentRecords() {
   }, []);
 
   let recordData = [
-    { id: "1", name: "Identify Subject", date: "6/10/2022", profesor: "Jan Montalvo", rating: 100 },
+    {
+      id: "1",
+      name: "Identify Subject",
+      date: "6/10/2022",
+      profesor: "Jan Montalvo",
+      rating: 100,
+    },
     {
       id: "2",
       name: "Research Literature",
@@ -59,8 +72,20 @@ function StudentRecords() {
       profesor: "Jan Montalvo",
       rating: 5,
     },
-    { id: "5", name: "Gather Data", date: "6/25/2022", profesor: "Jan Montalvo", rating: 5 },
-    { id: "6", name: "Analyze", date: "6/30/2022", profesor: "Jan Montalvo", rating: 5 },
+    {
+      id: "5",
+      name: "Gather Data",
+      date: "6/25/2022",
+      profesor: "Jan Montalvo",
+      rating: 5,
+    },
+    {
+      id: "6",
+      name: "Analyze",
+      date: "6/30/2022",
+      profesor: "Jan Montalvo",
+      rating: 5,
+    },
   ];
 
   if (isLoading) {
@@ -78,7 +103,7 @@ function StudentRecords() {
         />
       </div>
     );
-  } else if (recordData.length == 0) {
+  } else if (records.length == 0) {
     return (
       <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh" }}>
         <NoItemsFound title="No records assigned yet" icon={SadFaceIcon} />
@@ -95,7 +120,11 @@ function StudentRecords() {
             </HStack>
           </div>
         </HStack>
-        <SimpleGrid columns={[1, 2, 3]} spacing="40px" className={styles.gridSpace}>
+        <SimpleGrid
+          columns={[1, 2, 3]}
+          spacing="40px"
+          className={styles.gridSpace}
+        >
           {records?.map((record) => (
             <RecordCard key={record.id} recordData={record} />
           ))}

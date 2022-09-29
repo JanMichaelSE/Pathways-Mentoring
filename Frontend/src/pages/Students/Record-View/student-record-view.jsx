@@ -1,10 +1,27 @@
+import { useEffect } from "react";
+import IndividualRecord from "@/components/Students/Records/IndividualRecord/individual-record";
+
 import styles from "./student-record-view.module.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 
 function RecordView() {
   const { state } = useLocation();
+  console.log("State: ", state);
 
-  return <div className={styles.container}>Individual Record</div>;
+  if (state?.record == null) {
+    return <Navigate to={"../"} replace />;
+  }
+
+  return (
+    <>
+      <div className={styles.container}>
+        <IndividualRecord
+          title={state.record.title}
+          description={state.record.description}
+        />
+      </div>
+    </>
+  );
 }
 
 export default RecordView;
