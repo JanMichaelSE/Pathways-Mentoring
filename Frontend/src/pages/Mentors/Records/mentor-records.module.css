@@ -27,6 +27,7 @@
   }
 
   .modalButton{
+    margin-top: 40px;
     display: flex;
     cursor: pointer;
     font-size: var(--font-size-subheading);

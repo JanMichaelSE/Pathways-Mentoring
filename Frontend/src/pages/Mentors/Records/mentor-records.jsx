@@ -48,14 +48,14 @@ function MentorRecords() {
 
   function inputWidth() {
     if (isLessThan950) {
-      return "20rem";
+      return "40rem";
     } else {
       if (isLessThan1135) {
-        return "14rem";
+        return "40rem";
       } else if (isLessThan1420) {
-        return "20rem";
+        return "40rem";
       } else {
-        return "75rem";
+        return "50rem";
       }
     }
   }
@@ -180,11 +180,11 @@ function MentorRecords() {
               </HStack>
             </ModalHeader>
             <ModalBody pb={6}>
-              <Center flexDirection={"column"} alignContent={"space-around"} align="stretch">
+              <Center flexDirection={"column"} justifyContent={"space-between"} >
                   <Formik
                     enableReinitialize={true}
                     initialValues={{
-                      gender: assignableRecord || "Select Option",
+                      record: assignableRecord || "Select Option",
                     }}
                     validationSchema={Yup.object({})}
                     onSubmit={async (values) => {
@@ -196,6 +196,7 @@ function MentorRecords() {
                       name="record"
                       style={{ width: inputWidth() }}
                       disabled={edit}
+                      isBlue={true}
                     >
                       <option value="">Select Option</option>
                     </Select>
