@@ -1,3 +1,28 @@
+.record-stage {
+  max-width: 900px;
+  padding: 2rem;
+  margin: auto auto 2rem auto;
+  background-color: #ffffff;
+  border-radius: 2rem;
+  border: var(--modal-border-line);
+}
+
+.content-stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-stage {
+  width: 50px;
+}
+
+.title-stage {
+  font-size: var(--font-size-heading);
+  color: var(--color-blue-dark);
+}
+
 .record-container {
   text-align: center;
   background-color: white;
@@ -8,11 +33,91 @@
   padding-top: 2rem;
 }
 
+.titleContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  /* justify-content: center; */
+  margin-bottom: 2.5rem;
+}
+
 .record-title {
   color: var(--color-blue-dark);
   font-weight: bold;
   font-size: var(--font-size-heading);
+}
+
+.flex-container {
+  display: flex;
+  justify-content: flex-start; /* adjustment */
+  position: relative; /* new */
   margin-bottom: 2.5rem;
+  min-height: 5rem;
+  padding-right: 1rem;
+}
+
+.item-center {
+  flex: 0 1 auto;
+  position: absolute; /* new */
+  /* min-width: 50rem; */
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--color-blue-dark);
+  font-weight: bold;
+  font-size: var(--font-size-heading);
+}
+
+.item-right {
+  flex: 0 1 auto;
+  width: 100px;
+  height: 100px;
+  margin-left: auto; /* new */
+  margin-right: 0.5rem;
+}
+#btnSubmit {
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--color-white);
+  width: 130px;
+  height: 60px;
+  background: linear-gradient(180.71deg, #fac20b 0.61%, #ee7222 99.39%);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  border: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+}
+#btnReject {
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--color-white);
+  width: 130px;
+  height: 60px;
+  background: #ee7222;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  border: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+}
+#btnApprove {
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--color-white);
+  width: 130px;
+  height: 60px;
+  background: #fac20b;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  border: none;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
 }
 
 .record-description-container {

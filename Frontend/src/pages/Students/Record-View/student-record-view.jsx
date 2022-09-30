@@ -18,6 +18,8 @@ function RecordView() {
         <IndividualRecord
           title={state.record.title}
           description={state.record.description}
+          stage={state.record.stage}
+          role={"Student"}
         />
       </div>
     </>

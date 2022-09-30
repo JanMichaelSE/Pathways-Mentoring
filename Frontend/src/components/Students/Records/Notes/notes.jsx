@@ -13,7 +13,9 @@ function Notes() {
         </div>
         <div className={styles.buttonsContainer}>
           <input type="text" placeholder="Message" className={styles.input} />
-          <button className={styles.btn}>Send</button>
+          <button type={"button"} className={styles.btn}>
+            Send
+          </button>
         </div>
       </div>
     </>
