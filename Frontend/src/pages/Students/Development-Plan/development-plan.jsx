@@ -45,26 +45,22 @@ function DevelopmentPlan() {
   function questionInitialValue(question) {
     let initialValue = null;
 
-    if (
-      question.answer &&
-      (question.type == "Multi-Answer" || question.type == "Select")
-    ) {
+    if (question.answer && question.type == "Multi-Answer") {
       let selectValues = question.answer.split(";");
       initialValue = selectValues;
     } else if (question.answer) {
       initialValue = question.answer;
     } else {
-      initialValue =
-        question.type == "Multi-Answer" || question.type == "Select" ? [] : "";
+      initialValue = question.type == "Multi-Answer" ? [] : "";
     }
 
     return initialValue;
   }
 
   function questionValidation(type) {
-    if (type == "Multi-Answer" || type == "Select") {
+    if (type == "Multi-Answer") {
       return Yup.array()
-        .min(1, "Must select atleast 1 option.")
+        .min(1, "Must have at least 1 option.")
         .required("Question is required");
     } else {
       return Yup.string().required("Question is required");
