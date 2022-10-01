@@ -1,6 +1,5 @@
 import { useToast } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { useEffect } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 
 import { httpApproveRecord, httpRejectRecord } from "@/api/records.api";
