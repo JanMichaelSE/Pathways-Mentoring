@@ -58,7 +58,7 @@
 
 .item-center {
   flex: 0 1 auto;
-  position: absolute; /* new */
+  position: absolute;
   /* min-width: 50rem; */
   left: 50%;
   transform: translateX(-50%);
@@ -71,9 +71,10 @@
   flex: 0 1 auto;
   width: 100px;
   height: 100px;
-  margin-left: auto; /* new */
-  margin-right: 0.5rem;
+  margin-left: auto;
+  margin-right: 1.5rem;
 }
+
 #btnSubmit {
   cursor: pointer;
   font-weight: bold;
@@ -103,6 +104,7 @@
   -moz-border-radius: 15px;
   -ms-border-radius: 15px;
   -o-border-radius: 15px;
+  margin-bottom: 0.5rem;
 }
 #btnApprove {
   cursor: pointer;
@@ -171,8 +173,13 @@
   margin-right: 30px;
 }
 
-/* .line-content {
-  display: block;
-  margin-left: 2rem;
-  margin-right: 2rem;
-} */
+@media only screen and (max-width: 1024px) {
+  .flex-container {
+    display: flex;
+    justify-content: flex-start; /* adjustment */
+    position: relative; /* new */
+    margin-bottom: 3.5rem;
+    min-height: 5rem;
+    padding-right: 1rem;
+  }
+}

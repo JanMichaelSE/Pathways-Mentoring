@@ -92,16 +92,14 @@ function IndividualRecord({ title, description, stage, role }) {
                 </button>
               ) : (
                 <>
-                  <button
-                    type={"button"}
-                    className={styles.itemRight}
-                    id={styles.btnReject}
-                  >
-                    Reject
-                  </button>
-                  <button type={"button"} id={styles.btnApprove}>
-                    Approve
-                  </button>
+                  <div className={styles.itemRight}>
+                    <button type={"button"} id={styles.btnReject}>
+                      Reject
+                    </button>
+                    <button type={"button"} id={styles.btnApprove}>
+                      Approve
+                    </button>
+                  </div>
                 </>
               )}
             </>
