@@ -1,6 +1,6 @@
 import { useField } from "formik";
 import QuestionCard from "../QuestionCard/question-card";
-import styles from "./question-multi.answer.module.css";
+import styles from "./question-multi-answer.module.css";
 
 function QuestionMultiAnswer({ number, question, ...props }) {
   const [field, meta, helpers] = useField(props);
