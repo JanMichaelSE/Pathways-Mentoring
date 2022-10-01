@@ -1,7 +1,7 @@
 import axios from "@/utils/axios";
 
 async function httpGetRecordByUser() {
-  let recordsToReturn = {
+  let responseToReturn = {
     hasError: false,
     data: null,
     errorMessage: "",
@@ -9,15 +9,71 @@ async function httpGetRecordByUser() {
 
   try {
     const response = await axios.get("/records/user");
-    recordsToReturn.data = response.data;
+    responseToReturn.data = response.data;
   } catch (error) {
-    console.log("Error for Records By User:", error);
     const errorResponse = error.response.data;
-    recordsToReturn.hasError = true;
-    recordsToReturn.errorMessage = errorResponse.error.errorMessage;
+    responseToReturn.hasError = true;
+    responseToReturn.errorMessage = errorResponse.error.errorMessage;
   }
 
-  return recordsToReturn;
+  return responseToReturn;
 }
 
-export { httpGetRecordByUser };
+async function httpSubmitRecord(mentorId, recordId) {
+  let responseToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+
+  try {
+    const response = await axios.post("/records/submit", { mentorId, recordId });
+    responseToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    responseToReturn.hasError = true;
+    responseToReturn.errorMessage = errorResponse.error.errorMessage;
+  }
+
+  return responseToReturn;
+}
+
+async function httpApproveRecord(studentId, recordId) {
+  let responseToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+
+  try {
+    const response = await axios.post("/records/approve", { studentId, recordId });
+    responseToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    responseToReturn.hasError = true;
+    responseToReturn.errorMessage = errorResponse.error.errorMessage;
+  }
+
+  return responseToReturn;
+}
+
+async function httpRejectRecord(studentId, recordId) {
+  let responseToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+
+  try {
+    const response = await axios.post("/records/reject", { studentId, recordId });
+    responseToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    responseToReturn.hasError = true;
+    responseToReturn.errorMessage = errorResponse.error.errorMessage;
+  }
+
+  return responseToReturn;
+}
+
+export { httpGetRecordByUser, httpSubmitRecord, httpApproveRecord, httpRejectRecord };

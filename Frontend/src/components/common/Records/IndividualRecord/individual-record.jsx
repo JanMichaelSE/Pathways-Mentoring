@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
-import Notes from "../Notes/notes";
+import Notes from "@/components/common/Records/Notes/notes";
 import styles from "./individual-record.module.css";
 
-function IndividualRecord({ title, description, stage, role }) {
+function IndividualRecord({
+  title,
+  description,
+  stage,
+  role,
+  onSubmitRecord,
+  onApproveRecord,
+  onRejectRecord,
+}) {
   const [btnUser, setBtnUser] = useState(false);
   const [btnStage, setBtnStage] = useState(false);
   const [messageStage, setMessageStage] = useState("");
@@ -47,7 +55,7 @@ function IndividualRecord({ title, description, stage, role }) {
         setImageStage("");
       }
     }
-  }, []);
+  }, [stage]);
 
   function descriptionList() {
     const listItems = description.split(";");
@@ -60,16 +68,13 @@ function IndividualRecord({ title, description, stage, role }) {
       </ul>
     );
   }
+
   return (
     <>
       {showMessageStage ? (
         <div className={styles.recordStage}>
           <div className={styles.contentStage}>
-            <img
-              className={styles.imageStage}
-              src={`/assets/${imageStage}.svg`}
-              alt=""
-            />
+            <img className={styles.imageStage} src={`/assets/${imageStage}.svg`} alt="" />
             <h1 className={styles.titleStage}>{messageStage}</h1>
           </div>
         </div>
@@ -84,19 +89,20 @@ function IndividualRecord({ title, description, stage, role }) {
             <>
               {btnUser ? (
                 <button
-                  type={"button"}
-                  className={styles.itemRight}
                   id={styles.btnSubmit}
+                  className={styles.itemRight}
+                  type={"button"}
+                  onClick={onSubmitRecord}
                 >
                   Submit Record
                 </button>
               ) : (
                 <>
                   <div className={styles.itemRight}>
-                    <button type={"button"} id={styles.btnReject}>
+                    <button id={styles.btnReject} type={"button"} onClick={onRejectRecord}>
                       Reject
                     </button>
-                    <button type={"button"} id={styles.btnApprove}>
+                    <button id={styles.btnApprove} type={"button"} onClick={onApproveRecord}>
                       Approve
                     </button>
                   </div>

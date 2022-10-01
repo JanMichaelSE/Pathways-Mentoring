@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./record-card.module.css";
 
-export default function StudentRecord({ recordData }) {
+export default function RecordCard({ recordData }) {
   const navigate = useNavigate();
 
   function onRecordClick() {
@@ -17,6 +17,14 @@ export default function StudentRecord({ recordData }) {
       return 50;
     } else {
       return 5;
+    }
+  }
+
+  function getName() {
+    if (recordData.mentor?.name) {
+      return `Prof. ${recordData.mentor.name}`;
+    } else {
+      return `Std. ${recordData.student.name}`;
     }
   }
 
@@ -60,7 +68,7 @@ export default function StudentRecord({ recordData }) {
           >
             <Text className={styles.recordTitle}>{recordData.title}</Text>
             <Spacer py={3} />
-            <Text>Prof. {recordData.mentor.name}</Text>
+            <Text>{getName()}</Text>
             <Text>{formatDate()}</Text>
           </Box>
           <Spacer py={1} />

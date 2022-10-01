@@ -1,12 +1,46 @@
-import { useEffect } from "react";
-import IndividualRecord from "@/components/Students/Records/IndividualRecord/individual-record";
+import { useLocation, Navigate } from "react-router-dom";
+import { httpSubmitRecord } from "@/api/records.api";
+import { useToast } from "@chakra-ui/react";
+
+import IndividualRecord from "@/components/common/Records/IndividualRecord/individual-record";
 
 import styles from "./student-record-view.module.css";
-import { useLocation, Navigate } from "react-router-dom";
+import { useState } from "react";
 
 function RecordView() {
+  const toast = useToast();
   const { state } = useLocation();
-  console.log("State: ", state);
+  const [record, setRecord] = useState(state?.record);
+
+  useEffect(() => {
+    return () => {
+      window.history.replaceState({}, document.title);
+    };
+  }, []);
+
+  async function onSubmitRecord() {
+    const mentorId = record.mentorId;
+    const recordId = record.id;
+    const response = await httpSubmitRecord(mentorId, recordId);
+
+    if (response.hasError) {
+      return toast({
+        description: recordsResponse.errorMessage,
+        status: "error",
+        position: "top",
+        duration: 5000,
+      });
+    }
+
+    console.log("Record Response: ", response.data);
+    setRecord({ ...response.data });
+    toast({
+      title: "Record has been submitted!",
+      status: "success",
+      position: "top",
+      duration: 5000,
+    });
+  }
 
   if (state?.record == null) {
     return <Navigate to={"../"} replace />;
@@ -16,9 +50,10 @@ function RecordView() {
     <>
       <div className={styles.container}>
         <IndividualRecord
-          title={state.record.title}
-          description={state.record.description}
-          stage={state.record.stage}
+          title={record.title}
+          description={record.description}
+          stage={record.stage}
+          onSubmitRecord={onSubmitRecord}
           role={"Student"}
         />
       </div>
