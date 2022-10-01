@@ -1,12 +1,12 @@
+import { useToast } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 
 import { httpApproveRecord, httpRejectRecord } from "@/api/records.api";
 import IndividualRecord from "@/components/common/Records/IndividualRecord/individual-record";
 
 import styles from "./mentor-record-view.module.css";
-import { useToast } from "@chakra-ui/react";
-import { useState } from "react";
-import { useEffect } from "react";
 
 function RecordView() {
   const toast = useToast();
@@ -18,8 +18,6 @@ function RecordView() {
       window.history.replaceState({}, document.title);
     };
   }, []);
-
-  console.log("Mentor Record View State: ", state);
 
   async function onApproveRecord() {
     const studentId = record.studentId;
