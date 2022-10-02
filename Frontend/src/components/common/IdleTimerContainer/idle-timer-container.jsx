@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 import { httpLogout } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
+import { useDevelopmentPlanStore } from "@/store/developmentPlan.store";
+import { useAssessmentStore } from "@/store/assessment.store";
 import SessionTimeoutOverlay from "../SessionTimeoutOverlay/session-timeout-overlay";
 
 function IdleTimerContainer() {
@@ -12,6 +14,10 @@ function IdleTimerContainer() {
   const navigate = useNavigate();
   const toast = useToast();
   const resetUser = useUserStore((state) => state.resetUser);
+  const resetAssessment = useAssessmentStore((state) => state.resetAssessment);
+  const resetDevelopmentPlan = useDevelopmentPlanStore(
+    (state) => state.resetDevelopmentPlan
+  );
   const [timeoutId, setTimeoutId] = useState(null);
 
   const idleTimeout = 1000 * 60 * 10; // 10 minutes to timeout
@@ -44,6 +50,8 @@ function IdleTimerContainer() {
     }
     onClose();
     resetUser();
+    resetAssessment();
+    resetDevelopmentPlan();
     navigate("/", { replace: true });
   }
 

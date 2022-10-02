@@ -9,6 +9,11 @@ const vanillaDevelopmentPlanStore = createVanillaStore(
       setDevelopmentPlan: (developmentPlan) => {
         set({ developmentPlan: developmentPlan });
       },
+      resetDevelopmentPlan: () => {
+        set({
+          developmentPlan: null,
+        });
+      },
     }),
     { name: "developmentPlan-storage", getStorage: () => sessionStorage }
   )
