@@ -11,7 +11,7 @@ import styles from "./mentor-records.module.css";
 function MentorRecords() {
   // This request for Record could be a Reusable Hook in the Future
   const toast = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [records, setRecords] = useState([]);
   const [sortAscending, setSortAscending] = useState(true);
   const [filterOption, setFilterOption] = useState("none");
@@ -52,7 +52,7 @@ function MentorRecords() {
     );
   } else if (records.length == 0) {
     return (
-      <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh" }}>
+      <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh", marginTop: "4rem" }}>
         <NoItemsFound title="No records assigned yet" icon={SadFaceIcon} />
       </div>
     );

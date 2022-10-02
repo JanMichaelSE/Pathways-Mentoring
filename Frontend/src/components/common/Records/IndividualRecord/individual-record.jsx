@@ -19,43 +19,51 @@ function IndividualRecord({
 
   useEffect(() => {
     if (role === "Student") {
-      if (stage === "Approved") {
-        setBtnStage(false);
-        setMessageStage("Record is Completed");
-        setImageStage("record-complete-icon");
-        setShowMessageStage(true);
-      } else if (stage === "Pending Approval") {
-        setBtnStage(false);
-        setMessageStage("Record is Pending Approval");
-        setImageStage("record-clock-icon");
-        setShowMessageStage(true);
-      } else {
-        setBtnStage(true);
-        setBtnUser(true);
-        setMessageStage("");
-        setShowMessageStage(false);
-        setImageStage("");
-      }
+      handleStudentStageState(stage);
     } else if (role === "Mentor") {
-      if (stage === "Approved") {
-        setBtnStage(false);
-        setMessageStage("Record is Completed");
-        setImageStage("record-complete-icon");
-        setShowMessageStage(true);
-      } else if (stage === "Pending Approval") {
-        setBtnStage(true);
-        setBtnUser(false);
-        setMessageStage("Record is Pending Approval");
-        setImageStage("record-clock-icon");
-        setShowMessageStage(true);
-      } else {
-        setBtnStage(false);
-        setMessageStage("");
-        setShowMessageStage(false);
-        setImageStage("");
-      }
+      handleMentorStageState(stage);
     }
   }, [stage]);
+
+  function handleStudentStageState(stage) {
+    if (stage === "Approved") {
+      setBtnStage(false);
+      setMessageStage("Record is Completed");
+      setImageStage("record-complete-icon");
+      setShowMessageStage(true);
+    } else if (stage === "Pending Approval") {
+      setBtnStage(false);
+      setMessageStage("Record is Pending Approval");
+      setImageStage("record-clock-icon");
+      setShowMessageStage(true);
+    } else {
+      setBtnStage(true);
+      setBtnUser(true);
+      setMessageStage("");
+      setShowMessageStage(false);
+      setImageStage("");
+    }
+  }
+
+  function handleMentorStageState(stage) {
+    if (stage === "Approved") {
+      setBtnStage(false);
+      setMessageStage("Record is Completed");
+      setImageStage("record-complete-icon");
+      setShowMessageStage(true);
+    } else if (stage === "Pending Approval") {
+      setBtnStage(true);
+      setBtnUser(false);
+      setMessageStage("Record is Pending Approval");
+      setImageStage("record-clock-icon");
+      setShowMessageStage(true);
+    } else {
+      setBtnStage(false);
+      setMessageStage("");
+      setShowMessageStage(false);
+      setImageStage("");
+    }
+  }
 
   function descriptionList() {
     const listItems = description.split(";");
