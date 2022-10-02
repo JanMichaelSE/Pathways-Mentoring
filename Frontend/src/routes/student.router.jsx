@@ -10,6 +10,7 @@ import Mentors from "@/pages/Students/Mentors/mentors";
 import StudentProfile from "@/pages/Students/Profile/student-profile";
 import ContactUs from "@/pages/Common/Contact-Us/contact-us";
 import IdleTimerContainer from "@/components/common/IdleTimerContainer/idle-timer-container";
+import SmartGoalTemplate from "../pages/Students/Smart-Goal-Template/smart-goal-template";
 
 function StudentRouter() {
   return (
@@ -21,6 +22,7 @@ function StudentRouter() {
           <Route path="/" element={<StudentRecords />} />
           <Route path="/records/:recordId" element={<RecordView />} />
           <Route path="/development-plan" element={<DevelopmentPlan />} />
+          <Route path="/smart-goal-template" element={<SmartGoalTemplate />} />
           <Route path="/assessments" element={<AssessmentEdit />} />
           <Route path="/assessment-results" element={<AssessmentResults />} />
           <Route path="/mentors" element={<Mentors />} />

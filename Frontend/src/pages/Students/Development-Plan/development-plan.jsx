@@ -5,7 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { useToast, Spinner } from "@chakra-ui/react";
 
 import { useDevelopmentPlanStore } from "@/store/developmentPlan.store";
-import { httpGetDevelopmentPlanQuestion } from "@/api/DevelopmentPlan.api";
+import {
+  httpGetDevelopmentPlanQuestion,
+  httpAnswerDevelopmentPlan,
+} from "@/api/developmentPlan.api";
 
 import QuestionGenerator from "@/components/Students/QuestionGenerator/question-generator";
 import Button from "@/components/common/Button/button.jsx";
@@ -24,7 +27,7 @@ function DevelopmentPlan() {
   );
   const [formInitialValues, setFormInitialValues] = useState({});
   const [formValidationSchema, setFormValidationSchema] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadDevelopmentPlanInfo() {
@@ -38,18 +41,29 @@ function DevelopmentPlan() {
           duration: 5000,
         });
       }
+      initForm(DevelopmentPlanResponse.data);
+      setDevelopmentPlan(DevelopmentPlanResponse.data);
+      setIsLoading(false);
     }
-    loadDevelopmentPlanInfo();
+    if (developmentPlan == null) {
+      loadDevelopmentPlanInfo();
+    } else {
+      initForm(developmentPlan);
+      setIsLoading(false);
+    }
   }, []);
 
   function questionInitialValue(question) {
     let initialValue = null;
+    console.log("question.answers: ", question);
 
-    if (question.answer && question.type == "Multi-Answer") {
-      let selectValues = question.answer.split(";");
+    if (question.answers != 0 && question.type == "Multi-Answer") {
+      console.log("question.answers: ", question.answers[0]?.answer);
+      let selectValues = question.answers[0]?.answer.split(";");
       initialValue = selectValues;
-    } else if (question.answer) {
-      initialValue = question.answer;
+    } else if (question.answers != 0) {
+      console.log("question.answers: ", question);
+      initialValue = question.answers[0]?.answer;
     } else {
       initialValue = question.type == "Multi-Answer" ? [] : "";
     }
@@ -70,7 +84,7 @@ function DevelopmentPlan() {
   function initForm(developmentPlanData) {
     let _initialValues = {};
     let _validationSchema = {};
-    let _questions = developmentPlanData.questions;
+    let _questions = developmentPlanData;
 
     for (const question of _questions) {
       let key = question.id;
@@ -82,41 +96,51 @@ function DevelopmentPlan() {
     setFormValidationSchema(Yup.object().shape({ ..._validationSchema }));
   }
 
-  async function handleSubmit(assessmentInfo) {
-    // let _answers = [];
-    // for (const key in assessmentInfo) {
-    //   let newAnswer = {};
-    //   if (Array.isArray(assessmentInfo[key])) {
-    //     const answer = assessmentInfo[key].join(";");
-    //     newAnswer = {
-    //       questionId: Number(key),
-    //       answer: answer,
-    //     };
-    //   } else {
-    //     newAnswer = {
-    //       questionId: Number(key),
-    //       answer: String(assessmentInfo[key]),
-    //     };
-    //   }
-    //   _answers.push(newAnswer);
-    // }
-    // const answerResponse = await httpAnswerAssessment(_answers, assessment.id);
-    // if (answerResponse.hasError) {
-    //   return toast({
-    //     description: answerResponse.errorMessage,
-    //     status: "error",
-    //     position: "top",
-    //     duration: 5000,
-    //   });
-    // }
-    // toast({
-    //   description: "Assessment has been submitted!",
-    //   status: "success",
-    //   position: "top",
-    //   duration: 5000,
-    // });
-    // setAssessment(answerResponse.data);
-    // navigate("../assessment-results", { replace: true });
+  async function handleSubmit(developmentPlanInfo) {
+    console.log("developmentPlanInfo: ", developmentPlanInfo);
+    let _answers = [];
+    for (const key in developmentPlanInfo) {
+      let newAnswer = {};
+      if (Array.isArray(developmentPlanInfo[key])) {
+        console.log(
+          `developmentPlanInfo[key]: ${key}}`,
+          developmentPlanInfo[key]
+        );
+        const answer = developmentPlanInfo[key].join(";");
+        console.log("Answer on submit: ", answer);
+        newAnswer = {
+          questionId: Number(key),
+          answer: answer,
+        };
+        console.log("New answer on submit: ", newAnswer);
+      } else {
+        console.log("developmentPlanInfo[key]: ", developmentPlanInfo[key]);
+        newAnswer = {
+          questionId: Number(key),
+          answer: String(developmentPlanInfo[key]),
+        };
+      }
+      _answers.push(newAnswer);
+    }
+    console.log("_answers", _answers);
+    const answerResponse = await httpAnswerDevelopmentPlan(_answers);
+    console.log("answerResponse: ", answerResponse);
+    if (answerResponse.hasError) {
+      return toast({
+        description: answerResponse.errorMessage,
+        status: "error",
+        position: "top",
+        duration: 5000,
+      });
+    }
+    toast({
+      description: "Development Plan has been submitted!",
+      status: "success",
+      position: "top",
+      duration: 5000,
+    });
+    //setDevelopmentPlan(answerResponse.data);
+    navigate("../smart-goal-template", { replace: true });
   }
 
   if (isLoading) {
@@ -144,13 +168,18 @@ function DevelopmentPlan() {
         }}
       >
         <Form className={styles.developerPlanContainer}>
-          <DescriptionCard
-            title={"Individual Development Plan"}
-            description={
-              "The Individual Development Plan (IDP) supports undergraduate researchers to set goals and identify strategies that will help them to reach those goals. It is a self-tracking tool that can also be used to facilitate mentor-mentee communication and alignment of expectations. "
-            }
-          />
-          {/* {assessment.questions.map((question, index) => (
+          {console.log("formInitialValues: ", formInitialValues)}
+          <DescriptionCard title={"Individual Development Plan"}>
+            <p>
+              The Individual Development Plan (IDP) supports undergraduate
+              researchers to set goals and identify strategies that will help
+              them to reach those goals. It is a self-tracking tool that can
+              also be used to facilitate mentor-mentee communication and
+              alignment of expectations.
+            </p>
+          </DescriptionCard>
+
+          {developmentPlan.map((question, index) => (
             <QuestionGenerator
               key={question.id}
               id={question.id}
@@ -158,11 +187,13 @@ function DevelopmentPlan() {
               question={question.question}
               type={question.type}
               options={question.options}
-            />
-          ))} */}
+            >
+              {console.log("questions option:", question.options)}
+            </QuestionGenerator>
+          ))}
 
           <div className={styles.buttonContainer}>
-            <Button>Submit</Button>
+            <Button type={"submit"}>Submit</Button>
           </div>
         </Form>
       </Formik>

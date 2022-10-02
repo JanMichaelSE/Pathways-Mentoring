@@ -19,20 +19,16 @@ async function httpGetDevelopmentPlanQuestion() {
   return developmentPlanToReturn;
 }
 
-async function httpAnswerDevelopmentPlan(answers, assessmentId) {
+async function httpAnswerDevelopmentPlan(answers) {
   let answerResponse = {
     hasError: false,
     data: null,
     errorMessage: "",
   };
+  const answersInfo = { answers: answers };
 
   try {
-    const response = await axios.post(
-      "/development-plan/answer" + assessmentId,
-      {
-        answers,
-      }
-    );
+    const response = await axios.post("/development-plan/answer", answersInfo);
     answerResponse.data = response.data;
   } catch (error) {
     const errorResponse = error.response.data;
