@@ -32,7 +32,7 @@ function DevelopmentPlan() {
   useEffect(() => {
     async function loadDevelopmentPlanInfo() {
       const DevelopmentPlanResponse = await httpGetDevelopmentPlanQuestion();
-      console.log("Development Plan response: ", DevelopmentPlanResponse.data);
+
       if (DevelopmentPlanResponse.hasError) {
         return toast({
           description: DevelopmentPlanResponse.errorMessage,
@@ -55,14 +55,11 @@ function DevelopmentPlan() {
 
   function questionInitialValue(question) {
     let initialValue = null;
-    console.log("question.answers: ", question);
 
     if (question.answers != 0 && question.type == "Multi-Answer") {
-      console.log("question.answers: ", question.answers[0]?.answer);
       let selectValues = question.answers[0]?.answer.split(";");
       initialValue = selectValues;
     } else if (question.answers != 0) {
-      console.log("question.answers: ", question);
       initialValue = question.answers[0]?.answer;
     } else {
       initialValue = question.type == "Multi-Answer" ? [] : "";
@@ -97,24 +94,16 @@ function DevelopmentPlan() {
   }
 
   async function handleSubmit(developmentPlanInfo) {
-    console.log("developmentPlanInfo: ", developmentPlanInfo);
     let _answers = [];
     for (const key in developmentPlanInfo) {
       let newAnswer = {};
       if (Array.isArray(developmentPlanInfo[key])) {
-        console.log(
-          `developmentPlanInfo[key]: ${key}}`,
-          developmentPlanInfo[key]
-        );
         const answer = developmentPlanInfo[key].join(";");
-        console.log("Answer on submit: ", answer);
         newAnswer = {
           questionId: Number(key),
           answer: answer,
         };
-        console.log("New answer on submit: ", newAnswer);
       } else {
-        console.log("developmentPlanInfo[key]: ", developmentPlanInfo[key]);
         newAnswer = {
           questionId: Number(key),
           answer: String(developmentPlanInfo[key]),
@@ -122,9 +111,9 @@ function DevelopmentPlan() {
       }
       _answers.push(newAnswer);
     }
-    console.log("_answers", _answers);
+
     const answerResponse = await httpAnswerDevelopmentPlan(_answers);
-    console.log("answerResponse: ", answerResponse);
+
     if (answerResponse.hasError) {
       return toast({
         description: answerResponse.errorMessage,
@@ -139,7 +128,7 @@ function DevelopmentPlan() {
       position: "top",
       duration: 5000,
     });
-    //setDevelopmentPlan(answerResponse.data);
+    //setDevelopmentPlan(answerResponse.data);    needs work on this TODO
     navigate("../smart-goal-template", { replace: true });
   }
 
@@ -168,7 +157,6 @@ function DevelopmentPlan() {
         }}
       >
         <Form className={styles.developerPlanContainer}>
-          {console.log("formInitialValues: ", formInitialValues)}
           <DescriptionCard title={"Individual Development Plan"}>
             <p>
               The Individual Development Plan (IDP) supports undergraduate
@@ -187,9 +175,7 @@ function DevelopmentPlan() {
               question={question.question}
               type={question.type}
               options={question.options}
-            >
-              {console.log("questions option:", question.options)}
-            </QuestionGenerator>
+            />
           ))}
 
           <div className={styles.buttonContainer}>

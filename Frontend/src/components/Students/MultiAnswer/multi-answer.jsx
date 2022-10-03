@@ -5,11 +5,10 @@ import styles from "./multi-answer.module.css";
 function MultiAnswer({ initialValue, defaultValue, onChange }) {
   const [answerList, setAnswerList] = useState([{ service: "" }]);
   const [loading, setLoading] = useState(true);
-  //   console.log("default value:", setInitialValue());
 
   useEffect(() => {
     let initialArrayValue = [];
-    console.log("initialValue: ", typeof initialValue);
+
     if (initialValue.length != 0) {
       for (const value of initialValue) {
         initialArrayValue.push({ service: value });

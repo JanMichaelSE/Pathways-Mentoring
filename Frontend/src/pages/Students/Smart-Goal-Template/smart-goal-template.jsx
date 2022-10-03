@@ -10,7 +10,7 @@ import { httpGetDevelopmentPlanQuestion } from "@/api/developmentPlan.api";
 
 import styles from "./smart-goal-template.module.css";
 import DescriptionSmartGoal from "@/components/Students/DescriptionSmartGoal/description-smart-goal";
-
+import SmartTableTemplate from "@/components/Students/SmartTableTemplate/smart-table-template";
 function SmartGoalTemplate() {
   const navigate = useNavigate();
   const developmentPlan = useDevelopmentPlanStore(
@@ -62,7 +62,7 @@ function SmartGoalTemplate() {
     <>
       <div className={styles.developerPlanContainer}>
         <DescriptionSmartGoal />
-        <div>Table</div>
+        <SmartTableTemplate />
         <div className={styles.buttonContainer}>
           <Button type={"submit"}>Submit</Button>
         </div>
