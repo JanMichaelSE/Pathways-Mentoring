@@ -55,7 +55,8 @@ async function httpAnswerDevelopmentPlan(req: Request, res: Response) {
       });
     }
 
-    return res.status(200).json(upsertedAnswers);
+    const questionsWithAnswers = await findDevelopmentPlanQuestionsWithAnswers(userId);
+    return res.status(200).json(questionsWithAnswers);
   } catch (error) {
     return handleErrorResponse("answer development plan", error, res);
   }
