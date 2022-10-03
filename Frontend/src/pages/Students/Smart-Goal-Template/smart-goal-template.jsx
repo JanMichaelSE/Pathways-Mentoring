@@ -9,8 +9,8 @@ import Button from "@/components/common/Button/button";
 import { httpGetDevelopmentPlanQuestion } from "@/api/developmentPlan.api";
 
 import styles from "./smart-goal-template.module.css";
-import DescriptionSmartGoal from "@/components/Students/DescriptionSmartGoal/description-smart-goal";
-import SmartTableTemplate from "@/components/Students/SmartTableTemplate/smart-table-template";
+import DescriptionSmartGoal from "@/components/Students/SmartGoals/DescriptionSmartGoal/description-smart-goal";
+import SmartTableTemplate from "@/components/Students/SmartGoals/SmartTableTemplate/smart-table-template";
 function SmartGoalTemplate() {
   const navigate = useNavigate();
   const developmentPlan = useDevelopmentPlanStore(
