@@ -1,0 +1,8 @@
+.recordTitle {
+  font-size: var(--font-size-subheading);
+  font-weight: bold;
+}
+
+.progressBarOutline {
+  background-color: var(--color-grey);
+}

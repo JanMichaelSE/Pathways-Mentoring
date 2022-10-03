@@ -8,6 +8,7 @@ import {
   updateRecord,
 } from "../../models/records.model";
 import { findStudentById, findStudentByUserId } from "../../models/students.model";
+import { findUserById } from "../../models/users.model";
 import {
   sendRecordApprovedEmail,
   sendRecordRejectedEmail,
@@ -24,6 +25,40 @@ async function httpGetAllRecords(req: Request, res: Response) {
   try {
     const records = await findAllRecords();
     return res.status(200).json(records);
+  } catch (error) {
+    return handleErrorResponse("get all records", error, res);
+  }
+}
+
+async function httpGetRecordsByUser(req: Request, res: Response) {
+  console.log("Get User");
+
+  try {
+    const userId = req.userId;
+    const user = await findUserById(userId);
+
+    if (!user) {
+      return handleBadRequestResponse("A user with this Id doesn't exist.", res);
+    }
+
+    if (user.role === "Student") {
+      const student = await findStudentByUserId(userId);
+      if (!student) {
+        return handleNotFoundResponse("No student with this access token found.", res);
+      }
+
+      const records = await findRecordsByStudent(student.id);
+      return res.status(200).json(records);
+    } else {
+      const mentor = await findMentorByUserId(userId);
+      if (!mentor) {
+        return handleNotFoundResponse("No mentor with this access token found.", res);
+      }
+
+      const records = await findRecordsByMentor(mentor.id);
+
+      return res.status(200).json(records);
+    }
   } catch (error) {
     return handleErrorResponse("get all records", error, res);
   }
@@ -217,6 +252,7 @@ async function httpRejectRecord(req: Request, res: Response) {
 
 export {
   httpGetAllRecords,
+  httpGetRecordsByUser,
   httpGetRecordsByStudent,
   httpGetRecordsByMentor,
   httpCreateRecords,

@@ -6,6 +6,7 @@ import {
   httpGetAllRecords,
   httpGetRecordsByMentor,
   httpGetRecordsByStudent,
+  httpGetRecordsByUser,
   httpRejectRecord,
   httpSubmitRecord,
   httpUpdateRecord,
@@ -14,6 +15,8 @@ import {
 const router = express.Router();
 
 router.get("/", authenticateJsonWebToken, httpGetAllRecords);
+
+router.get("/user", authenticateJsonWebToken, httpGetRecordsByUser);
 
 router.get("/student", authenticateJsonWebToken, httpGetRecordsByStudent);
 

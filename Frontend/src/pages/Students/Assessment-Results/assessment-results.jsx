@@ -5,7 +5,7 @@ import { useAssessmentStore } from "@/store/assessment.store";
 import { Spinner } from "@chakra-ui/react";
 
 import DescriptionCard from "@/components/common/DescriptionCard/description-card";
-import AssessmentResultsGrid from "@/components/Students/AssessmentResultsGrid/assessment-results-grid";
+import AssessmentResultsGrid from "@/components/Students/Assessments/AssessmentResultsGrid/assessment-results-grid";
 import Button from "@/components/common/Button/button";
 
 import { httpGetPathwaysAssessment } from "@/api/assessments.api";
