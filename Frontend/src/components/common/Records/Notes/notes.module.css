@@ -1,0 +1,47 @@
+.notes-container {
+  background-color: #d9e4ea;
+  border-radius: 20px;
+  font-size: var(--font-size-small);
+  text-align: left;
+  min-height: 25rem;
+  padding: 1rem;
+  margin: 1.5rem 3rem 2.5rem 3rem;
+}
+
+.message-container {
+  min-height: 20rem;
+}
+
+.buttons-container {
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  padding-left: 0.75rem;
+  font-size: var(--font-size-subheading);
+  width: 90%;
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  margin-right: 0.5rem;
+}
+.btn {
+  cursor: pointer;
+  background: var(--color-blue-light);
+  font-size: var(--font-size-heading);
+  font-weight: bold;
+  color: var(--color-white);
+  width: 120px;
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}

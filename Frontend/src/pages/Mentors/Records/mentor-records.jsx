@@ -21,14 +21,18 @@ import {
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
-import Record from "../../../components/Mentors/Record/MentorRecord";
-import styles from "./mentor-records.module.css";
+import { httpGetRecordByUser } from "@/api/records.api";
+import RecordCard from "@/components/common/Records/RecordCard/record-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
 import Select from "@/components/common/Select/select";
 
+import styles from "./mentor-records.module.css";
+
 function MentorRecords() {
+  // This request for Record could be a Reusable Hook in the Future
   const toast = useToast();
+  const [records, setRecords] = useState([]);
   const [assignableRecord, setAssignableRecord] = useState({});
   const [edit, setEdit] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -41,6 +45,25 @@ function MentorRecords() {
   const [isLessThan1420] = useMediaQuery("(max-width: 1420px)");
   const [sortAscending, setSortAscending] = useState(true);
   const [filterOption, setFilterOption] = useState("none");
+
+  useEffect(() => {
+    async function loadRecords() {
+      const recordsResponse = await httpGetRecordByUser();
+
+      if (recordsResponse.hasError) {
+        return toast({
+          description: recordsResponse.errorMessage,
+          status: "error",
+          position: "top",
+          duration: 5000,
+        });
+      }
+
+      setRecords(recordsResponse.data);
+      setIsLoading(false);
+    }
+    loadRecords();
+  }, []);
 
   function clickFunction() {
     buttonFunction(cardData);
@@ -60,51 +83,6 @@ function MentorRecords() {
     }
   }
 
-  let recordData = [
-    {
-      id: "1",
-      name: "Identify Subject",
-      date: "6/10/2022",
-      student: "Jessica Quintana",
-      rating: 100,
-    },
-    {
-      id: "2",
-      name: "Research Literature",
-      date: "6/15/2022",
-      student: "Jessica Quintana",
-      rating: 50,
-    },
-    {
-      id: "3",
-      name: "Define Methodology",
-      date: "6/18/2022",
-      student: "Jessica Quintana",
-      rating: 50,
-    },
-    {
-      id: "4",
-      name: "Run Experiment / Fieldwork",
-      date: "6/22/2022",
-      student: "Jessica Quintana",
-      rating: 5,
-    },
-    {
-      id: "5",
-      name: "Gather Data",
-      date: "6/25/2022",
-      student: "Jessica Quintana",
-      rating: 5,
-    },
-    {
-      id: "6",
-      name: "Analyze",
-      date: "6/30/2022",
-      student: "Jessica Quintana",
-      rating: 5,
-    },
-  ];
-
   if (isLoading) {
     return (
       <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh" }}>
@@ -120,9 +98,9 @@ function MentorRecords() {
         />
       </div>
     );
-  } else if (recordData.length == 0) {
+  } else if (records.length == 0) {
     return (
-      <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh" }}>
+      <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh", marginTop: "4rem" }}>
         <NoItemsFound title="No records assigned yet" icon={SadFaceIcon} />
       </div>
     );
@@ -143,13 +121,9 @@ function MentorRecords() {
             </HStack>
           </div>
         </HStack>
-        <SimpleGrid
-          columns={[1, 2, 3]}
-          spacing="40px"
-          className={styles.gridSpace}
-        >
-          {recordData?.map((record) => (
-            <Record key={record.id} recordData={record} />
+        <SimpleGrid columns={[1, 2, 3]} spacing="40px" className={styles.gridSpace}>
+          {records?.map((record) => (
+            <RecordCard key={record.id} recordData={record} />
           ))}
         </SimpleGrid>
         <Modal

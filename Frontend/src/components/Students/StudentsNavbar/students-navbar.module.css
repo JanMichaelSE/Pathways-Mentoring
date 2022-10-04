@@ -63,7 +63,7 @@
   transition: all 0.2s, box-shadow 1ms, color 1ms;
 }
 
-@media only screen and (max-width: 1150px) {
+@media only screen and (max-width: 1300px) {
   .pathways-logo {
     width: 120px;
     min-width: 120px;

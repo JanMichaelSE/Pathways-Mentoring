@@ -7,7 +7,7 @@ import NavbarPopOverMenu from "@/components/common/NavbarPopOverMenu/navbar-popo
 function StudentNavbar() {
   let location = useLocation();
 
-  const [isLessThan1100] = useMediaQuery("(max-width: 1100px)");
+  const [isLessThan1100] = useMediaQuery("(max-width: 1300px)");
 
   return (
     <Fragment>
@@ -33,29 +33,21 @@ function StudentNavbar() {
           </Link>
           <Link
             className={
-              location.pathname === "/student/assessments"
-                ? styles.activeNavLink
-                : styles.navLink
+              location.pathname === "/student/assessments" ? styles.activeNavLink : styles.navLink
             }
             to="/student/assessments"
           >
             Assessments
           </Link>
           <Link
-            className={
-              location.pathname === "/student"
-                ? styles.activeNavLink
-                : styles.navLink
-            }
+            className={location.pathname === "/student" ? styles.activeNavLink : styles.navLink}
             to="/student"
           >
             Records
           </Link>
           <Link
             className={
-              location.pathname === "/student/mentors"
-                ? styles.activeNavLink
-                : styles.navLink
+              location.pathname === "/student/mentors" ? styles.activeNavLink : styles.navLink
             }
             to="/student/mentors"
           >
@@ -63,9 +55,7 @@ function StudentNavbar() {
           </Link>
           <Link
             className={
-              location.pathname === "/student/contact-us"
-                ? styles.activeNavLink
-                : styles.navLink
+              location.pathname === "/student/contact-us" ? styles.activeNavLink : styles.navLink
             }
             to="/student/contact-us"
           >

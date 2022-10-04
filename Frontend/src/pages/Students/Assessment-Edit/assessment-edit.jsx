@@ -8,7 +8,7 @@ import { Spinner } from "@chakra-ui/react";
 import { useAssessmentStore } from "@/store/assessment.store";
 import { httpGetPathwaysAssessment, httpAnswerAssessment } from "@/api/assessments.api";
 
-import QuestionGenerator from "@/components/Students/QuestionGenerator/question-generator";
+import QuestionGenerator from "@/components/Students/Questions/QuestionGenerator/question-generator";
 import Button from "@/components/common/Button/button.jsx";
 import DescriptionCard from "@/components/common/DescriptionCard/description-card";
 
