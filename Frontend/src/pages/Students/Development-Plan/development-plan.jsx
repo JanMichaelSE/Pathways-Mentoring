@@ -128,7 +128,7 @@ function DevelopmentPlan() {
       position: "top",
       duration: 5000,
     });
-    //setDevelopmentPlan(answerResponse.data);    needs work on this TODO
+    setDevelopmentPlan(answerResponse.data); //needs work on this TODO
     navigate("../smart-goal-template", { replace: true });
   }
 

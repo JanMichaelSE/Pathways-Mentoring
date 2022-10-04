@@ -13,6 +13,7 @@
 .add-btn {
   background: var(--color-blue-dark);
   width: 10rem;
+  color: white;
   outline: none;
   cursor: pointer;
   font-weight: 500;

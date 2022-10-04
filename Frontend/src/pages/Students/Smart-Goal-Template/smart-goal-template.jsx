@@ -22,6 +22,8 @@ function SmartGoalTemplate() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     async function loadDevelopmentPlanInfo() {
       const DevelopmentPlanResponse = await httpGetDevelopmentPlanQuestion();
 
@@ -43,6 +45,10 @@ function SmartGoalTemplate() {
     }
   }, []);
 
+  function goBack() {
+    navigate("../development-plan", { replace: true });
+  }
+
   if (isLoading) {
     return (
       <Spinner
@@ -62,9 +68,9 @@ function SmartGoalTemplate() {
     <>
       <div className={styles.developerPlanContainer}>
         <DescriptionSmartGoal />
-        <SmartTableTemplate />
+        <SmartTableTemplate smartResult={developmentPlan} />
         <div className={styles.buttonContainer}>
-          <Button type={"submit"}>Submit</Button>
+          <Button onClick={goBack}>BACK</Button>
         </div>
       </div>
     </>

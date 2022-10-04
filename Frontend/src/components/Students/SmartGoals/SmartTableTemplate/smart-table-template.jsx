@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./smart-table-template.module.css";
 
-function SmartTableTemplate() {
+function SmartTableTemplate({ smartResult }) {
   return (
     <>
       <div className={styles.tableContainer}>
