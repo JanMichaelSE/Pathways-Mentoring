@@ -73,7 +73,7 @@ async function findStudentsByMentor(mentorId: string): Promise<Student[]> {
     });
 
     const studentsWithoutId = students.map((student) =>
-      excludeFields(student, "id", "mentorId", "userId")
+      excludeFields(student, "mentorId", "userId")
     );
     return studentsWithoutId;
   } catch (error) {
