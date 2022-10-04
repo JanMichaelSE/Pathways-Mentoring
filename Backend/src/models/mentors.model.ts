@@ -140,7 +140,9 @@ async function findUnApprovedMentors(): Promise<Mentor[]> {
       },
     });
 
-    return mentors;
+    const filteredMentors = mentors.map((m) => excludeFields(m, "userId"));
+
+    return filteredMentors;
   } catch (error) {
     throw error;
   }
