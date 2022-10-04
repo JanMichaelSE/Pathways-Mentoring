@@ -5,7 +5,7 @@ import { useToast } from "@chakra-ui/react";
 import IndividualRecord from "@/components/common/Records/IndividualRecord/individual-record";
 
 import styles from "./student-record-view.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function RecordView() {
   const toast = useToast();
