@@ -19,7 +19,6 @@ function Assessments() {
   const [assessments, setAssessments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sortAscending, setSortAscending] = useState(true);
-  const [filterOption, setFilterOption] = useState("none");
 
   useEffect(() => {
     async function loadAllAssessments() {
