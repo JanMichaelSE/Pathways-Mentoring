@@ -1,4 +1,5 @@
 import { Response, Request } from "express";
+
 import { findMentorById, findMentorByUserId } from "../../models/mentors.model";
 import {
   createRecords,
@@ -9,11 +10,13 @@ import {
 } from "../../models/records.model";
 import { findStudentById, findStudentByUserId } from "../../models/students.model";
 import { findUserById } from "../../models/users.model";
+
 import {
   sendRecordApprovedEmail,
   sendRecordRejectedEmail,
   sendSubmitRecordEmail,
 } from "../../services/mail.service";
+
 import {
   handleBadRequestResponse,
   handleErrorResponse,
@@ -31,8 +34,6 @@ async function httpGetAllRecords(req: Request, res: Response) {
 }
 
 async function httpGetRecordsByUser(req: Request, res: Response) {
-  console.log("Get User");
-
   try {
     const userId = req.userId;
     const user = await findUserById(userId);
@@ -111,7 +112,7 @@ async function httpCreateRecords(req: Request, res: Response) {
     }
 
     const mentor = await findMentorByUserId(mentorUserId);
-    const student = await findStudentByUserId(studentUserId);
+    const student = await findStudentById(studentUserId);
     if (!mentor || !student) {
       return handleBadRequestResponse("No mentor or student exists with the provided id's.", res);
     }

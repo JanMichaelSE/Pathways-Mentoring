@@ -1,24 +1,35 @@
 import { useState, useEffect } from "react";
-import { HStack, SimpleGrid, Text, Image, Spinner, useToast } from "@chakra-ui/react";
+import {
+  HStack,
+  SimpleGrid,
+  Text,
+  Image,
+  Spinner,
+  useToast,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 import { httpGetRecordByUser } from "@/api/records.api";
+import { httpGetStudentByMentor } from "@/api/mentors.api";
 import RecordCard from "@/components/common/Records/RecordCard/record-card";
+import AssignRecordModal from "@/components/Mentors/AssignRecordModal/assign-record-modal";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
 
 import styles from "./mentor-records.module.css";
 
 function MentorRecords() {
-  // This request for Record could be a Reusable Hook in the Future
   const toast = useToast();
-  const [isLoading, setIsLoading] = useState(true);
   const [records, setRecords] = useState([]);
-  const [sortAscending, setSortAscending] = useState(true);
-  const [filterOption, setFilterOption] = useState("none");
+  const [students, setStudents] = useState([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isLoading, setIsLoading] = useState(false);
+  const [sortDescending, setSortDescending] = useState(false);
 
   useEffect(() => {
-    async function loadRecords() {
+    async function loadInitialData() {
       const recordsResponse = await httpGetRecordByUser();
+      const studentsResponse = await httpGetStudentByMentor();
 
       if (recordsResponse.hasError) {
         return toast({
@@ -29,11 +40,56 @@ function MentorRecords() {
         });
       }
 
-      setRecords(recordsResponse.data);
+      if (studentsResponse.hasError) {
+        return toast({
+          title: "An Error has occured.",
+          description:
+            "Could not retrieve the students assigned to this mentor. Please try again later.",
+          status: "error",
+          position: "top",
+          duration: "5000",
+        });
+      }
+
+      const recordsData = recordsResponse.data.sort((a, b) => {
+        if (a.createdDate < b.createdDate) {
+          return -1;
+        }
+        if (a.createdDate > b.createdDate) {
+          return 1;
+        }
+        return 0;
+      });
+
+      setRecords(recordsData);
+      setStudents(studentsResponse.data);
       setIsLoading(false);
     }
-    loadRecords();
+    loadInitialData();
   }, []);
+
+  function onSortRecords() {
+    records.sort((a, b) => {
+      if (a.createdDate < b.createdDate) {
+        return -1;
+      }
+      if (a.createdDate > b.createdDate) {
+        return 1;
+      }
+      return 0;
+    });
+
+    if (!sortDescending) {
+      records.reverse();
+    }
+
+    setRecords(records);
+    setSortDescending((prev) => !prev);
+  }
+
+  function getSortButtonText() {
+    return sortDescending ? "Descending" : "Ascending";
+  }
 
   if (isLoading) {
     return (
@@ -60,16 +116,16 @@ function MentorRecords() {
     return (
       <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh" }}>
         <HStack justifyContent={"end"} pt={15} mr={50}>
-          <div className={styles.button}>
+          <div className={styles.button} onClick={onOpen}>
             <HStack justifyContent={"center"} alignContent={"center"}>
               <Text>Create</Text>
-              <Image src="../../assets/AddNew.png" alt="Filter Icon" />
+              <Image src="/assets/AddNew.png" alt="Filter Icon" />
             </HStack>
           </div>
-          <div className={styles.lastButton}>
+          <div className={styles.lastButton} onClick={onSortRecords}>
             <HStack justifyContent={"center"} alignContent={"center"}>
-              <Text>Filter</Text>
-              <Image src="../../assets/Filter.png" alt="Filter Icon" />
+              <Text>{getSortButtonText()}</Text>
+              <Image src="/assets/Filter.png" alt="Filter Icon" />
             </HStack>
           </div>
         </HStack>
@@ -78,6 +134,7 @@ function MentorRecords() {
             <RecordCard key={record.id} recordData={record} />
           ))}
         </SimpleGrid>
+        <AssignRecordModal students={students} isOpen={isOpen} onClose={onClose} />
       </div>
     );
   }

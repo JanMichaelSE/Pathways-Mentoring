@@ -5,9 +5,7 @@ function Select({ label, isBlue, ...props }) {
   const [field, meta] = useField(props);
 
   function selectStyles() {
-    return meta.touched && meta.error
-      ? `${styles.select} input-error`
-      : styles.select;
+    return meta.touched && meta.error ? `${styles.select} input-error` : styles.select;
   }
 
   function labelStyles() {
