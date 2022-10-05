@@ -1,6 +1,6 @@
 .gridSpace {
   max-width: var(--responsive-screen-max-width);
-  margin: 0 auto;
+  margin: 0 1.5rem;
 }
 
 .emptyGridSpace {

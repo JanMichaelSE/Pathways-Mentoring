@@ -9,12 +9,10 @@ import SadFaceIcon from "@/assets/sad-face-icon.svg";
 import styles from "./student-records.module.css";
 
 function StudentRecords() {
-  // This request for Record could be a Reusable Hook in the Future
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [records, setRecords] = useState([]);
-  const [sortAscending, setSortAscending] = useState(true);
-  const [filterOption, setFilterOption] = useState("none");
+  const [sortDescending, setSortDescending] = useState(false);
 
   useEffect(() => {
     async function loadRecords() {
@@ -29,11 +27,44 @@ function StudentRecords() {
         });
       }
 
-      setRecords(recordsResponse.data);
+      const recordsData = recordsResponse.data.sort((a, b) => {
+        if (a.createdDate < b.createdDate) {
+          return -1;
+        }
+        if (a.createdDate > b.createdDate) {
+          return 1;
+        }
+        return 0;
+      });
+
+      setRecords(recordsData);
       setIsLoading(false);
     }
     loadRecords();
   }, []);
+
+  function onSortRecords() {
+    records.sort((a, b) => {
+      if (a.createdDate < b.createdDate) {
+        return -1;
+      }
+      if (a.createdDate > b.createdDate) {
+        return 1;
+      }
+      return 0;
+    });
+
+    if (!sortDescending) {
+      records.reverse();
+    }
+
+    setRecords(records);
+    setSortDescending((prev) => !prev);
+  }
+
+  function getSortButtonText() {
+    return sortDescending ? "Descending" : "Ascending";
+  }
 
   if (isLoading) {
     return (
@@ -60,10 +91,10 @@ function StudentRecords() {
     return (
       <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh" }}>
         <HStack justifyContent={"end"} pt={15}>
-          <div className={styles.lastButton}>
+          <div className={styles.lastButton} onClick={onSortRecords}>
             <HStack justifyContent={"center"} alignContent={"center"}>
-              <Text>Filter</Text>
-              <Image src="../../assets/Filter.png" alt="Filter Icon" />
+              <Text>{getSortButtonText()}</Text>
+              <Image src="/assets/Filter.png" alt="Filter Icon" />
             </HStack>
           </div>
         </HStack>
