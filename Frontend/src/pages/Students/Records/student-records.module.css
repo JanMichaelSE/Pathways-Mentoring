@@ -1,6 +1,6 @@
 .gridSpace {
   max-width: var(--responsive-screen-max-width);
-  margin: 0 1.5rem;
+  margin: 0 auto;
 }
 
 .emptyGridSpace {
@@ -27,7 +27,7 @@
   justify-content: center;
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1350px) {
   .gridSpace {
     grid-template-columns: repeat(2, 1fr) !important;
     margin: 0 2rem;
