@@ -39,8 +39,8 @@ function OfficeHours({ schedule }) {
             if (Array.isArray(compo[days[i]])) {
               timeList.push(
                 <VStack>
+                  <Text as="b">{days[i]}:</Text>
                   <UnorderedList>
-                    <ListItem>{days[i]}</ListItem>
                     <ListItem>{compo[days[i]][0]}</ListItem>
                     <ListItem>{compo[days[i]][1]}</ListItem>
                   </UnorderedList>
@@ -50,8 +50,8 @@ function OfficeHours({ schedule }) {
               if (compo.hasOwnProperty([days[i]])) {
                 timeList.push(
                   <VStack>
+                    <Text as="b">{days[i]}:</Text>
                     <UnorderedList>
-                      <ListItem>{days[i]}</ListItem>
                       <ListItem>{compo[days[i]]}</ListItem>
                     </UnorderedList>
                   </VStack>
@@ -63,15 +63,21 @@ function OfficeHours({ schedule }) {
     formatHours();
   });
 
-  function testFunction(){
-    console.log(timeList);
-    return (timeList.map((slot) => {slot}));
-  }
+  const Test = ({CompArray}) => { 
+    console.log(CompArray)
+    return(
+    
+    <div>
+      {CompArray.map(arr => (
+        <div>{arr}</div>
+      ))}
+    </div>
+  ); }
 
   return (
     <VStack>
-      <Text>Office Hours</Text>
-      <HStack>{testFunction()}</HStack>
+      <Text as="b" textDecorationLine={"underline"}>Office Hours</Text>
+      <HStack><Test CompArray={timeList}/></HStack>
     </VStack>
   );
 }
