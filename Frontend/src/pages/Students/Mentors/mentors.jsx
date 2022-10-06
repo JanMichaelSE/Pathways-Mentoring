@@ -97,7 +97,7 @@ function Mentors() {
     } else {
       return (
         <div >
-        <HStack paddingLeft={"40px"}>
+        <HStack paddingLeft={"40px"} paddingTop={"10px"}>
           <Image src={Contact} />
           <Text className={styles.heading}>Current Mentor</Text>
         </HStack>
@@ -120,6 +120,21 @@ function Mentors() {
           <Image src={Contact} />
           <Text className={styles.heading}>Mentors</Text>
         </HStack>
+        <SimpleGrid
+          columns={[1, 2, 3]}
+          spacing="40px"
+          className={styles.background}
+        >
+          {mentorData?.map((mentor) => (
+            <AvatarCard
+              key={mentor.id}
+              cardData={mentor}
+              buttonFunction={RequestMentoring}
+              messageButton={"Request Mentoring"}
+              studentSide={true}
+            />
+          ))}
+        </SimpleGrid>
         </div>
       );
     }
