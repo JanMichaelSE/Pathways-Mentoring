@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SimpleGrid, Spinner, useToast } from "@chakra-ui/react";
+import { SimpleGrid, Spinner, useToast, Text, HStack, Image } from "@chakra-ui/react";
 
 import { httpCancelMentorship } from "@/api/students.api";
 import { httpGetStudentByMentor } from "@/api/mentors.api";
@@ -7,6 +7,7 @@ import { httpGetStudentByMentor } from "@/api/mentors.api";
 import AvatarCard from "../../../components/common/AvatarCard/avatar-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
+import Contact from "@/assets/contact.svg"
 import styles from "./students.module.css";
 
 function Students() {
@@ -107,6 +108,11 @@ function Students() {
       );
     } else {
       return (
+        <div>
+        <HStack paddingLeft={"40px"} paddingTop={"10px"}>
+          <Image src={Contact} />
+          <Text className={styles.heading}>Pending Approval</Text>
+        </HStack>
         <SimpleGrid
           columns={[1, 2, 3]}
           spacing="40px"
@@ -121,6 +127,25 @@ function Students() {
             />
           ))}
         </SimpleGrid>
+        <HStack paddingLeft={"40px"}>
+          <Image src={Contact} />
+          <Text className={styles.heading}>Students</Text>
+        </HStack>
+        <SimpleGrid
+          columns={[1, 2, 3]}
+          spacing="40px"
+          className={styles.background}
+        >
+          {studentData?.map((student) => (
+            <AvatarCard
+              key={student.id}
+              cardData={student}
+              buttonFunction={CancelMentoring}
+              messageButton={"Cancel Mentorship"}
+            />
+          ))}
+        </SimpleGrid>
+        </div>
       );
     }
   }
