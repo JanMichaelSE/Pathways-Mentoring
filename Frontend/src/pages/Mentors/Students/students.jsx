@@ -56,35 +56,6 @@ function Students() {
       duration: 7000,
     });
   }
-  // let studentData1 = [
-  //   {
-  //     id: "1",
-  //     name: "Jessica Quintana",
-  //     telephone: "787-710-1074",
-  //     email: "jmontalvo.dev@gmail.com",
-  //     avatarLink: "/assets/Jessica.svg",
-  //     department: "CS/COE",
-  //     academicDegree: "BSc",
-  //   },
-  //   {
-  //     id: "2",
-  //     name: "Abigael Rivera",
-  //     telephone: "787-710-1074",
-  //     email: "jmontalvo.dev@gmail.com",
-  //     avatarLink: "/assets/Zayira.svg",
-  //     department: "CS/COE",
-  //     academicDegree: "BSc",
-  //   },
-  //   {
-  //     id: "3",
-  //     name: "Jan Montalvo",
-  //     telephone: "787-710-1074",
-  //     email: "jmontalvo.dev@gmail.com",
-  //     avatarLink: "/assets/Jan.svg",
-  //     department: "CS/COE",
-  //     academicDegree: "BSc",
-  //   },
-  // ];
 
   function loadStudentsComponent() {
     if (isLoading) {
