@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useToast } from "@chakra-ui/react";
+import { useToast, useDisclosure} from "@chakra-ui/react";
 
 import { httpSignupStudent } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
 
+import StudentSignUpPopup from "../StudentSignUpPopup/student-signup-popup";
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
@@ -14,25 +15,27 @@ import styles from "./student-form.module.css";
 function StudentForm() {
   const navigate = useNavigate();
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const setUser = useUserStore((state) => state.setUser);
   const setTokens = useUserStore((state) => state.setTokens);
-
+  
   async function handleSubmit(studentInfo) {
-    const userResponse = await httpSignupStudent(studentInfo);
+    // const userResponse = await httpSignupStudent(studentInfo);
 
-    if (userResponse.hasError) {
-      return toast({
-        description: userResponse.errorMessage,
-        status: "error",
-        position: "top",
-        duration: 5000,
-      });
-    }
+    // if (userResponse.hasError) {
+    //   return toast({
+    //     description: userResponse.errorMessage,
+    //     status: "error",
+    //     position: "top",
+    //     duration: 5000,
+    //   });
+    // }
 
-    setUser(userResponse.data.email, "Student");
-    setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
+    // setUser(userResponse.data.email, "Student");
+    // setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
+    onOpen();
+   //navigate("../student/assessments", { replace: true });
 
-    navigate("../student/assessments", { replace: true });
   }
 
   return (
@@ -144,6 +147,7 @@ function StudentForm() {
           </div>
         </Form>
       </Formik>
+      <StudentSignUpPopup isOpen={isOpen} onClose={onClose}/>
     </div>
   );
 }
