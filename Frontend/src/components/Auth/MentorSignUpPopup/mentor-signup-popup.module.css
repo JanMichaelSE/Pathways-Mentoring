@@ -1,0 +1,24 @@
+.checkmarkContainer {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.backbtn {
+}
+
+.checkmarkbtn {
+  margin-left: auto;
+  margin-right: auto;
+
+  /* justify-self: center; */
+}
+
+.message {
+  color: var(--color-blue-dark);
+  font-weight: 500;
+  font-size: 24px;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+}

@@ -2,11 +2,12 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useToast } from "@chakra-ui/react";
+import { useToast, useDisclosure } from "@chakra-ui/react";
 
 import { httpSignupMentor } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
 
+import MentorSignUpPopup from "../MentorSignUpPopup/mentor-signup-popup";
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
@@ -15,25 +16,26 @@ import styles from "./mentor-form.module.css";
 function MentorForm() {
   const navigate = useNavigate();
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const setUser = useUserStore((state) => state.setUser);
   const setTokens = useUserStore((state) => state.setTokens);
 
   async function handleSubmit(mentorInfo) {
-    const userResponse = await httpSignupMentor(mentorInfo);
+    // const userResponse = await httpSignupMentor(mentorInfo);
 
-    if (userResponse.hasError) {
-      return toast({
-        description: userResponse.errorMessage,
-        status: "error",
-        position: "top",
-        duration: 5000,
-      });
-    }
+    // if (userResponse.hasError) {
+    //   return toast({
+    //     description: userResponse.errorMessage,
+    //     status: "error",
+    //     position: "top",
+    //     duration: 5000,
+    //   });
+    // }
 
-    setUser(userResponse.data.email, "Mentor");
-    setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
-
-    navigate("../mentor", { replace: true });
+    // setUser(userResponse.data.email, "Mentor");
+    // setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
+    onOpen();
+    //navigate("../mentor", { replace: true });
   }
 
   return (
@@ -162,6 +164,7 @@ function MentorForm() {
           </div>
         </Form>
       </Formik>
+      <MentorSignUpPopup isOpen = {isOpen} onClose = {onClose}/>
     </div>
   );
 }
