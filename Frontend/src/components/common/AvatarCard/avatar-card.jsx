@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   Heading,
   Avatar,
@@ -18,6 +18,7 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import styles from "./avatar-card.module.css";
+import OfficeHours from "../../Students/OfficeHours/office-hours";
 
 function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -25,10 +26,30 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
   const finalRef = React.useRef(null);
   const [firstName, lastName] = cardData.name.split("; ");
 
+  let mentorSchedule = {};
+
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
 
   function clickFunction() {
     buttonFunction(cardData);
+  }
+  useEffect(() => {
+    transformSchedule(cardData.officeHours, mentorSchedule);
+  });
+
+  async function transformSchedule(serverData, schedule) {
+    const daysInterval = serverData.split("/");
+
+    for (const interval of daysInterval) {
+      const timeSplit = interval.split("%");
+      schedule[timeSplit[0]] = timeSplit[1];
+    }
+  }
+
+  function officeHours(mentorSchedule) {
+    return(
+      <OfficeHours schedule={mentorSchedule} />
+    );
   }
 
   return (
@@ -257,9 +278,11 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
                       pos={"relative"}
                       p={3}
                     />
-                    <Text fontWeight={"400"} textAlign={"justify"}>
+
+                    {officeHours(mentorSchedule)}
+                    {/* <Text fontWeight={"400"} textAlign={"justify"}>
                       {cardData.officeHours}
-                    </Text>
+                    </Text> */}
                   </HStack>
                 </>
               )}
