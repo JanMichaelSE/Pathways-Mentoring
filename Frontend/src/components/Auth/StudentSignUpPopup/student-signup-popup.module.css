@@ -1,4 +1,4 @@
-.checkmarkContainer{
+.checkmark-container{
     margin-left: auto;
     margin-right: auto;
     display: flex;
@@ -14,7 +14,7 @@
     display: table-cell;
 }
 
-.headermessage {
+.header-message {
     color: var(--color-blue-dark);
     display: flex;
     justify-content: center;
@@ -24,11 +24,12 @@
     vertical-align: middle;
 }
 
-.btnContainer {
+.btn-container {
     display: flex;
     justify-content: center;
     margin: 2rem 0 3rem 0;
 }
+
 .btn {
     cursor: pointer;
     font-size: var(--font-size-heading);
@@ -42,4 +43,3 @@
     border: none;
     float: right;
 }
-

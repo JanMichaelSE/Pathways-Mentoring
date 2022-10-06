@@ -1,20 +1,16 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "@/components/common/Button/button";
 
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
-  useDisclosure,
   Image,
 } from "@chakra-ui/react";
 
 import styles from "./student-signup-popup.module.css";
+
 function StudentSignUpPopup({ isOpen, onClose }) {
   const navigate = useNavigate();
 
@@ -44,7 +40,7 @@ function StudentSignUpPopup({ isOpen, onClose }) {
             <Image boxSize={"100px"} src="assets/checkmark-icon.svg" />
           </div>
           <div>
-            <h1 className={styles.headermessage}>
+            <h1 className={styles.headerMessage}>
               Your account has been created!
             </h1>
             <p className={styles.message}>

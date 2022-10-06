@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useToast, useDisclosure } from "@chakra-ui/react";
@@ -13,7 +12,6 @@ import Select from "@/components/common/Select/select";
 import styles from "./student-form.module.css";
 
 function StudentForm() {
-  const navigate = useNavigate();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const setUser = useUserStore((state) => state.setUser);
