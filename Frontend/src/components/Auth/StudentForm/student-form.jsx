@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useToast, useDisclosure} from "@chakra-ui/react";
+import { useToast, useDisclosure } from "@chakra-ui/react";
 
 import { httpSignupStudent } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
@@ -18,24 +18,22 @@ function StudentForm() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const setUser = useUserStore((state) => state.setUser);
   const setTokens = useUserStore((state) => state.setTokens);
-  
+
   async function handleSubmit(studentInfo) {
-    // const userResponse = await httpSignupStudent(studentInfo);
+    const userResponse = await httpSignupStudent(studentInfo);
 
-    // if (userResponse.hasError) {
-    //   return toast({
-    //     description: userResponse.errorMessage,
-    //     status: "error",
-    //     position: "top",
-    //     duration: 5000,
-    //   });
-    // }
+    if (userResponse.hasError) {
+      return toast({
+        description: userResponse.errorMessage,
+        status: "error",
+        position: "top",
+        duration: 5000,
+      });
+    }
 
-    // setUser(userResponse.data.email, "Student");
-    // setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
+    setUser(userResponse.data.email, "Student");
+    setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
     onOpen();
-   //navigate("../student/assessments", { replace: true });
-
   }
 
   return (
@@ -147,7 +145,7 @@ function StudentForm() {
           </div>
         </Form>
       </Formik>
-      <StudentSignUpPopup isOpen={isOpen} onClose={onClose}/>
+      <StudentSignUpPopup isOpen={isOpen} onClose={onClose} />
     </div>
   );
 }
