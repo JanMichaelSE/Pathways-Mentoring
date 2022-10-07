@@ -1,5 +1,4 @@
-import React from "react";
-import Button from "@/components/common/Button/button";
+import { useNavigate } from "react-router-dom";
 import {
   Modal,
   ModalOverlay,
@@ -16,6 +15,11 @@ import {
 import styles from "./mentor-signup-popup.module.css";
 
 function MentorSignUpPopup({ isOpen, onClose }) {
+  const navigate = useNavigate();
+  function returnToLogin() {
+    onClose();
+    navigate("../", { replace: true });
+  }
   return (
     <Modal
       isCentered
@@ -23,6 +27,7 @@ function MentorSignUpPopup({ isOpen, onClose }) {
       isOpen={isOpen}
       motionPreset="slideInBottom"
       size={"xl"}
+      closeOnOverlayClick={false}
     >
       <ModalOverlay />
       <ModalContent
@@ -32,31 +37,26 @@ function MentorSignUpPopup({ isOpen, onClose }) {
         borderColor={"#0066CC"}
       >
         <ModalHeader>
-          <div>
-            <Image
-              className={styles.backbtn}
-              boxSize="40px"
-              objectFit="cover"
-              src="/assets/back.svg"
-              alt="back.svg"
-              onClick={onClose}
-              cursor="pointer"
-            />
-          </div>
-
           <div className={styles.checkmarkContainer}>
             <Image
-              className={styles.checkmarkbtn}
+              className={styles.checkmarkBtn}
               boxSize={"100px"}
               src="assets/checkmark-icon.svg"
             />
           </div>
+          <div>
+            <p className={styles.message}>
+              Your account has been submitted for approval! You'll receive an
+              email once its been verified.
+            </p>
+          </div>
         </ModalHeader>
         <ModalBody>
-          <p className={styles.message}>
-            Your account has been submitted for approval! You'll receive an
-            email once its been verified.
-          </p>
+          <div className={styles.btnContainer}>
+            <button onClick={returnToLogin} className={styles.btn}>
+              Back
+            </button>
+          </div>
         </ModalBody>
       </ModalContent>
     </Modal>
