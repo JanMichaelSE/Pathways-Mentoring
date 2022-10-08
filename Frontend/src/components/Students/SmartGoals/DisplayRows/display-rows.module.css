@@ -1,8 +1,9 @@
 .rows {
   height: 10rem;
 }
-#firstColumn {
+.firstColumn {
   vertical-align: top;
+  width: 18rem;
   padding: 1rem 0.5rem 1rem 1.5rem;
   font-weight: 700;
 }

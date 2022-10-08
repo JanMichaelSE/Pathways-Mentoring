@@ -24,12 +24,12 @@ function SmartTableTemplate({ smartResult }) {
         <table className={styles.table}>
           <thead>
             <tr className={styles.firstRow}>
-              <th className={styles.goals}>GOALS</th>
-              <th className={styles.goals}>SPECIFICS</th>
-              <th className={styles.goals}>MEASURABLE</th>
-              <th className={styles.goals}>ATTAINABLE</th>
-              <th className={styles.goals}>RELEVANT</th>
-              <th className={styles.goals}>TIME-BOUND</th>
+              <th>GOALS</th>
+              <th>SPECIFICS</th>
+              <th>MEASURABLE</th>
+              <th>ATTAINABLE</th>
+              <th>RELEVANT</th>
+              <th>TIME-BOUND</th>
             </tr>
           </thead>
           <DisplayRows items={getMultiAnswer()} />

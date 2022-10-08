@@ -111,7 +111,7 @@ function DevelopmentPlan() {
       }
       _answers.push(newAnswer);
     }
-
+    console.log("Development Plan send:", _answers);
     const answerResponse = await httpAnswerDevelopmentPlan(_answers);
 
     if (answerResponse.hasError) {

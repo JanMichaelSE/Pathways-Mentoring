@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import styles from "./multi-answer.module.css";
 
-function MultiAnswer({ initialValue, defaultValue, onChange }) {
+function MultiAnswer({ initialValue, onChange }) {
   const [answerList, setAnswerList] = useState([{ service: "" }]);
   const [loading, setLoading] = useState(true);
 
@@ -50,10 +50,6 @@ function MultiAnswer({ initialValue, defaultValue, onChange }) {
     onChange(arrayListWithoutObject);
   }
 
-  function setInitialValue() {
-    defaultValue();
-  }
-
   if (loading) {
     return <></>;
   }
@@ -72,7 +68,7 @@ function MultiAnswer({ initialValue, defaultValue, onChange }) {
                 value={singleAnswer.service}
                 onChange={(e) => handleServiceChange(e, index)}
               />
-              {answerList.length - 1 === index && answerList.length < 4 && (
+              {answerList.length - 1 === index && (
                 <button
                   type="button"
                   className={styles.addBtn}
