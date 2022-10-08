@@ -10,9 +10,12 @@ import {
   httpSignupStudent,
   httpSignupAdmin,
   httpUpdateAdmin,
+  httpGetAdminProfile,
 } from "./auth.controller";
 
 const router = express.Router();
+
+router.get("/admin/profile", authenticateJsonWebToken, httpGetAdminProfile);
 
 router.post("/refreshToken", httpRefreshToken);
 

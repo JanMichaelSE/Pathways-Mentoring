@@ -69,6 +69,24 @@ async function findUserById(userId: string): Promise<User | null> {
   }
 }
 
+async function findEmailById(userId: string): Promise<User | null> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return excludeFields(user, "id", "accessToken", "refreshToken", "password", "passwordSalt");
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function updateUserPassword(user: User, newPassword: string): Promise<User> {
   try {
     let salt: string = generateSalt(32);
@@ -250,6 +268,7 @@ export {
   createUser,
   findUserByEmail,
   findUserById,
+  findEmailById,
   updateUserPassword,
   updateUserEmail,
   isUserAuthorized,
