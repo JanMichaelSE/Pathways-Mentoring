@@ -10,19 +10,15 @@ import { useUserStore } from "@/store/user.store";
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import styles from "./admin-profile-form.module.css";
-import { Box, useMediaQuery } from "@chakra-ui/react";
+import { useMediaQuery } from "@chakra-ui/react";
 
 function AdminProfileForm() {
   const toast = useToast();
   const userId = useUserStore((state) => state.userId);
   const setEmail = useUserStore((state) => state.setEmail);
-  const setPictureData = useUserStore((state) => state.setPictureData);
-  const pictureData = useUserStore((state) => state.pictureData);
   const [userData, setUserData] = useState({});
   const [edit, setEdit] = useState(true);
   const [close, setClose] = useState("Edit");
-  const [dataFirstName, setDataFirstName] = useState("");
-  const [dataLastName, setDataLastName] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -43,10 +39,6 @@ function AdminProfileForm() {
         });
       }
       setUserData(studentInfo.data);
-      setPictureData(studentInfo.data.profilePicture);
-      var [firstName, lastName] = studentInfo.data.name.split("; ");
-      setDataFirstName(firstName);
-      setDataLastName(lastName);
       setIsLoading(false);
     }
     loadStudentProfileInfo();
@@ -162,15 +154,13 @@ function AdminProfileForm() {
             Personal Information
           </h1>
           <div className={styles.inputContainer}>
-            <Box>
-              <Input
-                label="Email"
-                name="email"
-                type="text"
-                width={inputWidth()}
-                disabled={edit}
-              />
-            </Box>
+            <Input
+              label="Email"
+              name="email"
+              type="text"
+              width={inputWidth()}
+              disabled={edit}
+            />
             <Input
               label="Current Password"
               name="currentPassword"
