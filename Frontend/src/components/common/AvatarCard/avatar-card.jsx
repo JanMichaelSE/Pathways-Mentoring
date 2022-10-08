@@ -35,7 +35,7 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
   }
   useEffect(() => {
     transformSchedule(cardData.officeHours, mentorSchedule);
-  });
+  }, []);
 
   async function transformSchedule(serverData, schedule) {
     const daysInterval = serverData.split("/");
@@ -44,6 +44,8 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
       const timeSplit = interval.split("%");
       schedule[timeSplit[0]] = timeSplit[1];
     }
+
+    console.log("temp", daysInterval );
   }
 
   function officeHours(mentorSchedule) {

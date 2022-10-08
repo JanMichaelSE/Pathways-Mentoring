@@ -106,15 +106,16 @@ function Mentors() {
           spacing="40px"
           className={styles.background}
         >
-          {mentorData?.map((mentor) => (
-            <AvatarCard
+          {mentorData?.map((mentor) => {
+            if(mentor.isActiveMentor == true){
+            return <AvatarCard
               key={mentor.id}
               cardData={mentor}
               buttonFunction={RequestMentoring}
               messageButton={"Request Mentoring"}
               studentSide={true}
-            />
-          ))}
+            />}
+    })}
         </SimpleGrid>
         <HStack paddingLeft={"40px"}>
           <Image src={Contact} />

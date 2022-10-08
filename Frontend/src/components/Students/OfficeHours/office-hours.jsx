@@ -25,7 +25,7 @@ function OfficeHours({ schedule }) {
     async function formatHours() {
         for (let j = 0; j < days.length; j++) {
           let temp = schedule[days[j]];
-          if (temp.includes("@")) {
+          if (temp?.includes("@")) {
             let sub = temp.split("@");
             compo[days[j]] = [sub[0], sub[1]];
           } else {
@@ -68,7 +68,7 @@ function OfficeHours({ schedule }) {
     return(
     
     <div>
-      {CompArray.map(arr => (
+      {CompArray.map((arr) => (
         <div>{arr}</div>
       ))}
     </div>
@@ -76,7 +76,7 @@ function OfficeHours({ schedule }) {
 
   return (
     <VStack>
-      <Text as="b" textDecorationLine={"underline"}>Office Hours</Text>
+      <Text as="b" textDecorationLine={"underline"} size={"l"}>Office Hours</Text>
       <HStack><Test CompArray={timeList}/></HStack>
     </VStack>
   );
