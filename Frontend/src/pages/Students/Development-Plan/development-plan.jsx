@@ -31,18 +31,24 @@ function DevelopmentPlan() {
 
   useEffect(() => {
     async function loadDevelopmentPlanInfo() {
-      const DevelopmentPlanResponse = await httpGetDevelopmentPlanQuestion();
+      const developmentPlanResponse = await httpGetDevelopmentPlanQuestion();
 
-      if (DevelopmentPlanResponse.hasError) {
+      if (developmentPlanResponse.hasError) {
         return toast({
-          description: DevelopmentPlanResponse.errorMessage,
+          description: developmentPlanResponse.errorMessage,
           status: "error",
           position: "top",
           duration: 5000,
         });
       }
-      initForm(DevelopmentPlanResponse.data);
-      setDevelopmentPlan(DevelopmentPlanResponse.data);
+      initForm(developmentPlanResponse.data);
+      setDevelopmentPlan(developmentPlanResponse.data);
+      const isAnswered = isDevelopmentPlanAnswered(
+        developmentPlanResponse.data
+      );
+      if (isAnswered) {
+        return navigate("../smart-goal-template", { replace: true });
+      }
       setIsLoading(false);
     }
     if (developmentPlan == null) {
@@ -52,6 +58,16 @@ function DevelopmentPlan() {
       setIsLoading(false);
     }
   }, []);
+
+  function isDevelopmentPlanAnswered(developmentPlan) {
+    for (const question of developmentPlan) {
+      if (!!question.answers[0].answer) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   function questionInitialValue(question) {
     let initialValue = null;
@@ -111,7 +127,7 @@ function DevelopmentPlan() {
       }
       _answers.push(newAnswer);
     }
-    console.log("Development Plan send:", _answers);
+
     const answerResponse = await httpAnswerDevelopmentPlan(_answers);
 
     if (answerResponse.hasError) {
@@ -128,7 +144,7 @@ function DevelopmentPlan() {
       position: "top",
       duration: 5000,
     });
-    setDevelopmentPlan(answerResponse.data); //needs work on this TODO
+    setDevelopmentPlan(answerResponse.data);
     navigate("../smart-goal-template", { replace: true });
   }
 

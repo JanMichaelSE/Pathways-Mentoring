@@ -10,7 +10,9 @@ function SmartTableTemplate({ smartResult }) {
       if (item.type == "Multi-Answer") {
         var arrayAnswer = item.answers[0].answer.split(";");
         for (const index of arrayAnswer) {
-          results.push(index);
+          if (!!index) {
+            results.push(index);
+          }
         }
       }
     }
