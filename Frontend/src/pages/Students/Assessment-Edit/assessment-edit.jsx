@@ -38,6 +38,12 @@ function AssessmentsEdit() {
 
       initForm(assessmentResponse.data);
       setAssessment(assessmentResponse.data);
+
+      const isAnswered = isAssessmentAnswered(assessmentResponse.data);
+      if (isAnswered) {
+        return navigate("../assessment-results", { replace: true });
+      }
+
       setIsLoading(false);
     }
 
@@ -48,6 +54,16 @@ function AssessmentsEdit() {
       setIsLoading(false);
     }
   }, []);
+
+  function isAssessmentAnswered(assessment) {
+    for (const question of assessment.questions) {
+      if (!!question.answer) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   function questionInitialValue(question) {
     let initialValue = null;

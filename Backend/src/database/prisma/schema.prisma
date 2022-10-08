@@ -83,14 +83,14 @@ model Record {
   mentor       Mentor   @relation(fields: [mentorId], references: [id], onDelete: Cascade)
   studentId    String   @db.Uuid
   student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  notes        Note[]
+  note         Note?
 }
 
 model Note {
   id           String    @id @default(uuid()) @db.Uuid
   createdDate  DateTime  @default(now()) @db.Timestamptz(6)
   lastModified DateTime  @default(now()) @db.Timestamptz(6)
-  recordId     String    @db.Uuid
+  recordId     String    @unique @db.Uuid
   record       Record    @relation(fields: [recordId], references: [id], onDelete: Cascade)
   messages     Message[]
 }

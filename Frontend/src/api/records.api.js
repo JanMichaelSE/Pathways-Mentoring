@@ -19,6 +19,25 @@ async function httpGetRecordByUser() {
   return responseToReturn;
 }
 
+async function httpGetRecordById(recordId) {
+  let responseToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+
+  try {
+    const response = await axios.get(`/records/${recordId}`);
+    responseToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    responseToReturn.hasError = true;
+    responseToReturn.errorMessage = errorResponse.error.errorMessage;
+  }
+
+  return responseToReturn;
+}
+
 async function httpSubmitRecord(mentorId, recordId) {
   let responseToReturn = {
     hasError: false,
@@ -97,6 +116,7 @@ async function httpAssignRecords(studentId) {
 
 export {
   httpGetRecordByUser,
+  httpGetRecordById,
   httpSubmitRecord,
   httpApproveRecord,
   httpRejectRecord,

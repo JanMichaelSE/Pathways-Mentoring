@@ -36,26 +36,27 @@ async function upsertAnswers(
     }
 
     for (const question of questions) {
-      const answer = answersMap.get(question.id);
-
-      let isValidAnswer = true;
-      const answers = answer?.answer.split(";") ?? [];
-      for (const _answer of answers) {
-        if (!question.options?.includes(_answer)) {
-          isValidAnswer = false;
-        }
-      }
-
       if (
-        (question.type === "Select" ||
-          question.type === "Multi-select" ||
-          question.type === "Rating") &&
-        !isValidAnswer
+        question.type === "Select" ||
+        question.type === "Multi-select" ||
+        question.type === "Rating"
       ) {
-        return buildErrorObject(
-          400,
-          `Could not create answer for question id "${question.id}", question "${question.question}" because it has provided an answer that is not within the available options of the question. If the question is of type 'Select', 'Multi-Select' or 'Rating'. Please provide a valid answer that are within the available options of that question.`
-        );
+        const answer = answersMap.get(question.id);
+
+        let isValidAnswer = true;
+        const answers = answer?.answer.split(";") ?? [];
+        for (const _answer of answers) {
+          if (!question.options?.includes(_answer)) {
+            isValidAnswer = false;
+          }
+        }
+
+        if (!isValidAnswer) {
+          return buildErrorObject(
+            400,
+            `Could not create answer for question id "${question.id}", question "${question.question}" because it has provided an answer that is not within the available options of the question. If the question is of type 'Select', 'Multi-Select' or 'Rating'. Please provide a valid answer that are within the available options of that question.`
+          );
+        }
       }
     }
 
