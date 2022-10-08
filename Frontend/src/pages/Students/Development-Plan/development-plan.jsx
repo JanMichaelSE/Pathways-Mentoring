@@ -5,10 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast, Spinner } from "@chakra-ui/react";
 
 import { useDevelopmentPlanStore } from "@/store/developmentPlan.store";
-import {
-  httpGetDevelopmentPlanQuestion,
-  httpAnswerDevelopmentPlan,
-} from "@/api/developmentPlan.api";
+import { httpGetDevelopmentPlanQuestion, httpAnswerDevelopmentPlan } from "@/api/developmentPlan.api";
 
 import QuestionGenerator from "@/components/Students/Questions/QuestionGenerator/question-generator";
 import Button from "@/components/common/Button/button.jsx";
@@ -19,12 +16,8 @@ import styles from "./development-plan.module.css";
 function DevelopmentPlan() {
   const navigate = useNavigate();
   const toast = useToast();
-  const developmentPlan = useDevelopmentPlanStore(
-    (state) => state.developmentPlan
-  );
-  const setDevelopmentPlan = useDevelopmentPlanStore(
-    (state) => state.setDevelopmentPlan
-  );
+  const developmentPlan = useDevelopmentPlanStore((state) => state.developmentPlan);
+  const setDevelopmentPlan = useDevelopmentPlanStore((state) => state.setDevelopmentPlan);
   const [formInitialValues, setFormInitialValues] = useState({});
   const [formValidationSchema, setFormValidationSchema] = useState({});
   const [isLoading, setIsLoading] = useState(true);

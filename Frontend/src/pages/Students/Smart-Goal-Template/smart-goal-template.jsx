@@ -13,12 +13,8 @@ import DescriptionSmartGoal from "@/components/Students/SmartGoals/DescriptionSm
 import SmartTableTemplate from "@/components/Students/SmartGoals/SmartTableTemplate/smart-table-template";
 function SmartGoalTemplate() {
   const navigate = useNavigate();
-  const developmentPlan = useDevelopmentPlanStore(
-    (state) => state.developmentPlan
-  );
-  const setDevelopmentPlan = useDevelopmentPlanStore(
-    (state) => state.setDevelopmentPlan
-  );
+  const developmentPlan = useDevelopmentPlanStore((state) => state.developmentPlan);
+  const setDevelopmentPlan = useDevelopmentPlanStore((state) => state.setDevelopmentPlan);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
