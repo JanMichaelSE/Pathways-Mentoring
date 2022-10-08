@@ -76,7 +76,7 @@ async function httpUpdateMentorProfile(mentor) {
       phone: mentor.phone,
       gender: mentor.gender,
       currentPassword: mentor.currentPassword,
-      newPassword: mentor.newPassword,
+      newPassword: mentor.password,
       academicDegree: mentor.academicDegree,
       description: mentor.description,
       interests: mentor.interests,

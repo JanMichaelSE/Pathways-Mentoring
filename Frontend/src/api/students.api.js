@@ -57,7 +57,7 @@ async function httpUpdateStudentProfile(student) {
       phone: student.phone,
       gender: student.gender,
       currentPassword: student.currentPassword,
-      newPassword: student.newPassword,
+      newPassword: student.password,
       fieldOfStudy: student.fieldOfStudy,
       institution: student.institution,
       gpa: Number(student.gpa),
