@@ -4,8 +4,7 @@ import {
   httpApproveRecord,
   httpCreateRecords,
   httpGetAllRecords,
-  httpGetRecordsByMentor,
-  httpGetRecordsByStudent,
+  httpGetRecordById,
   httpGetRecordsByUser,
   httpRejectRecord,
   httpSubmitRecord,
@@ -18,9 +17,7 @@ router.get("/", authenticateJsonWebToken, httpGetAllRecords);
 
 router.get("/user", authenticateJsonWebToken, httpGetRecordsByUser);
 
-router.get("/student", authenticateJsonWebToken, httpGetRecordsByStudent);
-
-router.get("/mentor", authenticateJsonWebToken, httpGetRecordsByMentor);
+router.get("/:recordId", authenticateJsonWebToken, httpGetRecordById);
 
 router.post("/", authenticateJsonWebToken, httpCreateRecords);
 

@@ -1,19 +1,17 @@
+import { IMessage } from './../types/index.d';
 import { Message, Note } from "@prisma/client";
 import { prisma } from "../database";
 
-async function saveMessage(
-  message: string,
-  senderId: string,
-  receiverId: string,
-  noteId: string
+async function createMessage(
+ messageInfo: IMessage
 ): Promise<Message> {
   try {
     const createdMessage = await prisma.message.create({
       data: {
-        message: message,
-        senderId: senderId,
-        receiverId: receiverId,
-        noteId: noteId,
+        message: messageInfo.message,
+        senderId: messageInfo.senderId,
+        receiverId: messageInfo.receiverId,
+        noteId: messageInfo.noteId,
       },
     });
 
@@ -23,7 +21,51 @@ async function saveMessage(
   }
 }
 
-async function getNoteByRecordId(recordId: string): Promise<Note | null> {
+async function findNoteById(noteId: string): Promise<
+  | (Note & {
+      messages: Message[];
+      record: {
+        mentor: {
+          userId: string;
+        };
+        student: {
+          userId: string;
+        };
+      };
+    })
+  | null
+> {
+  try {
+    const note = await prisma.note.findUnique({
+      where: {
+        id: noteId,
+      },
+      include: {
+        messages: true,
+        record: {
+          select: {
+            mentor: {
+              select: {
+                userId: true,
+              },
+            },
+            student: {
+              select: {
+                userId: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return note;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function findNoteByRecordId(recordId: string): Promise<Note | null> {
   try {
     const note = await prisma.note.findFirst({
       where: {
@@ -37,4 +79,4 @@ async function getNoteByRecordId(recordId: string): Promise<Note | null> {
   }
 }
 
-export { saveMessage, getNoteByRecordId };
+export { createMessage, findNoteByRecordId, findNoteById };

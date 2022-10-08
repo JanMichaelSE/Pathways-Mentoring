@@ -33,7 +33,10 @@ function StudentNavbar() {
           </Link>
           <Link
             className={
-              location.pathname === "/student/assessments" ? styles.activeNavLink : styles.navLink
+              location.pathname === "/student/assessments" ||
+              location.pathname === "/student/assessment-results"
+                ? styles.activeNavLink
+                : styles.navLink
             }
             to="/student/assessments"
           >
