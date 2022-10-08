@@ -9,6 +9,11 @@ const vanillaAssessmentStore = createVanillaStore(
       setAssessment: (assessment) => {
         set({ assessment: assessment });
       },
+      resetAssessment: () => {
+        set({
+          assessment: null,
+        });
+      },
     }),
     { name: "assessment-storage", getStorage: () => sessionStorage }
   )

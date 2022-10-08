@@ -7,6 +7,7 @@ function IndividualRecord({
   description,
   stage,
   role,
+  noteId,
   onSubmitRecord,
   onApproveRecord,
   onRejectRecord,
@@ -133,7 +134,7 @@ function IndividualRecord({
           ></img>
           Notes
         </h1>
-        <Notes />
+        <Notes noteId={noteId} />
       </div>
     </>
   );

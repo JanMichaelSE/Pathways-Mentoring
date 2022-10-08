@@ -108,8 +108,23 @@ function MentorRecords() {
     );
   } else if (records.length == 0) {
     return (
-      <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh", marginTop: "4rem" }}>
+      <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh", paddingTop: "4rem" }}>
+        <HStack justifyContent={"end"} pt={15} mr={50} mb={50}>
+          <div className={styles.button} onClick={onOpen}>
+            <HStack justifyContent={"center"} alignContent={"center"}>
+              <Text>Create</Text>
+              <Image src="/assets/AddNew.png" alt="Filter Icon" />
+            </HStack>
+          </div>
+          <div className={styles.lastButton} onClick={onSortRecords}>
+            <HStack justifyContent={"center"} alignContent={"center"}>
+              <Text>{getSortButtonText()}</Text>
+              <Image src="/assets/Filter.png" alt="Filter Icon" />
+            </HStack>
+          </div>
+        </HStack>
         <NoItemsFound title="No records assigned yet" icon={SadFaceIcon} />
+        <AssignRecordModal students={students} isOpen={isOpen} onClose={onClose} />
       </div>
     );
   } else {

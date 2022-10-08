@@ -2,6 +2,7 @@
   width: 100%;
   display: flex;
   justify-content: left;
+  margin-bottom: 1rem;
 }
 .message-container {
   min-width: 20rem;

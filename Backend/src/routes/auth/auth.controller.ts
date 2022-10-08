@@ -5,6 +5,7 @@ import { IMentor, IUser, IStudent } from "./../../types/index.d";
 import { createStudent } from "../../models/students.model";
 import {
   createUser,
+  findEmailById,
   findUserByEmail,
   findUserById,
   getUserTokens,
@@ -22,6 +23,7 @@ import {
   formatPhoneNumber,
   handleBadRequestResponse,
   handleErrorResponse,
+  handleNotFoundResponse,
   isValidUUID,
   titleCase,
 } from "../../utils/helpers";
@@ -237,6 +239,23 @@ async function httpSignupAdmin(req: Request, res: Response) {
   }
 }
 
+async function httpGetAdminProfile(req: Request, res: Response) {
+  try {
+    const userId = req.userId;
+    const user = await findEmailById(userId);
+    if (!user) {
+      return handleNotFoundResponse(
+        "A user with this Id wasn't found.Please provide a valid Id.",
+        res
+      );
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return handleErrorResponse("get admin profile", error, res);
+  }
+}
+
 async function httpUpdateAdmin(req: Request, res: Response) {
   try {
     const userId = req.userId;
@@ -398,6 +417,7 @@ export {
   httpSignupStudent,
   httpSignupMentor,
   httpSignupAdmin,
+  httpGetAdminProfile,
   httpUpdateAdmin,
   httpLogout,
   httpRefreshToken,

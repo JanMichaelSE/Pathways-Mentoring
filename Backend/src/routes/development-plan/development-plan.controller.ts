@@ -28,7 +28,7 @@ async function httpAnswerDevelopmentPlan(req: Request, res: Response) {
     }
 
     for (const answer of answers) {
-      if (!answer.questionId || !answer.answer) {
+      if (!answer.questionId || answer.answer === undefined) {
         return handleBadRequestResponse(
           "Answers must contain 'questionId' and 'answer' inorder to answer the development plan.",
           res

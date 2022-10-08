@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { httpForgotPassword } from "@/api/user.api";
 
-import styles from "./forgotpwd-lojin-popup.module.css";
+import styles from "./forgotpwd-login-popup.module.css";
 
 function ForgotPwdLoginPopup() {
   const { isOpen, onOpen, onClose } = useDisclosure();

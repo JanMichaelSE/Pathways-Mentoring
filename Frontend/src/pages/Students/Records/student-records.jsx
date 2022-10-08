@@ -83,7 +83,7 @@ function StudentRecords() {
     );
   } else if (records.length == 0) {
     return (
-      <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh", marginTop: "4rem" }}>
+      <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh", paddingTop: "4rem" }}>
         <NoItemsFound title="No records assigned yet" icon={SadFaceIcon} />
       </div>
     );
