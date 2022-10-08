@@ -7,7 +7,7 @@ export default function RecordCard({ recordData }) {
   const navigate = useNavigate();
 
   function onRecordClick() {
-    navigate(`../records/${recordData.id}`, { replace: true, state: { record: recordData } });
+    navigate(`../records/${recordData.id}`);
   }
 
   function getProgressValue() {
@@ -22,9 +22,9 @@ export default function RecordCard({ recordData }) {
 
   function getName() {
     if (recordData.mentor?.name) {
-      return `Prof. ${recordData.mentor.name}`;
+      return `Prof. ${recordData.mentor.name.replace(";", "")}`;
     } else {
-      return `Std. ${recordData.student.name}`;
+      return `Std. ${recordData.student.name.replace(";", "")}`;
     }
   }
 

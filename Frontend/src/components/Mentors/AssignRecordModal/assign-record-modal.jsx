@@ -73,7 +73,6 @@ function AssignRecordModal({ students, isOpen, onClose }) {
               studentName: Yup.string().required(),
             })}
             onSubmit={async (values) => {
-              console.log("Student Name: ", values.studentName);
               await submitRecordAssignment(values.studentName);
             }}
           >
@@ -88,7 +87,7 @@ function AssignRecordModal({ students, isOpen, onClose }) {
                   <option value="">Select Option</option>
                   {students.map((student) => (
                     <option key={student.id} value={student.id}>
-                      {student.name}
+                      {student.name.replace(";", "")}
                     </option>
                   ))}
                 </Select>

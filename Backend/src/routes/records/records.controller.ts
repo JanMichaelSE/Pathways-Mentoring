@@ -4,6 +4,7 @@ import { findMentorById, findMentorByUserId } from "../../models/mentors.model";
 import {
   createRecords,
   findAllRecords,
+  findRecordById,
   findRecordsByMentor,
   findRecordsByStudent,
   updateRecord,
@@ -33,6 +34,25 @@ async function httpGetAllRecords(req: Request, res: Response) {
   }
 }
 
+async function httpGetRecordById(req: Request, res: Response) {
+  try {
+    const recordId = req.params.recordId;
+    if (!recordId) {
+      return handleBadRequestResponse(
+        "A recordId must be provided to get the record information.",
+        res
+      );
+    }
+
+    const record = await findRecordById(recordId);
+    if (record === null) {
+      return handleNotFoundResponse("A record with the provided ID was not found.", res);
+    }
+
+    return res.status(200).json(record);
+  } catch (error) {}
+}
+
 async function httpGetRecordsByUser(req: Request, res: Response) {
   try {
     const userId = req.userId;
@@ -60,40 +80,6 @@ async function httpGetRecordsByUser(req: Request, res: Response) {
 
       return res.status(200).json(records);
     }
-  } catch (error) {
-    return handleErrorResponse("get all records", error, res);
-  }
-}
-
-async function httpGetRecordsByStudent(req: Request, res: Response) {
-  try {
-    const studentUserId = req.userId;
-
-    const student = await findStudentByUserId(studentUserId);
-    if (!student) {
-      return handleNotFoundResponse("No student with this access token found.", res);
-    }
-
-    const records = await findRecordsByStudent(student.id);
-
-    return res.status(200).json(records);
-  } catch (error) {
-    return handleErrorResponse("get all records", error, res);
-  }
-}
-
-async function httpGetRecordsByMentor(req: Request, res: Response) {
-  try {
-    const mentorUserId = req.userId;
-
-    const mentor = await findMentorByUserId(mentorUserId);
-    if (!mentor) {
-      return handleNotFoundResponse("No mentor with this access token found.", res);
-    }
-
-    const records = await findRecordsByMentor(mentor.id);
-
-    return res.status(200).json(records);
   } catch (error) {
     return handleErrorResponse("get all records", error, res);
   }
@@ -176,6 +162,10 @@ async function httpSubmitRecord(req: Request, res: Response) {
     }
 
     const record = await updateRecord(recordId, "Pending Approval");
+    if (!record) {
+      return handleBadRequestResponse("Couldn't update record try again later.", res);
+    }
+
     let studentFormattedName = student.name.replace(";", "");
     await sendSubmitRecordEmail(mentor.email, studentFormattedName, record.id);
 
@@ -253,9 +243,8 @@ async function httpRejectRecord(req: Request, res: Response) {
 
 export {
   httpGetAllRecords,
+  httpGetRecordById,
   httpGetRecordsByUser,
-  httpGetRecordsByStudent,
-  httpGetRecordsByMentor,
   httpCreateRecords,
   httpUpdateRecord,
   httpSubmitRecord,

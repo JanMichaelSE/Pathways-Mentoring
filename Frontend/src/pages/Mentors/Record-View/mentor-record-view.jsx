@@ -1,21 +1,35 @@
-import { useToast } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { useLocation, Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
-import { httpApproveRecord, httpRejectRecord } from "@/api/records.api";
+import { Spinner, useToast } from "@chakra-ui/react";
+import { httpApproveRecord, httpRejectRecord, httpGetRecordById } from "@/api/records.api";
 import IndividualRecord from "@/components/common/Records/IndividualRecord/individual-record";
 
 import styles from "./mentor-record-view.module.css";
 
 function RecordView() {
   const toast = useToast();
-  const { state } = useLocation();
-  const [record, setRecord] = useState(state?.record);
+  const params = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [record, setRecord] = useState();
 
   useEffect(() => {
-    return () => {
-      window.history.replaceState({}, document.title);
-    };
+    async function loadRecordData() {
+      const response = await httpGetRecordById(params.recordId);
+
+      if (response.hasError) {
+        return toast({
+          description: "Could not load the data for this record. Please try again later.",
+          status: "error",
+          position: "top",
+          duration: 5000,
+        });
+      }
+
+      setRecord({ ...response.data });
+      setIsLoading(false);
+    }
+    loadRecordData();
   }, []);
 
   async function onApproveRecord() {
@@ -64,8 +78,23 @@ function RecordView() {
     });
   }
 
-  if (state?.record == null) {
+  if (params?.recordId == null) {
     return <Navigate to={"../"} replace />;
+  }
+
+  if (isLoading) {
+    return (
+      <Spinner
+        thickness="5px"
+        speed="0.65s"
+        emptyColor="gray.200"
+        color="blue.500"
+        size="xl"
+        position="absolute"
+        top="30%"
+        left="50%"
+      />
+    );
   }
 
   return (
@@ -75,6 +104,7 @@ function RecordView() {
           title={record.title}
           description={record.description}
           stage={record.stage}
+          noteId={record.note.id}
           onApproveRecord={onApproveRecord}
           onRejectRecord={onRejectRecord}
           role={"Mentor"}

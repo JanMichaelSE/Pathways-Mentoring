@@ -16,6 +16,8 @@
 
 .button-container {
   margin-right: 2rem;
+  display: flex;
+  justify-content: end;
 }
 
 /* Search Input Styles Component*/

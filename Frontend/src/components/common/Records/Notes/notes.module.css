@@ -3,18 +3,36 @@
   border-radius: 20px;
   font-size: var(--font-size-small);
   text-align: left;
-  min-height: 25rem;
+  min-height: 26rem;
   padding: 1rem;
   margin: 1.5rem 3rem 2.5rem 3rem;
 }
 
 .message-container {
   min-height: 20rem;
+  max-height: 20rem;
+  padding-right: 0.75rem;
+  overflow-y: scroll;
+  scrollbar-width: auto !important;
+  scrollbar-color: var(--color-blue-dark) !important;
+}
+
+.message-container::-webkit-scrollbar {
+  width: 16px;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.message-container::-webkit-scrollbar-thumb {
+  background-color: var(--color-blue-dark);
+  border-radius: 20px;
+  height: 40px;
 }
 
 .buttons-container {
   display: flex;
   align-items: center;
+  margin-top: 1rem;
 }
 
 .input {

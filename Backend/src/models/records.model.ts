@@ -11,6 +11,32 @@ async function findAllRecords(): Promise<Record[]> {
   }
 }
 
+async function findRecordById(id: string): Promise<Record | null> {
+  try {
+    const record = await prisma.record.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        mentor: {
+          select: {
+            name: true,
+          },
+        },
+        note: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    return record;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function findRecordsByStudent(studentId: string): Promise<Record[]> {
   try {
     const records = await prisma.record.findMany({
@@ -21,6 +47,11 @@ async function findRecordsByStudent(studentId: string): Promise<Record[]> {
         mentor: {
           select: {
             name: true,
+          },
+        },
+        note: {
+          select: {
+            id: true,
           },
         },
       },
@@ -42,6 +73,11 @@ async function findRecordsByMentor(mentorId: string): Promise<Record[]> {
         student: {
           select: {
             name: true,
+          },
+        },
+        note: {
+          select: {
+            id: true,
           },
         },
       },
@@ -66,12 +102,12 @@ async function createRecords(mentorId: string, studentId: string): Promise<Recor
       const _record = await prisma.record.create({
         data: {
           ...record,
-          notes: {
+          note: {
             create: {},
           },
         },
         include: {
-          notes: true,
+          note: true,
         },
       });
       createdRecords.push(_record);
@@ -83,7 +119,7 @@ async function createRecords(mentorId: string, studentId: string): Promise<Recor
   }
 }
 
-async function updateRecord(recordId: string, stage: string): Promise<Record> {
+async function updateRecord(recordId: string, stage: string): Promise<Record | null> {
   try {
     const updatedRecord = await prisma.record.update({
       where: {
@@ -94,10 +130,35 @@ async function updateRecord(recordId: string, stage: string): Promise<Record> {
       },
     });
 
-    return updatedRecord;
+    const recordToReturn = await prisma.record.findUnique({
+      where: {
+        id: recordId,
+      },
+      include: {
+        student: {
+          select: {
+            name: true,
+          },
+        },
+        note: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    return recordToReturn;
   } catch (error) {
     throw error;
   }
 }
 
-export { findAllRecords, findRecordsByStudent, findRecordsByMentor, createRecords, updateRecord };
+export {
+  findAllRecords,
+  findRecordById,
+  findRecordsByStudent,
+  findRecordsByMentor,
+  createRecords,
+  updateRecord,
+};
