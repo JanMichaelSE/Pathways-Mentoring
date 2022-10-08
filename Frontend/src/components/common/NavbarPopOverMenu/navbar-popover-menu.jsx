@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { httpLogout } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
+import { useDevelopmentPlanStore } from "@/store/developmentPlan.store";
+import { useAssessmentStore } from "@/store/assessment.store";
 import {
   useDisclosure,
   useToast,
@@ -20,6 +22,10 @@ function NavbarPopOverMenu() {
   const navigate = useNavigate();
   const role = useUserStore((state) => state.role);
   const resetUser = useUserStore((state) => state.resetUser);
+  const resetAssessment = useAssessmentStore((state) => state.resetAssessment);
+  const resetDevelopmentPlan = useDevelopmentPlanStore(
+    (state) => state.resetDevelopmentPlan
+  );
   const toast = useToast();
 
   async function onLogout() {
@@ -35,6 +41,8 @@ function NavbarPopOverMenu() {
     }
     onClose();
     resetUser();
+    resetAssessment();
+    resetDevelopmentPlan();
     navigate("/", { replace: true });
   }
 
