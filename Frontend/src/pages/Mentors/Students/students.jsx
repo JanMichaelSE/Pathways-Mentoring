@@ -124,14 +124,17 @@ function Students() {
           spacing="40px"
           className={styles.background}
         >
-          {studentData?.map((student) => (
-            <AvatarCard
+          {studentData?.map((student) => {
+            console.log(student);
+            if(student.isPendingMentorshipApproval === false){
+            return <AvatarCard
               key={student.id}
               cardData={student}
               buttonFunction={CancelMentoring}
               messageButton={"Cancel Mentorship"}
             />
-          ))}
+            }
+    })}
         </SimpleGrid>
         </div>
       );
