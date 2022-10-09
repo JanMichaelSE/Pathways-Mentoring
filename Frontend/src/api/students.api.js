@@ -87,7 +87,7 @@ async function httpRequestMentorship(userEmail) {
 
   try {
     const userInfo = {
-      toEmail: userEmail,
+      mentorEmail: userEmail,
     };
     const response = await axios.post("/students/request-mentorship", userInfo);
     userToReturn.data = await response.data;

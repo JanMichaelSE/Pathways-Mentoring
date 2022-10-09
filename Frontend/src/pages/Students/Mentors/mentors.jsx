@@ -72,28 +72,6 @@ function Mentors() {
     });
   }
 
-  async function CancelMentoring(cardData) {
-    console.log("Info of card data: ", cardData.email);
-    const userResponse = await httpCancelMentorship(cardData.email)
-
-    if (userResponse.hasError) {
-      return toast({
-        description: userResponse.errorMessage,
-        status: "error",
-        position: "top",
-        duration: 5000,
-      });
-    }
-
-  return toast({
-    title: "Mentorship Request!",
-    description: "Mentorship has been requested!",
-    status: "success",
-    position: "top",
-    duration: 7000,
-  });
-}
-
   function loadMentorsComponent() {
     if (isLoading) {
       return (
