@@ -126,15 +126,17 @@ function Mentors() {
           spacing="40px"
           className={styles.background}
         >
-          {mentorData?.map((mentor) => (
-            <AvatarCard
+          {mentorData?.map((mentor) => {
+            if(mentor.isActiveMentor == false){
+              return <AvatarCard
               key={mentor.id}
               cardData={mentor}
               buttonFunction={RequestMentoring}
               messageButton={"Request Mentoring"}
               studentSide={true}
-            />
-          ))}
+            />}
+          }
+          )}
         </SimpleGrid>
         </div>
       );
