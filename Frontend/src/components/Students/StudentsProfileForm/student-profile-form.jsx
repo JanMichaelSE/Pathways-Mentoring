@@ -155,7 +155,7 @@ function StudentProfileForm() {
           phone: userData.phone || "",
           email: userData.email || "",
           currentPassword: "",
-          password: "",
+          newPassword: "",
           confirmPassword: "",
           gender: userData.gender || "Select Option",
           fieldOfStudy: userData.fieldOfStudy || "",
@@ -177,12 +177,12 @@ function StudentProfileForm() {
             12,
             "Current password must be at least 12 characters"
           ),
-          password: Yup.string().min(
+          newPassword: Yup.string().min(
             12,
             "Password must be at least 12 characters"
           ),
           confirmPassword: Yup.string().oneOf(
-            [Yup.ref("password"), null],
+            [Yup.ref("newPassword"), null],
             "Passwords must match"
           ),
           gender: Yup.string().oneOf(["Male", "Female", "Other"]),
@@ -198,7 +198,9 @@ function StudentProfileForm() {
             "Mechanical Engineering",
           ]),
           institution: Yup.string(),
-          gpa: Yup.number(),
+          gpa: Yup.number()
+            .min(0.01, "GPA can not be less than 0.01")
+            .max(4, "GPA can not be more than 4.00"),
         })}
         onSubmit={async (values) => {
           await handleSubmit(values);
@@ -280,7 +282,6 @@ function StudentProfileForm() {
               </Select>
             </Box>
           </div>
-          {/* </div> */}
           <h1 className={styles.line} id={styles.changePassword}>
             <img
               className={styles.lineImg}
@@ -298,8 +299,8 @@ function StudentProfileForm() {
               disabled={edit}
             />
             <Input
-              label="Password"
-              name="password"
+              label="New Password"
+              name="newPassword"
               type="password"
               width={inputWidth()}
               disabled={edit}

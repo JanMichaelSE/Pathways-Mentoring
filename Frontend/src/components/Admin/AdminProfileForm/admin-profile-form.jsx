@@ -3,8 +3,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Spinner, useToast } from "@chakra-ui/react";
 
-import { httpGetStudentByUserId } from "@/api/students.api";
-import { httpUpdateAdminProfile } from "@/api/admin.api";
+import { httpGetAdminProfile, httpUpdateAdminProfile } from "@/api/admin.api";
 import { useUserStore } from "@/store/user.store";
 
 import Button from "@/components/common/Button/button";
@@ -27,21 +26,21 @@ function AdminProfileForm() {
   const [isLessThan1420] = useMediaQuery("(max-width: 1420px)");
 
   useEffect(() => {
-    async function loadStudentProfileInfo() {
-      const studentInfo = await httpGetStudentByUserId(userId);
+    async function loadAdminProfileInfo() {
+      const adminInfo = await httpGetAdminProfile();
 
-      if (studentInfo.hasError) {
+      if (adminInfo.hasError) {
         return toast({
-          description: studentInfo.errorMessage,
+          description: adminInfo.errorMessage,
           status: "error",
           position: "top",
           duration: 5000,
         });
       }
-      setUserData(studentInfo.data);
+      setUserData(adminInfo.data);
       setIsLoading(false);
     }
-    loadStudentProfileInfo();
+    loadAdminProfileInfo();
   }, []);
 
   function onEdit() {
@@ -110,7 +109,7 @@ function AdminProfileForm() {
         initialValues={{
           email: userData.email || "",
           currentPassword: "",
-          password: "",
+          newPassword: "",
           confirmPassword: "",
         }}
         validationSchema={Yup.object({
@@ -119,12 +118,12 @@ function AdminProfileForm() {
             12,
             "Current password must be at least 12 characters"
           ),
-          password: Yup.string().min(
+          newPassword: Yup.string().min(
             12,
             "Password must be at least 12 characters"
           ),
           confirmPassword: Yup.string().oneOf(
-            [Yup.ref("password"), null],
+            [Yup.ref("newPassword"), null],
             "Passwords must match"
           ),
         })}
@@ -151,7 +150,7 @@ function AdminProfileForm() {
               src="/assets/more-info.svg"
               style={{ marginRight: "20px" }}
             ></img>
-            Personal Information
+            Admin Information
           </h1>
           <div className={styles.inputContainer}>
             <Input
@@ -169,8 +168,8 @@ function AdminProfileForm() {
               disabled={edit}
             />
             <Input
-              label="Password"
-              name="password"
+              label="New Password"
+              name="newPassword"
               type="password"
               width={inputWidth()}
               disabled={edit}

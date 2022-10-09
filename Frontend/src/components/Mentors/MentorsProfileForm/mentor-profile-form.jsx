@@ -189,7 +189,7 @@ function MentorProfileForm() {
           phone: userData.phone || "",
           gender: userData.gender || "Select Option",
           currentPassword: "",
-          password: "",
+          newPassword: "",
           confirmPassword: "",
           academicDegree: userData.academicDegree || "",
           description: userData.description || "",
@@ -213,12 +213,12 @@ function MentorProfileForm() {
             12,
             "Current password must be at least 12 characters"
           ),
-          password: Yup.string().min(
+          newPassword: Yup.string().min(
             12,
             "Password must be at least 12 characters"
           ),
           confirmPassword: Yup.string().oneOf(
-            [Yup.ref("password"), null],
+            [Yup.ref("newPassword"), null],
             "Passwords must match"
           ),
           gender: Yup.string().oneOf(["Male", "Female", "Other"]),
@@ -351,8 +351,8 @@ function MentorProfileForm() {
               isBlue={true}
             />
             <Input
-              label="Password"
-              name="password"
+              label="New Password"
+              name="newPassword"
               type="password"
               width={inputWidth()}
               disabled={edit}

@@ -1,5 +1,26 @@
 import axios from "@/utils/axios";
 
+async function httpGetAdminProfile() {
+  let userToReturn = {
+    hasError: false,
+    data: null,
+    errorMessage: "",
+  };
+  try {
+    const response = await axios.get("auth/admin/profile");
+
+    userToReturn.data = response.data;
+  } catch (error) {
+    const errorResponse = error.response.data;
+    if (typeof errorResponse.error.errorCode == "number") {
+      userToReturn.hasError = true;
+      userToReturn.errorMessage = errorResponse.error.errorMessage;
+    }
+  }
+
+  return userToReturn;
+}
+
 async function httpUpdateAdminProfile(admin) {
   let userToReturn = {
     hasError: false,
@@ -11,7 +32,7 @@ async function httpUpdateAdminProfile(admin) {
     const adminInfo = {
       email: admin.email.toLowerCase(),
       currentPassword: admin.currentPassword,
-      newPassword: admin.password,
+      newPassword: admin.newPassword,
     };
 
     const response = await axios.post("auth/admin/profile", adminInfo);
@@ -28,4 +49,4 @@ async function httpUpdateAdminProfile(admin) {
   return userToReturn;
 }
 
-export { httpUpdateAdminProfile };
+export { httpGetAdminProfile, httpUpdateAdminProfile };

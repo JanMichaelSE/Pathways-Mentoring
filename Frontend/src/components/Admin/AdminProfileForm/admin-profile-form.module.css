@@ -94,61 +94,6 @@ h1 #editbutton {
   align-items: center;
 }
 
-#personal-info:before {
-  content: "";
-  display: inline-block;
-  width: 32rem;
-  height: 3px;
-  background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
-  margin-right: auto;
-  margin-left: 30px;
-}
-#personal-info:after {
-  content: "";
-  display: inline-block;
-  width: 32rem;
-  height: 3px;
-  background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
-  margin-left: auto;
-  margin-right: 30px;
-}
-#changePassword:before {
-  content: "";
-  display: inline-block;
-  width: 33rem;
-  height: 3px;
-  background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
-  margin-right: auto;
-  margin-left: 30px;
-}
-#changePassword:after {
-  content: "";
-  display: inline-block;
-  width: 33rem;
-  height: 3px;
-  background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
-  margin-left: auto;
-  margin-right: 30px;
-}
-#academicInfo:before {
-  content: "";
-  display: inline-block;
-  width: 32rem;
-  height: 3px;
-  background: -webkit-linear-gradient(135deg, #fac20b 20%, #0066cc);
-  margin-right: auto;
-  margin-left: 30px;
-}
-#academicInfo:after {
-  content: "";
-  display: inline-block;
-  width: 32rem;
-  height: 3px;
-  background: -webkit-linear-gradient(135deg, #0066cc, #fac20b 80%);
-  margin-left: auto;
-  margin-right: 30px;
-}
-
 .avatarContainerModal {
   display: flex;
   flex-direction: column;
