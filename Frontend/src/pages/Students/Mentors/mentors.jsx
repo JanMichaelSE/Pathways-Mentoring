@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { HStack, SimpleGrid, Spinner, useToast, Image, Text } from "@chakra-ui/react";
+import {
+  HStack,
+  SimpleGrid,
+  Spinner,
+  useToast,
+  Image,
+  Text,
+} from "@chakra-ui/react";
 import { httpGetAllMentors } from "@/api/mentors.api";
 import { httpRequestMentorship } from "@/api/students.api";
 import AvatarCard from "../../../components/common/AvatarCard/avatar-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
-import Contact from "@/assets/contact.svg"
+import Contact from "@/assets/contact.svg";
 import styles from "./mentors.module.css";
 import { httpCancelMentorship } from "../../../api/students.api";
 
 function Mentors() {
   const toast = useToast();
+  const [availableMentorData, setAvailableMentorData] = useState([]);
   const [currentMentorData, setCurrentMentorData] = useState([]);
-  const [mentorData, setMentorData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -27,13 +34,24 @@ function Mentors() {
           duration: 5000,
         });
       }
+      let tempCurrentMentor = [];
+      let tempAvailableMentor = [];
+      for (const mentor of mentorsResponse.data) {
+        if (mentor.isActiveMentor == false) {
+          console.log(mentor);
+          tempAvailableMentor.push(mentor);
+        } else {
+          console.log(mentor);
+          tempCurrentMentor.push(mentor);
+        }
+      }
 
-      setMentorData(mentorsResponse.data);
+      setCurrentMentorData(tempCurrentMentor);
+      setAvailableMentorData(tempAvailableMentor);
       setIsLoading(false);
     }
 
     loadAllMentors();
-
   }, []);
 
   async function RequestMentoring(cardData) {
@@ -48,20 +66,6 @@ function Mentors() {
         duration: 5000,
       });
     }
-  }
-
-    async function CancelMentoring(cardData) {
-      console.log("Info of card data: ", cardData.email);
-      const userResponse = await httpCancelMentorship(cardData.email)
-  
-      if (userResponse.hasError) {
-        return toast({
-          description: userResponse.errorMessage,
-          status: "error",
-          position: "top",
-          duration: 5000,
-        });
-      }
 
     return toast({
       title: "Mentorship Request!",
@@ -70,6 +74,87 @@ function Mentors() {
       position: "top",
       duration: 7000,
     });
+  }
+
+  async function CancelMentoring() {
+    const userResponse = await httpCancelMentorship();
+
+    if (userResponse.hasError) {
+      return toast({
+        description: userResponse.errorMessage,
+        status: "error",
+        position: "top",
+        duration: 5000,
+      });
+    }
+
+    return toast({
+      title: "Canceled Mentorship Request!",
+      description: "Mentorship has been canceled!",
+      status: "success",
+      position: "top",
+      duration: 7000,
+    });
+  }
+
+  function loadCurrent(){
+    if(currentMentorData.length != 0){
+      return(
+        <>
+        <HStack paddingLeft={"40px"} paddingTop={"10px"}>
+            <Image src={Contact} />
+            <Text className={styles.heading}>Current Mentor</Text>
+          </HStack>
+          <SimpleGrid
+            columns={[1, 2, 3]}
+            spacing="40px"
+            className={styles.background}
+          >
+            {currentMentorData?.map((mentor) => {
+              return (
+                <AvatarCard
+                  key={mentor.id}
+                  cardData={mentor}
+                  buttonFunction={CancelMentoring}
+                  messageButton={"Cancel Mentoring"}
+                  studentSide={true}
+                />
+              );
+            })}
+          </SimpleGrid>
+          </>
+      );
+    }
+  }
+
+  function loadAvailable(){
+    if(availableMentorData.length != 0){
+      return(
+        <>
+        <HStack paddingLeft={"40px"}>
+            <Image src={Contact} />
+            <Text className={styles.heading}>Mentors</Text>
+          </HStack>
+          <SimpleGrid
+            columns={[1, 2, 3]}
+            spacing="40px"
+            className={styles.background}
+          >
+            {availableMentorData?.map((mentor) => {
+              return (
+                <AvatarCard
+                  key={mentor.id}
+                  cardData={mentor}
+                  buttonFunction={RequestMentoring}
+                  messageButton={"Request Mentoring"}
+                  studentSide={true}
+                />
+              );
+            })}
+          </SimpleGrid>
+        </>
+      );
+    }
   }
 
   function loadMentorsComponent() {
@@ -86,7 +171,10 @@ function Mentors() {
           left="50%"
         />
       );
-    } else if (mentorData.length === 0 && currentMentorData.length === 0) {
+    } else if (
+      availableMentorData.length === 0 &&
+      currentMentorData.length === 0
+    ) {
       return (
         <div className={styles.noUsers}>
           <NoItemsFound title="No Mentors added yet." icon={SadFaceIcon} />
@@ -94,48 +182,9 @@ function Mentors() {
       );
     } else {
       return (
-        <div >
-        <HStack paddingLeft={"40px"} paddingTop={"10px"}>
-          <Image src={Contact} />
-          <Text className={styles.heading}>Current Mentor</Text>
-        </HStack>
-        <SimpleGrid
-          columns={[1, 2, 3]}
-          spacing="40px"
-          className={styles.background}
-        >
-          {mentorData?.map((mentor) => {
-            if(mentor.isActiveMentor == true){
-            return <AvatarCard
-              key={mentor.id}
-              cardData={mentor}
-              buttonFunction={RequestMentoring}
-              messageButton={"Request Mentoring"}
-              studentSide={true}
-            />}
-    })}
-        </SimpleGrid>
-        <HStack paddingLeft={"40px"}>
-          <Image src={Contact} />
-          <Text className={styles.heading}>Mentors</Text>
-        </HStack>
-        <SimpleGrid
-          columns={[1, 2, 3]}
-          spacing="40px"
-          className={styles.background}
-        >
-          {mentorData?.map((mentor) => {
-            if(mentor.isActiveMentor == false){
-              return <AvatarCard
-              key={mentor.id}
-              cardData={mentor}
-              buttonFunction={RequestMentoring}
-              messageButton={"Request Mentoring"}
-              studentSide={true}
-            />}
-          }
-          )}
-        </SimpleGrid>
+        <div>
+          {loadCurrent()}
+          {loadAvailable()}
         </div>
       );
     }

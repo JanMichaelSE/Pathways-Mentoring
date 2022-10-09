@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SimpleGrid, Spinner, useToast, Text, HStack, Image } from "@chakra-ui/react";
 
 import { httpCancelMentorship } from "@/api/students.api";
-import { httpGetStudentByMentor } from "@/api/mentors.api";
+import { httpGetStudentByMentor, httpAcceptMentorship } from "@/api/mentors.api";
 
 import AvatarCard from "../../../components/common/AvatarCard/avatar-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
@@ -12,18 +12,11 @@ import styles from "./students.module.css";
 
 function Students() {
   const toast = useToast();
-  const [studentData, setStudentData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  let found = false;
+  const [pendingStudents, setPendingStudents] = useState([]);
+  const [currentStudents, setCurrentStudents] = useState([]);
 
   useEffect(() => {
-    for(var i = 0; i < studentData.length; i++) {
-      if (studentData[i].isPendingMentorshipApproval === true && found == false) {
-        found = true;
-        break;
-      }
-    }
-
     async function loadAllStudents() {
       const studentsResponse = await httpGetStudentByMentor();
 
@@ -36,7 +29,22 @@ function Students() {
         });
       }
 
-      setStudentData(studentsResponse.data);
+      studentsResponse.data
+      let tempPendingStudents = []
+      let tempCurrentStudents = []
+      for(const student of studentsResponse.data) {
+        if (student.isPendingMentorshipApproval === false) {
+          tempCurrentStudents.push(student);
+        } else {
+          
+          tempPendingStudents.push(student)
+        }
+      }
+
+      setCurrentStudents(tempCurrentStudents);
+      setPendingStudents(tempPendingStudents);
+      
+      
       setIsLoading(false);
     }
 
@@ -44,8 +52,8 @@ function Students() {
   }, []);
 
   async function CancelMentoring(cardData) {
-    console.log("Info of card data: ", cardData.studentId);
-    const userResponse = await httpCancelMentorship(cardData.studentId);
+    console.log("Info of card data: ", cardData);
+    const userResponse = await httpCancelMentorship(cardData.id);
 
     if (userResponse.hasError) {
       return toast({
@@ -56,9 +64,21 @@ function Students() {
       });
     }
 
+    if(!userResponse.hasError){
+    let tempCurrent = currentStudents;
+
+    for(let i; i < tempCurrent.length; i++){
+      if(tempCurrent[i].id === cardData.id){
+        tempCurrent[i].pop();
+        break;
+      }
+    }
+    setCurrentStudents(tempCurrent);
+  }
+
     return toast({
-      title: "Approved!",
-      description: "Mentor access has been approved!",
+      title: "Canceled Mentoring!",
+      description: "Mentorship has been canceled!",
       status: "success",
       position: "top",
       duration: 7000,
@@ -66,8 +86,11 @@ function Students() {
   }
 
   async function AcceptMentoring(cardData) {
-    console.log("Info of card data: ", cardData.studentId);
-    const userResponse = await httpAcceptMentorship(cardData.studentId);
+    console.log("Info of card data: ", cardData);
+    const userResponse = await httpAcceptMentorship(cardData.id);
+
+    let tempPending = pendingStudents;
+    let tempCurrent = currentStudents;
 
     if (userResponse.hasError) {
       return toast({
@@ -78,9 +101,21 @@ function Students() {
       });
     }
 
+    if(!userResponse.hasError){
+      //
+    for(let i; i < tempPending.length; i++){
+      if(tempPending[i].id === cardData.id){
+        tempCurrent.push(tempPending[i].pop())
+        break;
+      }
+    }
+    setCurrentStudents(tempCurrent);
+    setPendingStudents(tempPending);
+  }
+
     return toast({
-      title: "Approved!",
-      description: "Mentor access has been approved!",
+      title: "Mentorship Approved!",
+      description: "Mentorship has been approved!",
       status: "success",
       position: "top",
       duration: 7000,
@@ -88,12 +123,59 @@ function Students() {
   }
 
   function loadPending() {
-    if(found === true){
-      return <HStack paddingLeft={"40px"} paddingTop={"10px"}>
+    if(pendingStudents.length != 0){
+      return (
+        <>
+      <HStack paddingLeft={"40px"} paddingTop={"10px"}>
           <Image src={Contact} />
           <Text className={styles.heading}>Pending Approval</Text>
         </HStack>
+        <SimpleGrid
+        columns={[1, 2, 3]}
+        spacing="40px"
+        className={styles.background}
+      >
+        {pendingStudents?.map((student) => {
+          return <AvatarCard
+            key={student.id}
+            cardData={student}
+            buttonFunction={AcceptMentoring}
+            messageButton={"Accept Mentorship"}
+          />
+          
+  })}
+      </SimpleGrid>
+      </>);
     }
+  }
+
+  function loadCurrent(){
+    if(currentStudents.length != 0){
+    return(
+      <>
+      <HStack paddingLeft={"40px"}>
+          <Image src={Contact} />
+          <Text className={styles.heading}>Students</Text>
+        </HStack>
+        <SimpleGrid
+          columns={[1, 2, 3]}
+          spacing="40px"
+          className={styles.background}
+        >
+          {currentStudents?.map((student) => {
+            
+            return <AvatarCard
+              key={student.id}
+              cardData={student}
+              buttonFunction={CancelMentoring}
+              messageButton={"Cancel Mentorship"}
+            />
+            
+    })}
+        </SimpleGrid>
+      </>
+    );
+  }
   }
 
   function loadStudentsComponent() {
@@ -110,7 +192,7 @@ function Students() {
           left="50%"
         />
       );
-    } else if (studentData.length === 0) {
+    } else if (currentStudents.length === 0 && pendingStudents.length === 0) {
       return (
         <div className={styles.noUsers}>
           <NoItemsFound title="No Students added yet." icon={SadFaceIcon} />
@@ -119,45 +201,8 @@ function Students() {
     } else {
       return (
         <div>
-       {loadPending()}
-        <SimpleGrid
-          columns={[1, 2, 3]}
-          spacing="40px"
-          className={styles.background}
-        >
-          {studentData?.map((student) => {
-            console.log(student);
-            if(student.isPendingMentorshipApproval === true){
-            return <AvatarCard
-              key={student.id}
-              cardData={student}
-              buttonFunction={CancelMentoring}
-              messageButton={"Cancel Mentorship"}
-            />
-            }
-    })}
-        </SimpleGrid>
-        <HStack paddingLeft={"40px"}>
-          <Image src={Contact} />
-          <Text className={styles.heading}>Students</Text>
-        </HStack>
-        <SimpleGrid
-          columns={[1, 2, 3]}
-          spacing="40px"
-          className={styles.background}
-        >
-          {studentData?.map((student) => {
-            console.log(student);
-            if(student.isPendingMentorshipApproval === false){
-            return <AvatarCard
-              key={student.id}
-              cardData={student}
-              buttonFunction={CancelMentoring}
-              messageButton={"Cancel Mentorship"}
-            />
-            }
-    })}
-        </SimpleGrid>
+        {loadPending()}
+        {loadCurrent()}
         </div>
       );
     }

@@ -48,7 +48,8 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
   }
 
   useEffect(() => {
-    async function transformSchedule(serverData, schedule) {
+    console.log(cardData)
+    function transformSchedule(serverData, schedule) {
       const daysInterval = serverData.split("/");
 
       for (const interval of daysInterval) {
@@ -56,9 +57,10 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
         schedule[timeSplit[0]] = timeSplit[1];
       }
     }
-
+    if(studentSide === true){
     transformSchedule(cardData.officeHours, mentorSchedule);
-    async function formatHours() {
+    }
+    function formatHours() {
       for (let j = 0; j < days.length; j++) {
         let temp = mentorSchedule[days[j]];
         if (temp?.includes("@")) {
@@ -72,7 +74,9 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
       }
     }
 
+    if(studentSide === true){
     formatHours();
+    }
     setHoursState(compo);
   }, []);
 
@@ -313,15 +317,15 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
                           Office Hours
                         </Text>
                         <HStack paddingLeft={"10px"} justifyItems={"space-around"}>
-                        {
-                          days.map((day)=> {
+                        {/* {
+                          days.map((day, index)=> {
                             if (Array.isArray(hoursState[day])) {
                               return (
-                                <VStack paddingLeft={"10px"}>
+                                <VStack key={index} paddingLeft={"10px"}>
                                   <Text as="b">{day}:</Text>
                                   <UnorderedList>
-                                    <ListItem key={day + hoursState[day][0]}>{hoursState[day][0]}</ListItem>
-                                    <ListItem key={day + hoursState[day][1]}>{hoursState[day][1]}</ListItem>
+                                    <ListItem key={day + hoursState[day][0] + index}>{hoursState[day][0]}</ListItem>
+                                    <ListItem key={day + hoursState[day][1] + index}>{hoursState[day][1]}</ListItem>
                                   </UnorderedList>
                                 </VStack>
                               );
@@ -334,10 +338,10 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
                             }
                             else if (hoursState.hasOwnProperty(day)) {
                               return (
-                                <VStack paddingLeft={"10px"}>
+                                <VStack  key={index} paddingLeft={"10px"}>
                                   <Text as="b">{day}:</Text>
                                   <UnorderedList>
-                                    <ListItem key={day}>{hoursState[day]}</ListItem>
+                                    <ListItem key={day + hoursState[day] + index}>{hoursState[day]}</ListItem>
                                   </UnorderedList>
                                 </VStack>
                               );
@@ -345,7 +349,7 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
                           }
                         }
                           )
-                        }
+                        } */}
                         </HStack>
                       </VStack>
                     }
