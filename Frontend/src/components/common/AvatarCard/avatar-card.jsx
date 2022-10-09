@@ -21,7 +21,6 @@ import {
   ListItem
 } from "@chakra-ui/react";
 import styles from "./avatar-card.module.css";
-import OfficeHours from "../../Students/OfficeHours/office-hours";
 
 function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
