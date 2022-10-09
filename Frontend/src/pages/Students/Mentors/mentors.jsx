@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { HStack, SimpleGrid, Spinner, useToast, Image, Text } from "@chakra-ui/react";
 import { httpGetAllMentors } from "@/api/mentors.api";
 import { httpRequestMentorship } from "@/api/students.api";
-import { httpGetUnapprovedMentors } from "../../../api/mentors.api";
 import AvatarCard from "../../../components/common/AvatarCard/avatar-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
 import Contact from "@/assets/contact.svg"
 import styles from "./mentors.module.css";
+import { httpCancelMentorship } from "../../../api/students.api";
 
 function Mentors() {
   const toast = useToast();
@@ -29,27 +29,11 @@ function Mentors() {
       }
 
       setMentorData(mentorsResponse.data);
+      setIsLoading(false);
     }
 
     loadAllMentors();
 
-    async function loadCurrentMentor() {
-      const mentorsResponse = await httpGetUnapprovedMentors();
-
-      if (mentorsResponse.hasError) {
-        return toast({
-          description: mentorsResponse.errorMessage,
-          status: "error",
-          position: "top",
-          duration: 5000,
-        });
-      }
-
-      setCurrentMentorData(mentorsResponse.data);
-      setIsLoading(false);
-    }
-
-    loadCurrentMentor();
   }, []);
 
   async function RequestMentoring(cardData) {
@@ -64,6 +48,20 @@ function Mentors() {
         duration: 5000,
       });
     }
+  }
+
+    async function CancelMentoring(cardData) {
+      console.log("Info of card data: ", cardData.email);
+      const userResponse = await httpCancelMentorship(cardData.email)
+  
+      if (userResponse.hasError) {
+        return toast({
+          description: userResponse.errorMessage,
+          status: "error",
+          position: "top",
+          duration: 5000,
+        });
+      }
 
     return toast({
       title: "Mentorship Request!",
@@ -73,6 +71,28 @@ function Mentors() {
       duration: 7000,
     });
   }
+
+  async function CancelMentoring(cardData) {
+    console.log("Info of card data: ", cardData.email);
+    const userResponse = await httpCancelMentorship(cardData.email)
+
+    if (userResponse.hasError) {
+      return toast({
+        description: userResponse.errorMessage,
+        status: "error",
+        position: "top",
+        duration: 5000,
+      });
+    }
+
+  return toast({
+    title: "Mentorship Request!",
+    description: "Mentorship has been requested!",
+    status: "success",
+    position: "top",
+    duration: 7000,
+  });
+}
 
   function loadMentorsComponent() {
     if (isLoading) {

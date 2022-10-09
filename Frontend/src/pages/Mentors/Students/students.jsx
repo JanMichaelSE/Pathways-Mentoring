@@ -65,6 +65,28 @@ function Students() {
     });
   }
 
+  async function AcceptMentoring(cardData) {
+    console.log("Info of card data: ", cardData.studentId);
+    const userResponse = await httpAcceptMentorship(cardData.studentId);
+
+    if (userResponse.hasError) {
+      return toast({
+        description: userResponse.errorMessage,
+        status: "error",
+        position: "top",
+        duration: 5000,
+      });
+    }
+
+    return toast({
+      title: "Approved!",
+      description: "Mentor access has been approved!",
+      status: "success",
+      position: "top",
+      duration: 7000,
+    });
+  }
+
   function loadPending() {
     if(found === true){
       return <HStack paddingLeft={"40px"} paddingTop={"10px"}>
