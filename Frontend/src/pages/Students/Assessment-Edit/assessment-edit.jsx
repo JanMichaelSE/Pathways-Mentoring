@@ -6,7 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { Spinner } from "@chakra-ui/react";
 
 import { useAssessmentStore } from "@/store/assessment.store";
-import { httpGetPathwaysAssessment, httpAnswerAssessment } from "@/api/assessments.api";
+import {
+  httpGetPathwaysAssessment,
+  httpAnswerAssessment,
+} from "@/api/assessments.api";
 
 import QuestionGenerator from "@/components/Students/Questions/QuestionGenerator/question-generator";
 import Button from "@/components/common/Button/button.jsx";
@@ -68,13 +71,17 @@ function AssessmentsEdit() {
   function questionInitialValue(question) {
     let initialValue = null;
 
-    if (question.answer && (question.type == "Multi-select" || question.type == "Select")) {
+    if (
+      question.answer &&
+      (question.type == "Multi-select" || question.type == "Select")
+    ) {
       let selectValues = question.answer.split(";");
       initialValue = selectValues;
     } else if (question.answer) {
       initialValue = question.answer;
     } else {
-      initialValue = question.type == "Multi-select" || question.type == "Select" ? [] : "";
+      initialValue =
+        question.type == "Multi-select" || question.type == "Select" ? [] : "";
     }
 
     return initialValue;
@@ -82,7 +89,9 @@ function AssessmentsEdit() {
 
   function questionValidation(type) {
     if (type == "Multi-select" || type == "Select") {
-      return Yup.array().min(1, "Must select atleast 1 option.").required("Question is required");
+      return Yup.array()
+        .min(1, "Must select at least 1 option.")
+        .required("Question is required");
     } else {
       return Yup.string().required("Question is required");
     }

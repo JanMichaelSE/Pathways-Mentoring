@@ -23,7 +23,8 @@ function StudentNavbar() {
         <div className={styles.navLinksContainer}>
           <Link
             className={
-              location.pathname === "/student/development-plan"
+              location.pathname === "/student/development-plan" ||
+              location.pathname === "/student/smart-goal-template"
                 ? styles.activeNavLink
                 : styles.navLink
             }
@@ -43,14 +44,20 @@ function StudentNavbar() {
             Assessments
           </Link>
           <Link
-            className={location.pathname === "/student" ? styles.activeNavLink : styles.navLink}
+            className={
+              location.pathname === "/student"
+                ? styles.activeNavLink
+                : styles.navLink
+            }
             to="/student"
           >
             Records
           </Link>
           <Link
             className={
-              location.pathname === "/student/mentors" ? styles.activeNavLink : styles.navLink
+              location.pathname === "/student/mentors"
+                ? styles.activeNavLink
+                : styles.navLink
             }
             to="/student/mentors"
           >
@@ -58,7 +65,9 @@ function StudentNavbar() {
           </Link>
           <Link
             className={
-              location.pathname === "/student/contact-us" ? styles.activeNavLink : styles.navLink
+              location.pathname === "/student/contact-us"
+                ? styles.activeNavLink
+                : styles.navLink
             }
             to="/student/contact-us"
           >
