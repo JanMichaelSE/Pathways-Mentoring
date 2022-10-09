@@ -14,8 +14,16 @@ function Students() {
   const toast = useToast();
   const [studentData, setStudentData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  let found = false;
 
   useEffect(() => {
+    for(var i = 0; i < studentData.length; i++) {
+      if (studentData[i].isPendingMentorshipApproval === true && found == false) {
+        found = true;
+        break;
+      }
+    }
+
     async function loadAllStudents() {
       const studentsResponse = await httpGetStudentByMentor();
 
@@ -57,6 +65,15 @@ function Students() {
     });
   }
 
+  function loadPending() {
+    if(found === true){
+      return <HStack paddingLeft={"40px"} paddingTop={"10px"}>
+          <Image src={Contact} />
+          <Text className={styles.heading}>Pending Approval</Text>
+        </HStack>
+    }
+  }
+
   function loadStudentsComponent() {
     if (isLoading) {
       return (
@@ -80,23 +97,23 @@ function Students() {
     } else {
       return (
         <div>
-        <HStack paddingLeft={"40px"} paddingTop={"10px"}>
-          <Image src={Contact} />
-          <Text className={styles.heading}>Pending Approval</Text>
-        </HStack>
+       {loadPending()}
         <SimpleGrid
           columns={[1, 2, 3]}
           spacing="40px"
           className={styles.background}
         >
-          {studentData?.map((student) => (
-            <AvatarCard
+          {studentData?.map((student) => {
+            console.log(student);
+            if(student.isPendingMentorshipApproval === true){
+            return <AvatarCard
               key={student.id}
               cardData={student}
               buttonFunction={CancelMentoring}
               messageButton={"Cancel Mentorship"}
             />
-          ))}
+            }
+    })}
         </SimpleGrid>
         <HStack paddingLeft={"40px"}>
           <Image src={Contact} />
