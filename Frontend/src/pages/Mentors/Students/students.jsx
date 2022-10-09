@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SimpleGrid, Spinner, useToast } from "@chakra-ui/react";
+import { SimpleGrid, Spinner, useToast, Text, HStack, Image } from "@chakra-ui/react";
 
 import { httpCancelMentorship } from "@/api/students.api";
 import { httpGetStudentByMentor } from "@/api/mentors.api";
@@ -7,14 +7,23 @@ import { httpGetStudentByMentor } from "@/api/mentors.api";
 import AvatarCard from "../../../components/common/AvatarCard/avatar-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
+import Contact from "@/assets/contact.svg"
 import styles from "./students.module.css";
 
 function Students() {
   const toast = useToast();
   const [studentData, setStudentData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  let found = false;
 
   useEffect(() => {
+    for(var i = 0; i < studentData.length; i++) {
+      if (studentData[i].isPendingMentorshipApproval === true && found == false) {
+        found = true;
+        break;
+      }
+    }
+
     async function loadAllStudents() {
       const studentsResponse = await httpGetStudentByMentor();
 
@@ -55,35 +64,15 @@ function Students() {
       duration: 7000,
     });
   }
-  // let studentData1 = [
-  //   {
-  //     id: "1",
-  //     name: "Jessica Quintana",
-  //     telephone: "787-710-1074",
-  //     email: "jmontalvo.dev@gmail.com",
-  //     avatarLink: "/assets/Jessica.svg",
-  //     department: "CS/COE",
-  //     academicDegree: "BSc",
-  //   },
-  //   {
-  //     id: "2",
-  //     name: "Abigael Rivera",
-  //     telephone: "787-710-1074",
-  //     email: "jmontalvo.dev@gmail.com",
-  //     avatarLink: "/assets/Zayira.svg",
-  //     department: "CS/COE",
-  //     academicDegree: "BSc",
-  //   },
-  //   {
-  //     id: "3",
-  //     name: "Jan Montalvo",
-  //     telephone: "787-710-1074",
-  //     email: "jmontalvo.dev@gmail.com",
-  //     avatarLink: "/assets/Jan.svg",
-  //     department: "CS/COE",
-  //     academicDegree: "BSc",
-  //   },
-  // ];
+
+  function loadPending() {
+    if(found === true){
+      return <HStack paddingLeft={"40px"} paddingTop={"10px"}>
+          <Image src={Contact} />
+          <Text className={styles.heading}>Pending Approval</Text>
+        </HStack>
+    }
+  }
 
   function loadStudentsComponent() {
     if (isLoading) {
@@ -107,6 +96,29 @@ function Students() {
       );
     } else {
       return (
+        <div>
+       {loadPending()}
+        <SimpleGrid
+          columns={[1, 2, 3]}
+          spacing="40px"
+          className={styles.background}
+        >
+          {studentData?.map((student) => {
+            console.log(student);
+            if(student.isPendingMentorshipApproval === true){
+            return <AvatarCard
+              key={student.id}
+              cardData={student}
+              buttonFunction={CancelMentoring}
+              messageButton={"Cancel Mentorship"}
+            />
+            }
+    })}
+        </SimpleGrid>
+        <HStack paddingLeft={"40px"}>
+          <Image src={Contact} />
+          <Text className={styles.heading}>Students</Text>
+        </HStack>
         <SimpleGrid
           columns={[1, 2, 3]}
           spacing="40px"
@@ -121,6 +133,7 @@ function Students() {
             />
           ))}
         </SimpleGrid>
+        </div>
       );
     }
   }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Heading,
   Avatar,
@@ -16,20 +16,65 @@ import {
   useMediaQuery,
   HStack,
   Spacer,
+  VStack,
+  UnorderedList,
+  ListItem
 } from "@chakra-ui/react";
 import styles from "./avatar-card.module.css";
 
 function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [hoursState, setHoursState] = useState({});
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
   const [firstName, lastName] = cardData.name.split("; ");
+
+  let mentorSchedule = {};
+  let compo = {};
+  const days = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
 
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
 
   function clickFunction() {
     buttonFunction(cardData);
   }
+
+  useEffect(() => {
+    async function transformSchedule(serverData, schedule) {
+      const daysInterval = serverData.split("/");
+
+      for (const interval of daysInterval) {
+        const timeSplit = interval.split("%");
+        schedule[timeSplit[0]] = timeSplit[1];
+      }
+    }
+
+    transformSchedule(cardData.officeHours, mentorSchedule);
+    async function formatHours() {
+      for (let j = 0; j < days.length; j++) {
+        let temp = mentorSchedule[days[j]];
+        if (temp?.includes("@")) {
+          let sub = temp.split("@");
+          compo[days[j]] = [sub[0], sub[1]];
+        } else {
+          if (temp !== "") {
+            compo[days[j]] = temp;
+          }
+        }
+      }
+    }
+
+    formatHours();
+    setHoursState(compo);
+  }, []);
 
   return (
     <>
@@ -257,9 +302,53 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
                       pos={"relative"}
                       p={3}
                     />
-                    <Text fontWeight={"400"} textAlign={"justify"}>
-                      {cardData.officeHours}
-                    </Text>
+
+                    {
+                      <VStack>
+                        <Text
+                          as="b"
+                          textDecorationLine={"underline"}
+                          size={"l"}
+                        >
+                          Office Hours
+                        </Text>
+                        <HStack paddingLeft={"10px"} justifyItems={"space-around"}>
+                        {
+                          days.map((day)=> {
+                            if (Array.isArray(hoursState[day])) {
+                              return (
+                                <VStack paddingLeft={"10px"}>
+                                  <Text as="b">{day}:</Text>
+                                  <UnorderedList>
+                                    <ListItem key={day + hoursState[day][0]}>{hoursState[day][0]}</ListItem>
+                                    <ListItem key={day + hoursState[day][1]}>{hoursState[day][1]}</ListItem>
+                                  </UnorderedList>
+                                </VStack>
+                              );
+                          } else {
+                            if(hoursState.hasOwnProperty(day) && hoursState[day] == undefined){
+                              return(
+                                <>
+                                </>
+                              );
+                            }
+                            else if (hoursState.hasOwnProperty(day)) {
+                              return (
+                                <VStack paddingLeft={"10px"}>
+                                  <Text as="b">{day}:</Text>
+                                  <UnorderedList>
+                                    <ListItem key={day}>{hoursState[day]}</ListItem>
+                                  </UnorderedList>
+                                </VStack>
+                              );
+                            }
+                          }
+                        }
+                          )
+                        }
+                        </HStack>
+                      </VStack>
+                    }
                   </HStack>
                 </>
               )}

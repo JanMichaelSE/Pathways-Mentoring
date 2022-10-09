@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { SimpleGrid, Spinner, useToast } from "@chakra-ui/react";
+import { HStack, SimpleGrid, Spinner, useToast, Image, Text } from "@chakra-ui/react";
 import { httpGetAllMentors } from "@/api/mentors.api";
 import { httpRequestMentorship } from "@/api/students.api";
+import { httpGetUnapprovedMentors } from "../../../api/mentors.api";
 import AvatarCard from "../../../components/common/AvatarCard/avatar-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
+import Contact from "@/assets/contact.svg"
 import styles from "./mentors.module.css";
 
 function Mentors() {
   const toast = useToast();
+  const [currentMentorData, setCurrentMentorData] = useState([]);
   const [mentorData, setMentorData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -26,10 +29,27 @@ function Mentors() {
       }
 
       setMentorData(mentorsResponse.data);
-      setIsLoading(false);
     }
 
     loadAllMentors();
+
+    async function loadCurrentMentor() {
+      const mentorsResponse = await httpGetUnapprovedMentors();
+
+      if (mentorsResponse.hasError) {
+        return toast({
+          description: mentorsResponse.errorMessage,
+          status: "error",
+          position: "top",
+          duration: 5000,
+        });
+      }
+
+      setCurrentMentorData(mentorsResponse.data);
+      setIsLoading(false);
+    }
+
+    loadCurrentMentor();
   }, []);
 
   async function RequestMentoring(cardData) {
@@ -68,7 +88,7 @@ function Mentors() {
           left="50%"
         />
       );
-    } else if (mentorData.length === 0) {
+    } else if (mentorData.length === 0 && currentMentorData.length === 0) {
       return (
         <div className={styles.noUsers}>
           <NoItemsFound title="No Mentors added yet." icon={SadFaceIcon} />
@@ -76,21 +96,49 @@ function Mentors() {
       );
     } else {
       return (
+        <div >
+        <HStack paddingLeft={"40px"} paddingTop={"10px"}>
+          <Image src={Contact} />
+          <Text className={styles.heading}>Current Mentor</Text>
+        </HStack>
         <SimpleGrid
           columns={[1, 2, 3]}
           spacing="40px"
           className={styles.background}
         >
-          {mentorData?.map((mentor) => (
-            <AvatarCard
-              key={mentor.userId}
+          {mentorData?.map((mentor) => {
+            if(mentor.isActiveMentor == true){
+            return <AvatarCard
+              key={mentor.id}
               cardData={mentor}
               buttonFunction={RequestMentoring}
               messageButton={"Request Mentoring"}
               studentSide={true}
-            />
-          ))}
+            />}
+    })}
         </SimpleGrid>
+        <HStack paddingLeft={"40px"}>
+          <Image src={Contact} />
+          <Text className={styles.heading}>Mentors</Text>
+        </HStack>
+        <SimpleGrid
+          columns={[1, 2, 3]}
+          spacing="40px"
+          className={styles.background}
+        >
+          {mentorData?.map((mentor) => {
+            if(mentor.isActiveMentor == false){
+              return <AvatarCard
+              key={mentor.id}
+              cardData={mentor}
+              buttonFunction={RequestMentoring}
+              messageButton={"Request Mentoring"}
+              studentSide={true}
+            />}
+          }
+          )}
+        </SimpleGrid>
+        </div>
       );
     }
   }
