@@ -42,7 +42,10 @@ async function httpGetAllMentors(req: Request, res: Response) {
     const userId = req.userId;
     const student = await findStudentByUserId(userId);
     if (!student) {
-      return handleBadRequestResponse("A student with this Id doesn't exist.", res);
+      return handleBadRequestResponse(
+        "A student with this Id doesn't exist.",
+        res
+      );
     }
 
     let mentors = await findAllMentors();
@@ -72,7 +75,10 @@ async function httpGetMentorProfileByUserId(req: Request, res: Response) {
     const userId = req.userId;
     const mentorResponse = await findMentorByUserId(userId);
     if (!mentorResponse) {
-      return handleBadRequestResponse("This mentor does not exist in the system.", res);
+      return handleBadRequestResponse(
+        "This mentor does not exist in the system.",
+        res
+      );
     }
 
     return res.status(200).json(mentorResponse);
@@ -86,7 +92,10 @@ async function httpGetAllStudentsByMentor(req: Request, res: Response) {
     const userId = req.userId;
     const mentor = await findMentorByUserId(userId);
     if (!mentor) {
-      return handleNotFoundResponse("A mentor with this ID doesn't exist.", res);
+      return handleNotFoundResponse(
+        "A mentor with this ID doesn't exist.",
+        res
+      );
     }
 
     const students = await findStudentsByMentor(mentor.id);
@@ -134,7 +143,9 @@ async function httpUpdateMentorProfile(req: Request, res: Response) {
       });
     }
 
-    const validatedMentorResponse = await validateMentorExists(validatedUserResponse.id);
+    const validatedMentorResponse = await validateMentorExists(
+      validatedUserResponse.id
+    );
     if ("errorCode" in validatedMentorResponse) {
       return res.status(validatedMentorResponse.errorCode).json({
         error: validatedMentorResponse,
@@ -174,13 +185,20 @@ async function httpAcceptMentorshipRequest(req: Request, res: Response) {
     const mentorUserId = req.userId;
     const mentor = await findMentorByUserId(mentorUserId);
     if (!mentor) {
-      return handleNotFoundResponse("A mentor with this ID doesn't exist.", res);
+      return handleNotFoundResponse(
+        "A mentor with this ID doesn't exist.",
+        res
+      );
     }
 
-    const updatedStudent = await updateStudentMentorship(student.id, mentor.id, false);
+    const updatedStudent = await updateStudentMentorship(
+      student.id,
+      mentor.id,
+      false
+    );
     const records = await createRecords(mentor.id, student.id);
     let mentorFormattedName = mentor.name.replace(";", "");
-    await sendAcceptedMentorshipEmail(student.email, mentorFormattedName);
+    //await sendAcceptedMentorshipEmail(student.email, mentorFormattedName);
 
     return res.status(200).json({
       student: updatedStudent,
@@ -205,7 +223,10 @@ async function httpApproveMentorAccess(req: Request, res: Response) {
 
     const mentor = await findMentorById(mentorId);
     if (!mentor) {
-      return handleNotFoundResponse("No mentor exists with the provided Id.", res);
+      return handleNotFoundResponse(
+        "No mentor exists with the provided Id.",
+        res
+      );
     }
 
     const updatedUser = await updateUserApproval(mentor.userId, true);

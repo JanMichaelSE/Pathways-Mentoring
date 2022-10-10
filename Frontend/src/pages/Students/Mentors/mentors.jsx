@@ -34,20 +34,19 @@ function Mentors() {
           duration: 5000,
         });
       }
-      let tempCurrentMentor = [];
-      let tempAvailableMentor = [];
+
       for (const mentor of mentorsResponse.data) {
         if (mentor.isActiveMentor == false) {
           console.log(mentor);
-          tempAvailableMentor.push(mentor);
+          availableMentorData.push(mentor);
         } else {
           console.log(mentor);
-          tempCurrentMentor.push(mentor);
+          currentMentorData.push(mentor);
         }
       }
 
-      setCurrentMentorData(tempCurrentMentor);
-      setAvailableMentorData(tempAvailableMentor);
+      setCurrentMentorData(currentMentorData);
+      setAvailableMentorData(availableMentorData);
       setIsLoading(false);
     }
 
@@ -76,7 +75,7 @@ function Mentors() {
     });
   }
 
-  async function CancelMentoring() {
+  async function CancelMentoring(cardData) {
     const userResponse = await httpCancelMentorship();
 
     if (userResponse.hasError) {
@@ -88,6 +87,16 @@ function Mentors() {
       });
     }
 
+    currentMentorData.map((student, index) => {
+      if (student.id == cardData.id) {
+        availableMentorData.push(currentMentorData[index]);
+        currentMentorData.splice(index, 1);
+      }
+    });
+
+    setAvailableMentorData([...availableMentorData]);
+    setCurrentMentorData([...currentMentorData]);
+
     return toast({
       title: "Canceled Mentorship Request!",
       description: "Mentorship has been canceled!",
@@ -97,11 +106,11 @@ function Mentors() {
     });
   }
 
-  function loadCurrent(){
-    if(currentMentorData.length != 0){
-      return(
+  function loadCurrent() {
+    if (currentMentorData.length != 0) {
+      return (
         <>
-        <HStack paddingLeft={"40px"} paddingTop={"10px"}>
+          <HStack paddingLeft={"40px"} paddingTop={"10px"}>
             <Image src={Contact} />
             <Text className={styles.heading}>Current Mentor</Text>
           </HStack>
@@ -122,16 +131,16 @@ function Mentors() {
               );
             })}
           </SimpleGrid>
-          </>
+        </>
       );
     }
   }
 
-  function loadAvailable(){
-    if(availableMentorData.length != 0){
-      return(
+  function loadAvailable() {
+    if (availableMentorData.length != 0) {
+      return (
         <>
-        <HStack paddingLeft={"40px"}>
+          <HStack paddingLeft={"40px"}>
             <Image src={Contact} />
             <Text className={styles.heading}>Mentors</Text>
           </HStack>
