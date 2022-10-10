@@ -6,6 +6,7 @@ import {
   Text,
   HStack,
   Image,
+  useMediaQuery,
 } from "@chakra-ui/react";
 
 import { httpCancelMentorship } from "@/api/students.api";
@@ -19,12 +20,18 @@ import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
 import Contact from "@/assets/contact.svg";
 import styles from "./students.module.css";
+import { useSearchParams } from "react-router-dom";
 
 function Students() {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(true);
+  const [studentLocation, setStudentLocation] = useState([]);
   const [pendingStudents, setPendingStudents] = useState([]);
   const [currentStudents, setCurrentStudents] = useState([]);
+  const [isLessThan950] = useMediaQuery("(max-width: 950px)");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // index boolean
 
   useEffect(() => {
     async function loadAllStudents() {
@@ -118,7 +125,15 @@ function Students() {
     });
   }
 
-  function loadPending() {
+  function gridValues() {
+    if (isLessThan950) {
+      return [1, 2];
+    } else {
+      return [1, 2, 3];
+    }
+  }
+
+  function loadPendingStudent() {
     if (pendingStudents.length != 0) {
       return (
         <>
@@ -127,7 +142,7 @@ function Students() {
             <Text className={styles.heading}>Pending Approval</Text>
           </HStack>
           <SimpleGrid
-            columns={[1, 2, 3]}
+            columns={gridValues()}
             spacing="40px"
             className={styles.background}
           >
@@ -148,7 +163,7 @@ function Students() {
     }
   }
 
-  function loadCurrent() {
+  function loadCurrentStudent() {
     if (currentStudents.length != 0) {
       return (
         <>
@@ -157,7 +172,7 @@ function Students() {
             <Text className={styles.heading}>Students</Text>
           </HStack>
           <SimpleGrid
-            columns={[1, 2, 3]}
+            columns={gridValues()}
             spacing="40px"
             className={styles.background}
           >
@@ -199,19 +214,15 @@ function Students() {
       );
     } else {
       return (
-        <div>
-          {loadPending()}
-          {loadCurrent()}
+        <div className={styles.container}>
+          {loadPendingStudent()}
+          {loadCurrentStudent()}
         </div>
       );
     }
   }
 
-  return (
-    <div style={{ flex: 1, backgroundColor: "#f1f8fc" }}>
-      {loadStudentsComponent()}
-    </div>
-  );
+  return <>{loadStudentsComponent()}</>;
 }
 
 export default Students;

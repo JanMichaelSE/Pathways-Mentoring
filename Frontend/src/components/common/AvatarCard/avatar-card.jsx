@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Heading,
   Avatar,
@@ -22,132 +23,143 @@ import OfficeHours from "../../Mentors/OfficeHours/office-hours";
 
 function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  
+
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
   const [firstName, lastName] = cardData.name.split("; ");
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
+
+  useEffect(() => {
+    let urlStudentId = searchParams.get("studentId");
+    if (urlStudentId) {
+      if (cardData.id == urlStudentId) {
+        onOpen();
+        searchParams.delete("studentId");
+        setSearchParams(searchParams);
+      }
+    }
+  }, []);
 
   function clickFunction() {
     buttonFunction(cardData);
   }
 
   function loadPhone() {
-    if(!!cardData.phone){
-    return(
-      <>
-      <HStack
-                  px={3}
-                  py={3}
-                  rounded={"27px"}
-                  bg={"#D9E4EA"}
-                  mx={3}
-                  boxShadow={"md"}
-                >
-                  <Image
-                    boxSize="50px"
-                    objectFit="cover"
-                    src="/assets/cellphone.svg"
-                    alt="Cellphone.svg"
-                  />
-                  <Text fontWeight={"400"}>{cardData.phone}</Text>
-                </HStack>
-      </>
-    );
+    if (!!cardData.phone) {
+      return (
+        <>
+          <HStack
+            px={3}
+            py={3}
+            rounded={"27px"}
+            bg={"#D9E4EA"}
+            mx={3}
+            boxShadow={"md"}
+          >
+            <Image
+              boxSize="50px"
+              objectFit="cover"
+              src="/assets/cellphone.svg"
+              alt="Cellphone.svg"
+            />
+            <Text fontWeight={"400"}>{cardData.phone}</Text>
+          </HStack>
+        </>
+      );
     }
   }
 
-  function loadEmail(){
-    if(!!cardData.email){
-      return(
-
+  function loadEmail() {
+    if (!!cardData.email) {
+      return (
         <>
-    <HStack
-                  px={3}
-                  py={3}
-                  rounded={"27px"}
-                  bg={"#D9E4EA"}
-                  mx={3}
-                  boxShadow={"md"}
-                >
-                  <Image
-                    boxSize="50px"
-                    objectFit="cover"
-                    src="/assets/circled-envelope.svg"
-                    alt="Company.svg"
-                  />
-                  <Text fontWeight={"400"}>{cardData.email}</Text>
-                </HStack>
-                </>)
+          <HStack
+            px={3}
+            py={3}
+            rounded={"27px"}
+            bg={"#D9E4EA"}
+            mx={3}
+            boxShadow={"md"}
+          >
+            <Image
+              boxSize="50px"
+              objectFit="cover"
+              src="/assets/circled-envelope.svg"
+              alt="Company.svg"
+            />
+            <Text fontWeight={"400"}>{cardData.email}</Text>
+          </HStack>
+        </>
+      );
+    }
   }
-}
-function loadAcademicDegree(){
-  if(!!cardData.academicDegree){
-    return(
-      <>
-  <HStack
-                  px={3}
-                  py={3}
-                  rounded={"27px"}
-                  bg={"#D9E4EA"}
-                  mx={3}
-                  my={5}
-                  boxShadow={"md"}
-                >
-                  <Image
-                    boxSize="50px"
-                    objectFit="cover"
-                    src="/assets/graduation-cap.svg"
-                    alt="Company.svg"
-                  />
-                  <Text fontWeight={"400"}>{cardData.academicDegree}</Text>
-                </HStack>
-                </>
-    );
-}
-}
-function loadDescription(){
-  if(!!cardData.description){
-    return(
-      <>
-        <HStack
-                    px={3}
-                    py={3}
-                    rounded={"27px"}
-                    bg={"#D9E4EA"}
-                    mx={3}
-                    my={5}
-                    boxShadow={"md"}
-                    maxWidth={"2xl"}
-                    justifyContent="start"
-                    minW={"670px"}
-                  >
-                    <Avatar
-                      size={"lg"}
-                      borderWidth={"2px"}
-                      borderColor={"#99A9B9"}
-                      background={"#5389BE"}
-                      src={"/assets/info.svg"}
-                      alt={"Avatar Alt"}
-                      pos={"relative"}
-                      p={3}
-                    />
-                    <Text fontWeight={"400"} textAlign={"justify"}>
-                      {cardData.description}
-                    </Text>
-                  </HStack>
-      </>
-    );
+  function loadAcademicDegree() {
+    if (!!cardData.academicDegree) {
+      return (
+        <>
+          <HStack
+            px={3}
+            py={3}
+            rounded={"27px"}
+            bg={"#D9E4EA"}
+            mx={3}
+            my={5}
+            boxShadow={"md"}
+          >
+            <Image
+              boxSize="50px"
+              objectFit="cover"
+              src="/assets/graduation-cap.svg"
+              alt="Company.svg"
+            />
+            <Text fontWeight={"400"}>{cardData.academicDegree}</Text>
+          </HStack>
+        </>
+      );
+    }
   }
-}
+  function loadDescription() {
+    if (!!cardData.description) {
+      return (
+        <>
+          <HStack
+            px={3}
+            py={3}
+            rounded={"27px"}
+            bg={"#D9E4EA"}
+            mx={3}
+            my={5}
+            boxShadow={"md"}
+            maxWidth={"2xl"}
+            justifyContent="start"
+            minW={"670px"}
+          >
+            <Avatar
+              size={"lg"}
+              borderWidth={"2px"}
+              borderColor={"#99A9B9"}
+              background={"#5389BE"}
+              src={"/assets/info.svg"}
+              alt={"Avatar Alt"}
+              pos={"relative"}
+              p={3}
+            />
+            <Text fontWeight={"400"} textAlign={"justify"}>
+              {cardData.description}
+            </Text>
+          </HStack>
+        </>
+      );
+    }
+  }
 
-function loadHours(){
-  if(!!cardData.officeHours){
-  return <OfficeHours timeString={cardData.officeHours}/>
+  function loadHours() {
+    if (!!cardData.officeHours) {
+      return <OfficeHours timeString={cardData.officeHours} />;
+    }
   }
-}
-
 
   return (
     <>
@@ -225,6 +237,8 @@ function loadHours(){
           borderWidth={"2px"}
           borderStyle={"dashed"}
           borderColor={"#0066CC"}
+          paddingTop={"1rem"}
+          paddingBottom={"3rem"}
         >
           <ModalHeader>
             <HStack alignItems={"center"}>

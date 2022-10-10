@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { VStack, UnorderedList, ListItem, HStack, Avatar, Text, SimpleGrid } from "@chakra-ui/react";
+import {
+  VStack,
+  UnorderedList,
+  ListItem,
+  HStack,
+  Avatar,
+  Text,
+  SimpleGrid,
+} from "@chakra-ui/react";
 import styles from "./office-hours.module.css";
 
-function OfficeHours({timeString}) {
+function OfficeHours({ timeString }) {
   const [hoursState, setHoursState] = useState({});
   let mentorSchedule = {};
   let compo = {};
@@ -25,9 +33,9 @@ function OfficeHours({timeString}) {
         schedule[timeSplit[0]] = timeSplit[1];
       }
     }
-    
-      transformSchedule(timeString, mentorSchedule);
-    
+
+    transformSchedule(timeString, mentorSchedule);
+
     function formatHours() {
       for (let j = 0; j < days.length; j++) {
         let temp = mentorSchedule[days[j]];
@@ -42,21 +50,19 @@ function OfficeHours({timeString}) {
       }
     }
 
-    
-      formatHours();
-    
+    formatHours();
+
     setHoursState(compo);
   }, []);
 
   function capitalizeFirstLetter(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);  
-}
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   return (
     <>
       <VStack
-        px={3}
-        py={3}
+        padding={"1.5rem 1rem 2rem 1rem"}
         rounded={"27px"}
         bg={"#D9E4EA"}
         mx={3}
@@ -68,63 +74,71 @@ function OfficeHours({timeString}) {
         justifyContent="center"
       >
         <HStack alignSelf={"start"}>
-        <Avatar
-          size={"lg"}
-          borderWidth={"2px"}
-          borderColor={"#99A9B9"}
-          background={"#5389BE"}
-          src={"/assets/Person_Calendar.png"}
-          alt={"Avatar Alt"}
-          pos={"relative"}
-          p={3}
-        />  
-            <Text className={styles.regularbold} textDecorationLine={"underline"} size={"l"}>
-              Office Hours
-            </Text>
-            </HStack>
-          <VStack>
-        
+          <Avatar
+            size={"lg"}
+            borderWidth={"2px"}
+            borderColor={"#99A9B9"}
+            background={"#5389BE"}
+            src={"/assets/Person_Calendar.png"}
+            alt={"Avatar Alt"}
+            pos={"relative"}
+            p={3}
+          />
+          <Text
+            className={styles.regularbold}
+            textDecorationLine={"underline"}
+            size={"l"}
+          >
+            Office Hours
+          </Text>
+        </HStack>
+        <VStack paddingLeft={"5rem"}>
           <SimpleGrid
             columns={[3]}
             spacing="40px"
             className={styles.background}
           >
-              {
-                          days.map((day, index)=> {
-                            if (Array.isArray(hoursState[day])) {
-                              return (
-                                <VStack key={index} paddingLeft={"15px"}>
-                                  <Text alignSelf={"start"} className={styles.regularbold}>{capitalizeFirstLetter(day)}:</Text>
-                                  <UnorderedList>
-                                    <ListItem key={day + hoursState[day][0] + index}>{hoursState[day][0]}</ListItem>
-                                    <ListItem key={day + hoursState[day][1] + index}>{hoursState[day][1]}</ListItem>
-                                  </UnorderedList>
-                                </VStack>
-                              );
-                          } else {
-                            if(hoursState.hasOwnProperty(day) && hoursState[day] == undefined){
-                              return(
-                                <>
-                                </>
-                              );
-                            }
-                            else if (hoursState.hasOwnProperty(day)) {
-                              return (
-                                <VStack  key={index} paddingLeft={"15px"}>
-                                  <Text className={styles.regularbold} alignSelf={"start"}>{capitalizeFirstLetter(day)}:</Text>
-                                  <UnorderedList>
-                                    <ListItem key={day + hoursState[day] + index}>{hoursState[day]}</ListItem>
-                                  </UnorderedList>
-                                </VStack>
-                              );
-                            }
-                          }
-                        }
-                          )
-                        } 
-            </SimpleGrid>
-          </VStack>
-        
+            {days.map((day, index) => {
+              if (Array.isArray(hoursState[day])) {
+                return (
+                  <VStack key={index} paddingLeft={"15px"}>
+                    <Text alignSelf={"start"} className={styles.regularbold}>
+                      {capitalizeFirstLetter(day)}:
+                    </Text>
+                    <UnorderedList>
+                      <ListItem key={day + hoursState[day][0] + index}>
+                        {hoursState[day][0]}
+                      </ListItem>
+                      <ListItem key={day + hoursState[day][1] + index}>
+                        {hoursState[day][1]}
+                      </ListItem>
+                    </UnorderedList>
+                  </VStack>
+                );
+              } else {
+                if (
+                  hoursState.hasOwnProperty(day) &&
+                  hoursState[day] == undefined
+                ) {
+                  return <></>;
+                } else if (hoursState.hasOwnProperty(day)) {
+                  return (
+                    <VStack key={index} paddingLeft={"15px"}>
+                      <Text className={styles.regularbold} alignSelf={"start"}>
+                        {capitalizeFirstLetter(day)}:
+                      </Text>
+                      <UnorderedList>
+                        <ListItem key={day + hoursState[day] + index}>
+                          {hoursState[day]}
+                        </ListItem>
+                      </UnorderedList>
+                    </VStack>
+                  );
+                }
+              }
+            })}
+          </SimpleGrid>
+        </VStack>
       </VStack>
     </>
   );

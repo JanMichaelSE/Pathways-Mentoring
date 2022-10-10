@@ -1,5 +1,5 @@
-.background {
-  background-color: var(--color-white);
+.container {
+  padding-top: 3rem;
 }
 
 .heading {
@@ -10,4 +10,7 @@
 
 .noUsers {
   padding-top: 100px;
+}
+
+@media only screen and (max-width: 950px) {
 }

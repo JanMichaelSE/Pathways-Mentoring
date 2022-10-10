@@ -6,6 +6,7 @@ import {
   useToast,
   Image,
   Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { httpGetAllMentors } from "@/api/mentors.api";
 import { httpRequestMentorship } from "@/api/students.api";
@@ -21,6 +22,7 @@ function Mentors() {
   const [availableMentorData, setAvailableMentorData] = useState([]);
   const [currentMentorData, setCurrentMentorData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLessThan950] = useMediaQuery("(max-width: 950px)");
 
   useEffect(() => {
     async function loadAllMentors() {
@@ -66,6 +68,15 @@ function Mentors() {
       });
     }
 
+    currentMentorData.map((student, index) => {
+      if (student.id == cardData.id) {
+        availableMentorData.push(currentMentorData[index]);
+        currentMentorData.splice(index, 1);
+      }
+    });
+    setAvailableMentorData([...availableMentorData]);
+    setCurrentMentorData([...currentMentorData]);
+
     return toast({
       title: "Mentorship Request!",
       description: "Mentorship has been requested!",
@@ -106,7 +117,15 @@ function Mentors() {
     });
   }
 
-  function loadCurrent() {
+  function gridValues() {
+    if (isLessThan950) {
+      return [1, 2];
+    } else {
+      return [1, 2, 3];
+    }
+  }
+
+  function loadCurrentMentor() {
     if (currentMentorData.length != 0) {
       return (
         <>
@@ -115,7 +134,7 @@ function Mentors() {
             <Text className={styles.heading}>Current Mentor</Text>
           </HStack>
           <SimpleGrid
-            columns={[1, 2, 3]}
+            columns={gridValues()}
             spacing="40px"
             className={styles.background}
           >
@@ -136,7 +155,7 @@ function Mentors() {
     }
   }
 
-  function loadAvailable() {
+  function loadAvailableMentor() {
     if (availableMentorData.length != 0) {
       return (
         <>
@@ -145,7 +164,7 @@ function Mentors() {
             <Text className={styles.heading}>Mentors</Text>
           </HStack>
           <SimpleGrid
-            columns={[1, 2, 3]}
+            columns={gridValues()}
             spacing="40px"
             className={styles.background}
           >
@@ -191,19 +210,15 @@ function Mentors() {
       );
     } else {
       return (
-        <div>
-          {loadCurrent()}
-          {loadAvailable()}
+        <div className={styles.container}>
+          {loadCurrentMentor()}
+          {loadAvailableMentor()}
         </div>
       );
     }
   }
 
-  return (
-    <div style={{ flex: 1, backgroundColor: "#f1f8fc" }}>
-      {loadMentorsComponent()}
-    </div>
-  );
+  return <>{loadMentorsComponent()}</>;
 }
 
 export default Mentors;

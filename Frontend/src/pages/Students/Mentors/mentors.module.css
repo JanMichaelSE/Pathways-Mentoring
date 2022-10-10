@@ -1,5 +1,5 @@
-.background {
-  background-color: var(--color-white);
+.container {
+  padding-top: 3rem;
 }
 
 .heading {
