@@ -17,7 +17,7 @@ export interface IStudent {
   phone: string;
   gender: string;
   graduationDate: Date;
-  gpa: number;
+  gpa: string;
   institution: string;
   fieldOfStudy: string;
   hasResearch?: boolean;

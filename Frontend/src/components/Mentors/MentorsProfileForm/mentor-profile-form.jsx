@@ -21,7 +21,6 @@ import Schedule from "@/components/Mentors/TimeComponents/Schedule/schedule";
 
 function MentorProfileForm() {
   const toast = useToast();
-  const userId = useUserStore((state) => state.userId);
   const setEmail = useUserStore((state) => state.setEmail);
   const setPictureData = useUserStore((state) => state.setPictureData);
   const pictureData = useUserStore((state) => state.pictureData);
@@ -55,7 +54,7 @@ function MentorProfileForm() {
 
   useEffect(() => {
     async function loadMentorProfileInfo() {
-      const mentorInfo = await httpGetMentorByUserId(userId);
+      const mentorInfo = await httpGetMentorByUserId();
 
       if (mentorInfo.hasError) {
         return toast({
@@ -112,7 +111,6 @@ function MentorProfileForm() {
     if (isReadyToSubmit && isSubmitting) {
       // --- Logic to submit ---
       const mentorInfoWithID = {
-        userId: userId,
         ...mentorData,
         profilePicture: pictureData,
         officeHours: transformedSchedule,
@@ -189,7 +187,7 @@ function MentorProfileForm() {
           phone: userData.phone || "",
           gender: userData.gender || "Select Option",
           currentPassword: "",
-          password: "",
+          newPassword: "",
           confirmPassword: "",
           academicDegree: userData.academicDegree || "",
           description: userData.description || "",
@@ -200,51 +198,54 @@ function MentorProfileForm() {
           officeHours: "",
         }}
         validationSchema={Yup.object({
-          firstName: Yup.string(),
-          lastName: Yup.string(),
+          firstName: Yup.string().required("First Name is required"),
+          lastName: Yup.string().required("Last Name is required"),
           phone: Yup.string()
             .matches(
               /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/,
               "Phone number is not valid"
             )
             .min(10, "Phone number must be 10 digits"),
-          email: Yup.string().email("Invalid email address"),
+          email: Yup.string()
+            .email("Invalid email address")
+            .required("Email is required"),
           currentPassword: Yup.string().min(
             12,
             "Current password must be at least 12 characters"
           ),
-          password: Yup.string().min(
+          newPassword: Yup.string().min(
             12,
             "Password must be at least 12 characters"
           ),
           confirmPassword: Yup.string().oneOf(
-            [Yup.ref("password"), null],
+            [Yup.ref("newPassword"), null],
             "Passwords must match"
           ),
-          gender: Yup.string().oneOf(["Male", "Female", "Other"]),
-          academicDegree: Yup.string().required(),
+          gender: Yup.string()
+            .oneOf(["Male", "Female", "Other"])
+            .required("Gender is required"),
+          academicDegree: Yup.string().required("Academic Degree is required"),
           description: Yup.string().test(
             "len",
             "Max character limit of 1500 reached.",
             (val) => (val?.length || 0) < 1500
           ),
-          department: Yup.string().oneOf([
-            "Architecture",
-            "Business Administration",
-            "Civil Engineering",
-            "Computer Engineering",
-            "Computer Science",
-            "Electrical Engineering",
-            "Environmental Engineering",
-            "Industrial Engineering",
-            "Mechanical Engineering",
-          ]),
-          facultyStatus: Yup.string().oneOf([
-            "Instructor",
-            "Assistant",
-            "Associate",
-            "Professor",
-          ]),
+          department: Yup.string()
+            .oneOf([
+              "Architecture",
+              "Business Administration",
+              "Civil Engineering",
+              "Computer Engineering",
+              "Computer Science",
+              "Electrical Engineering",
+              "Environmental Engineering",
+              "Industrial Engineering",
+              "Mechanical Engineering",
+            ])
+            .required("Department is required"),
+          facultyStatus: Yup.string()
+            .oneOf(["Instructor", "Assistant", "Associate", "Professor"])
+            .required("Faculty Status is required"),
           office: Yup.string(),
           officeHours: Yup.string(),
         })}
@@ -280,32 +281,32 @@ function MentorProfileForm() {
           <div className={styles.inputContainer}>
             <Box>
               <Input
-                label="First Name"
+                label="First Name *"
                 name="firstName"
                 type="text"
                 width={inputWidth()}
                 disabled={edit}
-                isBlue={true}
+                isBlue
               />
             </Box>
             <Box>
               <Input
-                label="Last Name"
+                label="Last Name *"
                 name="lastName"
                 type="text"
                 width={inputWidth()}
                 disabled={edit}
-                isBlue={true}
+                isBlue
               />
             </Box>
             <Box>
               <Input
-                label="Email"
+                label="Email *"
                 name="email"
                 type="text"
                 width={inputWidth()}
                 disabled={edit}
-                isBlue={true}
+                isBlue
               />
             </Box>
             <Box>
@@ -315,16 +316,16 @@ function MentorProfileForm() {
                 type="tel"
                 width={inputWidth()}
                 disabled={edit}
-                isBlue={true}
+                isBlue
               />
             </Box>
             <Box>
               <Select
-                label="Gender"
+                label="Gender *"
                 name="gender"
                 style={{ width: inputWidth() }}
                 disabled={edit}
-                isBlue={true}
+                isBlue
               >
                 <option value="">Select Option</option>
                 <option value="Male">Male</option>
@@ -348,15 +349,15 @@ function MentorProfileForm() {
               type="password"
               width={inputWidth()}
               disabled={edit}
-              isBlue={true}
+              isBlue
             />
             <Input
-              label="Password"
-              name="password"
+              label="New Password"
+              name="newPassword"
               type="password"
               width={inputWidth()}
               disabled={edit}
-              isBlue={true}
+              isBlue
             />
             <Input
               label="Confirm Password"
@@ -364,7 +365,7 @@ function MentorProfileForm() {
               type="password"
               width={inputWidth()}
               disabled={edit}
-              isBlue={true}
+              isBlue
             />
           </div>
           <h1 className={styles.line} id={styles.bibliography}>
@@ -383,7 +384,7 @@ function MentorProfileForm() {
               bottomCount={true}
               countNumber={countNumber}
               disabled={edit}
-              isBlue={true}
+              isBlue
               maxLength={1500}
             />
           </div>
@@ -397,11 +398,11 @@ function MentorProfileForm() {
           </h1>
           <div className={styles.facultyContainer}>
             <Select
-              label="Academic Degree"
+              label="Academic Degree *"
               name="academicDegree"
               style={{ width: inputWidth() }}
               disabled={edit}
-              isBlue={true}
+              isBlue
             >
               <option value="">Select Option</option>
               <option value="Master">Master</option>
@@ -409,11 +410,11 @@ function MentorProfileForm() {
               <option value="Post Doctoral">Post Doctoral</option>
             </Select>
             <Select
-              label="Department"
+              label="Department *"
               name="department"
               style={{ width: inputWidth() }}
               disabled={edit}
-              isBlue={true}
+              isBlue
             >
               <option value="">Select Option</option>
               <option value="Architecture">Architecture</option>
@@ -437,11 +438,11 @@ function MentorProfileForm() {
               </option>
             </Select>
             <Select
-              label="Faculty Status"
+              label="Faculty Status *"
               name="facultyStatus"
               style={{ width: inputWidth() }}
               disabled={edit}
-              isBlue={true}
+              isBlue
             >
               <option value="">Select Option</option>
               <option value="Instructor">Instructor</option>
@@ -455,15 +456,15 @@ function MentorProfileForm() {
               type="numeric"
               width={inputWidth()}
               disabled={edit}
-              isBlue={true}
+              isBlue
             />
             <Input
-              label="Area of Interest"
+              label="Area of Interest *"
               name="interests"
               type="text"
               width={inputWidth()}
               disabled={edit}
-              isBlue={true}
+              isBlue
             />
           </div>
           <h1 className={styles.line} id={styles.officeHours}>

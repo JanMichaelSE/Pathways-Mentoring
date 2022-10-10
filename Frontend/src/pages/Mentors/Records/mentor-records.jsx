@@ -23,7 +23,7 @@ function MentorRecords() {
   const [records, setRecords] = useState([]);
   const [students, setStudents] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [sortDescending, setSortDescending] = useState(false);
 
   useEffect(() => {
@@ -108,7 +108,14 @@ function MentorRecords() {
     );
   } else if (records.length == 0) {
     return (
-      <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh", paddingTop: "4rem" }}>
+      <div
+        style={{
+          flex: 1,
+          backgroundColor: "#f1f8fc",
+          height: "92vh",
+          paddingTop: "4rem",
+        }}
+      >
         <HStack justifyContent={"end"} pt={15} mr={50} mb={50}>
           <div className={styles.button} onClick={onOpen}>
             <HStack justifyContent={"center"} alignContent={"center"}>
@@ -124,7 +131,11 @@ function MentorRecords() {
           </div>
         </HStack>
         <NoItemsFound title="No records assigned yet" icon={SadFaceIcon} />
-        <AssignRecordModal students={students} isOpen={isOpen} onClose={onClose} />
+        <AssignRecordModal
+          students={students}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
       </div>
     );
   } else {
@@ -144,12 +155,20 @@ function MentorRecords() {
             </HStack>
           </div>
         </HStack>
-        <SimpleGrid columns={[1, 2, 3]} spacing="40px" className={styles.gridSpace}>
+        <SimpleGrid
+          columns={[1, 2, 3]}
+          spacing="40px"
+          className={styles.gridSpace}
+        >
           {records?.map((record) => (
             <RecordCard key={record.id} recordData={record} />
           ))}
         </SimpleGrid>
-        <AssignRecordModal students={students} isOpen={isOpen} onClose={onClose} />
+        <AssignRecordModal
+          students={students}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
       </div>
     );
   }

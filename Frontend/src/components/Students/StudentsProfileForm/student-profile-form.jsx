@@ -19,7 +19,6 @@ import ProfilePicture from "@/components/common/Profile/ProfilePicture/profile-p
 
 function StudentProfileForm() {
   const toast = useToast();
-  const userId = useUserStore((state) => state.userId);
   const setEmail = useUserStore((state) => state.setEmail);
   const setPictureData = useUserStore((state) => state.setPictureData);
   const pictureData = useUserStore((state) => state.pictureData);
@@ -37,7 +36,7 @@ function StudentProfileForm() {
 
   useEffect(() => {
     async function loadStudentProfileInfo() {
-      const studentInfo = await httpGetStudentByUserId(userId);
+      const studentInfo = await httpGetStudentByUserId();
 
       if (studentInfo.hasError) {
         return toast({
@@ -68,7 +67,6 @@ function StudentProfileForm() {
 
   async function handleSubmit(studentInfo) {
     const studentInfoWithID = {
-      userId: userId,
       ...studentInfo,
       profilePicture: pictureData,
     };
@@ -155,7 +153,7 @@ function StudentProfileForm() {
           phone: userData.phone || "",
           email: userData.email || "",
           currentPassword: "",
-          password: "",
+          newPassword: "",
           confirmPassword: "",
           gender: userData.gender || "Select Option",
           fieldOfStudy: userData.fieldOfStudy || "",
@@ -164,41 +162,49 @@ function StudentProfileForm() {
           profilePicture: userData.profilePicture || "",
         }}
         validationSchema={Yup.object({
-          firstName: Yup.string(),
-          lastName: Yup.string(),
+          firstName: Yup.string().required("First Name is required"),
+          lastName: Yup.string().required("Last Name is required"),
           phone: Yup.string()
             .matches(
               /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/,
               "Phone number is not valid"
             )
             .min(10, "Phone number must be 10 digits"),
-          email: Yup.string().email("Invalid email address"),
+          email: Yup.string()
+            .email("Invalid email address")
+            .required("Email is required"),
           currentPassword: Yup.string().min(
             12,
             "Current password must be at least 12 characters"
           ),
-          password: Yup.string().min(
+          newPassword: Yup.string().min(
             12,
             "Password must be at least 12 characters"
           ),
           confirmPassword: Yup.string().oneOf(
-            [Yup.ref("password"), null],
+            [Yup.ref("newPassword"), null],
             "Passwords must match"
           ),
-          gender: Yup.string().oneOf(["Male", "Female", "Other"]),
-          fieldOfStudy: Yup.string().oneOf([
-            "Architecture",
-            "Business Administration",
-            "Civil Engineering",
-            "Computer Engineering",
-            "Computer Science",
-            "Electrical Engineering",
-            "Environmental Engineering",
-            "Industrial Engineering",
-            "Mechanical Engineering",
-          ]),
-          institution: Yup.string(),
-          gpa: Yup.number(),
+          gender: Yup.string()
+            .oneOf(["Male", "Female", "Other"])
+            .required("Gender is required"),
+          fieldOfStudy: Yup.string()
+            .oneOf([
+              "Architecture",
+              "Business Administration",
+              "Civil Engineering",
+              "Computer Engineering",
+              "Computer Science",
+              "Electrical Engineering",
+              "Environmental Engineering",
+              "Industrial Engineering",
+              "Mechanical Engineering",
+            ])
+            .required("Field of Study is required"),
+          institution: Yup.string().required("Institution is required"),
+          gpa: Yup.number()
+            .min(0.01, "GPA can not be less than 0.01")
+            .max(4, "GPA can not be more than 4.00"),
         })}
         onSubmit={async (values) => {
           await handleSubmit(values);
@@ -232,29 +238,32 @@ function StudentProfileForm() {
           <div className={styles.inputContainer}>
             <Box>
               <Input
-                label="First Name"
+                label="First Name *"
                 name="firstName"
                 type="text"
                 width={inputWidth()}
                 disabled={edit}
+                isBlue
               />
             </Box>
             <Box>
               <Input
-                label="Last Name"
+                label="Last Name *"
                 name="lastName"
                 type="text"
                 width={inputWidth()}
                 disabled={edit}
+                isBlue
               />
             </Box>
             <Box>
               <Input
-                label="Email"
+                label="Email *"
                 name="email"
                 type="text"
                 width={inputWidth()}
                 disabled={edit}
+                isBlue
               />
             </Box>
             <Box>
@@ -264,14 +273,16 @@ function StudentProfileForm() {
                 type="tel"
                 width={inputWidth()}
                 disabled={edit}
+                isBlue
               />
             </Box>
             <Box>
               <Select
-                label="Gender"
+                label="Gender *"
                 name="gender"
                 style={{ width: inputWidth() }}
                 disabled={edit}
+                isBlue
               >
                 <option value="">Select Option</option>
                 <option value="Male">Male</option>
@@ -280,7 +291,6 @@ function StudentProfileForm() {
               </Select>
             </Box>
           </div>
-          {/* </div> */}
           <h1 className={styles.line} id={styles.changePassword}>
             <img
               className={styles.lineImg}
@@ -296,13 +306,15 @@ function StudentProfileForm() {
               type="password"
               width={inputWidth()}
               disabled={edit}
+              isBlue
             />
             <Input
-              label="Password"
-              name="password"
+              label="New Password"
+              name="newPassword"
               type="password"
               width={inputWidth()}
               disabled={edit}
+              isBlue
             />
             <Input
               label="Confirm Password"
@@ -310,6 +322,7 @@ function StudentProfileForm() {
               type="password"
               width={inputWidth()}
               disabled={edit}
+              isBlue
             />
           </div>
           <h1 className={styles.line} id={styles.academicInfo}>
@@ -322,10 +335,11 @@ function StudentProfileForm() {
           </h1>
           <div className={styles.inputContainer}>
             <Select
-              label="Field Of Study"
+              label="Field Of Study *"
               name="fieldOfStudy"
               style={{ width: inputWidthField() }}
               disabled={edit}
+              isBlue
             >
               <option value="">Select Option</option>
               <option value="Architecture">Architecture</option>
@@ -349,11 +363,12 @@ function StudentProfileForm() {
               </option>
             </Select>
             <Input
-              label="Institution"
+              label="Institution *"
               name="institution"
               type="institution"
               width={inputWidthAcademic()}
               disabled={edit}
+              isBlue
             />
             <Input
               label="GPA"
@@ -361,6 +376,7 @@ function StudentProfileForm() {
               type="numeric"
               width={inputWidthAcademic()}
               disabled={edit}
+              isBlue
             />
           </div>
 

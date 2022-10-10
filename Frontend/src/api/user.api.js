@@ -43,7 +43,7 @@ async function httpSignupStudent(student) {
       role: "student",
       phone: student.phone,
       gender: student.gender,
-      gpa: Number(student.gpa),
+      gpa: Number(student.gpa).toFixed(2),
       institution: student.institution,
       fieldOfStudy: student.fieldOfStudy,
     };

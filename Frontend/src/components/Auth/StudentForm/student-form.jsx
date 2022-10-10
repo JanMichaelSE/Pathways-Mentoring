@@ -83,8 +83,10 @@ function StudentForm() {
               "Mechanical Engineering",
             ])
             .required("Field of Study is required"),
-          institution: Yup.string().required("Insitution is required"),
-          gpa: Yup.number(),
+          institution: Yup.string().required("Institution is required"),
+          gpa: Yup.number()
+            .min(0.01, "GPA can not be less than 0.01")
+            .max(4, "GPA can not be more than 4.00"),
         })}
         onSubmit={async (values) => {
           await handleSubmit(values);
