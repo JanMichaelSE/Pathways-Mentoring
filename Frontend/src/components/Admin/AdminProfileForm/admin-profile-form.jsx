@@ -13,7 +13,6 @@ import { useMediaQuery } from "@chakra-ui/react";
 
 function AdminProfileForm() {
   const toast = useToast();
-  const userId = useUserStore((state) => state.userId);
   const setEmail = useUserStore((state) => state.setEmail);
   const [userData, setUserData] = useState({});
   const [edit, setEdit] = useState(true);
@@ -113,7 +112,9 @@ function AdminProfileForm() {
           confirmPassword: "",
         }}
         validationSchema={Yup.object({
-          email: Yup.string().email("Invalid email address"),
+          email: Yup.string()
+            .email("Invalid email address")
+            .required("Email is required"),
           currentPassword: Yup.string().min(
             12,
             "Current password must be at least 12 characters"
@@ -154,11 +155,12 @@ function AdminProfileForm() {
           </h1>
           <div className={styles.inputContainer}>
             <Input
-              label="Email"
+              label="Email *"
               name="email"
               type="text"
               width={inputWidth()}
               disabled={edit}
+              isBlue
             />
             <Input
               label="Current Password"
@@ -166,6 +168,7 @@ function AdminProfileForm() {
               type="password"
               width={inputWidth()}
               disabled={edit}
+              isBlue
             />
             <Input
               label="New Password"
@@ -173,6 +176,7 @@ function AdminProfileForm() {
               type="password"
               width={inputWidth()}
               disabled={edit}
+              isBlue
             />
             <Input
               label="Confirm Password"
@@ -180,6 +184,7 @@ function AdminProfileForm() {
               type="password"
               width={inputWidth()}
               disabled={edit}
+              isBlue
             />
           </div>
           <div className={styles.buttonContainer}>

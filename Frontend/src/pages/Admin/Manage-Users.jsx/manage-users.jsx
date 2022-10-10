@@ -50,6 +50,14 @@ function ManageUsers() {
       });
     }
 
+    mentors.map((mentor, index) => {
+      if (mentor.id == cardData.id) {
+        mentors.splice(index, 1);
+      }
+    });
+
+    setMentors([...mentors]);
+
     return toast({
       title: "Approved!",
       description: "Mentor access has been approved!",
