@@ -57,7 +57,7 @@ model Student {
   phone                       String?   @db.VarChar(15)
   gender                      String    @db.VarChar(10)
   graduationDate              DateTime? @db.Date
-  gpa                         Float?
+  gpa                         String?
   institution                 String
   fieldOfStudy                String    @db.VarChar(255)
   hasResearch                 Boolean   @default(false)
