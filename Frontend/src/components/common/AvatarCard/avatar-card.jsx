@@ -16,30 +16,16 @@ import {
   useMediaQuery,
   HStack,
   Spacer,
-  VStack,
-  UnorderedList,
-  ListItem
 } from "@chakra-ui/react";
 import styles from "./avatar-card.module.css";
+import OfficeHours from "../../Mentors/OfficeHours/office-hours";
 
 function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [hoursState, setHoursState] = useState({});
+  
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
   const [firstName, lastName] = cardData.name.split("; ");
-
-  let mentorSchedule = {};
-  let compo = {};
-  const days = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
 
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
 
@@ -47,38 +33,121 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
     buttonFunction(cardData);
   }
 
-  useEffect(() => {
-    console.log(cardData)
-    function transformSchedule(serverData, schedule) {
-      const daysInterval = serverData.split("/");
+  function loadPhone() {
+    if(!!cardData.phone){
+    return(
+      <>
+      <HStack
+                  px={3}
+                  py={3}
+                  rounded={"27px"}
+                  bg={"#D9E4EA"}
+                  mx={3}
+                  boxShadow={"md"}
+                >
+                  <Image
+                    boxSize="50px"
+                    objectFit="cover"
+                    src="/assets/cellphone.svg"
+                    alt="Cellphone.svg"
+                  />
+                  <Text fontWeight={"400"}>{cardData.phone}</Text>
+                </HStack>
+      </>
+    );
+    }
+  }
 
-      for (const interval of daysInterval) {
-        const timeSplit = interval.split("%");
-        schedule[timeSplit[0]] = timeSplit[1];
-      }
-    }
-    if(studentSide === true){
-    transformSchedule(cardData.officeHours, mentorSchedule);
-    }
-    function formatHours() {
-      for (let j = 0; j < days.length; j++) {
-        let temp = mentorSchedule[days[j]];
-        if (temp?.includes("@")) {
-          let sub = temp.split("@");
-          compo[days[j]] = [sub[0], sub[1]];
-        } else {
-          if (temp !== "") {
-            compo[days[j]] = temp;
-          }
-        }
-      }
-    }
+  function loadEmail(){
+    if(!!cardData.email){
+      return(
 
-    if(studentSide === true){
-    formatHours();
-    }
-    setHoursState(compo);
-  }, []);
+        <>
+    <HStack
+                  px={3}
+                  py={3}
+                  rounded={"27px"}
+                  bg={"#D9E4EA"}
+                  mx={3}
+                  boxShadow={"md"}
+                >
+                  <Image
+                    boxSize="50px"
+                    objectFit="cover"
+                    src="/assets/circled-envelope.svg"
+                    alt="Company.svg"
+                  />
+                  <Text fontWeight={"400"}>{cardData.email}</Text>
+                </HStack>
+                </>)
+  }
+}
+function loadAcademicDegree(){
+  if(!!cardData.academicDegree){
+    return(
+      <>
+  <HStack
+                  px={3}
+                  py={3}
+                  rounded={"27px"}
+                  bg={"#D9E4EA"}
+                  mx={3}
+                  my={5}
+                  boxShadow={"md"}
+                >
+                  <Image
+                    boxSize="50px"
+                    objectFit="cover"
+                    src="/assets/graduation-cap.svg"
+                    alt="Company.svg"
+                  />
+                  <Text fontWeight={"400"}>{cardData.academicDegree}</Text>
+                </HStack>
+                </>
+    );
+}
+}
+function loadDescription(){
+  if(!!cardData.description){
+    return(
+      <>
+        <HStack
+                    px={3}
+                    py={3}
+                    rounded={"27px"}
+                    bg={"#D9E4EA"}
+                    mx={3}
+                    my={5}
+                    boxShadow={"md"}
+                    maxWidth={"2xl"}
+                    justifyContent="start"
+                    minW={"670px"}
+                  >
+                    <Avatar
+                      size={"lg"}
+                      borderWidth={"2px"}
+                      borderColor={"#99A9B9"}
+                      background={"#5389BE"}
+                      src={"/assets/info.svg"}
+                      alt={"Avatar Alt"}
+                      pos={"relative"}
+                      p={3}
+                    />
+                    <Text fontWeight={"400"} textAlign={"justify"}>
+                      {cardData.description}
+                    </Text>
+                  </HStack>
+      </>
+    );
+  }
+}
+
+function loadHours(){
+  if(!!cardData.officeHours){
+  return <OfficeHours timeString={cardData.officeHours}/>
+  }
+}
+
 
   return (
     <>
@@ -200,160 +269,19 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
             </Center>
             <Center flexDir={"column"} mt={7}>
               <Stack
-                align={"center"}
-                justify={"center"}
+                align={"start"}
                 direction={"row"}
-                spacing={8}
+                spacing={2}
+                minW={"670px"}
               >
-                <HStack
-                  px={3}
-                  py={3}
-                  rounded={"27px"}
-                  bg={"#D9E4EA"}
-                  mx={3}
-                  pr={5}
-                  boxShadow={"md"}
-                >
-                  <Image
-                    boxSize="50px"
-                    objectFit="cover"
-                    src="/assets/cellphone.svg"
-                    alt="Cellphone.svg"
-                  />
-                  <Text fontWeight={"400"}>{cardData.phone}</Text>
-                </HStack>
-                <HStack
-                  px={3}
-                  py={3}
-                  rounded={"27px"}
-                  bg={"#D9E4EA"}
-                  mx={3}
-                  pr={5}
-                  boxShadow={"md"}
-                >
-                  <Image
-                    boxSize="50px"
-                    objectFit="cover"
-                    src="/assets/circled-envelope.svg"
-                    alt="Company.svg"
-                  />
-                  <Text fontWeight={"400"}>{cardData.email}</Text>
-                </HStack>
-                <HStack
-                  pl={2}
-                  pr={3}
-                  py={3}
-                  rounded={"27px"}
-                  bg={"#D9E4EA"}
-                  mx={3}
-                  my={5}
-                  boxShadow={"md"}
-                >
-                  <Image
-                    boxSize="50px"
-                    objectFit="cover"
-                    src="/assets/graduation-cap.svg"
-                    alt="Company.svg"
-                  />
-                  <Text fontWeight={"400"}>{cardData.academicDegree}</Text>
-                </HStack>
+                {loadPhone()}
+                {loadEmail()}
+                {loadAcademicDegree()}
               </Stack>
               {studentSide && (
                 <>
-                  <HStack
-                    px={3}
-                    py={3}
-                    rounded={"27px"}
-                    bg={"#D9E4EA"}
-                    mx={3}
-                    my={5}
-                    boxShadow={"md"}
-                    maxWidth={"2xl"}
-                    justifyContent="center"
-                  >
-                    <Avatar
-                      size={"lg"}
-                      borderWidth={"2px"}
-                      borderColor={"#99A9B9"}
-                      background={"#5389BE"}
-                      src={"/assets/info.svg"}
-                      alt={"Avatar Alt"}
-                      pos={"relative"}
-                      p={3}
-                    />
-                    <Text fontWeight={"400"} textAlign={"justify"}>
-                      {cardData.description}
-                    </Text>
-                  </HStack>
-                  <HStack
-                    px={3}
-                    py={3}
-                    rounded={"27px"}
-                    bg={"#D9E4EA"}
-                    mx={3}
-                    mb={5}
-                    boxShadow={"md"}
-                    maxWidth={"2xl"}
-                    justifyContent="center"
-                  >
-                    <Avatar
-                      size={"lg"}
-                      borderWidth={"2px"}
-                      borderColor={"#99A9B9"}
-                      background={"#5389BE"}
-                      src={"/assets/Person_Calendar.png"}
-                      alt={"Avatar Alt"}
-                      pos={"relative"}
-                      p={3}
-                    />
-
-                    {
-                      <VStack>
-                        <Text
-                          as="b"
-                          textDecorationLine={"underline"}
-                          size={"l"}
-                        >
-                          Office Hours
-                        </Text>
-                        <HStack paddingLeft={"10px"} justifyItems={"space-around"}>
-                        {/* {
-                          days.map((day, index)=> {
-                            if (Array.isArray(hoursState[day])) {
-                              return (
-                                <VStack key={index} paddingLeft={"10px"}>
-                                  <Text as="b">{day}:</Text>
-                                  <UnorderedList>
-                                    <ListItem key={day + hoursState[day][0] + index}>{hoursState[day][0]}</ListItem>
-                                    <ListItem key={day + hoursState[day][1] + index}>{hoursState[day][1]}</ListItem>
-                                  </UnorderedList>
-                                </VStack>
-                              );
-                          } else {
-                            if(hoursState.hasOwnProperty(day) && hoursState[day] == undefined){
-                              return(
-                                <>
-                                </>
-                              );
-                            }
-                            else if (hoursState.hasOwnProperty(day)) {
-                              return (
-                                <VStack  key={index} paddingLeft={"10px"}>
-                                  <Text as="b">{day}:</Text>
-                                  <UnorderedList>
-                                    <ListItem key={day + hoursState[day] + index}>{hoursState[day]}</ListItem>
-                                  </UnorderedList>
-                                </VStack>
-                              );
-                            }
-                          }
-                        }
-                          )
-                        } */}
-                        </HStack>
-                      </VStack>
-                    }
-                  </HStack>
+                  {loadDescription()}
+                  {loadHours()}
                 </>
               )}
             </Center>

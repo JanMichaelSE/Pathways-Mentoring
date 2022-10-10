@@ -200,7 +200,7 @@ function Mentors() {
   }
 
   return (
-    <div style={{ flex: 1, backgroundColor: "#f1f8fc", height: "92vh" }}>
+    <div style={{ flex: 1, backgroundColor: "#f1f8fc" }}>
       {loadMentorsComponent()}
     </div>
   );
