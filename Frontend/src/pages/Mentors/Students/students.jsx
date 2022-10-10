@@ -20,18 +20,13 @@ import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
 import Contact from "@/assets/contact.svg";
 import styles from "./students.module.css";
-import { useSearchParams } from "react-router-dom";
 
 function Students() {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(true);
-  const [studentLocation, setStudentLocation] = useState([]);
   const [pendingStudents, setPendingStudents] = useState([]);
   const [currentStudents, setCurrentStudents] = useState([]);
   const [isLessThan950] = useMediaQuery("(max-width: 950px)");
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  // index boolean
 
   useEffect(() => {
     async function loadAllStudents() {
@@ -65,7 +60,6 @@ function Students() {
   }, []);
 
   async function CancelMentoring(cardData) {
-    console.log("Info of card data: ", cardData);
     const userResponse = await httpCancelMentorship(cardData.id);
 
     if (userResponse.hasError) {
@@ -95,7 +89,6 @@ function Students() {
   }
 
   async function AcceptMentoring(cardData) {
-    console.log("Info of card data: ", cardData);
     const userResponse = await httpAcceptMentorship(cardData.id);
 
     if (userResponse.hasError) {
