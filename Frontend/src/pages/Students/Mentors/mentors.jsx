@@ -39,10 +39,8 @@ function Mentors() {
 
       for (const mentor of mentorsResponse.data) {
         if (mentor.isActiveMentor == false) {
-          console.log(mentor);
           availableMentorData.push(mentor);
         } else {
-          console.log(mentor);
           currentMentorData.push(mentor);
         }
       }
@@ -56,7 +54,6 @@ function Mentors() {
   }, []);
 
   async function RequestMentoring(cardData) {
-    console.log("Info of card data: ", cardData.email);
     const userResponse = await httpRequestMentorship(cardData.email);
 
     if (userResponse.hasError) {

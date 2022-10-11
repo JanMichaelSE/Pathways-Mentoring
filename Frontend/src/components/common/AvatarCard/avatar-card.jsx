@@ -8,6 +8,7 @@ import {
   Text,
   Stack,
   Image,
+  Link,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -89,7 +90,9 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
               src="/assets/circled-envelope.svg"
               alt="Company.svg"
             />
-            <Text fontWeight={"400"}>{cardData.email}</Text>
+            <Link href={`mailto:${cardData.email}`} fontWeight={"400"}>
+              {cardData.email}
+            </Link>
           </HStack>
         </>
       );

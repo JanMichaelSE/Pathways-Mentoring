@@ -139,7 +139,6 @@ function Students() {
             spacing="40px"
             className={styles.background}
           >
-            {console.log("Pending Students", pendingStudents)}
             {pendingStudents?.map((student) => {
               return (
                 <AvatarCard

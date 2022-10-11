@@ -45,7 +45,9 @@ async function findAllMentors(): Promise<Mentor[]> {
         },
       },
     });
-    const mentorsWithoutId = mentors.map((mentor) => excludeFields(mentor, "userId"));
+    const mentorsWithoutId = mentors.map((mentor) =>
+      excludeFields(mentor, "userId")
+    );
     return mentorsWithoutId;
   } catch (error) {
     throw error;
@@ -56,22 +58,12 @@ async function findMentorByStudentId(studentId: string): Promise<Mentor[]> {
   try {
     const mentor = await prisma.mentor.findMany({
       where: {
-        AND: [
-          {
-            students: {
-              some: {
-                id: studentId,
-              },
-            },
+        students: {
+          some: {
+            id: studentId,
+            isPendingMentorshipApproval: false,
           },
-          {
-            students: {
-              some: {
-                isPendingMentorshipApproval: false,
-              },
-            },
-          },
-        ],
+        },
       },
     });
 
@@ -166,7 +158,9 @@ async function updateMentor(
         description: mentorInfo.description,
         interests: mentorInfo.interests,
         department: !!mentorInfo.department ? mentorInfo.department : undefined,
-        academicDegree: !!mentorInfo.academicDegree ? mentorInfo.academicDegree : undefined,
+        academicDegree: !!mentorInfo.academicDegree
+          ? mentorInfo.academicDegree
+          : undefined,
         office: mentorInfo.office,
         officeHours: mentorInfo.officeHours,
         profilePicture: mentorInfo.profilePicture,
@@ -180,7 +174,9 @@ async function updateMentor(
   }
 }
 
-async function validateMentorExists(userId: string): Promise<Mentor | IErrorResponse> {
+async function validateMentorExists(
+  userId: string
+): Promise<Mentor | IErrorResponse> {
   try {
     const mentor = await prisma.mentor.findUnique({
       where: {
