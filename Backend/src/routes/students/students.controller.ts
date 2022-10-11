@@ -140,7 +140,7 @@ async function httpRequestMentorship(req: Request, res: Response) {
     await updateStudentMentorship(student.id, mentor.id, true);
 
     let formattedName = student.name.replace(";", "");
-    //await sendRequestMentorshipEmail(mentorEmail, formattedName, student.id);
+    await sendRequestMentorshipEmail(mentorEmail, formattedName, student.id);
 
     return res.status(200).json("Mentorship Request has been sent.");
   } catch (error) {
@@ -188,11 +188,11 @@ async function httpCancelMentorship(req: Request, res: Response) {
 
       updatedStudent = await updateStudentMentorship(student.id, null);
       let studentFormattedName = student.name.replace(";", "");
-      // await sendCanceledMentorshipEmail(
-      //   mentor.email,
-      //   studentFormattedName,
-      //   studentFormattedName
-      // );
+      await sendCanceledMentorshipEmail(
+        mentor.email,
+        studentFormattedName,
+        studentFormattedName
+      );
     } else {
       const mentor = await findMentorByUserId(userId);
       if (!mentor) {
