@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   Heading,
@@ -44,22 +44,15 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
     }
   }, []);
 
-  function clickFunction() {
+  function onModalSubmit() {
     buttonFunction(cardData);
   }
 
-  function loadPhone() {
+  function loadPhoneComponent() {
     if (!!cardData.phone) {
       return (
         <>
-          <HStack
-            px={3}
-            py={3}
-            rounded={"27px"}
-            bg={"#D9E4EA"}
-            mx={3}
-            boxShadow={"md"}
-          >
+          <HStack px={3} py={3} rounded={"27px"} bg={"#D9E4EA"} boxShadow={"md"}>
             <Image
               boxSize="50px"
               objectFit="cover"
@@ -73,18 +66,11 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
     }
   }
 
-  function loadEmail() {
+  function loadEmailComponent() {
     if (!!cardData.email) {
       return (
         <>
-          <HStack
-            px={3}
-            py={3}
-            rounded={"27px"}
-            bg={"#D9E4EA"}
-            mx={3}
-            boxShadow={"md"}
-          >
+          <HStack px={3} py={3} rounded={"27px"} bg={"#D9E4EA"} boxShadow={"md"}>
             <Image
               boxSize="50px"
               objectFit="cover"
@@ -99,19 +85,11 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
       );
     }
   }
-  function loadAcademicDegree() {
+  function loadAcademicDegreeComponent() {
     if (!!cardData.academicDegree) {
       return (
         <>
-          <HStack
-            px={3}
-            py={3}
-            rounded={"27px"}
-            bg={"#D9E4EA"}
-            mx={3}
-            my={5}
-            boxShadow={"md"}
-          >
+          <HStack px={3} py={3} rounded={"27px"} bg={"#D9E4EA"} boxShadow={"md"} minWidth={"180px"}>
             <Image
               boxSize="50px"
               objectFit="cover"
@@ -124,7 +102,7 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
       );
     }
   }
-  function loadDescription() {
+  function loadDescriptionComponent() {
     if (!!cardData.description) {
       return (
         <>
@@ -159,7 +137,7 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
     }
   }
 
-  function loadHours() {
+  function loadOfficeHoursComponent() {
     if (!!cardData.officeHours) {
       return <OfficeHours timeString={cardData.officeHours} />;
     }
@@ -170,7 +148,9 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
       <Center py={6}>
         <Box
           px={20}
-          maxW={"275px"}
+          maxWidth={"275px"}
+          maxHeight={"400px"}
+          minHeight={"400px"}
           w={"full"}
           bg={"#FFFFFF"}
           boxShadow={"2xl"}
@@ -181,27 +161,11 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
           cursor={"pointer"}
         >
           <ProfilePicture avatar={cardData.profilePicture} />
-          {/* <Avatar
-            size={"2xl"}
-            borderWidth={"2px"}
-            borderStyle={"dashed"}
-            borderColor={"#93B3D3"}
-            background={"#F1F8FC"}
-            src={`/assets/spriteAvatar.svg#${cardData.profilePicture}`}
-            alt={"Avatar Alt"}
-            mb={4}
-            pos={"relative"}
-            p={3}
-          /> */}
-          <Heading fontSize={"2xl"} fontFamily={"body"}>
+          <Heading fontSize={"2xl"} fontFamily={"body"} noOfLines={2}>
             {`${firstName} ${lastName}`}
-            {console.log(
-              "image: ",
-              `/assets/spriteAvatar.svg#${cardData.profilePicture}`
-            )}
           </Heading>
           <Text fontWeight={600} color={"gray.500"} mb={4}>
-            {cardData.department}
+            {cardData.department || cardData.fieldOfStudy}
           </Text>
 
           <Stack align={"center"} justify={"center"} direction={"row"} mt={6}>
@@ -260,11 +224,7 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
                 cursor="pointer"
               />
               <Spacer />
-              <button
-                type="submit"
-                className={styles.button}
-                onClick={clickFunction}
-              >
+              <button type="submit" className={styles.button} onClick={onModalSubmit}>
                 {messageButton}
               </button>
             </HStack>
@@ -277,25 +237,26 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
                   {`${firstName} ${lastName}`}
                 </Heading>
                 <Text fontWeight={600} color={"gray.500"}>
-                  {cardData.department}
+                  {cardData.department || cardData.fieldOfStudy}
                 </Text>
               </Stack>
             </Center>
             <Center flexDir={"column"} mt={7}>
               <Stack
-                align={"start"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
                 direction={"row"}
                 spacing={2}
                 minW={"670px"}
               >
-                {loadPhone()}
-                {loadEmail()}
-                {loadAcademicDegree()}
+                {loadPhoneComponent()}
+                {loadEmailComponent()}
+                {loadAcademicDegreeComponent()}
               </Stack>
               {studentSide && (
                 <>
-                  {loadDescription()}
-                  {loadHours()}
+                  {loadDescriptionComponent()}
+                  {loadOfficeHoursComponent()}
                 </>
               )}
             </Center>
