@@ -47,11 +47,11 @@ function Notes({ noteId }) {
         setMessages([...messages]);
       });
     }
-  }, [isLoading]);
+  }, [isLoading, messages]);
 
   function onMessageInputChange(event) {
-    const value = event.target.value;
-    setMessage(value);
+    const inputMessage = event.target.value;
+    setMessage(inputMessage);
   }
 
   function sendMessage() {
