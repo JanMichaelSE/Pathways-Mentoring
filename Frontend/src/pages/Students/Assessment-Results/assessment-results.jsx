@@ -33,6 +33,11 @@ function AssessmentResults() {
         });
       }
 
+      const isAnswered = isAssessmentAnswered(assessmentResponse.data);
+      if (!isAnswered) {
+        return navigate("../assessments", { replace: true });
+      }
+
       setAssessment(assessmentResponse.data);
       setIsLoading(false);
     }
@@ -40,9 +45,23 @@ function AssessmentResults() {
     if (assessment == null) {
       loadAssessmentResults();
     } else {
+      const isAnswered = isAssessmentAnswered(assessment);
+      if (!isAnswered) {
+        return navigate("../assessments", { replace: true });
+      }
       setIsLoading(false);
     }
   }, []);
+
+  function isAssessmentAnswered(assessment) {
+    for (const question of assessment.questions) {
+      if (!!question.answer) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   function goBack() {
     navigate("../assessments", { replace: true });

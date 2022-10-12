@@ -21,25 +21,43 @@ function SmartGoalTemplate() {
     window.scrollTo(0, 0);
 
     async function loadDevelopmentPlanInfo() {
-      const DevelopmentPlanResponse = await httpGetDevelopmentPlanQuestion();
+      const developmentPlanResponse = await httpGetDevelopmentPlanQuestion();
 
-      if (DevelopmentPlanResponse.hasError) {
+      if (developmentPlanResponse.hasError) {
         return toast({
-          description: DevelopmentPlanResponse.errorMessage,
+          description: developmentPlanResponse.errorMessage,
           status: "error",
           position: "top",
           duration: 5000,
         });
       }
-      setDevelopmentPlan(DevelopmentPlanResponse.data);
+      setDevelopmentPlan(developmentPlanResponse.data);
+      const isAnswered = isDevelopmentPlanAnswered(developmentPlanResponse.data);
+      if (!isAnswered) {
+        return navigate("../development-plan", { replace: true });
+      }
       setIsLoading(false);
     }
     if (developmentPlan == null) {
       loadDevelopmentPlanInfo();
     } else {
+      const isAnswered = isDevelopmentPlanAnswered(developmentPlan);
+      if (!isAnswered) {
+        return navigate("../development-plan", { replace: true });
+      }
       setIsLoading(false);
     }
   }, []);
+
+  function isDevelopmentPlanAnswered(developmentPlan) {
+    for (const question of developmentPlan) {
+      if (!!question.answers[0]?.answer) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   function goBack() {
     navigate("../development-plan", { replace: true });
