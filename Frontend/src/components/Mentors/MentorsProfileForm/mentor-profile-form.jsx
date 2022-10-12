@@ -243,6 +243,7 @@ function MentorProfileForm() {
               "Mechanical Engineering",
             ])
             .required("Department is required"),
+          interests: Yup.string().required("Area of Interest is required"),
           facultyStatus: Yup.string()
             .oneOf(["Instructor", "Assistant", "Associate", "Professor"])
             .required("Faculty Status is required"),
