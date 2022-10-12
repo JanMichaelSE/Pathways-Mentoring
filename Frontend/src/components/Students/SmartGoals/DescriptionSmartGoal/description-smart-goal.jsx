@@ -5,7 +5,7 @@ import styles from "./description-smart-goal.module.css";
 
 function DescriptionSmartGoal() {
   return (
-    <DescriptionCard title={"Individual Development Plan"}>
+    <DescriptionCard title={"SMART Goals Template"}>
       <p>
         Create goals that are specific, measurable, align with your career goals
         and the goals of the organization. Be sure your goals are realistic but
