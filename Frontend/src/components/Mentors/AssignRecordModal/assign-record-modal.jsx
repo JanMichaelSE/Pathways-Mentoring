@@ -70,7 +70,7 @@ function AssignRecordModal({ students, isOpen, onClose }) {
               studentName: "",
             }}
             validationSchema={Yup.object({
-              studentName: Yup.string().required(),
+              studentName: Yup.string().required("A student is required to assign records."),
             })}
             onSubmit={async (values) => {
               await submitRecordAssignment(values.studentName);
