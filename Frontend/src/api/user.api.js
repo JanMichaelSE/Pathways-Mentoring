@@ -80,7 +80,7 @@ async function httpSignupMentor(mentor) {
       gender: mentor.gender,
       academicDegree: mentor.academicDegree,
       department: mentor.department,
-      interests: mentor.interests,
+      interests: mentor.areaOfInterest,
       facultyStatus: mentor.facultyStatus,
       officeHours: "",
     };
