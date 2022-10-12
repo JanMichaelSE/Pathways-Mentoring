@@ -16,6 +16,7 @@ import {
   useMediaQuery,
   HStack,
   Spacer,
+  Link,
 } from "@chakra-ui/react";
 
 export default function StaffCard({ cardData }) {
@@ -94,11 +95,7 @@ export default function StaffCard({ cardData }) {
         rounded={"27px"}
       >
         <ModalOverlay />
-        <ModalContent
-          borderWidth={"2px"}
-          borderStyle={"dashed"}
-          borderColor={"#0066CC"}
-        >
+        <ModalContent borderWidth={"2px"} borderStyle={"dashed"} borderColor={"#0066CC"}>
           <ModalHeader>
             <HStack alignItems={"center"}>
               <Image
@@ -134,12 +131,7 @@ export default function StaffCard({ cardData }) {
               </Stack>
             </Center>
             <Center flexDir={"column"} mt={7}>
-              <Stack
-                align={"center"}
-                justify={"center"}
-                direction={"row"}
-                spacing={8}
-              >
+              <Stack align={"center"} justify={"center"} direction={"row"} spacing={8}>
                 <HStack
                   px={3}
                   py={3}
@@ -172,7 +164,9 @@ export default function StaffCard({ cardData }) {
                     src="/assets/circled-envelope.svg"
                     alt="Company.svg"
                   />
-                  <Text fontWeight={"400"}>{cardData.email}</Text>
+                  <Link href={`mailto:${cardData.email}`} fontWeight={"400"}>
+                    {cardData.email}
+                  </Link>
                 </HStack>
                 <HStack
                   pl={2}
@@ -204,16 +198,11 @@ export default function StaffCard({ cardData }) {
                 maxWidth={"2xl"}
                 justifyContent="center"
               >
-                <Image
-                  boxSize="50px"
-                  objectFit="cover"
-                  src="/assets/info.svg"
-                  alt="info.svg"
-                />
+                <Image boxSize="50px" objectFit="cover" src="/assets/info.svg" alt="info.svg" />
                 <Text fontWeight={"400"}>
-                  Will only accept calls on fridays at work. If need of any
-                  other information please contact me by email. In any case I am
-                  available on Monday and Friday from 12:00 PM to 4:00 PM.
+                  Will only accept calls on fridays at work. If need of any other information please
+                  contact me by email. In any case I am available on Monday and Friday from 12:00 PM
+                  to 4:00 PM.
                 </Text>
               </HStack>
             </Center>
