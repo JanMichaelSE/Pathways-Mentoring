@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import styles from "./avatar-card.module.css";
 import OfficeHours from "../../Mentors/OfficeHours/office-hours";
+import ProfilePicture from "../Profile/ProfilePicture/profile-picture";
 
 function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -179,20 +180,25 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
           onClick={onOpen}
           cursor={"pointer"}
         >
-          <Avatar
+          <ProfilePicture avatar={cardData.profilePicture} />
+          {/* <Avatar
             size={"2xl"}
             borderWidth={"2px"}
             borderStyle={"dashed"}
             borderColor={"#93B3D3"}
             background={"#F1F8FC"}
-            src={cardData.profilePicture}
+            src={`/assets/spriteAvatar.svg#${cardData.profilePicture}`}
             alt={"Avatar Alt"}
             mb={4}
             pos={"relative"}
             p={3}
-          />
+          /> */}
           <Heading fontSize={"2xl"} fontFamily={"body"}>
             {`${firstName} ${lastName}`}
+            {console.log(
+              "image: ",
+              `/assets/spriteAvatar.svg#${cardData.profilePicture}`
+            )}
           </Heading>
           <Text fontWeight={600} color={"gray.500"} mb={4}>
             {cardData.department}
@@ -266,16 +272,7 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
           <ModalBody pb={6}>
             <Center align="stretch">
               <Stack align={"center"} justify={"center"} mx={6}>
-                <Avatar
-                  size={"2xl"}
-                  background={"#F1F8FC"}
-                  borderWidth={"2px"}
-                  borderColor={"#0874E0"}
-                  src={cardData.profilePicture}
-                  alt={"Avatar Alt"}
-                  mb={4}
-                  p={5}
-                />
+                <ProfilePicture avatar={cardData.profilePicture} />
                 <Heading fontSize={"2xl"} fontFamily={"body"}>
                   {`${firstName} ${lastName}`}
                 </Heading>

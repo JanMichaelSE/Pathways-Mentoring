@@ -267,7 +267,10 @@ function MentorProfileForm() {
             </Button>
           </div>
           <div className={styles.avatarContainer}>
-            <ProfilePicture enableReinitialize={true}></ProfilePicture>
+            <ProfilePicture
+              enableReinitialize={true}
+              forProfile
+            ></ProfilePicture>
             <ProfileChangerPopOver name="profilePicture" edit={edit} />
           </div>
 
