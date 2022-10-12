@@ -43,9 +43,7 @@ function DevelopmentPlan() {
       }
       initForm(developmentPlanResponse.data);
       setDevelopmentPlan(developmentPlanResponse.data);
-      const isAnswered = isDevelopmentPlanAnswered(
-        developmentPlanResponse.data
-      );
+      const isAnswered = isDevelopmentPlanAnswered(developmentPlanResponse.data);
       if (isAnswered) {
         return navigate("../smart-goal-template", { replace: true });
       }
@@ -86,9 +84,7 @@ function DevelopmentPlan() {
 
   function questionValidation(type) {
     if (type == "Multi-Answer") {
-      return Yup.array()
-        .min(1, "Must have at least 1 option.")
-        .required("Question is required");
+      return Yup.array().min(1, "Must have at least 1 option.").required("Question is required");
     } else {
       return Yup.string().required("Question is required");
     }
@@ -175,10 +171,9 @@ function DevelopmentPlan() {
         <Form className={styles.developerPlanContainer}>
           <DescriptionCard title={"Individual Development Plan"}>
             <p>
-              The Individual Development Plan (IDP) supports undergraduate
-              researchers to set goals and identify strategies that will help
-              them to reach those goals. It is a self-tracking tool that can
-              also be used to facilitate mentor-mentee communication and
+              The Individual Development Plan (IDP) supports undergraduate researchers to set goals
+              and identify strategies that will help them to reach those goals. It is a
+              self-tracking tool that can also be used to facilitate mentor-mentee communication and
               alignment of expectations.
             </p>
           </DescriptionCard>
