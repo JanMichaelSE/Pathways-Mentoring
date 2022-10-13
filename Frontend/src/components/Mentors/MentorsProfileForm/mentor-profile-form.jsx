@@ -243,6 +243,7 @@ function MentorProfileForm() {
               "Mechanical Engineering",
             ])
             .required("Department is required"),
+          interests: Yup.string().required("Area of Interest is required"),
           facultyStatus: Yup.string()
             .oneOf(["Instructor", "Assistant", "Associate", "Professor"])
             .required("Faculty Status is required"),
@@ -266,7 +267,10 @@ function MentorProfileForm() {
             </Button>
           </div>
           <div className={styles.avatarContainer}>
-            <ProfilePicture enableReinitialize={true}></ProfilePicture>
+            <ProfilePicture
+              enableReinitialize={true}
+              forProfile
+            ></ProfilePicture>
             <ProfileChangerPopOver name="profilePicture" edit={edit} />
           </div>
 

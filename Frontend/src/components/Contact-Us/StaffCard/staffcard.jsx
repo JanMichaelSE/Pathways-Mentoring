@@ -16,6 +16,7 @@ import {
   useMediaQuery,
   HStack,
   Spacer,
+  Link,
 } from "@chakra-ui/react";
 
 export default function StaffCard({ cardData }) {
@@ -31,7 +32,9 @@ export default function StaffCard({ cardData }) {
         <Box
           px={20}
           pt={5}
-          maxW={"275px"}
+          maxWidth={"275px"}
+          maxHeight={"380px"}
+          minHeight={"380px"}
           w={"full"}
           bg={"#FFFFFF"}
           boxShadow={"2xl"}
@@ -50,7 +53,7 @@ export default function StaffCard({ cardData }) {
             pos={"relative"}
             p={3}
           />
-          <Heading fontSize={"2xl"} fontFamily={"body"}>
+          <Heading fontSize={"2xl"} fontFamily={"body"} noOfLines={2}>
             {cardData.name}
           </Heading>
           <Text fontWeight={600} color={"gray.500"} mb={4}>
@@ -94,11 +97,7 @@ export default function StaffCard({ cardData }) {
         rounded={"27px"}
       >
         <ModalOverlay />
-        <ModalContent
-          borderWidth={"2px"}
-          borderStyle={"dashed"}
-          borderColor={"#0066CC"}
-        >
+        <ModalContent borderWidth={"2px"} borderStyle={"dashed"} borderColor={"#0066CC"}>
           <ModalHeader>
             <HStack alignItems={"center"}>
               <Image
@@ -114,7 +113,7 @@ export default function StaffCard({ cardData }) {
           </ModalHeader>
           <ModalBody pb={6}>
             <Center align="stretch">
-              <Stack align={"center"} justify={"center"} mx={6}>
+              <Stack alignItems={"center"} justifyContent={"center"} mx={6}>
                 <Avatar
                   size={"2xl"}
                   background={"#F1F8FC"}
@@ -135,20 +134,14 @@ export default function StaffCard({ cardData }) {
             </Center>
             <Center flexDir={"column"} mt={7}>
               <Stack
-                align={"center"}
-                justify={"center"}
+                maxWidth={"670px"}
+                minWidth={"670px"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
                 direction={"row"}
                 spacing={8}
               >
-                <HStack
-                  px={3}
-                  py={3}
-                  rounded={"27px"}
-                  bg={"#D9E4EA"}
-                  mx={3}
-                  pr={5}
-                  boxShadow={"md"}
-                >
+                <HStack px={3} py={3} rounded={"27px"} bg={"#D9E4EA"} pr={5} boxShadow={"md"}>
                   <Image
                     boxSize="50px"
                     objectFit="cover"
@@ -157,33 +150,18 @@ export default function StaffCard({ cardData }) {
                   />
                   <Text fontWeight={"400"}>{cardData.telephone}</Text>
                 </HStack>
-                <HStack
-                  px={3}
-                  py={3}
-                  rounded={"27px"}
-                  bg={"#D9E4EA"}
-                  mx={3}
-                  pr={5}
-                  boxShadow={"md"}
-                >
+                <HStack px={3} py={3} rounded={"27px"} bg={"#D9E4EA"} pr={5} boxShadow={"md"}>
                   <Image
                     boxSize="50px"
                     objectFit="cover"
                     src="/assets/circled-envelope.svg"
                     alt="Company.svg"
                   />
-                  <Text fontWeight={"400"}>{cardData.email}</Text>
+                  <Link href={`mailto:${cardData.email}`} fontWeight={"400"}>
+                    {cardData.email}
+                  </Link>
                 </HStack>
-                <HStack
-                  pl={2}
-                  pr={3}
-                  py={3}
-                  rounded={"27px"}
-                  bg={"#D9E4EA"}
-                  mx={3}
-                  my={5}
-                  boxShadow={"md"}
-                >
+                <HStack pl={2} pr={3} py={3} rounded={"27px"} bg={"#D9E4EA"} boxShadow={"md"}>
                   <Image
                     boxSize="50px"
                     objectFit="cover"
@@ -201,19 +179,15 @@ export default function StaffCard({ cardData }) {
                 mx={3}
                 my={5}
                 boxShadow={"md"}
-                maxWidth={"2xl"}
+                minWidth={"670px"}
+                maxWidth={"670px"}
                 justifyContent="center"
               >
-                <Image
-                  boxSize="50px"
-                  objectFit="cover"
-                  src="/assets/info.svg"
-                  alt="info.svg"
-                />
+                <Image boxSize="50px" objectFit="cover" src="/assets/info.svg" alt="info.svg" />
                 <Text fontWeight={"400"}>
-                  Will only accept calls on fridays at work. If need of any
-                  other information please contact me by email. In any case I am
-                  available on Monday and Friday from 12:00 PM to 4:00 PM.
+                  Will only accept calls on fridays at work. If need of any other information please
+                  contact me by email. In any case I am available on Monday and Friday from 12:00 PM
+                  to 4:00 PM.
                 </Text>
               </HStack>
             </Center>

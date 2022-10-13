@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   Heading,
@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import styles from "./avatar-card.module.css";
 import OfficeHours from "../../Mentors/OfficeHours/office-hours";
+import ProfilePicture from "../Profile/ProfilePicture/profile-picture";
 
 function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,22 +44,15 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
     }
   }, []);
 
-  function clickFunction() {
+  function onModalSubmit() {
     buttonFunction(cardData);
   }
 
-  function loadPhone() {
+  function loadPhoneComponent() {
     if (!!cardData.phone) {
       return (
         <>
-          <HStack
-            px={3}
-            py={3}
-            rounded={"27px"}
-            bg={"#D9E4EA"}
-            mx={3}
-            boxShadow={"md"}
-          >
+          <HStack px={3} py={3} rounded={"27px"} bg={"#D9E4EA"} boxShadow={"md"}>
             <Image
               boxSize="50px"
               objectFit="cover"
@@ -72,18 +66,11 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
     }
   }
 
-  function loadEmail() {
+  function loadEmailComponent() {
     if (!!cardData.email) {
       return (
         <>
-          <HStack
-            px={3}
-            py={3}
-            rounded={"27px"}
-            bg={"#D9E4EA"}
-            mx={3}
-            boxShadow={"md"}
-          >
+          <HStack px={3} py={3} rounded={"27px"} bg={"#D9E4EA"} boxShadow={"md"}>
             <Image
               boxSize="50px"
               objectFit="cover"
@@ -98,19 +85,11 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
       );
     }
   }
-  function loadAcademicDegree() {
+  function loadAcademicDegreeComponent() {
     if (!!cardData.academicDegree) {
       return (
         <>
-          <HStack
-            px={3}
-            py={3}
-            rounded={"27px"}
-            bg={"#D9E4EA"}
-            mx={3}
-            my={5}
-            boxShadow={"md"}
-          >
+          <HStack px={3} py={3} rounded={"27px"} bg={"#D9E4EA"} boxShadow={"md"} minWidth={"180px"}>
             <Image
               boxSize="50px"
               objectFit="cover"
@@ -123,7 +102,7 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
       );
     }
   }
-  function loadDescription() {
+  function loadDescriptionComponent() {
     if (!!cardData.description) {
       return (
         <>
@@ -158,7 +137,7 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
     }
   }
 
-  function loadHours() {
+  function loadOfficeHoursComponent() {
     if (!!cardData.officeHours) {
       return <OfficeHours timeString={cardData.officeHours} />;
     }
@@ -169,7 +148,9 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
       <Center py={6}>
         <Box
           px={20}
-          maxW={"275px"}
+          maxWidth={"275px"}
+          maxHeight={"400px"}
+          minHeight={"400px"}
           w={"full"}
           bg={"#FFFFFF"}
           boxShadow={"2xl"}
@@ -179,23 +160,12 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
           onClick={onOpen}
           cursor={"pointer"}
         >
-          <Avatar
-            size={"2xl"}
-            borderWidth={"2px"}
-            borderStyle={"dashed"}
-            borderColor={"#93B3D3"}
-            background={"#F1F8FC"}
-            src={cardData.profilePicture}
-            alt={"Avatar Alt"}
-            mb={4}
-            pos={"relative"}
-            p={3}
-          />
-          <Heading fontSize={"2xl"} fontFamily={"body"}>
+          <ProfilePicture avatar={cardData.profilePicture} />
+          <Heading fontSize={"2xl"} fontFamily={"body"} noOfLines={2}>
             {`${firstName} ${lastName}`}
           </Heading>
           <Text fontWeight={600} color={"gray.500"} mb={4}>
-            {cardData.department}
+            {cardData.department || cardData.fieldOfStudy}
           </Text>
 
           <Stack align={"center"} justify={"center"} direction={"row"} mt={6}>
@@ -254,11 +224,7 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
                 cursor="pointer"
               />
               <Spacer />
-              <button
-                type="submit"
-                className={styles.button}
-                onClick={clickFunction}
-              >
+              <button type="submit" className={styles.button} onClick={onModalSubmit}>
                 {messageButton}
               </button>
             </HStack>
@@ -266,39 +232,31 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
           <ModalBody pb={6}>
             <Center align="stretch">
               <Stack align={"center"} justify={"center"} mx={6}>
-                <Avatar
-                  size={"2xl"}
-                  background={"#F1F8FC"}
-                  borderWidth={"2px"}
-                  borderColor={"#0874E0"}
-                  src={cardData.profilePicture}
-                  alt={"Avatar Alt"}
-                  mb={4}
-                  p={5}
-                />
+                <ProfilePicture avatar={cardData.profilePicture} />
                 <Heading fontSize={"2xl"} fontFamily={"body"}>
                   {`${firstName} ${lastName}`}
                 </Heading>
                 <Text fontWeight={600} color={"gray.500"}>
-                  {cardData.department}
+                  {cardData.department || cardData.fieldOfStudy}
                 </Text>
               </Stack>
             </Center>
             <Center flexDir={"column"} mt={7}>
               <Stack
-                align={"start"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
                 direction={"row"}
                 spacing={2}
                 minW={"670px"}
               >
-                {loadPhone()}
-                {loadEmail()}
-                {loadAcademicDegree()}
+                {loadPhoneComponent()}
+                {loadEmailComponent()}
+                {loadAcademicDegreeComponent()}
               </Stack>
               {studentSide && (
                 <>
-                  {loadDescription()}
-                  {loadHours()}
+                  {loadDescriptionComponent()}
+                  {loadOfficeHoursComponent()}
                 </>
               )}
             </Center>
