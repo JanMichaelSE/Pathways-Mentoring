@@ -9,8 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Node JS App
-      - uses: appleboy/ssh-action@v0.1.2
-      - uses: actions/checkout@v3
+        uses: appleboy/ssh-action@v0.1.2
         with:
           host: ${{secrets.SSH_HOST}}
           username: ${{secrets.SSH_USERNAME}}
@@ -19,7 +18,7 @@ jobs:
           token: ${{secrets.ACCESS_TOKEN}}
 
           script: |
-            mkdir pathways-repo
-            cd pathways-repo
+            mkdir pathways-repo-1
+            cd pathways-repo-1
             git clone git@github.com:JanMichaelSE/Pathways-Mentoring.git
             echo 'Deployment Successful from Actions'
