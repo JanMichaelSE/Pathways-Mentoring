@@ -9,19 +9,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate with Github
-        uses: actions/checkout@v3
+        uses: actions/checkout@v1
         with:
           token: ${{secrets.ACCESS_TOKEN}}
           
-      - name: Deploy Node JS App
+      - name: Authenticate with Vm
         uses: appleboy/ssh-action@v0.1.2
         with:
           host: ${{secrets.SSH_HOST}}
           username: ${{secrets.SSH_USERNAME}}
           key: ${{secrets.SSH_KEY}}
           passphrase: ${{secrets.SSH_PASSPHRASE}}
-          script: |
-            mkdir pathways-repo-3
-            cd pathways-repo-3
+          
+      - name: Deploy App
+        run: |
+            mkdir pathways-repo-4
+            cd pathways-repo-4
             git clone git@github.com:JanMichaelSE/Pathways-Mentoring.git
             echo 'Deployment Successful from Actions'
