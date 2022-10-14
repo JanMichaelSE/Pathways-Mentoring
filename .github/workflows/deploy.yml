@@ -5,7 +5,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions: read-all|write-all
+    permissions: write-all
     steps:
       - name: Deploy App
         uses: appleboy/ssh-action@v0.1.2
