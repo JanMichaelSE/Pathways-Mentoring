@@ -16,9 +16,7 @@ jobs:
           passphrase: ${{secrets.SSH_PASSPHRASE}}
 
           script: |
-            mkdir pathyways-mentoring-repo-2
-            cd pathyways-mentoring-repo-2
-            git config —-global credential.helper store
-            echo “https://janmichaelse:${{secrets.ACCESS_TOKEN}}@github.com“ > ~/.git-credentials
-            git clone https://github.com/JanMichaelSE/Pathways-Mentoring.git
+            mkdir pathyways-mentoring-repo-3
+            cd pathyways-mentoring-repo-3
+            git clone https://${{secrets.ACCESS_TOKEN}}@github.com/JanMichaelSE/Pathways-Mentoring.git
             echo 'Deployment Successful from Actions'
