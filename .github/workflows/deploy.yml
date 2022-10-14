@@ -3,27 +3,58 @@ on:
     branches:
       - main
 
-
 jobs:
-  deploy:
+  authentication:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      deployments: write
+      id-token: write
+      issues: write
+      discussions: write
+      packages: write
+      pages: write
+      pull-requests: write
+      repository-projects: write
+      security-events: write
+      statuses: write
     steps:
-      - name: Authenticate with Github
+      - name: Authenticate with Github Job
         uses: actions/checkout@v3
         with:
           token: ${{secrets.ACCESS_TOKEN}}
-          
-      - name: Authenticate with Vm
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      deployments: write
+      id-token: write
+      issues: write
+      discussions: write
+      packages: write
+      pages: write
+      pull-requests: write
+      repository-projects: write
+      security-events: write
+      statuses: write
+    needs: authentication
+    steps:          
+      - name: Digital Ocean Server Job
         uses: appleboy/ssh-action@v0.1.2
         with:
           host: ${{secrets.SSH_HOST}}
           username: ${{secrets.SSH_USERNAME}}
           key: ${{secrets.SSH_KEY}}
           passphrase: ${{secrets.SSH_PASSPHRASE}}
-          
-      - name: Deploy App
-        run: |
-            mkdir pathways-repo-4
-            cd pathways-repo-4
+          run: |
+            mkdir pathways-repo-5
+            cd pathways-repo-5
             git clone git@github.com:JanMichaelSE/Pathways-Mentoring.git
             echo 'Deployment Successful from Actions'
+
+          
+        
