@@ -16,7 +16,14 @@ jobs:
           passphrase: ${{secrets.SSH_PASSPHRASE}}
 
           script: |
-            mkdir pathways-repo
-            cd pathways-repo
+            cd /home
             git clone https://${{secrets.ACCESS_TOKEN}}@github.com/JanMichaelSE/Pathways-Mentoring.git
+            cd ./Pathways-Mentoring
+            cd ./Frontend
+            npm install
+            npm run build
+            cd ..
+            cd ./Backend
+            npm install
+            cd ..
             echo 'Deployment Successful from Actions'
