@@ -50,7 +50,7 @@ jobs:
           username: ${{secrets.SSH_USERNAME}}
           key: ${{secrets.SSH_KEY}}
           passphrase: ${{secrets.SSH_PASSPHRASE}}
-          run: |
+          script: |
             mkdir pathways-repo-5
             cd pathways-repo-5
             git clone git@github.com:JanMichaelSE/Pathways-Mentoring.git
