@@ -5,20 +5,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      actions: read-all|write-all
-      checks: read-all|write-all
-      contents: read-all|write-all
-      deployments: read-all|write-all
-      id-token: read-all|write-all
-      issues: read-all|write-all
-      discussions: read-all|write-all
-      packages: read-all|write-all
-      pages: read-all|write-all
-      pull-requests: read-all|write-all
-      repository-projects: read-all|write-all
-      security-events: read-all|write-all
-      statuses: read-all|write-all
+    permissions: read-all|write-all
     steps:
       - name: Deploy App
         uses: appleboy/ssh-action@v0.1.2
