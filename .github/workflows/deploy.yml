@@ -18,8 +18,8 @@ jobs:
           script: |
             mkdir pathyways-mentoring-repo-1
             cd pathyways-mentoring-repo-1
-            git config --global url."https://api:$MY_GIT_TOKEN@github.com/".insteadOf "https://github.com/"
-            git config --global url."https://ssh:$MY_GIT_TOKEN@github.com/".insteadOf "ssh://git@github.com/"
-            git config --global url."https://git:$MY_GIT_TOKEN@github.com/".insteadOf "git@github.com:"
-            git clone https://git:${{secrets.GITHUB_TOKEN}}@github.com:JanMichaelSE/Pathways-Mentoring.git
+            git config --global url."https://api:${{secrets.ACCESS_TOKEN}}@github.com/".insteadOf "https://github.com/"
+            git config --global url."https://ssh:${{secrets.ACCESS_TOKEN}}@github.com/".insteadOf "ssh://git@github.com/"
+            git config --global url."https://git:${{secrets.ACCESS_TOKEN}}@github.com/".insteadOf "git@github.com:"
+            git clone "https://git:${{secrets.ACCESS_TOKEN}}@github.com:JanMichaelSE/Pathways-Mentoring.git"
             echo 'Deployment Successful from Actions'
