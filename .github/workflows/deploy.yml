@@ -16,7 +16,7 @@ jobs:
           passphrase: ${{secrets.SSH_PASSPHRASE}}
 
           script: |
-            mkdir test
-            cd test
+            mkdir pathyways-mentoring-repo
+            cd pathyways-mentoring-repo
             git clone git:${{secrets.GITHUB_TOKEN}}@github.com:JanMichaelSE/Pathways-Mentoring.git
             echo 'Deployment Successful from Actions'
