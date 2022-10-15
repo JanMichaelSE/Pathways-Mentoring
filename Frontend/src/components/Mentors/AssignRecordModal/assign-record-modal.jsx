@@ -17,6 +17,7 @@ import * as Yup from "yup";
 import { httpAssignRecords } from "@/api/records.api";
 import Select from "@/components/common/Select/select";
 import Button from "@/components/common/Button/button";
+import BackIcon from "@/assets/back.svg";
 
 import styles from "./assign-record-modal.module.css";
 
@@ -55,8 +56,8 @@ function AssignRecordModal({ students, isOpen, onClose }) {
             <Image
               boxSize="40px"
               objectFit="cover"
-              src="/assets/back.svg"
-              alt="back.svg"
+              src={BackIcon}
+              alt="Back Icon"
               onClick={onClose}
               cursor="pointer"
             />

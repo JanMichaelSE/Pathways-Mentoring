@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Spinner, useToast } from "@chakra-ui/react";
+import { Spinner, useToast, useMediaQuery } from "@chakra-ui/react";
 
 import { httpGetAdminProfile, httpUpdateAdminProfile } from "@/api/admin.api";
 import { useUserStore } from "@/store/user.store";
 
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
+import MoreInfoIcon from "@/assets/more-info.svg";
+
 import styles from "./admin-profile-form.module.css";
-import { useMediaQuery } from "@chakra-ui/react";
 
 function AdminProfileForm() {
   const toast = useToast();
@@ -112,17 +113,9 @@ function AdminProfileForm() {
           confirmPassword: "",
         }}
         validationSchema={Yup.object({
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Email is required"),
-          currentPassword: Yup.string().min(
-            12,
-            "Current password must be at least 12 characters"
-          ),
-          newPassword: Yup.string().min(
-            12,
-            "Password must be at least 12 characters"
-          ),
+          email: Yup.string().email("Invalid email address").required("Email is required"),
+          currentPassword: Yup.string().min(12, "Current password must be at least 12 characters"),
+          newPassword: Yup.string().min(12, "Password must be at least 12 characters"),
           confirmPassword: Yup.string().oneOf(
             [Yup.ref("newPassword"), null],
             "Passwords must match"
@@ -135,12 +128,7 @@ function AdminProfileForm() {
         <Form className={styles.formContainer}>
           <div className={styles.photoContainer}>
             <h1 className={styles.profileHeader}>My Profile</h1>
-            <Button
-              type="button"
-              id="editbutton"
-              style={{ width: 130 }}
-              onClick={onEdit}
-            >
+            <Button type="button" id="editbutton" style={{ width: 130 }} onClick={onEdit}>
               {close}
             </Button>
           </div>
@@ -148,7 +136,8 @@ function AdminProfileForm() {
           <h1 className={styles.line}>
             <img
               className={styles.lineImg}
-              src="/assets/more-info.svg"
+              src={MoreInfoIcon}
+              alt="More Info Icon"
               style={{ marginRight: "20px" }}
             ></img>
             Admin Information

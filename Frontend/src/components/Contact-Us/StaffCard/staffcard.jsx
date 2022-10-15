@@ -19,6 +19,15 @@ import {
   Link,
 } from "@chakra-ui/react";
 
+import BackIcon from "@/assets/back.svg";
+import CellPhoneIcon from "@/assets/cellphone.svg";
+import CircledEnvelopeIcon from "@/assets/circled-envelope.svg";
+import CompanyIcon from "@/assets/Company.svg";
+import GmailIcon from "@/assets/Gmail-Logo.svg";
+import GraduationCapIcon from "@/assets/graduation-cap.svg";
+import InfoIcon from "@/assets/info.svg";
+import PhoneSquaredIcon from "@/assets/Phone-Squared.svg";
+
 export default function StaffCard({ cardData }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
@@ -66,7 +75,7 @@ export default function StaffCard({ cardData }) {
               py={1}
               boxSize="65px"
               objectFit="cover"
-              src="/assets/Gmail-Logo.svg"
+              src={GmailIcon}
               alt="Email Icon"
             />
             <Image
@@ -74,7 +83,7 @@ export default function StaffCard({ cardData }) {
               py={1}
               boxSize="50px"
               objectFit="cover"
-              src="/assets/Phone-Squared.svg"
+              src={PhoneSquaredIcon}
               alt="Phone Squared Icon"
             />
             <Image
@@ -82,8 +91,8 @@ export default function StaffCard({ cardData }) {
               py={1}
               boxSize="50px"
               objectFit="cover"
-              src="/assets/Company.svg"
-              alt="Company.svg"
+              src={CompanyIcon}
+              alt="Company Icon"
             />
           </Stack>
         </Box>
@@ -103,8 +112,8 @@ export default function StaffCard({ cardData }) {
               <Image
                 boxSize="40px"
                 objectFit="cover"
-                src="/assets/back.svg"
-                alt="back.svg"
+                src={BackIcon}
+                alt="Back Icon"
                 onClick={onClose}
                 cursor="pointer"
               />
@@ -145,8 +154,8 @@ export default function StaffCard({ cardData }) {
                   <Image
                     boxSize="50px"
                     objectFit="cover"
-                    src="/assets/cellphone.svg"
-                    alt="Company.svg"
+                    src={CellPhoneIcon}
+                    alt="Cell Phone Icon"
                   />
                   <Text fontWeight={"400"}>{cardData.telephone}</Text>
                 </HStack>
@@ -154,8 +163,8 @@ export default function StaffCard({ cardData }) {
                   <Image
                     boxSize="50px"
                     objectFit="cover"
-                    src="/assets/circled-envelope.svg"
-                    alt="Company.svg"
+                    src={CircledEnvelopeIcon}
+                    alt="Circled Envelope Icon"
                   />
                   <Link href={`mailto:${cardData.email}`} fontWeight={"400"}>
                     {cardData.email}
@@ -165,8 +174,8 @@ export default function StaffCard({ cardData }) {
                   <Image
                     boxSize="50px"
                     objectFit="cover"
-                    src="/assets/graduation-cap.svg"
-                    alt="Company.svg"
+                    src={GraduationCapIcon}
+                    alt="Graduation Cap Icon"
                   />
                   <Text fontWeight={"400"}>{cardData.academicDegree}</Text>
                 </HStack>
@@ -183,7 +192,7 @@ export default function StaffCard({ cardData }) {
                 maxWidth={"670px"}
                 justifyContent="center"
               >
-                <Image boxSize="50px" objectFit="cover" src="/assets/info.svg" alt="info.svg" />
+                <Image boxSize="50px" objectFit="cover" src={InfoIcon} alt="info icon" />
                 <Text fontWeight={"400"}>
                   Will only accept calls on fridays at work. If need of any other information please
                   contact me by email. In any case I am available on Monday and Friday from 12:00 PM

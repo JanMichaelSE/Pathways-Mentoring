@@ -9,6 +9,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import ImageList from "../ImageList/image-list";
+import ProfileAvatarIcon from "@/assets/profile-avatar-icon.svg";
 
 function ProfileChangerPopOver({ ...props }) {
   const { onOpen, onClose, isOpen } = useDisclosure();
@@ -43,8 +44,8 @@ function ProfileChangerPopOver({ ...props }) {
               <Image
                 borderRadius="full"
                 boxSize="62px"
-                src="/assets/profile-avatar-icon.svg"
-                alt="Avatar"
+                src={ProfileAvatarIcon}
+                alt="Profile Avatar Icon"
                 m="auto"
               />
             </button>

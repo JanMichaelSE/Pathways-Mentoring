@@ -8,21 +8,16 @@ import {
   Text,
   SimpleGrid,
 } from "@chakra-ui/react";
+
+import PersonCalendarIcon from "@/assets/Person_Calendar.png";
+
 import styles from "./office-hours.module.css";
 
 function OfficeHours({ timeString }) {
   const [hoursState, setHoursState] = useState({});
   let mentorSchedule = {};
   let compo = {};
-  const days = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
+  const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
   useEffect(() => {
     function transformSchedule(serverData, schedule) {
@@ -79,25 +74,17 @@ function OfficeHours({ timeString }) {
             borderWidth={"2px"}
             borderColor={"#99A9B9"}
             background={"#5389BE"}
-            src={"/assets/Person_Calendar.png"}
-            alt={"Avatar Alt"}
+            src={PersonCalendarIcon}
+            alt={"Person Calendar Icon"}
             pos={"relative"}
             p={3}
           />
-          <Text
-            className={styles.regularbold}
-            textDecorationLine={"underline"}
-            size={"l"}
-          >
+          <Text className={styles.regularbold} textDecorationLine={"underline"} size={"l"}>
             Office Hours
           </Text>
         </HStack>
         <VStack paddingLeft={"5rem"}>
-          <SimpleGrid
-            columns={[3]}
-            spacing="40px"
-            className={styles.background}
-          >
+          <SimpleGrid columns={[3]} spacing="40px" className={styles.background}>
             {days.map((day, index) => {
               if (Array.isArray(hoursState[day])) {
                 return (
@@ -116,10 +103,7 @@ function OfficeHours({ timeString }) {
                   </VStack>
                 );
               } else {
-                if (
-                  hoursState.hasOwnProperty(day) &&
-                  hoursState[day] == undefined
-                ) {
+                if (hoursState.hasOwnProperty(day) && hoursState[day] == undefined) {
                   return <></>;
                 } else if (hoursState.hasOwnProperty(day)) {
                   return (
@@ -128,9 +112,7 @@ function OfficeHours({ timeString }) {
                         {capitalizeFirstLetter(day)}:
                       </Text>
                       <UnorderedList>
-                        <ListItem key={day + hoursState[day] + index}>
-                          {hoursState[day]}
-                        </ListItem>
+                        <ListItem key={day + hoursState[day] + index}>{hoursState[day]}</ListItem>
                       </UnorderedList>
                     </VStack>
                   );

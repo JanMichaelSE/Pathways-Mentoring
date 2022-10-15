@@ -11,6 +11,7 @@ import { httpGetAllAssessments } from "@/api/assessments.api";
 import AssessmentCard from "@/components/Students/AssessmentCard/assessment-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
+import FilterIcon from "@/assets/Filter.png";
 
 import styles from "./assessments.module.css";
 
@@ -91,7 +92,7 @@ function Assessments() {
       <div className={styles.buttonsContainer}>
         <button className={`btn ${styles.button}`}>
           Filter
-          <img src="/assets/Filter.png" />
+          <img src={FilterIcon} />
         </button>
         <button className={`btn ${styles.button}`} onClick={onSort}>
           {sortAscending ? "Sort Desc" : "Sort Asc"}

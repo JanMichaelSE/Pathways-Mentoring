@@ -1,6 +1,10 @@
 import { SimpleGrid, Box } from "@chakra-ui/react";
-import styles from "./image-list.module.css";
 import { useUserStore } from "@/store/user.store";
+
+import AvatarSprite from "@/assets/spriteAvatar.svg";
+
+import styles from "./image-list.module.css";
+
 const ImageList = (props) => {
   const setPictureData = useUserStore((state) => state.setPictureData);
 
@@ -18,11 +22,7 @@ const ImageList = (props) => {
         }}
       >
         <svg key={image} id={"avatar" + image} className={styles.icon} onClick={clickImage}>
-          <use
-            key={image}
-            id={"avatar" + image}
-            href={"/assets/spriteAvatar.svg#avatar" + image}
-          ></use>
+          <use key={image} id={"avatar" + image} href={AvatarSprite + `#avatar${image}`}></use>
         </svg>
       </Box>
     );
