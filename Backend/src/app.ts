@@ -12,11 +12,8 @@ import contactUsRouter from "./routes/contact-us/contact-us.router";
 import developmentPlanRouter from "./routes/development-plan/development-plan.router";
 
 dotenv.config();
-const CLIENT_HOST = process.env.CLIENT_HOST;
-const CLIENT_PORT = process.env.CLIENT_PORT;
-
 const app = express();
-const allowedOrigins = [`${CLIENT_HOST}:${CLIENT_PORT}`];
+const allowedOrigins = ["http://localhost:3000"];
 const options: cors.CorsOptions = {
   origin: allowedOrigins,
 };
