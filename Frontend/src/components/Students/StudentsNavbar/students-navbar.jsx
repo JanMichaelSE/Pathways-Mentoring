@@ -10,8 +10,6 @@ import styles from "./students-navbar.module.css";
 function StudentNavbar() {
   let location = useLocation();
 
-  const [isLessThan1100] = useMediaQuery("(max-width: 1300px)");
-
   return (
     <Fragment>
       <nav className={styles.nav}>
