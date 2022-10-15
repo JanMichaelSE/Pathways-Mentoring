@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
-import styles from "./time-day.module.css";
-import { Switch, Image } from "@chakra-ui/react";
-import TimePickerSelector from "@/components/Mentors/TimeComponents/TimePickerSelector/time-picker-selector";
+
 import { useUserStore } from "@/store/user.store";
+import { Switch, Image } from "@chakra-ui/react";
+
+import TimePickerSelector from "@/components/Mentors/TimeComponents/TimePickerSelector/time-picker-selector";
+import AddIcon from "@/assets/add-icon.svg";
+import SlashIcon from "@/assets/slash-icon.svg";
+import SubstractIcon from "@/assets/subtract-icon.svg";
+
+import styles from "./time-day.module.css";
 
 function TimeDay({ day, time, edit }) {
   const schedule = useUserStore((state) => state.schedule);
@@ -135,7 +141,8 @@ function TimeDay({ day, time, edit }) {
                       className={styles.separator}
                       borderRadius="full"
                       boxSize="50px"
-                      src="/assets/slash-icon.svg"
+                      src={SlashIcon}
+                      alt="Slash Icon"
                     ></Image>
                     <TimePickerSelector
                       time={timeSplit[1]}
@@ -151,16 +158,15 @@ function TimeDay({ day, time, edit }) {
                         background: "none",
                       }}
                       onClick={() =>
-                        setHasSecondInterval(
-                          (hasSecondInterval) => !hasSecondInterval
-                        )
+                        setHasSecondInterval((hasSecondInterval) => !hasSecondInterval)
                       }
                       disabled={edit}
                     >
                       <Image
                         borderRadius="full"
                         boxSize="50px"
-                        src="/assets/subtract-icon.svg"
+                        src={SubstractIcon}
+                        alt="Substract Icon"
                       ></Image>
                     </button>
                   </>
@@ -180,9 +186,7 @@ function TimeDay({ day, time, edit }) {
                         background: "none",
                       }}
                       onClick={() =>
-                        setHasSecondInterval(
-                          (hasSecondInterval) => !hasSecondInterval
-                        )
+                        setHasSecondInterval((hasSecondInterval) => !hasSecondInterval)
                       }
                       disabled={edit}
                     >
@@ -192,7 +196,7 @@ function TimeDay({ day, time, edit }) {
                         h={"50px"}
                         minHeight={"50px"}
                         minWidth={"50px"}
-                        src="/assets/add-icon.svg"
+                        src={AddIcon}
                       ></Image>
                     </button>
                   </>

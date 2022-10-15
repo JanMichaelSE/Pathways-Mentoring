@@ -3,19 +3,21 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Spinner, useToast } from "@chakra-ui/react";
 
-import {
-  httpUpdateStudentProfile,
-  httpGetStudentByUserId,
-} from "@/api/students.api";
+import { httpUpdateStudentProfile, httpGetStudentByUserId } from "@/api/students.api";
 import { useUserStore } from "@/store/user.store";
 
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
-import styles from "./student-profile-form.module.css";
+
 import { Box, useMediaQuery } from "@chakra-ui/react";
 import ProfileChangerPopOver from "@/components/common/Profile/ProfileChangerPopOver/profile-changer-popover";
 import ProfilePicture from "@/components/common/Profile/ProfilePicture/profile-picture";
+import AcademicIcon from "@/assets/academic-icon.svg";
+import MoreInfoIcon from "@/assets/more-info.svg";
+import PasswordIcon from "@/assets/password-icon.svg";
+
+import styles from "./student-profile-form.module.css";
 
 function StudentProfileForm() {
   const toast = useToast();
@@ -170,24 +172,14 @@ function StudentProfileForm() {
               "Phone number is not valid"
             )
             .min(10, "Phone number must be 10 digits"),
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Email is required"),
-          currentPassword: Yup.string().min(
-            12,
-            "Current password must be at least 12 characters"
-          ),
-          newPassword: Yup.string().min(
-            12,
-            "Password must be at least 12 characters"
-          ),
+          email: Yup.string().email("Invalid email address").required("Email is required"),
+          currentPassword: Yup.string().min(12, "Current password must be at least 12 characters"),
+          newPassword: Yup.string().min(12, "Password must be at least 12 characters"),
           confirmPassword: Yup.string().oneOf(
             [Yup.ref("newPassword"), null],
             "Passwords must match"
           ),
-          gender: Yup.string()
-            .oneOf(["Male", "Female", "Other"])
-            .required("Gender is required"),
+          gender: Yup.string().oneOf(["Male", "Female", "Other"]).required("Gender is required"),
           fieldOfStudy: Yup.string()
             .oneOf([
               "Architecture",
@@ -213,27 +205,20 @@ function StudentProfileForm() {
         <Form className={styles.formContainer}>
           <div className={styles.photoContainer}>
             <h1 className={styles.profileHeader}>My Profile</h1>
-            <Button
-              type="button"
-              id="editbutton"
-              style={{ width: 130 }}
-              onClick={onEdit}
-            >
+            <Button type="button" id="editbutton" style={{ width: 130 }} onClick={onEdit}>
               {close}
             </Button>
           </div>
           <div className={styles.avatarContainer}>
-            <ProfilePicture
-              enableReinitialize={true}
-              forProfile
-            ></ProfilePicture>
+            <ProfilePicture enableReinitialize={true} forProfile></ProfilePicture>
             <ProfileChangerPopOver name="profilePicture" edit={edit} />
           </div>
 
           <h1 className={styles.line} id={styles.personalInfo}>
             <img
               className={styles.lineImg}
-              src="/assets/more-info.svg"
+              src={MoreInfoIcon}
+              alt="More Info Icon"
               style={{ marginRight: "20px" }}
             ></img>
             Personal Information
@@ -297,7 +282,8 @@ function StudentProfileForm() {
           <h1 className={styles.line} id={styles.changePassword}>
             <img
               className={styles.lineImg}
-              src="/assets/password-icon.svg"
+              src={PasswordIcon}
+              alt="Password Icon"
               style={{ marginRight: "20px" }}
             ></img>
             Change Password
@@ -331,7 +317,7 @@ function StudentProfileForm() {
           <h1 className={styles.line} id={styles.academicInfo}>
             <img
               className={styles.lineImg}
-              src="/assets/academic-icon.svg"
+              src={AcademicIcon}
               style={{ marginRight: "20px" }}
             ></img>
             Academic Information
@@ -346,24 +332,14 @@ function StudentProfileForm() {
             >
               <option value="">Select Option</option>
               <option value="Architecture">Architecture</option>
-              <option value="Business Administration">
-                Business Administration
-              </option>
+              <option value="Business Administration">Business Administration</option>
               <option value="Civil Engineering">Civil Engineering</option>
               <option value="Computer Engineering">Computer Engineering</option>
               <option value="Computer Science">Computer Science</option>
-              <option value="Electrical Engineering">
-                Electrical Engineering
-              </option>
-              <option value="Environmental Engineering">
-                Environmental Engineering
-              </option>
-              <option value="Industrial Engineering">
-                Industrial Engineering
-              </option>
-              <option value="Mechanical Engineering">
-                Mechanical Engineering
-              </option>
+              <option value="Electrical Engineering">Electrical Engineering</option>
+              <option value="Environmental Engineering">Environmental Engineering</option>
+              <option value="Industrial Engineering">Industrial Engineering</option>
+              <option value="Mechanical Engineering">Mechanical Engineering</option>
             </Select>
             <Input
               label="Institution *"

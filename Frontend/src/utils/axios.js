@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { getState } from "@/store/user.store";
 
-const HOST = import.meta.env.VITE_HOST;
+const HOST = import.meta.env.VITE_HOST || "http://localhost:8000";
 
 console.log("AXIOS HOST: ", HOST);
 

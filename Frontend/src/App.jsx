@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import { useSocketStore } from "./store/socket.store";
 import "./styles/App.css";
 
-const HOST = import.meta.env.VITE_HOST;
+const HOST = import.meta.env.VITE_HOST || "http://localhost:8000";
 
 console.log("HOST: ", HOST);
 

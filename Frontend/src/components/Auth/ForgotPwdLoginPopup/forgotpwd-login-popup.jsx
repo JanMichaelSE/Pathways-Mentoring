@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import mailIcon from "@/assets/mail-icon.svg";
+import BackIcon from "@/assets/back.svg";
 import {
   Image,
   Modal,
@@ -38,8 +39,7 @@ function ForgotPwdLoginPopup() {
     }
 
     toast({
-      description:
-        "Reset Password Email Has Been Sent! Please check your inbox.",
+      description: "Reset Password Email Has Been Sent! Please check your inbox.",
       status: "success",
       position: "top",
       duration: 5000,
@@ -55,13 +55,7 @@ function ForgotPwdLoginPopup() {
       <button className={styles.linkButton} onClick={onOpen}>
         Forgot password?
       </button>
-      <Modal
-        isCentered
-        onClose={onClose}
-        isOpen={isOpen}
-        motionPreset="slideInBottom"
-        size={"xl"}
-      >
+      <Modal isCentered onClose={onClose} isOpen={isOpen} motionPreset="slideInBottom" size={"xl"}>
         <ModalOverlay />
         <ModalContent
           borderRadius={"60px"}
@@ -74,26 +68,20 @@ function ForgotPwdLoginPopup() {
               <Image
                 boxSize="40px"
                 objectFit="cover"
-                src="/assets/back.svg"
-                alt="back.svg"
+                src={BackIcon}
+                alt="Back Icon"
                 onClick={onClose}
                 cursor="pointer"
               />
-              <h1 style={{ fontWeight: 600, fontSize: "36px" }}>
-                Forgot Password
-              </h1>
+              <h1 style={{ fontWeight: 600, fontSize: "36px" }}>Forgot Password</h1>
             </HStack>
-            <h1 style={{ textAlign: "center" }}>
-              Enter an email address you use to sign in to.
-            </h1>
+            <h1 style={{ textAlign: "center" }}>Enter an email address you use to sign in to.</h1>
           </ModalHeader>
           <ModalBody>
             <Formik
               initialValues={{ email: "" }}
               validationSchema={Yup.object({
-                email: Yup.string()
-                  .email("Invalid email address")
-                  .required("Email is required"),
+                email: Yup.string().email("Invalid email address").required("Email is required"),
               })}
               onSubmit={async (values) => {
                 await handleEmailSubmit(values);

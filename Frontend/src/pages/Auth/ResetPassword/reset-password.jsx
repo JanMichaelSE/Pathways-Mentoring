@@ -1,18 +1,16 @@
-import styles from "./reset-password.module.css";
-import AuthLock from "@/assets/authlock.svg";
 import { Link } from "react-router-dom";
-import ResetPasswordForm from "../../../components/Auth/ResetPasswordForm/reset-password-form";
+
+import AuthLock from "@/assets/authlock.svg";
+import ResetPasswordForm from "@/components/Auth/ResetPasswordForm/reset-password-form";
+
+import styles from "./reset-password.module.css";
 
 function ResetPassword() {
   return (
     <>
       <div className={styles.loginBackground}>
         <div className={styles.logoContainer}>
-          <img
-            className={styles.pathwayLogo}
-            src={AuthLock}
-            alt="AuthLock-Logo"
-          />
+          <img className={styles.pathwayLogo} src={AuthLock} alt="AuthLock-Logo" />
         </div>
         <div className={styles.headerContainer}>
           <h1 className={styles.header}>Reset your password</h1>

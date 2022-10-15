@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Spinner, useToast } from "@chakra-ui/react";
+import { Spinner, useToast, Box, useMediaQuery } from "@chakra-ui/react";
 
-import {
-  httpUpdateMentorProfile,
-  httpGetMentorByUserId,
-} from "@/api/mentors.api";
+import { httpUpdateMentorProfile, httpGetMentorByUserId } from "@/api/mentors.api";
 import { useUserStore } from "@/store/user.store";
 
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import InputMessage from "@/components/common/InputMessage/InputMessage";
 import Select from "@/components/common/Select/select";
-import styles from "./mentor-profile-form.module.css";
 import ProfileChangerPopOver from "@/components/common/Profile/ProfileChangerPopOver/profile-changer-popover";
 import ProfilePicture from "@/components/common/Profile/ProfilePicture/profile-picture";
-import { Box, useMediaQuery } from "@chakra-ui/react";
 import Schedule from "@/components/Mentors/TimeComponents/Schedule/schedule";
+import BibliographyIcon from "@/assets/bibliography-icon.svg";
+import ClockIcon from "@/assets/clock-icon.svg";
+import FacultyIcon from "@/assets/faculty-icon.svg";
+import MoreInfoIcon from "@/assets/more-info.svg";
+import PasswordIcon from "@/assets/password-icon.svg";
+
+import styles from "./mentor-profile-form.module.css";
 
 function MentorProfileForm() {
   const toast = useToast();
@@ -109,7 +111,6 @@ function MentorProfileForm() {
     }
 
     if (isReadyToSubmit && isSubmitting) {
-      // --- Logic to submit ---
       const mentorInfoWithID = {
         ...mentorData,
         profilePicture: pictureData,
@@ -206,24 +207,14 @@ function MentorProfileForm() {
               "Phone number is not valid"
             )
             .min(10, "Phone number must be 10 digits"),
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Email is required"),
-          currentPassword: Yup.string().min(
-            12,
-            "Current password must be at least 12 characters"
-          ),
-          newPassword: Yup.string().min(
-            12,
-            "Password must be at least 12 characters"
-          ),
+          email: Yup.string().email("Invalid email address").required("Email is required"),
+          currentPassword: Yup.string().min(12, "Current password must be at least 12 characters"),
+          newPassword: Yup.string().min(12, "Password must be at least 12 characters"),
           confirmPassword: Yup.string().oneOf(
             [Yup.ref("newPassword"), null],
             "Passwords must match"
           ),
-          gender: Yup.string()
-            .oneOf(["Male", "Female", "Other"])
-            .required("Gender is required"),
+          gender: Yup.string().oneOf(["Male", "Female", "Other"]).required("Gender is required"),
           academicDegree: Yup.string().required("Academic Degree is required"),
           description: Yup.string().test(
             "len",
@@ -257,27 +248,19 @@ function MentorProfileForm() {
         <Form className={styles.formContainer}>
           <div className={styles.photoContainer}>
             <h1 className={styles.profileHeader}>My Profile</h1>
-            <Button
-              type="button"
-              id="editbutton"
-              style={{ width: 130 }}
-              onClick={onEdit}
-            >
+            <Button type="button" id="editbutton" style={{ width: 130 }} onClick={onEdit}>
               {close}
             </Button>
           </div>
           <div className={styles.avatarContainer}>
-            <ProfilePicture
-              enableReinitialize={true}
-              forProfile
-            ></ProfilePicture>
+            <ProfilePicture enableReinitialize={true} forProfile></ProfilePicture>
             <ProfileChangerPopOver name="profilePicture" edit={edit} />
           </div>
 
           <h1 className={styles.line} id={styles.personalInfo}>
             <img
               className={styles.lineImg}
-              src="/assets/more-info.svg"
+              src={MoreInfoIcon}
               style={{ marginRight: "20px" }}
             ></img>
             Personal Information
@@ -341,7 +324,8 @@ function MentorProfileForm() {
           <h1 className={styles.line} id={styles.changePassword}>
             <img
               className={styles.lineImg}
-              src="/assets/password-icon.svg"
+              src={PasswordIcon}
+              alt="Password Icon"
               style={{ marginRight: "20px" }}
             ></img>
             Change Password
@@ -375,7 +359,7 @@ function MentorProfileForm() {
           <h1 className={styles.line} id={styles.bibliography}>
             <img
               className={styles.lineImg}
-              src="/assets/bibliography-icon.svg"
+              src={BibliographyIcon}
               style={{ marginRight: "20px" }}
             ></img>
             Bibliography
@@ -395,7 +379,8 @@ function MentorProfileForm() {
           <h1 className={styles.line} id={styles.facultyInfo}>
             <img
               className={styles.lineImg}
-              src="/assets/faculty-icon.svg"
+              src={FacultyIcon}
+              alt="Faculty Icon"
               style={{ marginRight: "20px" }}
             ></img>
             Faculty Information
@@ -422,24 +407,14 @@ function MentorProfileForm() {
             >
               <option value="">Select Option</option>
               <option value="Architecture">Architecture</option>
-              <option value="Business Administration">
-                Business Administration
-              </option>
+              <option value="Business Administration">Business Administration</option>
               <option value="Civil Engineering">Civil Engineering</option>
               <option value="Computer Engineering">Computer Engineering</option>
               <option value="Computer Science">Computer Science</option>
-              <option value="Electrical Engineering">
-                Electrical Engineering
-              </option>
-              <option value="Environmental Engineering">
-                Environmental Engineering
-              </option>
-              <option value="Industrial Engineering">
-                Industrial Engineering
-              </option>
-              <option value="Mechanical Engineering">
-                Mechanical Engineering
-              </option>
+              <option value="Electrical Engineering">Electrical Engineering</option>
+              <option value="Environmental Engineering">Environmental Engineering</option>
+              <option value="Industrial Engineering">Industrial Engineering</option>
+              <option value="Mechanical Engineering">Mechanical Engineering</option>
             </Select>
             <Select
               label="Faculty Status *"
@@ -474,7 +449,8 @@ function MentorProfileForm() {
           <h1 className={styles.line} id={styles.officeHours}>
             <img
               className={styles.lineImg}
-              src="/assets/clock-icon.svg"
+              src={ClockIcon}
+              alt="Clock Icon"
               style={{ marginRight: "20px" }}
             ></img>
             Office Hours

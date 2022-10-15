@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
 import Notes from "@/components/common/Records/Notes/notes";
+import RecordClockIcon from "@/assets/record-clock-icon.svg";
+import RecordCompleteIcon from "@/assets/record-complete-icon.svg";
+import RecordDescIcon from "@/assets/record-desc-icon.svg";
+import RecordNotesIcon from "@/assets/record-notes.svg";
+
 import styles from "./individual-record.module.css";
 
 function IndividualRecord({
@@ -15,7 +20,7 @@ function IndividualRecord({
   const [btnUser, setBtnUser] = useState(false);
   const [btnStage, setBtnStage] = useState(false);
   const [messageStage, setMessageStage] = useState("");
-  const [imageStage, setImageStage] = useState("");
+  const [imageStage, setImageStage] = useState(null);
   const [showMessageStage, setShowMessageStage] = useState(false);
 
   useEffect(() => {
@@ -30,19 +35,19 @@ function IndividualRecord({
     if (stage === "Approved") {
       setBtnStage(false);
       setMessageStage("Record is Completed");
-      setImageStage("record-complete-icon");
+      setImageStage(RecordCompleteIcon);
       setShowMessageStage(true);
     } else if (stage === "Pending Approval") {
       setBtnStage(false);
       setMessageStage("Record is Pending Approval");
-      setImageStage("record-clock-icon");
+      setImageStage(RecordClockIcon);
       setShowMessageStage(true);
     } else {
       setBtnStage(true);
       setBtnUser(true);
       setMessageStage("");
       setShowMessageStage(false);
-      setImageStage("");
+      setImageStage(null);
     }
   }
 
@@ -50,19 +55,19 @@ function IndividualRecord({
     if (stage === "Approved") {
       setBtnStage(false);
       setMessageStage("Record is Completed");
-      setImageStage("record-complete-icon");
+      setImageStage(RecordCompleteIcon);
       setShowMessageStage(true);
     } else if (stage === "Pending Approval") {
       setBtnStage(true);
       setBtnUser(false);
       setMessageStage("Record is Pending Approval");
-      setImageStage("record-clock-icon");
+      setImageStage(RecordClockIcon);
       setShowMessageStage(true);
     } else {
       setBtnStage(false);
       setMessageStage("");
       setShowMessageStage(false);
-      setImageStage("");
+      setImageStage(null);
     }
   }
 
@@ -83,7 +88,7 @@ function IndividualRecord({
       {showMessageStage ? (
         <div className={styles.recordStage}>
           <div className={styles.contentStage}>
-            <img className={styles.imageStage} src={`/assets/${imageStage}.svg`} alt="" />
+            <img className={styles.imageStage} src={imageStage} alt="" />
             <h1 className={styles.titleStage}>{messageStage}</h1>
           </div>
         </div>
@@ -123,13 +128,14 @@ function IndividualRecord({
           )}
         </div>
         <div className={styles.recordDescriptionContainer}>
-          <img src="/assets/record-desc-icon.svg" alt="record-desc-icon" />
+          <img src={RecordDescIcon} alt="record-desc-icon" />
           {descriptionList()}
         </div>
         <h1 className={styles.line}>
           <img
             className={styles.lineImg}
-            src="/assets/record-notes.svg"
+            src={RecordNotesIcon}
+            alt="Record Notes Icon"
             style={{ marginRight: "20px" }}
           ></img>
           Notes

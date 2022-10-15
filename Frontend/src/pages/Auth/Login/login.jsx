@@ -17,16 +17,10 @@ function Login() {
         <div className={styles.linkContainer}>
           <h2 className={styles.subHeading}>
             New to Pathways? <SignupPopupSelector />
-            {/* <Link to={"/signup"} className={styles.navigationLink}>
-              Create an account.
-            </Link> */}
             <br />
           </h2>
           <h2 className={styles.subHeading}>
             <ForgotPwdLoginPopup />
-            {/* <Link to={"/"} className={styles.navigationLink}>
-              Forgot password?
-            </Link> */}
             <br />
           </h2>
         </div>
