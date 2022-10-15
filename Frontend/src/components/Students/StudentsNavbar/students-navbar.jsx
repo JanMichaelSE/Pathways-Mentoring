@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@chakra-ui/react";
 
 import NavbarPopOverMenu from "@/components/common/NavbarPopOverMenu/navbar-popover-menu";
-import PathwaysSmallLogo from "@/assets/Pathway_logo_small.png";
+import PathwaysSmallLogo from "@/assets/Pathway_Logo_small.png";
 
 import styles from "./students-navbar.module.css";
 
