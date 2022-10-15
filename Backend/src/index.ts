@@ -9,15 +9,12 @@ import {
 } from "./services/data.service";
 import { handleSocketEvents } from "./services/socket.service";
 
-const SERVER_HOST = process.env.SERVER_HOST;
-const SERVER_PORT = process.env.SERVER_PORT;
-const CLIENT_HOST = process.env.CLIENT_HOST;
-const CLIENT_PORT = process.env.CLIENT_PORT;
+const PORT = process.env.SERVER_PORT ?? 8000;
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: `${CLIENT_HOST}:${CLIENT_PORT}`,
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
@@ -47,4 +44,4 @@ io.on("connection", (socket) => {
   handleSocketEvents(socket);
 });
 
-server.listen(SERVER_PORT, () => console.log(`Server is running ${SERVER_HOST}:${SERVER_PORT}`));
+server.listen(PORT, () => console.log(`Server is running http://localhost:${PORT}`));
