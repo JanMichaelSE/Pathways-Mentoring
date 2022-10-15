@@ -1,6 +1,7 @@
 import { Image } from "@chakra-ui/react";
 import { useUserStore } from "@/store/user.store";
 import ProfileAvatarIcon from "@/assets/profile-avatar.svg";
+import AvatarSprite from "@/assets/spriteAvatar.svg";
 
 import styles from "./profile-picture.module.css";
 
@@ -12,7 +13,7 @@ function ProfilePicture({ forProfile, avatar, ...props }) {
     } else {
       return (
         <svg className={styles.imageContainer}>
-          <use href={"/assets/spriteAvatar.svg#" + pictureData}></use>
+          <use href={AvatarSprite + pictureData}></use>
         </svg>
       );
     }
@@ -27,7 +28,7 @@ function ProfilePicture({ forProfile, avatar, ...props }) {
       return (
         <div className={styles.container}>
           <svg className={styles.imageAvatarContainer}>
-            <use href={"/assets/spriteAvatar.svg#" + avatar}></use>
+            <use href={AvatarSprite + avatar}></use>
           </svg>
         </div>
       );
