@@ -13,7 +13,7 @@ function ProfilePicture({ forProfile, avatar, ...props }) {
     } else {
       return (
         <svg className={styles.imageContainer}>
-          <use href={AvatarSprite + pictureData}></use>
+          <use href={AvatarSprite + "#" + pictureData}></use>
         </svg>
       );
     }
@@ -28,7 +28,7 @@ function ProfilePicture({ forProfile, avatar, ...props }) {
       return (
         <div className={styles.container}>
           <svg className={styles.imageAvatarContainer}>
-            <use href={AvatarSprite + avatar}></use>
+            <use href={AvatarSprite + "#" + avatar}></use>
           </svg>
         </div>
       );
