@@ -1,27 +1,20 @@
 import { Link } from "react-router-dom";
-import styles from "./signup-popup-selector.module.css";
+import BackIcon from "@/assets/back.svg";
+import SelectMentorIcon from "@/assets/select-mentor-logo.svg";
+import SelectStudentIcon from "@/assets/select-student-logo.svg";
+
 import {
-  Heading,
-  Avatar,
-  Box,
-  Center,
-  Text,
-  Stack,
   Image,
-  Button,
-  SimpleGrid,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
-  useMediaQuery,
   HStack,
-  Spacer,
-  StylesProvider,
 } from "@chakra-ui/react";
+
+import styles from "./signup-popup-selector.module.css";
 
 function SignupPopupSelector() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,13 +24,7 @@ function SignupPopupSelector() {
       <button className={styles.linkButton} onClick={onOpen}>
         Create an account.
       </button>
-      <Modal
-        isCentered
-        onClose={onClose}
-        isOpen={isOpen}
-        motionPreset="slideInBottom"
-        size={"xl"}
-      >
+      <Modal isCentered onClose={onClose} isOpen={isOpen} motionPreset="slideInBottom" size={"xl"}>
         <ModalOverlay />
         <ModalContent
           borderRadius={"60px"}
@@ -50,8 +37,8 @@ function SignupPopupSelector() {
               <Image
                 boxSize="40px"
                 objectFit="cover"
-                src="/assets/back.svg"
-                alt="back.svg"
+                src={BackIcon}
+                alt="Back Icon"
                 onClick={onClose}
                 cursor="pointer"
               />
@@ -61,10 +48,10 @@ function SignupPopupSelector() {
           <ModalBody>
             <div className={styles.buttonContainer}>
               <Link className={styles.linkLogo} to={"/signup?role=mentor"}>
-                <img src="/assets/select-mentor-logo.svg"></img>
+                <img src={SelectMentorIcon} alt="Select Mentor Icon"></img>
               </Link>
               <Link className={styles.linkLogo} to={"/signup?role=student"}>
-                <img src="/assets/select-student-logo.svg"></img>
+                <img src={SelectStudentIcon} alt="Select Student Icon"></img>
               </Link>
             </div>
           </ModalBody>

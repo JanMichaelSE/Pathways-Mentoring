@@ -1,7 +1,10 @@
 import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import styles from "./admin-navbar.module.css";
+
 import NavbarPopOverMenu from "@/components/common/NavbarPopOverMenu/navbar-popover-menu";
+import PathwaysSmallLogo from "@/assets/Pathway_logo_small.png";
+
+import styles from "./admin-navbar.module.css";
 
 function AdminNavbar() {
   let location = useLocation();
@@ -10,20 +13,12 @@ function AdminNavbar() {
     <Fragment>
       <nav className={styles.nav}>
         <div>
-          <img
-            src="/assets/Pathway_logo_small.png"
-            alt="Pathways"
-            className={styles.pathwaysLogo}
-          />
+          <img src={PathwaysSmallLogo} alt="Pathways" className={styles.pathwaysLogo} />
         </div>
 
         <div className={styles.navLinksContainer}>
           <Link
-            className={
-              location.pathname === "/admin"
-                ? styles.activeNavLink
-                : styles.navLink
-            }
+            className={location.pathname === "/admin" ? styles.activeNavLink : styles.navLink}
             to="/admin"
           >
             Users

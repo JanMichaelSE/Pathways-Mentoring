@@ -15,6 +15,8 @@ import RecordCard from "@/components/common/Records/RecordCard/record-card";
 import AssignRecordModal from "@/components/Mentors/AssignRecordModal/assign-record-modal";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
+import AddNewIcon from "@/assets/AddNew.png";
+import FilterIcon from "@/assets/Filter.png";
 
 import styles from "./mentor-records.module.css";
 
@@ -120,22 +122,18 @@ function MentorRecords() {
           <div className={styles.button} onClick={onOpen}>
             <HStack justifyContent={"center"} alignContent={"center"}>
               <Text>Create</Text>
-              <Image src="/assets/AddNew.png" alt="Filter Icon" />
+              <Image src={AddNewIcon} alt="Filter Icon" />
             </HStack>
           </div>
           <div className={styles.lastButton} onClick={onSortRecords}>
             <HStack justifyContent={"center"} alignContent={"center"}>
               <Text>{getSortButtonText()}</Text>
-              <Image src="/assets/Filter.png" alt="Filter Icon" />
+              <Image src={FilterIcon} alt="Filter Icon" />
             </HStack>
           </div>
         </HStack>
         <NoItemsFound title="No records assigned yet" icon={SadFaceIcon} />
-        <AssignRecordModal
-          students={students}
-          isOpen={isOpen}
-          onClose={onClose}
-        />
+        <AssignRecordModal students={students} isOpen={isOpen} onClose={onClose} />
       </div>
     );
   } else {
@@ -145,30 +143,22 @@ function MentorRecords() {
           <div className={styles.button} onClick={onOpen}>
             <HStack justifyContent={"center"} alignContent={"center"}>
               <Text>Create</Text>
-              <Image src="/assets/AddNew.png" alt="Filter Icon" />
+              <Image src={AddNewIcon} alt="Filter Icon" />
             </HStack>
           </div>
           <div className={styles.lastButton} onClick={onSortRecords}>
             <HStack justifyContent={"center"} alignContent={"center"}>
               <Text>{getSortButtonText()}</Text>
-              <Image src="/assets/Filter.png" alt="Filter Icon" />
+              <Image src={FilterIcon} alt="Filter Icon" />
             </HStack>
           </div>
         </HStack>
-        <SimpleGrid
-          columns={[1, 2, 3]}
-          spacing="40px"
-          className={styles.gridSpace}
-        >
+        <SimpleGrid columns={[1, 2, 3]} spacing="40px" className={styles.gridSpace}>
           {records?.map((record) => (
             <RecordCard key={record.id} recordData={record} />
           ))}
         </SimpleGrid>
-        <AssignRecordModal
-          students={students}
-          isOpen={isOpen}
-          onClose={onClose}
-        />
+        <AssignRecordModal students={students} isOpen={isOpen} onClose={onClose} />
       </div>
     );
   }

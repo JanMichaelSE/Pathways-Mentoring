@@ -1,16 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  HStack,
-  Image,
-} from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, Image } from "@chakra-ui/react";
+
+import CheckmarkIcon from "@/assets/checkmark-icon.svg";
 
 import styles from "./mentor-signup-popup.module.css";
 
@@ -41,13 +32,14 @@ function MentorSignUpPopup({ isOpen, onClose }) {
             <Image
               className={styles.checkmarkBtn}
               boxSize={"100px"}
-              src="assets/checkmark-icon.svg"
+              src={CheckmarkIcon}
+              alt="Checkmark Icon"
             />
           </div>
           <div>
             <p className={styles.message}>
-              Your account has been submitted for approval! You'll receive an
-              email once its been verified.
+              Your account has been submitted for approval! You'll receive an email once its been
+              verified.
             </p>
           </div>
         </ModalHeader>

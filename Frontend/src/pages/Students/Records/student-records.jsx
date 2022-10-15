@@ -5,6 +5,7 @@ import { httpGetRecordByUser } from "@/api/records.api";
 import RecordCard from "@/components/common/Records/RecordCard/record-card";
 import NoItemsFound from "@/components/common/NoItemsFound/no-items-found";
 import SadFaceIcon from "@/assets/sad-face-icon.svg";
+import FilterIcon from "@/assets/Filter.png";
 
 import styles from "./student-records.module.css";
 
@@ -94,7 +95,7 @@ function StudentRecords() {
           <div className={styles.lastButton} onClick={onSortRecords}>
             <HStack justifyContent={"center"} alignContent={"center"}>
               <Text>{getSortButtonText()}</Text>
-              <Image src="/assets/Filter.png" alt="Filter Icon" />
+              <Image src={FilterIcon} alt="Filter Icon" />
             </HStack>
           </div>
         </HStack>

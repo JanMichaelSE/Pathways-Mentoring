@@ -1,10 +1,11 @@
-import styles from "./navbar-popover-menu.module.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { httpLogout } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
 import { useDevelopmentPlanStore } from "@/store/developmentPlan.store";
 import { useAssessmentStore } from "@/store/assessment.store";
+import AvatarIcon from "@/assets/Avatars.png";
+
 import {
   useDisclosure,
   useToast,
@@ -17,23 +18,22 @@ import {
   PopoverArrow,
 } from "@chakra-ui/react";
 
+import styles from "./navbar-popover-menu.module.css";
+
 function NavbarPopOverMenu() {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const navigate = useNavigate();
   const role = useUserStore((state) => state.role);
   const resetUser = useUserStore((state) => state.resetUser);
   const resetAssessment = useAssessmentStore((state) => state.resetAssessment);
-  const resetDevelopmentPlan = useDevelopmentPlanStore(
-    (state) => state.resetDevelopmentPlan
-  );
+  const resetDevelopmentPlan = useDevelopmentPlanStore((state) => state.resetDevelopmentPlan);
   const toast = useToast();
 
   async function onLogout() {
     const logoutResponse = await httpLogout();
     if (logoutResponse.hasError) {
       return toast({
-        description:
-          "Could not logout user. Please close session and log back in.",
+        description: "Could not logout user. Please close session and log back in.",
         status: "error",
         position: "top",
         duration: null,
@@ -56,12 +56,7 @@ function NavbarPopOverMenu() {
         placement={"bottom"}
       >
         <PopoverTrigger>
-          <img
-            src="/assets/Avatars.png"
-            alt="profile"
-            className={styles.logoLink}
-            onClick={onOpen}
-          />
+          <img src={AvatarIcon} alt="profile" className={styles.logoLink} onClick={onOpen} />
         </PopoverTrigger>
         <PopoverContent w={90} borderColor={"#0066CC"}>
           <PopoverArrow bg={"blue.600"} />

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import RemoveIcon from "@/assets/idp-remove-icon.svg";
+
 import styles from "./multi-answer.module.css";
 
 function MultiAnswer({ initialValue, onChange }) {
@@ -69,11 +71,7 @@ function MultiAnswer({ initialValue, onChange }) {
                 onChange={(e) => handleServiceChange(e, index)}
               />
               {answerList.length - 1 === index && (
-                <button
-                  type="button"
-                  className={styles.addBtn}
-                  onClick={handleServiceAdd}
-                >
+                <button type="button" className={styles.addBtn} onClick={handleServiceAdd}>
                   <span>Add Goal</span>
                 </button>
               )}
@@ -86,10 +84,7 @@ function MultiAnswer({ initialValue, onChange }) {
                   onClick={() => handleServiceRemove(index)}
                 >
                   <span>
-                    <img
-                      src="/assets/idp-remove-icon.svg"
-                      alt="idp-remove-icon"
-                    />
+                    <img src={RemoveIcon} alt="idp-remove-icon" />
                   </span>
                 </button>
               )}

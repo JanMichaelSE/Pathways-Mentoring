@@ -10,10 +10,11 @@ import Input from "@/components/common/Input/input";
 
 import mailIcon from "@/assets/mail-icon.svg";
 import lockIcon from "@/assets/secure-icon.svg";
-import styles from "./login-form.module.css";
 
 import { httpLogin } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
+
+import styles from "./login-form.module.css";
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -64,9 +65,7 @@ function LoginForm() {
         password: "",
       }}
       validationSchema={Yup.object({
-        email: Yup.string()
-          .email("Invalid email address")
-          .required("Email is required"),
+        email: Yup.string().email("Invalid email address").required("Email is required"),
         password: Yup.string()
           .min(12, "Must Contain 12 Characters")
           .required("Password is required"),

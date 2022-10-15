@@ -1,14 +1,8 @@
-import {
-  Box,
-  Grid,
-  GridItem,
-  HStack,
-  Image,
-  Text,
-  useMediaQuery,
-} from "@chakra-ui/react";
+import { Box, Grid, GridItem, HStack, Image, Text, useMediaQuery } from "@chakra-ui/react";
 import StaffCards from "@/components/Contact-Us/StaffCards/staffcards";
 import ContactUsForm from "@/components/Contact-Us/ContactForm/contact-us-form";
+import ContactIcon from "@/assets/contact.svg";
+
 import styles from "./contact-us.module.css";
 
 function ContactUs() {
@@ -16,11 +10,7 @@ function ContactUs() {
   return (
     <div className={styles.container}>
       <Grid templateColumns="repeat(10, 1fr)" gap={2}>
-        <GridItem
-          justifyContent={"center"}
-          colSpan={isLargerThan940 ? 7 : 10}
-          mt={6}
-        >
+        <GridItem justifyContent={"center"} colSpan={isLargerThan940 ? 7 : 10} mt={6}>
           <Box
             w={isLargerThan940 ? "100" : "87%"}
             maxWidth={"991px"}
@@ -33,12 +23,7 @@ function ContactUs() {
             mx={"auto"}
           >
             <HStack>
-              <Image
-                boxSize="50px"
-                objectFit="cover"
-                src="/assets/contact.svg"
-                alt="Company.svg"
-              />
+              <Image boxSize="50px" objectFit="cover" src={ContactIcon} alt="Contact Icon" />
               <Text className={styles.heading}>Contact Pathways</Text>
             </HStack>
             <ContactUsForm />

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 import {
   Heading,
   Avatar,
@@ -19,9 +18,20 @@ import {
   HStack,
   Spacer,
 } from "@chakra-ui/react";
-import styles from "./avatar-card.module.css";
+import { useSearchParams } from "react-router-dom";
+
 import OfficeHours from "../../Mentors/OfficeHours/office-hours";
 import ProfilePicture from "../Profile/ProfilePicture/profile-picture";
+import BackIcon from "@/assets/back.svg";
+import CellPhoneIcon from "@/assets/cellphone.svg";
+import CircledEnvelopeIcon from "@/assets/circled-envelope.svg";
+import CompanyIcon from "@/assets/Company.svg";
+import GmailIcon from "@/assets/Gmail-Logo.svg";
+import GraduationCapIcon from "@/assets/graduation-cap.svg";
+import InfoIcon from "@/assets/info.svg";
+import PhoneSquaredIcon from "@/assets/Phone-Squared.svg";
+
+import styles from "./avatar-card.module.css";
 
 function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,12 +63,7 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
       return (
         <>
           <HStack px={3} py={3} rounded={"27px"} bg={"#D9E4EA"} boxShadow={"md"}>
-            <Image
-              boxSize="50px"
-              objectFit="cover"
-              src="/assets/cellphone.svg"
-              alt="Cellphone.svg"
-            />
+            <Image boxSize="50px" objectFit="cover" src={CellPhoneIcon} alt="Cell Phone Icon" />
             <Text fontWeight={"400"}>{cardData.phone}</Text>
           </HStack>
         </>
@@ -74,8 +79,8 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
             <Image
               boxSize="50px"
               objectFit="cover"
-              src="/assets/circled-envelope.svg"
-              alt="Company.svg"
+              src={CircledEnvelopeIcon}
+              alt="Circled Envelope Icon"
             />
             <Link href={`mailto:${cardData.email}`} fontWeight={"400"}>
               {cardData.email}
@@ -93,8 +98,8 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
             <Image
               boxSize="50px"
               objectFit="cover"
-              src="/assets/graduation-cap.svg"
-              alt="Company.svg"
+              src={GraduationCapIcon}
+              alt="Graduation Cap Icon"
             />
             <Text fontWeight={"400"}>{cardData.academicDegree}</Text>
           </HStack>
@@ -123,8 +128,8 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
               borderWidth={"2px"}
               borderColor={"#99A9B9"}
               background={"#5389BE"}
-              src={"/assets/info.svg"}
-              alt={"Avatar Alt"}
+              src={InfoIcon}
+              alt={"Info Icon"}
               pos={"relative"}
               p={3}
             />
@@ -174,7 +179,7 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
               py={1}
               boxSize="65px"
               objectFit="cover"
-              src="/assets/Gmail-Logo.svg"
+              src={GmailIcon}
               alt="Email Icon"
             />
             <Image
@@ -182,7 +187,7 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
               py={1}
               boxSize="50px"
               objectFit="cover"
-              src="/assets/Phone-Squared.svg"
+              src={PhoneSquaredIcon}
               alt="Phone Squared Icon"
             />
             <Image
@@ -190,8 +195,8 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
               py={1}
               boxSize="50px"
               objectFit="cover"
-              src="/assets/Company.svg"
-              alt="Company.svg"
+              src={CompanyIcon}
+              alt="Company Icon"
             />
           </Stack>
         </Box>
@@ -218,8 +223,8 @@ function AvatarCard({ cardData, buttonFunction, messageButton, studentSide }) {
               <Image
                 boxSize="40px"
                 objectFit="cover"
-                src="/assets/back.svg"
-                alt="back.svg"
+                src={BackIcon}
+                alt="Back Icon"
                 onClick={onClose}
                 cursor="pointer"
               />
