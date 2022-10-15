@@ -31,13 +31,7 @@ function SignupPopupSelector() {
       <button className={styles.linkButton} onClick={onOpen}>
         Create an account.
       </button>
-      <Modal
-        isCentered
-        onClose={onClose}
-        isOpen={isOpen}
-        motionPreset="slideInBottom"
-        size={"xl"}
-      >
+      <Modal isCentered onClose={onClose} isOpen={isOpen} motionPreset="slideInBottom" size={"xl"}>
         <ModalOverlay />
         <ModalContent
           borderRadius={"60px"}
@@ -50,7 +44,7 @@ function SignupPopupSelector() {
               <Image
                 boxSize="40px"
                 objectFit="cover"
-                src="/assets/back.svg"
+                src="@/assets/back.svg"
                 alt="back.svg"
                 onClick={onClose}
                 cursor="pointer"
@@ -61,10 +55,10 @@ function SignupPopupSelector() {
           <ModalBody>
             <div className={styles.buttonContainer}>
               <Link className={styles.linkLogo} to={"/signup?role=mentor"}>
-                <img src="/assets/select-mentor-logo.svg"></img>
+                <img src="@/assets/select-mentor-logo.svg"></img>
               </Link>
               <Link className={styles.linkLogo} to={"/signup?role=student"}>
-                <img src="/assets/select-student-logo.svg"></img>
+                <img src="@/assets/select-student-logo.svg"></img>
               </Link>
             </div>
           </ModalBody>
