@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 import NavbarPopOverMenu from "@/components/common/NavbarPopOverMenu/navbar-popover-menu";
-import PathwaysSmallLogo from "@/assets/Pathway_logo_small.png";
+import PathwaysSmallLogo from "@/assets/Pathway_Logo_small.png";
 
 import styles from "./mentors-navbar.module.css";
 
