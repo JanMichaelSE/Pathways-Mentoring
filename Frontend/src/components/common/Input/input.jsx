@@ -2,20 +2,33 @@ import { useField, ErrorMessage } from "formik";
 import styles from "./input.module.css";
 import { phoneFormat } from "@/utils/helpers";
 
-function Input({ label, ...props }) {
+function Input({ label, imgUrl, isBlue, ...props }) {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
   function inputStyles() {
-    return meta.touched && meta.error
-      ? `${styles.input} input-error`
-      : styles.input;
+    let classNames = styles.input;
+
+    if (meta.touched && meta.error) {
+      classNames += " input-error";
+    }
+    if (imgUrl) {
+      classNames += " " + styles.inputImg;
+    }
+
+    return classNames;
   }
 
   function labelStyles() {
-    return meta.touched && meta.error
-      ? `${styles.label} label-error`
-      : styles.label;
+    let classNames = styles.label;
+
+    if (meta.touched && meta.error) {
+      classNames += " label-error";
+    }
+    if (isBlue) {
+      classNames += " " + styles.blueFont;
+    }
+    return classNames;
   }
 
   function formatInput(event) {
@@ -30,12 +43,19 @@ function Input({ label, ...props }) {
 
   return (
     <div>
-      <label className={labelStyles()} htmlFor={props.id || props.name}>
-        {label}
-      </label>
+      {label && (
+        <label className={labelStyles()} htmlFor={props.id || props.name}>
+          {label}
+        </label>
+      )}
       <input
+        autoComplete="off"
         className={inputStyles()}
-        style={{ width: props.width }}
+        style={{
+          width: props.width,
+          height: props.height,
+          backgroundImage: `url(${imgUrl})`,
+        }}
         {...field}
         {...props}
         onChange={formatInput}

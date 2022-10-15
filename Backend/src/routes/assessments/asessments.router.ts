@@ -1,17 +1,32 @@
-import express from 'express';
-import { httpAddAssessment, httpDeleteAssessment, httpGetAllAssessments, httpGetAssessment, httpUpdateAssessment } from './assessments.controller';
+import express from "express";
+import { authenticateJsonWebToken } from "../../services/auth.service";
+import {
+  httpAddAssessment,
+  httpAnswerAssessment,
+  httpDeleteAssessment,
+  httpGetAllAssessments,
+  httpGetAnswersByAssessment,
+  httpGetAssessment,
+  httpGetPathwaysAssessment,
+  httpUpdateAssessment,
+} from "./assessments.controller";
 
 const router = express.Router();
 
-router.get("/", httpGetAllAssessments);
+router.get("/", authenticateJsonWebToken, httpGetAllAssessments);
 
-router.get("/:id", httpGetAssessment);
+router.get("/pathways", authenticateJsonWebToken, httpGetPathwaysAssessment);
 
-router.post("/", httpAddAssessment);
+router.get("/:assessmentId", authenticateJsonWebToken, httpGetAssessment);
 
-router.post("/:id", httpUpdateAssessment);
+router.get("/answer/:assessmentId", authenticateJsonWebToken, httpGetAnswersByAssessment);
 
-router.delete("/:id", httpDeleteAssessment);
+router.post("/", authenticateJsonWebToken, httpAddAssessment);
 
+router.post("/answer/:assessmentId", authenticateJsonWebToken, httpAnswerAssessment);
+
+router.post("/:assessmentId", authenticateJsonWebToken, httpUpdateAssessment);
+
+router.delete("/:assessmentId", authenticateJsonWebToken, httpDeleteAssessment);
 
 export default router;

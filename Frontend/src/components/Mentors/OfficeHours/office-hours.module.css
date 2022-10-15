@@ -1,0 +1,4 @@
+.regularbold {
+   font-size: var(--font-size-regular);
+   font-weight: bold;
+}

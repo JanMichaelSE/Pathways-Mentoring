@@ -1,0 +1,27 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: left;
+  margin-bottom: 1rem;
+}
+.message-container {
+  min-width: 20rem;
+  max-width: 20rem;
+  font-weight: bold;
+}
+.receiver-container {
+  padding: 0.5rem 1rem 1rem 1rem;
+  background-color: white;
+  border-radius: 20px;
+  font-size: var(--font-size-small);
+  border-radius: 0 10px 10px 10px;
+  -webkit-border-radius: 0 10px 10px 10px;
+  -moz-border-radius: 0 10px 10px 10px;
+  -ms-border-radius: 0 10px 10px 10px;
+  -o-border-radius: 0 10px 10px 10px;
+}
+
+.time-container {
+  float: right;
+  padding-right: 0.25rem;
+}

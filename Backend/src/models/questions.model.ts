@@ -1,12 +1,37 @@
 import { prisma } from "../database";
+
 import { Question } from "@prisma/client";
+
 import { IErrorResponse, IQuestion } from "../types";
-import { titleCase } from "../utils/helpers";
+import { buildErrorObject, titleCase } from "../utils/helpers";
 
-
-async function deleteQuestions(questions: IQuestion[], assessmentId: number) : Promise<void> {
+async function findDevelopmentPlanQuestionsWithAnswers(userId?: string): Promise<Question[]> {
   try {
+    const questions = await prisma.question.findMany({
+      where: {
+        isDevelopmentPlan: true,
+      },
+      include: {
+        answers: {
+          where: {
+            userId: userId,
+          },
+          select: {
+            id: true,
+            answer: true,
+          },
+        },
+      },
+    });
 
+    return questions;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function deleteQuestions(questions: IQuestion[], assessmentId: number): Promise<void> {
+  try {
     const existingQuestions = await prisma.question.findMany({
       where: {
         assessmentId: assessmentId,
@@ -14,10 +39,8 @@ async function deleteQuestions(questions: IQuestion[], assessmentId: number) : P
     });
 
     const questionIds = questions.map((q) => q.id);
-    const questionsToDelete = existingQuestions.filter(
-      (q) => !questionIds.includes(q.id)
-    );
-    
+    const questionsToDelete = existingQuestions.filter((q) => !questionIds.includes(q.id));
+
     for (const question of questionsToDelete) {
       await prisma.question.delete({
         where: {
@@ -25,18 +48,16 @@ async function deleteQuestions(questions: IQuestion[], assessmentId: number) : P
         },
       });
     }
-
   } catch (error) {
     throw error;
   }
 }
 
-async function upsertQuestions(questions: IQuestion[], assessmentId: number) : Promise<Question[]> {
+async function upsertQuestions(questions: IQuestion[], assessmentId?: number): Promise<Question[]> {
   try {
-
     let questionsToReturn: Question[] = [];
     for (const question of questions) {
-      const questionId = (question.id) ?? -1;      
+      const questionId = question.id ?? -1;
       const questionUpserted = await prisma.question.upsert({
         where: {
           id: questionId,
@@ -46,39 +67,25 @@ async function upsertQuestions(questions: IQuestion[], assessmentId: number) : P
           type: question.type,
           options: question.options,
           assessmentId: assessmentId,
+          isDevelopmentPlan: question.isDevelopmentPlan,
         },
         update: {
           question: question.question,
           type: question.type,
           options: question.options,
-        }    
+          isDevelopmentPlan: question.isDevelopmentPlan,
+        },
       });
       questionsToReturn.push(questionUpserted);
-    }    
+    }
 
     return questionsToReturn;
-
   } catch (error) {
     throw error;
-  }  
-}
-
-
-// --- Questions Helper Functions ---
-function exclude<Question, Key extends keyof Question>(
-  question: Question,
-  ...keys: Key[]
-): Question {
-  for (let key of keys) {
-    delete question[key];
   }
-  return question;
 }
 
-function validateQuestionsFormat(
-  questions: IQuestion[]
-): IQuestion[] | IErrorResponse {
-
+function validateQuestionsFormat(questions: IQuestion[]): IQuestion[] | IErrorResponse {
   // Transform Questions to have proper title casing type
   questions.forEach((q) => {
     q.type = titleCase(q.type);
@@ -89,32 +96,33 @@ function validateQuestionsFormat(
     if (
       question.type != "Text" &&
       question.type != "Select" &&
-      question.type != "Multi-select"
+      question.type != "Multi-select" &&
+      question.type != "Rating" &&
+      question.type != "Multi-Answer"
     ) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage: `The question: "${question.question}" does not have a valid type assigned. Valid types are: "Text", "Select" and "Multi-select`,
-      };
-      return error;
+      return buildErrorObject(
+        400,
+        `The question: "${question.question}" does not have a valid type assigned. Valid types are: "Text", "Select", "Multi-select", "Rating" and "Multi-Answer"`
+      );
     } else if (
-      (question.type === "Multi-select" || question.type === "Select") &&
+      (question.type === "Multi-select" ||
+        question.type === "Select" ||
+        question.type === "Rating") &&
       !question.options
     ) {
-      const error: IErrorResponse = {
-        errorCode: 400,
-        errorMessage: `The question: "${question.question}" does not have a options assigned. If questions is of type "Select" or "Multi-select", options are required.`,
-      };
-      return error;
+      return buildErrorObject(
+        400,
+        `The question: "${question.question}" does not have a options assigned. If questions is of type "Select", "Multi-select" or "Rating" options are required.`
+      );
     }
   }
 
   return questions;
-
 }
-
 
 export {
+  findDevelopmentPlanQuestionsWithAnswers,
   deleteQuestions,
   upsertQuestions,
-  validateQuestionsFormat
-}
+  validateQuestionsFormat,
+};

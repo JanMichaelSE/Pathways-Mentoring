@@ -1,0 +1,13 @@
+.container {
+  padding-top: 3rem;
+}
+
+.heading {
+  font-size: var(--font-size-heading);
+  font-weight: bold;
+  color: var(--color-blue-dark);
+}
+
+.noUsers {
+  padding-top: 100px;
+}

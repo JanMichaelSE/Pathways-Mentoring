@@ -1,40 +1,37 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import { useToast, useDisclosure } from "@chakra-ui/react";
 
 import { httpSignupStudent } from "@/api/user.api";
 import { useUserStore } from "@/store/user.store";
 
+import StudentSignUpPopup from "../StudentSignUpPopup/student-signup-popup";
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
 import styles from "./student-form.module.css";
 
 function StudentForm() {
-  const navigate = useNavigate();
-  const userId = useUserStore((state) => state.userId);
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const setUser = useUserStore((state) => state.setUser);
-
-  useEffect(() => {
-    if (userId) {
-      navigate("../student", { replace: true });
-    }
-  }, [userId]);
+  const setTokens = useUserStore((state) => state.setTokens);
 
   async function handleSubmit(studentInfo) {
     const userResponse = await httpSignupStudent(studentInfo);
 
     if (userResponse.hasError) {
-      return toast.error(userResponse.errorMessage);
+      return toast({
+        description: userResponse.errorMessage,
+        status: "error",
+        position: "top",
+        duration: 5000,
+      });
     }
 
-    setUser(
-      userResponse.data.userId,
-      userResponse.data.email,
-      userResponse.data.role
-    );
+    setUser(userResponse.data.email, "Student");
+    setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
+    onOpen();
   }
 
   return (
@@ -73,9 +70,23 @@ function StudentForm() {
           gender: Yup.string()
             .oneOf(["Male", "Female", "Other"])
             .required("Gender is required"),
-          fieldOfStudy: Yup.string().required("Field of Study is required"),
-          institution: Yup.string().required("Insitution is required"),
-          gpa: Yup.number(),
+          fieldOfStudy: Yup.string()
+            .oneOf([
+              "Architecture",
+              "Business Administration",
+              "Civil Engineering",
+              "Computer Engineering",
+              "Computer Science",
+              "Electrical Engineering",
+              "Environmental Engineering",
+              "Industrial Engineering",
+              "Mechanical Engineering",
+            ])
+            .required("Field of Study is required"),
+          institution: Yup.string().required("Institution is required"),
+          gpa: Yup.number()
+            .min(0.01, "GPA can not be less than 0.01")
+            .max(4, "GPA can not be more than 4.00"),
         })}
         onSubmit={async (values) => {
           await handleSubmit(values);
@@ -93,7 +104,28 @@ function StudentForm() {
               name="confirmPassword"
               type="password"
             />
-            <Input label="Field Of Study *" name="fieldOfStudy" type="text" />
+            <Select label="Field Of Study *" name="fieldOfStudy">
+              <option value="">Select Option</option>
+              <option value="Architecture">Architecture</option>
+              <option value="Business Administration">
+                Business Administration
+              </option>
+              <option value="Civil Engineering">Civil Engineering</option>
+              <option value="Computer Engineering">Computer Engineering</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Electrical Engineering">
+                Electrical Engineering
+              </option>
+              <option value="Environmental Engineering">
+                Environmental Engineering
+              </option>
+              <option value="Industrial Engineering">
+                Industrial Engineering
+              </option>
+              <option value="Mechanical Engineering">
+                Mechanical Engineering
+              </option>
+            </Select>
             <Input
               label="Institution *"
               name="institution"
@@ -113,6 +145,7 @@ function StudentForm() {
           </div>
         </Form>
       </Formik>
+      <StudentSignUpPopup isOpen={isOpen} onClose={onClose} />
     </div>
   );
 }

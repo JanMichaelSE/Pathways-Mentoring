@@ -1,0 +1,46 @@
+/* Creating Student Form Component */
+.form-container {
+  max-width: 1350px;
+}
+
+.form-input {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 2rem;
+}
+
+.form-input div {
+  margin-right: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.button-container {
+  display: flex;
+  justify-content: end;
+  margin-right: 2rem;
+}
+
+/* Search Input Styles Component*/
+.input-search {
+  font-size: var(--font-size-regular);
+  background-color: var(--color-white);
+  background-image: url("../../../assets/search-icon.svg");
+  background-repeat: no-repeat;
+  background-position: top 5px left 20px;
+  border: 1px solid rgba(139, 141, 144, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  padding: 0 20px 0 70px;
+  height: 60px;
+  width: 25rem;
+}
+
+.input-search:focus {
+  outline: none;
+}
+
+@media only screen and (max-width: 950px) {
+  .form-input {
+    justify-content: space-between;
+  }
+}

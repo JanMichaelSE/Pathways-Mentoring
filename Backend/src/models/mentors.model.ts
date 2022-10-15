@@ -1,15 +1,16 @@
-import { Mentor } from "@prisma/client";
 import { prisma } from "../database";
-import { IMentor, IErrorResponse } from './../types/index.d';
 
+import { Mentor } from "@prisma/client";
+
+import { buildErrorObject, excludeFields } from "../utils/helpers";
+import { IMentor, IErrorResponse } from "./../types/index.d";
 
 async function createMentor(
   userId: string,
   email: string,
   mentorInfo: IMentor
-) : Promise<Mentor | IErrorResponse> {
+): Promise<Mentor | IErrorResponse> {
   try {
-
     const createdMentor = await prisma.mentor.create({
       data: {
         name: mentorInfo.name,
@@ -28,50 +29,92 @@ async function createMentor(
       },
     });
 
-    const mentorWithoutId = exclude(createdMentor, "id");
+    const mentorWithoutId = excludeFields(createdMentor, "id");
     return mentorWithoutId;
-    
   } catch (error) {
     throw error;
   }
 }
 
-async function findAllMentors() : Promise<Mentor[]> {
+async function findAllMentors(): Promise<Mentor[]> {
   try {
-    const mentors = await prisma.mentor.findMany();
-    const mentorsWithoutId = mentors.map(mentor => exclude(mentor, 'id'));
+    const mentors = await prisma.mentor.findMany({
+      where: {
+        user: {
+          isApproved: true,
+        },
+      },
+    });
+    const mentorsWithoutId = mentors.map((mentor) =>
+      excludeFields(mentor, "userId")
+    );
     return mentorsWithoutId;
   } catch (error) {
     throw error;
   }
 }
 
-async function findMentorByUserId(userId: string) : Promise<Mentor | null> {
+async function findMentorByStudentId(studentId: string): Promise<Mentor[]> {
   try {
-    const mentor = await prisma.mentor.findUnique({
+    const mentor = await prisma.mentor.findMany({
       where: {
-        userId: userId
-      }
+        students: {
+          some: {
+            id: studentId,
+            isPendingMentorshipApproval: false,
+          },
+        },
+      },
     });
 
-    if (!mentor) {
-      return null;
-    }
-    
-    const mentorWithoutId = exclude(mentor, 'id');
-    return mentorWithoutId;
-
+    return mentor;
   } catch (error) {
     throw error;
   }
 }
 
-async function findMentorByEmail(email: string) : Promise<Mentor | null> {
+async function findMentorById(mentorId: string): Promise<Mentor | null> {
   try {
     const mentor = await prisma.mentor.findUnique({
       where: {
-        email: email
-      }
+        id: mentorId,
+      },
+    });
+
+    if (!mentor) {
+      return null;
+    }
+
+    return mentor;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function findMentorByUserId(userId: string): Promise<Mentor | null> {
+  try {
+    const mentor = await prisma.mentor.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+
+    if (!mentor) {
+      return null;
+    }
+
+    return mentor;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function findMentorByEmail(email: string): Promise<Mentor | null> {
+  try {
+    const mentor = await prisma.mentor.findUnique({
+      where: {
+        email: email,
+      },
     });
     return mentor;
   } catch (error) {
@@ -79,66 +122,85 @@ async function findMentorByEmail(email: string) : Promise<Mentor | null> {
   }
 }
 
-async function updateMentor(userId: string, mentorInfo: IMentor) : Promise<Mentor | IErrorResponse> {
+async function findUnApprovedMentors(): Promise<Mentor[]> {
   try {
-    
-    const mentor = await prisma.mentor.findUnique({
+    const mentors = await prisma.mentor.findMany({
       where: {
-        userId: userId
-      }
-    });
-    if (!mentor) {
-      const error: IErrorResponse = {
-        errorCode: 401,
-        errorMessage:
-          "This mentor does not exist in the system.",
-      };
-      return error;
-    }
-
-    const updatedMentor = await prisma.mentor.update({
-      where: {
-        id: mentor.id
+        user: {
+          isApproved: false,
+        },
       },
-      data: {
-        name: !!mentorInfo.name ? mentorInfo.name : undefined,
-        phone: !!mentorInfo.phone ? mentorInfo.phone : undefined,
-        gender: !!mentorInfo.gender ? mentorInfo.gender : undefined,
-        description: mentorInfo.description,
-        interests: mentorInfo.interests,
-        department: !!mentorInfo.department ? mentorInfo.department : undefined,
-        academicDegree: !!mentorInfo.academicDegree ? mentorInfo.academicDegree : undefined,
-        office: mentorInfo.office,
-        officeHours: mentorInfo.officeHours,
-        profilePicture: mentorInfo.profilePicture
-      }
     });
 
-    const mentorWithoutId = exclude(updatedMentor, 'id');
-    return mentorWithoutId;
+    const filteredMentors = mentors.map((m) => excludeFields(m, "userId"));
 
+    return filteredMentors;
   } catch (error) {
     throw error;
   }
 }
 
+async function updateMentor(
+  id: string,
+  email: string,
+  mentorInfo: IMentor
+): Promise<Mentor | IErrorResponse> {
+  try {
+    const updatedMentor = await prisma.mentor.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: !!mentorInfo.name ? mentorInfo.name : undefined,
+        email: !!email ? email : undefined,
+        phone: !!mentorInfo.phone ? mentorInfo.phone : undefined,
+        gender: !!mentorInfo.gender ? mentorInfo.gender : undefined,
+        description: mentorInfo.description,
+        interests: mentorInfo.interests,
+        department: !!mentorInfo.department ? mentorInfo.department : undefined,
+        academicDegree: !!mentorInfo.academicDegree
+          ? mentorInfo.academicDegree
+          : undefined,
+        office: mentorInfo.office,
+        officeHours: mentorInfo.officeHours,
+        profilePicture: mentorInfo.profilePicture,
+      },
+    });
 
-// --- Mentor Helper Functions ---
-function exclude<Mentor, Key extends keyof Mentor>(
-  mentor: Mentor,
-  ...keys: Key[]
-): Mentor {
-  for (let key of keys) {
-    delete mentor[key];
+    const mentorWithoutId = excludeFields(updatedMentor, "id");
+    return mentorWithoutId;
+  } catch (error) {
+    throw error;
   }
-  return mentor;
 }
 
+async function validateMentorExists(
+  userId: string
+): Promise<Mentor | IErrorResponse> {
+  try {
+    const mentor = await prisma.mentor.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+    if (!mentor) {
+      return buildErrorObject(401, "This mentor does not exist in the system.");
+    }
+
+    return mentor;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export {
   createMentor,
   findAllMentors,
+  findMentorByStudentId,
+  findMentorById,
   findMentorByUserId,
   findMentorByEmail,
-  updateMentor
-}
+  findUnApprovedMentors,
+  updateMentor,
+  validateMentorExists,
+};

@@ -1,11 +1,15 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Formik, Form, ErrorMessage } from "formik";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import { useToast } from "@chakra-ui/react";
+import { useMediaQuery } from "@chakra-ui/react";
 
 import Button from "@/components/common/Button/button";
-import Input from "@/components/Auth/InputLogin/input-login";
+import Input from "@/components/common/Input/input";
+
+import mailIcon from "@/assets/mail-icon.svg";
+import lockIcon from "@/assets/secure-icon.svg";
 import styles from "./login-form.module.css";
 
 import { httpLogin } from "@/api/user.api";
@@ -13,16 +17,23 @@ import { useUserStore } from "@/store/user.store";
 
 function LoginForm() {
   const navigate = useNavigate();
+  const location = useLocation();
   const role = useUserStore((state) => state.role);
   const setUser = useUserStore((state) => state.setUser);
+  const setTokens = useUserStore((state) => state.setTokens);
+
+  const toast = useToast();
+  const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
 
   useEffect(() => {
-    if (role == "Student") {
-      navigate("../student", { replace: true });
+    if (role && location.state?.from) {
+      navigate(location.state.from);
+    } else if (role == "Student") {
+      navigate("../student");
     } else if (role == "Mentor") {
-      navigate("../mentor", { replace: true });
+      navigate("../mentor");
     } else if (role == "Admin") {
-      navigate("../admin", { replace: true });
+      navigate("../admin");
     }
   }, [role]);
 
@@ -30,14 +41,20 @@ function LoginForm() {
     const userResponse = await httpLogin(studentInfo);
 
     if (userResponse.hasError) {
-      return toast.error(userResponse.errorMessage);
+      return toast({
+        description: userResponse.errorMessage,
+        status: "error",
+        position: "top",
+        duration: 5000,
+      });
     }
 
-    setUser(
-      userResponse.data.userId,
-      userResponse.data.email,
-      userResponse.data.role
-    );
+    setUser(userResponse.data.email, userResponse.data.role);
+    setTokens(userResponse.data.accessToken, userResponse.data.refreshToken);
+  }
+
+  function inputWidth() {
+    return isLessThan1135 ? "22rem" : "30rem";
   }
 
   return (
@@ -60,19 +77,24 @@ function LoginForm() {
     >
       <Form>
         <div className={styles.formInput}>
-          <Input name="email" type="text" placeholder="Email" id="input" />
-          <div className={styles.error}>
-            <ErrorMessage name="email" />
+          <div className={styles.inputContainer}>
+            <Input
+              name="email"
+              type="text"
+              placeholder="Email"
+              imgUrl={mailIcon}
+              width={inputWidth()}
+            />
           </div>
 
-          <Input
-            name="password"
-            type="password"
-            placeholder="Password"
-            id="input"
-          />
-          <div className={styles.error}>
-            <ErrorMessage name="password" />
+          <div className={styles.inputContainer}>
+            <Input
+              name="password"
+              type="password"
+              placeholder="Password"
+              imgUrl={lockIcon}
+              width={inputWidth()}
+            />
           </div>
 
           <div className={styles.buttonContainer}>

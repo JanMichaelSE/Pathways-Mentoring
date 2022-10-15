@@ -1,19 +1,23 @@
 import { useField, ErrorMessage } from "formik";
 import styles from "./select.module.css";
 
-function Select({ label, ...props }) {
+function Select({ label, isBlue, ...props }) {
   const [field, meta] = useField(props);
 
   function selectStyles() {
-    return meta.touched && meta.error
-      ? `${styles.select} input-error`
-      : styles.select;
+    return meta.touched && meta.error ? `${styles.select} input-error` : styles.select;
   }
 
   function labelStyles() {
-    return meta.touched && meta.error
-      ? `${styles.label} label-error`
-      : styles.label;
+    let classNames = styles.label;
+
+    if (meta.touched && meta.error) {
+      classNames += " label-error";
+    }
+    if (isBlue) {
+      classNames += " " + styles.blueFont;
+    }
+    return classNames;
   }
 
   return (

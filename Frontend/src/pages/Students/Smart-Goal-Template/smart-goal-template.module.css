@@ -1,0 +1,14 @@
+.developerPlan-container {
+  background-color: var(--color-white);
+  padding: 60px;
+  padding-right: 70px;
+  padding-left: 70px;
+  margin: auto;
+  max-width: var(--responsive-screen-max-width);
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}

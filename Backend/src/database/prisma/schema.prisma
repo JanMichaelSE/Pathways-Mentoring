@@ -16,12 +16,16 @@ model User {
   password         String    @unique @db.VarChar(65)
   passwordSalt     String    @unique @db.VarChar(65)
   role             String    @db.VarChar(10)
+  isApproved       Boolean   @default(false)
+  accessToken      String?
+  refreshToken     String?
   createdDate      DateTime  @default(now()) @db.Timestamptz(6)
   lastModified     DateTime  @default(now()) @db.Timestamptz(6)
   mentor           Mentor?
   student          Student?
   senderMessages   Message[] @relation(name: "sender")
   receiverMessages Message[] @relation(name: "receiver")
+  Answer           Answer[]
 }
 
 model Mentor {
@@ -47,52 +51,52 @@ model Mentor {
 }
 
 model Student {
-  id             String    @id @default(uuid()) @db.Uuid
-  name           String    @db.VarChar(100)
-  email          String    @unique @db.VarChar(150)
-  phone          String?   @db.VarChar(15)
-  gender         String    @db.VarChar(10)
-  graduationDate DateTime? @db.Date
-  gpa            Float?
-  institution    String
-  fieldOfStudy   String    @db.VarChar(255)
-  hasResearch    Boolean   @default(false)
-  profilePicture String?
-  createdDate    DateTime  @default(now()) @db.Timestamptz(6)
-  lastModified   DateTime  @default(now()) @db.Timestamptz(6)
-  userId         String    @unique @db.Uuid
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  mentorId       String?   @db.Uuid
-  mentor         Mentor?   @relation(fields: [mentorId], references: [id], onDelete: NoAction)
-  records        Record[]
-  answers        Answer[]
+  id                          String    @id @default(uuid()) @db.Uuid
+  name                        String    @db.VarChar(100)
+  email                       String    @unique @db.VarChar(150)
+  phone                       String?   @db.VarChar(15)
+  gender                      String    @db.VarChar(10)
+  graduationDate              DateTime? @db.Date
+  gpa                         String?
+  institution                 String
+  fieldOfStudy                String    @db.VarChar(255)
+  hasResearch                 Boolean   @default(false)
+  isPendingMentorshipApproval Boolean   @default(false)
+  profilePicture              String?
+  createdDate                 DateTime  @default(now()) @db.Timestamptz(6)
+  lastModified                DateTime  @default(now()) @db.Timestamptz(6)
+  userId                      String    @unique @db.Uuid
+  user                        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mentorId                    String?   @db.Uuid
+  mentor                      Mentor?   @relation(fields: [mentorId], references: [id], onDelete: NoAction)
+  records                     Record[]
 }
 
 model Record {
   id           String   @id @default(uuid()) @db.Uuid
-  stage        String   @db.VarChar(255)
-  finished     Boolean? @default(false)
-  approved     Boolean? @default(false)
-  rating       Decimal?
+  title        String   @db.VarChar(255)
+  description  String?
+  stage        String?  @default("New") @db.VarChar(255)
   createdDate  DateTime @default(now()) @db.Timestamptz(6)
   lastModified DateTime @default(now()) @db.Timestamptz(6)
   mentorId     String   @db.Uuid
   mentor       Mentor   @relation(fields: [mentorId], references: [id], onDelete: Cascade)
   studentId    String   @db.Uuid
   student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  notes        Note[]
+  note         Note?
 }
 
 model Note {
-  id           Int      @id @default(autoincrement())
-  createdDate  DateTime @default(now()) @db.Timestamptz(6)
-  lastModified DateTime @default(now()) @db.Timestamptz(6)
-  recordId     String   @db.Uuid
-  record       Record   @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  id           String    @id @default(uuid()) @db.Uuid
+  createdDate  DateTime  @default(now()) @db.Timestamptz(6)
+  lastModified DateTime  @default(now()) @db.Timestamptz(6)
+  recordId     String    @unique @db.Uuid
+  record       Record    @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  messages     Message[]
 }
 
 model Message {
-  id           Int      @id @default(autoincrement())
+  id           String   @id @default(uuid()) @db.Uuid
   message      String
   createdDate  DateTime @default(now()) @db.Timestamptz(6)
   lastModified DateTime @default(now()) @db.Timestamptz(6)
@@ -100,6 +104,8 @@ model Message {
   sender       User     @relation(name: "sender", fields: [senderId], references: [id], onDelete: Cascade)
   receiverId   String   @db.Uuid
   receiver     User     @relation(name: "receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  noteId       String   @db.Uuid
+  note         Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
 }
 
 model Assessment {
@@ -112,15 +118,16 @@ model Assessment {
 }
 
 model Question {
-  id           Int        @id @default(autoincrement())
-  question     String
-  type         String     @db.VarChar(255)
-  options      String?
-  createdDate  DateTime   @default(now()) @db.Timestamptz(6)
-  lastModified DateTime   @default(now()) @db.Timestamptz(6)
-  assessmentId Int
-  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-  answers      Answer[]
+  id                Int         @id @default(autoincrement())
+  question          String
+  type              String      @db.VarChar(255)
+  isDevelopmentPlan Boolean?    @default(false)
+  options           String?
+  createdDate       DateTime    @default(now()) @db.Timestamptz(6)
+  lastModified      DateTime    @default(now()) @db.Timestamptz(6)
+  assessmentId      Int?
+  assessment        Assessment? @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  answers           Answer[]
 }
 
 model Answer {
@@ -128,8 +135,8 @@ model Answer {
   answer       String
   createdDate  DateTime @default(now()) @db.Timestamptz(6)
   lastModified DateTime @default(now()) @db.Timestamptz(6)
-  studentId    String   @db.Uuid
-  student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  userId       String   @db.Uuid
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   questionId   Int
   question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }

@@ -1,0 +1,4 @@
+.continue-btn {
+  background: var(--button-background) !important;
+  color: var(--color-white);
+}

@@ -1,26 +1,21 @@
-import "./styles/App.css";
 import AuthRouter from "@/routes/root.router.jsx";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ChakraProvider } from "@chakra-ui/react";
+import io from "socket.io-client";
+import { useSocketStore } from "./store/socket.store";
+import "./styles/App.css";
+
+const socket = io.connect("http://localhost:8000");
 
 function App() {
+  const setSocket = useSocketStore((state) => state.setSocket);
+  setSocket(socket);
+
   return (
-    <div className="App">
-      <ToastContainer
-        position="top-center"
-        autoClose={4000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        closeButton={false}
-        theme="colored"
-      />
-      <AuthRouter />
-    </div>
+    <>
+      <ChakraProvider>
+        <AuthRouter />
+      </ChakraProvider>
+    </>
   );
 }
 

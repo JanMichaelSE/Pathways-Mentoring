@@ -1,42 +1,84 @@
 import { Fragment } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { useMediaQuery } from "@chakra-ui/react";
 import styles from "./students-navbar.module.css";
+import NavbarPopOverMenu from "@/components/common/NavbarPopOverMenu/navbar-popover-menu";
 
-export default function Navbar() {
+function StudentNavbar() {
+  let location = useLocation();
+
+  const [isLessThan1100] = useMediaQuery("(max-width: 1300px)");
+
   return (
     <Fragment>
       <nav className={styles.nav}>
-        <div className={styles.logoContainer}>
-          <Link className={styles.LogoLink} to="/">
-            <img src="/assets/Pathway_logo_small.png" alt="Pathways" />
-          </Link>
+        <div>
+          <img
+            src="/assets/Pathway_logo_small.png"
+            alt="Pathways"
+            className={styles.pathwaysLogo}
+          />
         </div>
+
         <div className={styles.navLinksContainer}>
-          <Link className={styles.navLink} to="/student/assessments">
+          <Link
+            className={
+              location.pathname === "/student/development-plan" ||
+              location.pathname === "/student/smart-goal-template"
+                ? styles.activeNavLink
+                : styles.navLink
+            }
+            to="/student/development-plan"
+          >
+            IDP
+          </Link>
+          <Link
+            className={
+              location.pathname === "/student/assessments" ||
+              location.pathname === "/student/assessment-results"
+                ? styles.activeNavLink
+                : styles.navLink
+            }
+            to="/student/assessments"
+          >
             Assessments
           </Link>
-          <Link className={styles.navLink} to="/student/records">
+          <Link
+            className={
+              location.pathname === "/student"
+                ? styles.activeNavLink
+                : styles.navLink
+            }
+            to="/student"
+          >
             Records
           </Link>
-          <Link className={styles.navLink} to="/student/mentors">
+          <Link
+            className={
+              location.pathname === "/student/mentors"
+                ? styles.activeNavLink
+                : styles.navLink
+            }
+            to="/student/mentors"
+          >
             Mentors
           </Link>
-          <Link className={styles.navLink} to="/student/contact-us">
+          <Link
+            className={
+              location.pathname === "/student/contact-us"
+                ? styles.activeNavLink
+                : styles.navLink
+            }
+            to="/student/contact-us"
+          >
             Contact Us
           </Link>
-        </div>
-        <div className={styles.profileContainer}>
-          <img
-            src="/assets/Doorbell.svg"
-            alt="NotificationBell"
-            className={styles.LogoLink}
-          />
-          <Link className={styles.LogoLink} to="/student/profile">
-            <img src="/assets/Avatars.png" alt="profile" />
-          </Link>
+          <NavbarPopOverMenu classname={styles.logoLink} />
         </div>
       </nav>
       <Outlet />
     </Fragment>
   );
 }
+
+export default StudentNavbar;
