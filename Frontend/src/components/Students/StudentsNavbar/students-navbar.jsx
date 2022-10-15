@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { useMediaQuery } from "@chakra-ui/react";
 
 import NavbarPopOverMenu from "@/components/common/NavbarPopOverMenu/navbar-popover-menu";
 import PathwaysSmallLogo from "@/assets/Pathway_Logo_small.png";
