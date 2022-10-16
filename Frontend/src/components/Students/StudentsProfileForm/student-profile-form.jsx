@@ -13,6 +13,7 @@ import Select from "@/components/common/Select/select";
 import { Box, useMediaQuery } from "@chakra-ui/react";
 import ProfileChangerPopOver from "@/components/common/Profile/ProfileChangerPopOver/profile-changer-popover";
 import ProfilePicture from "@/components/common/Profile/ProfilePicture/profile-picture";
+import InputCreatable from "@/components/common/InputCreatable/input-creatable";
 import AcademicIcon from "@/assets/academic-icon.svg";
 import MoreInfoIcon from "@/assets/more-info.svg";
 import PasswordIcon from "@/assets/password-icon.svg";
@@ -29,8 +30,19 @@ function StudentProfileForm() {
   const [close, setClose] = useState("Edit");
   const [dataFirstName, setDataFirstName] = useState("");
   const [dataLastName, setDataLastName] = useState("");
-
   const [isLoading, setIsLoading] = useState(true);
+
+  const fieldOfStudyValues = [
+    "Architecture",
+    "Business Administration",
+    "Civil Engineering",
+    "Computer Engineering",
+    "Computer Science",
+    "Electrical Engineering",
+    "Environmental Engineering",
+    "Industrial Engineering",
+    "Mechanical Engineering",
+  ];
 
   const [isLessThan950] = useMediaQuery("(max-width: 950px)");
   const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
@@ -180,19 +192,7 @@ function StudentProfileForm() {
             "Passwords must match"
           ),
           gender: Yup.string().oneOf(["Male", "Female", "Other"]).required("Gender is required"),
-          fieldOfStudy: Yup.string()
-            .oneOf([
-              "Architecture",
-              "Business Administration",
-              "Civil Engineering",
-              "Computer Engineering",
-              "Computer Science",
-              "Electrical Engineering",
-              "Environmental Engineering",
-              "Industrial Engineering",
-              "Mechanical Engineering",
-            ])
-            .required("Field of Study is required"),
+          fieldOfStudy: Yup.string().required("Field of Study is required"),
           institution: Yup.string().required("Institution is required"),
           gpa: Yup.number()
             .min(0.01, "GPA can not be less than 0.01")
@@ -323,24 +323,14 @@ function StudentProfileForm() {
             Academic Information
           </h1>
           <div className={styles.inputContainer}>
-            <Select
+            <InputCreatable
               label="Field Of Study *"
               name="fieldOfStudy"
-              style={{ width: inputWidthField() }}
+              width={inputWidthField()}
+              initOptions={fieldOfStudyValues}
+              isBlue={true}
               disabled={edit}
-              isBlue
-            >
-              <option value="">Select Option</option>
-              <option value="Architecture">Architecture</option>
-              <option value="Business Administration">Business Administration</option>
-              <option value="Civil Engineering">Civil Engineering</option>
-              <option value="Computer Engineering">Computer Engineering</option>
-              <option value="Computer Science">Computer Science</option>
-              <option value="Electrical Engineering">Electrical Engineering</option>
-              <option value="Environmental Engineering">Environmental Engineering</option>
-              <option value="Industrial Engineering">Industrial Engineering</option>
-              <option value="Mechanical Engineering">Mechanical Engineering</option>
-            </Select>
+            />
             <Input
               label="Institution *"
               name="institution"
