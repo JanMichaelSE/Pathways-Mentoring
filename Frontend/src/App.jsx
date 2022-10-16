@@ -5,7 +5,7 @@ import { useSocketStore } from "./store/socket.store";
 import "./styles/App.css";
 
 const HOST = import.meta.env.VITE_HOST || "http://localhost:8000";
-const socket = io.connect(HOST + "/api");
+const socket = io.connect(HOST, { path: "/api" });
 console.log("Socket: ", socket);
 
 function App() {
