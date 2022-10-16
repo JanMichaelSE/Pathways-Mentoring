@@ -11,7 +11,6 @@ function InputCreatable({ initOptions, label, width, isBlue, ...props }) {
   });
 
   function handleSelectChange(selectValue) {
-    console.log("On Select Values: ", selectValue.value);
     setValue(selectValue.value);
   }
 

@@ -176,8 +176,8 @@
 @media only screen and (max-width: 1024px) {
   .flex-container {
     display: flex;
-    justify-content: flex-start; /* adjustment */
-    position: relative; /* new */
+    justify-content: flex-start;
+    position: relative;
     margin-bottom: 3.5rem;
     min-height: 5rem;
     padding-right: 1rem;

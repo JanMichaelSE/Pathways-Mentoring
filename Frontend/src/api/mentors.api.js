@@ -115,7 +115,6 @@ async function httpAcceptMentorship(studentId) {
     const response = await axios.post("/mentors/accept-mentorship", userInfo);
     userToReturn.data = await response.data;
   } catch (error) {
-    console.log(error);
     const errorResponse = error.response.data;
     if (typeof errorResponse.error.errorCode == "number") {
       userToReturn.hasError = true;
@@ -156,12 +155,9 @@ async function httpApproveMentorAccess(userId) {
     const userInfo = {
       mentorId: userId,
     };
-    console.log("UserInfo: ", userInfo);
-    console.log("id:", userId);
     const response = await axios.post("/mentors/approve-mentor", userInfo);
     userToReturn.data = await response.data;
   } catch (error) {
-    console.log(error);
     const errorResponse = error.response.data;
     if (typeof errorResponse.error.errorCode == "number") {
       userToReturn.hasError = true;

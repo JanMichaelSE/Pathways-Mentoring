@@ -47,7 +47,6 @@ function RecordView() {
       });
     }
 
-    console.log("Record Response: ", response.data);
     setRecord({ ...response.data });
     toast({
       title: "Record has been submitted!",
