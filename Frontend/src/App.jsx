@@ -7,7 +7,7 @@ import "./styles/App.css";
 const HOST = import.meta.env.VITE_HOST || "http://localhost";
 const PORT = import.meta.env.VITE_PORT || "8000";
 const SERVER = `${HOST}:${PORT}`;
-const socket = io.connect(SERVER, { path: "/api" });
+const socket = io.connect(SERVER);
 console.log("Socket: ", socket);
 
 function App() {
