@@ -16,6 +16,8 @@ function Notes({ noteId }) {
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
 
+  console.log("Note Socket: ", socket);
+
   useEffect(() => {
     async function loadNoteData() {
       const response = await httpGetNote(noteId);
@@ -43,6 +45,7 @@ function Notes({ noteId }) {
     if (!isLoading) {
       scrollChatToBottom();
       socket.on("receive_message", (data) => {
+        console.log("Receive Message: ", data);
         messages.push(data);
         setMessages([...messages]);
       });
