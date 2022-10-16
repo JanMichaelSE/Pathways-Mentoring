@@ -9,6 +9,8 @@ import StudentSignUpPopup from "../StudentSignUpPopup/student-signup-popup";
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
+import InputCreatable from "@/components/common/InputCreatable/input-creatable";
+
 import styles from "./student-form.module.css";
 
 function StudentForm() {
@@ -16,6 +18,18 @@ function StudentForm() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const setUser = useUserStore((state) => state.setUser);
   const setTokens = useUserStore((state) => state.setTokens);
+
+  const fieldOfStudyValues = [
+    "Architecture",
+    "Business Administration",
+    "Civil Engineering",
+    "Computer Engineering",
+    "Computer Science",
+    "Electrical Engineering",
+    "Environmental Engineering",
+    "Industrial Engineering",
+    "Mechanical Engineering",
+  ];
 
   async function handleSubmit(studentInfo) {
     const userResponse = await httpSignupStudent(studentInfo);
@@ -58,31 +72,15 @@ function StudentForm() {
               "Phone number is not valid"
             )
             .min(10, "Phone number must be 10 digits"),
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Email is required"),
+          email: Yup.string().email("Invalid email address").required("Email is required"),
           password: Yup.string()
             .min(12, "Password must be at least 12 characters")
             .required("Password is required"),
           confirmPassword: Yup.string()
             .oneOf([Yup.ref("password"), null], "Passwords must match")
             .required("Password Confirmation is required"),
-          gender: Yup.string()
-            .oneOf(["Male", "Female", "Other"])
-            .required("Gender is required"),
-          fieldOfStudy: Yup.string()
-            .oneOf([
-              "Architecture",
-              "Business Administration",
-              "Civil Engineering",
-              "Computer Engineering",
-              "Computer Science",
-              "Electrical Engineering",
-              "Environmental Engineering",
-              "Industrial Engineering",
-              "Mechanical Engineering",
-            ])
-            .required("Field of Study is required"),
+          gender: Yup.string().oneOf(["Male", "Female", "Other"]).required("Gender is required"),
+          fieldOfStudy: Yup.string().required("Field of Study is required"),
           institution: Yup.string().required("Institution is required"),
           gpa: Yup.number()
             .min(0.01, "GPA can not be less than 0.01")
@@ -99,38 +97,14 @@ function StudentForm() {
             <Input label="Phone" name="phone" type="tel" />
             <Input label="Email *" name="email" type="text" />
             <Input label="Password *" name="password" type="password" />
-            <Input
-              label="Confirm Password *"
-              name="confirmPassword"
-              type="password"
+            <Input label="Confirm Password *" name="confirmPassword" type="password" />
+            <InputCreatable
+              label="Field Of Study *"
+              name="fieldOfStudy"
+              initOptions={fieldOfStudyValues}
+              width="16rem"
             />
-            <Select label="Field Of Study *" name="fieldOfStudy">
-              <option value="">Select Option</option>
-              <option value="Architecture">Architecture</option>
-              <option value="Business Administration">
-                Business Administration
-              </option>
-              <option value="Civil Engineering">Civil Engineering</option>
-              <option value="Computer Engineering">Computer Engineering</option>
-              <option value="Computer Science">Computer Science</option>
-              <option value="Electrical Engineering">
-                Electrical Engineering
-              </option>
-              <option value="Environmental Engineering">
-                Environmental Engineering
-              </option>
-              <option value="Industrial Engineering">
-                Industrial Engineering
-              </option>
-              <option value="Mechanical Engineering">
-                Mechanical Engineering
-              </option>
-            </Select>
-            <Input
-              label="Institution *"
-              name="institution"
-              type="institution"
-            />
+            <Input label="Institution *" name="institution" type="institution" />
             <Select label="Gender *" name="gender">
               <option value="">Select Option</option>
               <option value="Male">Male</option>

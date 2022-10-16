@@ -13,6 +13,8 @@ import Select from "@/components/common/Select/select";
 import ProfileChangerPopOver from "@/components/common/Profile/ProfileChangerPopOver/profile-changer-popover";
 import ProfilePicture from "@/components/common/Profile/ProfilePicture/profile-picture";
 import Schedule from "@/components/Mentors/TimeComponents/Schedule/schedule";
+import InputCreatable from "@/components/common/InputCreatable/input-creatable";
+
 import BibliographyIcon from "@/assets/bibliography-icon.svg";
 import ClockIcon from "@/assets/clock-icon.svg";
 import FacultyIcon from "@/assets/faculty-icon.svg";
@@ -38,6 +40,8 @@ function MentorProfileForm() {
   const [isReadyToSubmit, setIsReadyToSubmit] = useState(false);
   const [transformedSchedule, setTransformedSchedule] = useState("");
   const [mentorData, setMentorData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
   const scheduleStatus = {
     sunday: false,
     monday: false,
@@ -47,8 +51,17 @@ function MentorProfileForm() {
     friday: false,
     saturday: false,
   };
-
-  const [isLoading, setIsLoading] = useState(true);
+  const departmentValues = [
+    "Architecture",
+    "Business Administration",
+    "Civil Engineering",
+    "Computer Engineering",
+    "Computer Science",
+    "Electrical Engineering",
+    "Environmental Engineering",
+    "Industrial Engineering",
+    "Mechanical Engineering",
+  ];
 
   const [isLessThan820] = useMediaQuery("(max-width: 820px)");
   const [isLessThan1135] = useMediaQuery("(max-width: 1135px)");
@@ -206,7 +219,8 @@ function MentorProfileForm() {
               /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/,
               "Phone number is not valid"
             )
-            .min(10, "Phone number must be 10 digits"),
+            .min(10, "Phone number must be 10 digits")
+            .required("Phone is required"),
           email: Yup.string().email("Invalid email address").required("Email is required"),
           currentPassword: Yup.string().min(12, "Current password must be at least 12 characters"),
           newPassword: Yup.string().min(12, "Password must be at least 12 characters"),
@@ -221,19 +235,7 @@ function MentorProfileForm() {
             "Max character limit of 1500 reached.",
             (val) => (val?.length || 0) < 1500
           ),
-          department: Yup.string()
-            .oneOf([
-              "Architecture",
-              "Business Administration",
-              "Civil Engineering",
-              "Computer Engineering",
-              "Computer Science",
-              "Electrical Engineering",
-              "Environmental Engineering",
-              "Industrial Engineering",
-              "Mechanical Engineering",
-            ])
-            .required("Department is required"),
+          department: Yup.string().required("Department is required"),
           interests: Yup.string().required("Area of Interest is required"),
           facultyStatus: Yup.string()
             .oneOf(["Instructor", "Assistant", "Associate", "Professor"])
@@ -298,7 +300,7 @@ function MentorProfileForm() {
             </Box>
             <Box>
               <Input
-                label="Phone"
+                label="Phone *"
                 name="phone"
                 type="tel"
                 width={inputWidth()}
@@ -398,24 +400,14 @@ function MentorProfileForm() {
               <option value="Doctorate">Doctorate</option>
               <option value="Post Doctoral">Post Doctoral</option>
             </Select>
-            <Select
+            <InputCreatable
               label="Department *"
               name="department"
-              style={{ width: inputWidth() }}
+              width={inputWidth()}
+              initOptions={departmentValues}
+              isBlue={true}
               disabled={edit}
-              isBlue
-            >
-              <option value="">Select Option</option>
-              <option value="Architecture">Architecture</option>
-              <option value="Business Administration">Business Administration</option>
-              <option value="Civil Engineering">Civil Engineering</option>
-              <option value="Computer Engineering">Computer Engineering</option>
-              <option value="Computer Science">Computer Science</option>
-              <option value="Electrical Engineering">Electrical Engineering</option>
-              <option value="Environmental Engineering">Environmental Engineering</option>
-              <option value="Industrial Engineering">Industrial Engineering</option>
-              <option value="Mechanical Engineering">Mechanical Engineering</option>
-            </Select>
+            />
             <Select
               label="Faculty Status *"
               name="facultyStatus"

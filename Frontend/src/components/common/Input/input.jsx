@@ -1,6 +1,6 @@
 import { useField, ErrorMessage } from "formik";
-import styles from "./input.module.css";
 import { phoneFormat } from "@/utils/helpers";
+import styles from "./input.module.css";
 
 function Input({ label, imgUrl, isBlue, ...props }) {
   const [field, meta, helpers] = useField(props);
