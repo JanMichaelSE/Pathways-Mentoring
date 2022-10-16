@@ -4,10 +4,8 @@ import io from "socket.io-client";
 import { useSocketStore } from "./store/socket.store";
 import "./styles/App.css";
 
-const HOST = import.meta.env.VITE_HOST || "http://localhost";
-const PORT = import.meta.env.VITE_PORT || "8000";
-const SERVER = `${HOST}:${PORT}`;
-const socket = io.connect(SERVER);
+const HOST = import.meta.env.VITE_HOST || "http://localhost:8000";
+const socket = io.connect(HOST);
 console.log("Socket: ", socket);
 
 function App() {
