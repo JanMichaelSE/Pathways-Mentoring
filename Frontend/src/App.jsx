@@ -6,6 +6,7 @@ import "./styles/App.css";
 
 const HOST = import.meta.env.VITE_HOST || "http://localhost:8000";
 const socket = io.connect(HOST + "/api");
+console.log("Socket: ", socket);
 
 function App() {
   const setSocket = useSocketStore((state) => state.setSocket);
