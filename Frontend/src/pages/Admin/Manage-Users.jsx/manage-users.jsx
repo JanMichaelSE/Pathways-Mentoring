@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import {
-  httpGetUnapprovedMentors,
-  httpApproveMentorAccess,
-} from "@/api/mentors.api";
+import { httpGetUnapprovedMentors, httpApproveMentorAccess } from "@/api/mentors.api";
 
 import { SimpleGrid, Spinner, useToast } from "@chakra-ui/react";
 
@@ -38,7 +35,6 @@ function ManageUsers() {
   }, []);
 
   async function acceptMentor(cardData) {
-    console.log("Info of card data: ", cardData.id);
     const userResponse = await httpApproveMentorAccess(cardData.id);
 
     if (userResponse.hasError) {
@@ -91,11 +87,7 @@ function ManageUsers() {
       );
     } else {
       return (
-        <SimpleGrid
-          columns={[1, 2, 3]}
-          spacing="40px"
-          className={styles.background}
-        >
+        <SimpleGrid columns={[1, 2, 3]} spacing="40px" className={styles.background}>
           {mentors?.map((mentor) => (
             <AvatarCard
               key={mentor.id}

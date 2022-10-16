@@ -92,7 +92,6 @@ async function httpRequestMentorship(userEmail) {
     const response = await axios.post("/students/request-mentorship", userInfo);
     userToReturn.data = await response.data;
   } catch (error) {
-    console.log(error);
     const errorResponse = error.response.data;
     if (typeof errorResponse.error.errorCode == "number") {
       userToReturn.hasError = true;
@@ -117,7 +116,6 @@ async function httpCancelMentorship(studentId) {
     const response = await axios.post("/students/cancel-mentorship", userInfo);
     userToReturn.data = await response.data;
   } catch (error) {
-    console.log(error);
     const errorResponse = error.response.data;
     if (typeof errorResponse.error.errorCode == "number") {
       userToReturn.hasError = true;

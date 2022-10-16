@@ -2,9 +2,6 @@ import Axios from "axios";
 import { getState } from "@/store/user.store";
 
 const HOST = import.meta.env.VITE_HOST || "http://localhost:8000";
-
-console.log("AXIOS HOST: ", HOST);
-
 const axios = Axios.create({ baseURL: HOST });
 
 axios.interceptors.request.use((config) => {

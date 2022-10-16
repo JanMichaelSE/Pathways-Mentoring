@@ -8,11 +8,25 @@ import MentorSignUpPopup from "../MentorSignUpPopup/mentor-signup-popup";
 import Button from "@/components/common/Button/button";
 import Input from "@/components/common/Input/input";
 import Select from "@/components/common/Select/select";
+import InputCreatable from "@/components/common/InputCreatable/input-creatable";
+
 import styles from "./mentor-form.module.css";
 
 function MentorForm() {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const departmentValues = [
+    "Architecture",
+    "Business Administration",
+    "Civil Engineering",
+    "Computer Engineering",
+    "Computer Science",
+    "Electrical Engineering",
+    "Environmental Engineering",
+    "Industrial Engineering",
+    "Mechanical Engineering",
+  ];
 
   async function handleSubmit(mentorInfo) {
     const userResponse = await httpSignupMentor(mentorInfo);
@@ -54,32 +68,16 @@ function MentorForm() {
             )
             .min(10, "Phone number must be 10 digits")
             .required("Phone is required"),
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Email is required"),
+          email: Yup.string().email("Invalid email address").required("Email is required"),
           password: Yup.string()
             .min(12, "Password must be at least 12 characters")
             .required("Password is required"),
           confirmPassword: Yup.string()
             .oneOf([Yup.ref("password"), null], "Passwords must match")
             .required("Password Confirmation is required"),
-          gender: Yup.string()
-            .oneOf(["Male", "Female", "Other"])
-            .required("Gender is required"),
+          gender: Yup.string().oneOf(["Male", "Female", "Other"]).required("Gender is required"),
           academicDegree: Yup.string().required("Academic Degree is required"),
-          department: Yup.string()
-            .oneOf([
-              "Architecture",
-              "Business Administration",
-              "Civil Engineering",
-              "Computer Engineering",
-              "Computer Science",
-              "Electrical Engineering",
-              "Environmental Engineering",
-              "Industrial Engineering",
-              "Mechanical Engineering",
-            ])
-            .required("Department is required"),
+          department: Yup.string().required("Department is required"),
           areaOfInterest: Yup.string().required("Area of Interest is required"),
           facultyStatus: Yup.string()
             .oneOf(["Instructor", "Assistant", "Associate", "Professor"])
@@ -102,38 +100,14 @@ function MentorForm() {
             <Input label="Phone *" name="phone" type="tel" />
             <Input label="Email *" name="email" type="text" />
             <Input label="Password *" name="password" type="password" />
-            <Input
-              label="Confirm Password *"
-              name="confirmPassword"
-              type="password"
+            <Input label="Confirm Password *" name="confirmPassword" type="password" />
+            <InputCreatable
+              label="Department *"
+              name="department"
+              initOptions={departmentValues}
+              width="16rem"
             />
-            <Select label="Department *" name="department">
-              <option value="">Select Option</option>
-              <option value="Architecture">Architecture</option>
-              <option value="Business Administration">
-                Business Administration
-              </option>
-              <option value="Civil Engineering">Civil Engineering</option>
-              <option value="Computer Engineering">Computer Engineering</option>
-              <option value="Computer Science">Computer Science</option>
-              <option value="Electrical Engineering">
-                Electrical Engineering
-              </option>
-              <option value="Environmental Engineering">
-                Environmental Engineering
-              </option>
-              <option value="Industrial Engineering">
-                Industrial Engineering
-              </option>
-              <option value="Mechanical Engineering">
-                Mechanical Engineering
-              </option>
-            </Select>
-            <Input
-              label="Area of Interest *"
-              name="areaOfInterest"
-              type="text"
-            />
+            <Input label="Area of Interest *" name="areaOfInterest" type="text" />
             <Select label="Gender *" name="gender">
               <option value="">Select Option</option>
               <option value="Male">Male</option>

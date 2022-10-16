@@ -10,22 +10,14 @@
   --font-size-regular: 14pt;
   --font-size-small: 12pt;
 
-  --button-background: linear-gradient(
-    180.71deg,
-    #fac20b 0.61%,
-    #ee7222 99.39%
-  );
+  --button-background: linear-gradient(180.71deg, #fac20b 0.61%, #ee7222 99.39%);
 
   --modal-border-line: 3px dashed var(--color-blue-dark);
 
   --responsive-screen-max-width: 1300px;
 
   /* React Toastify Overriden Styles */
-  --toastify-color-warning: linear-gradient(
-    180.71deg,
-    #fac20b 0.61%,
-    #ee7222 99.39%
-  );
+  --toastify-color-warning: linear-gradient(180.71deg, #fac20b 0.61%, #ee7222 99.39%);
 }
 
 *,
@@ -53,16 +45,14 @@ html {
 
 body {
   min-height: 100vh !important;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 /* Reusable Classes */
@@ -81,7 +71,21 @@ code {
   border: none;
 }
 
+.label {
+  display: block;
+  font-size: var(--font-size-regular);
+  font-weight: bold;
+  color: #5c5d60;
+  padding-bottom: 0.25rem;
+  margin-left: 20px;
+}
+
+.blue-font {
+  color: var(--color-blue-dark) !important;
+}
+
 /* Error Styles */
+
 .label-error {
   color: red;
 }
