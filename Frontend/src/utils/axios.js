@@ -1,8 +1,10 @@
 import Axios from "axios";
 import { getState } from "@/store/user.store";
 
-const HOST = import.meta.env.VITE_HOST || "http://localhost:8000";
-const axios = Axios.create({ baseURL: HOST + "/api" });
+const HOST = import.meta.env.VITE_HOST
+  ? import.meta.env.VITE_HOST + "/api"
+  : "http://localhost:8000";
+const axios = Axios.create({ baseURL: HOST });
 
 axios.interceptors.request.use((config) => {
   const userStorage = JSON.parse(window.sessionStorage.getItem("user-storage"));
