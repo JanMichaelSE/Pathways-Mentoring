@@ -95,7 +95,7 @@ function initialDevelopmentPlanData(): IQuestion[] {
       isDevelopmentPlan: true,
     },
     {
-      question: "How will you assess your progress in masteriung these competencies and skills?",
+      question: "How will you assess your progress in mastering these competencies and skills?",
       type: "Text",
       isDevelopmentPlan: true,
     },
