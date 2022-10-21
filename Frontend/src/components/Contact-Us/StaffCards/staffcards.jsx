@@ -12,21 +12,21 @@ export default function StaffCards() {
   let staffData = [
     {
       id: "1",
-      name: "Jessica Quintana",
-      telephone: "787-710-1074",
-      email: "jmontalvo.dev@gmail.com",
-      avatarLink: AvatarSprite + "#avatar2",
-      department: "CS/COE",
-      academicDegree: "BSc",
+      name: "Cuauhtemoc Godoy",
+      telephone: "797-622-8000 ext. 640",
+      email: "cgodoy@pupr.edu",
+      avatarLink: AvatarSprite + "#avatar1",
+      department: "Pathways Director",
+      academicDegree: "PhD",
     },
     {
       id: "2",
-      name: "Jan Montalvo",
-      telephone: "787-710-1074",
-      email: "jmontalvo.dev@gmail.com",
+      name: "Zayira Jordan",
+      telephone: "787-622-8000 ext. 220",
+      email: "zjordan@pupr.edu",
       avatarLink: AvatarSprite + "#avatar1",
-      department: "CS/COE",
-      academicDegree: "BSc",
+      department: "Stategy One Leader",
+      academicDegree: "PhD",
     },
   ];
 
