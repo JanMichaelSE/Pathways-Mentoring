@@ -54,27 +54,6 @@ function Notes({ noteId }) {
     setMessage(inputMessage);
   }
 
-  function onMessageInputEnter(event) {
-    if (event.key === "Enter") {
-      socket.emit("send_message", {
-        chat_id: noteId,
-        message: message,
-        senderId: note.senderId,
-        receiverId: note.receiverId,
-      });
-
-      const messageInfo = {
-        message: message,
-        senderId: note.senderId,
-        receiverId: note.receiverId,
-        createdDate: new Date(),
-      };
-      messages.push(messageInfo);
-      setMessages([...messages]);
-      setMessage("");
-    }
-  }
-
   function sendMessage() {
     socket.emit("send_message", {
       chat_id: noteId,
@@ -107,14 +86,6 @@ function Notes({ noteId }) {
     });
   }
 
-  function renderMessage(key, message) {
-    if (message.senderId === note.senderId) {
-      return <SenderMessage key={key} message={message.message} date={message.createdDate} />;
-    } else {
-      return <ReceiverMessage key={key} message={message.message} date={message.createdDate} />;
-    }
-  }
-
   if (isLoading) {
     return (
       <Spinner
@@ -134,7 +105,15 @@ function Notes({ noteId }) {
       <div className={styles.notesContainer}>
         <div id="message-container" className={styles.messageContainer}>
           {messages.map((message, index) => {
-            return renderMessage(index, message);
+            if (message.senderId === note.senderId) {
+              return (
+                <SenderMessage key={index} message={message.message} date={message.createdDate} />
+              );
+            } else {
+              return (
+                <ReceiverMessage key={index} message={message.message} date={message.createdDate} />
+              );
+            }
           })}
         </div>
         <div className={styles.buttonsContainer}>
@@ -144,7 +123,6 @@ function Notes({ noteId }) {
             className={styles.input}
             value={message}
             onChange={onMessageInputChange}
-            onKeyDown={onMessageInputEnter}
           />
           <button type={"button"} className={styles.btn} onClick={sendMessage}>
             Send
