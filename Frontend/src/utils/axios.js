@@ -1,9 +1,8 @@
 import Axios from "axios";
 import { getState } from "@/store/user.store";
 
-const HOST = import.meta.env.VITE_HOST
-  ? import.meta.env.VITE_HOST + "/api"
-  : "http://localhost:8000";
+const isDevEnvironment = import.meta.env.DEV;
+const HOST = isDevEnvironment ? "http://localhost:8000" : import.meta.env.VITE_HOST + "/api";
 const axios = Axios.create({ baseURL: HOST });
 
 axios.interceptors.request.use((config) => {
