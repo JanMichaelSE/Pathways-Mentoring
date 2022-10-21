@@ -4,9 +4,8 @@ import io from "socket.io-client";
 import { useSocketStore } from "./store/socket.store";
 import "./styles/App.css";
 
-const isDevEnvironment = import.meta.env.DEV;
-const HOST = isDevEnvironment ? "http://localhost:8000" : import.meta.env.VITE_HOST;
-const PATH = isDevEnvironment ? "" : "/api/socket.io";
+const HOST = import.meta.env.VITE_HOST || "http://localhost:8000";
+const PATH = import.meta.env.VITE_HOST ? "/api/socket.io" : "";
 const socket = io.connect(HOST, { path: PATH });
 
 function App() {
