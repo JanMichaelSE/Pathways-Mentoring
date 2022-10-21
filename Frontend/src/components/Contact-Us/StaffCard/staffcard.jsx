@@ -25,6 +25,7 @@ import CircledEnvelopeIcon from "@/assets/circled-envelope.svg";
 import CompanyIcon from "@/assets/Company.svg";
 import GmailIcon from "@/assets/Gmail-Logo.svg";
 import GraduationCapIcon from "@/assets/graduation-cap.svg";
+import InfoIcon from "@/assets/info.svg";
 import PhoneSquaredIcon from "@/assets/Phone-Squared.svg";
 
 export default function StaffCard({ cardData }) {
