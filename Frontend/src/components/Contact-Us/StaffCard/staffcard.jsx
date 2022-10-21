@@ -106,7 +106,12 @@ export default function StaffCard({ cardData }) {
         rounded={"27px"}
       >
         <ModalOverlay />
-        <ModalContent borderWidth={"2px"} borderStyle={"dashed"} borderColor={"#0066CC"}>
+        <ModalContent
+          borderWidth={"2px"}
+          borderStyle={"dashed"}
+          borderColor={"#0066CC"}
+          paddingBottom={"3rem"}
+        >
           <ModalHeader>
             <HStack alignItems={"center"}>
               <Image
@@ -180,25 +185,6 @@ export default function StaffCard({ cardData }) {
                   <Text fontWeight={"400"}>{cardData.academicDegree}</Text>
                 </HStack>
               </Stack>
-              <HStack
-                px={3}
-                py={3}
-                rounded={"27px"}
-                bg={"#D9E4EA"}
-                mx={3}
-                my={5}
-                boxShadow={"md"}
-                minWidth={"670px"}
-                maxWidth={"670px"}
-                justifyContent="center"
-              >
-                <Image boxSize="50px" objectFit="cover" src={InfoIcon} alt="info icon" />
-                <Text fontWeight={"400"}>
-                  Will only accept calls on fridays at work. If need of any other information please
-                  contact me by email. In any case I am available on Monday and Friday from 12:00 PM
-                  to 4:00 PM.
-                </Text>
-              </HStack>
             </Center>
           </ModalBody>
         </ModalContent>
