@@ -11,7 +11,7 @@
 }
 .sender-container {
   padding: 0.5rem 1rem 1rem 1rem;
-  background-color: white;
+  background-color: var(--chakra-colors-whatsapp-300);
   border-radius: 20px;
   font-size: var(--font-size-small);
   border-radius: 10px 0 10px 10px;
